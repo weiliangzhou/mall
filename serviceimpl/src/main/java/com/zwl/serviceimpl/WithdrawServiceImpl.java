@@ -1,0 +1,118 @@
+package com.zwl.serviceimpl;
+
+import com.zwl.dao.mapper.UserAccountMapper;
+import com.zwl.dao.mapper.WithdrawFlowMapper;
+import com.zwl.dao.mapper.WithdrawMapper;
+import com.zwl.exception.BSUtil;
+import com.zwl.model.User;
+import com.zwl.model.Withdraw;
+import com.zwl.model.WithdrawFlow;
+import com.zwl.service.WithdrawService;
+import com.zwl.service.WxPayService;
+import com.zwl.service.WxUserService;
+import com.zwl.util.UUIDUtil;
+import com.zwl.wxpay.AdminPayVo;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+/**
+ * @author 二师兄超级帅
+ * @Title: WithdrawServiceImpl
+ * @ProjectName parent
+ * @Description: TODO
+ * @date 2018/7/520:51
+ */
+@Service
+public class WithdrawServiceImpl implements WithdrawService {
+    @Autowired
+    private WithdrawMapper withdrawMapper;
+    @Autowired
+    private UserAccountMapper userAccountMapper;
+    @Autowired
+    private WithdrawFlowMapper withdrawFlowMapper;
+
+    @Autowired
+    private WxPayService wxPayService;
+
+    @Autowired
+    private WxUserService wxUserService;
+
+    @Override
+    public List<Withdraw> getWithdrawList() {
+        return withdrawMapper.getWithdrawList();
+    }
+
+    @Override
+    public int updateByWithdrawId(String partner_trade_no, String partner_trade_no1, String payment_no) {
+        return withdrawMapper.updateByWithdrawId(partner_trade_no, partner_trade_no1, payment_no);
+    }
+
+    @Override
+    @Transactional
+    public void approveWithdraw(Integer status, String operator, String withdrawId, String realIp) {
+        int count = withdrawMapper.updateWithdrawById(status, operator, withdrawId);
+        if (count == 0)
+            BSUtil.isTrue(false, "操作异常,请重新操作");
+        //记录流水表
+        WithdrawFlow withdrawFlow = new WithdrawFlow();
+        withdrawFlow.setWithdrawId(withdrawId);
+//        0审核中 1审核通过(前端显示到款中) 2未通过  3成功
+        withdrawFlow.setStatus(status);
+        withdrawFlow.setOperator(operator);
+        withdrawFlowMapper.insertSelective(withdrawFlow);
+        Withdraw withdraw = withdrawMapper.getByWithdrawId(withdrawId);
+        String openId = withdraw.getOpenId();
+        String realName = withdraw.getRealName();
+        Integer amount = withdraw.getMoney();
+        AdminPayVo adminPayVo = new AdminPayVo();
+        adminPayVo.setRealIp(realIp);
+        adminPayVo.setOpenId(openId);
+        adminPayVo.setRealName(realName);
+        adminPayVo.setAmount(amount);
+        adminPayVo.setDesc("企业付款");
+        adminPayVo.setWithdrawNo(withdrawId);
+        //如果审核通过，则调用企业付款,2.0版本
+//        wxPayService.adminPay(adminPayVo);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public synchronized void apply(Withdraw withdraw) {
+        Integer money = withdraw.getMoney();
+        String userId = withdraw.getUserId();
+        String merchantId = withdraw.getMerchantId();
+        Integer balance = userAccountMapper.getBalanceByUserId(userId);
+        if (money >= balance)
+            BSUtil.isTrue(false, "可用余额不足");
+//        需校验该用户是否实名，未实名则返回norealname
+        User user = wxUserService.getUserById(userId);
+        String realName = user.getRealName();
+        if (StringUtils.isBlank(realName))
+            BSUtil.isTrue(false, "未实名");
+//        默认写死微信，后期可配置，申请提现金额，可提现金额，点击确认，
+//调用微信支付    记录发送参数日志
+//        发送支付信息成功
+//        发送支付信息失败
+//        同时记录提现流水表
+        Integer currentAmount = balance - money;// Arith.sub(balance, money);
+        int difBalance = userAccountMapper.updateBanlanceByUserId(userId, currentAmount);
+        if (difBalance == 0)
+            BSUtil.isTrue(false, "更新余额异常");
+        withdraw.setWithdrawId(UUIDUtil.getUUID32());
+        withdraw.setOpenId(user.getWechatOpenid());
+        withdraw.setRealName(user.getRealName());
+        long id = withdrawMapper.insertSelective(withdraw);
+//        if (0 == withdrawId)
+//            BSUtil.isTrue(false, "操作异常,请重新操作");
+        Withdraw withdrawId = withdrawMapper.selectByPrimaryKey(id);
+        WithdrawFlow withdrawFlow = new WithdrawFlow();
+        withdrawFlow.setWithdrawId(withdrawId.getWithdrawId());
+        withdrawFlow.setStatus(0);
+        withdrawFlow.setMerchantId(merchantId);
+        withdrawFlowMapper.insertSelective(withdrawFlow);
+    }
+}
