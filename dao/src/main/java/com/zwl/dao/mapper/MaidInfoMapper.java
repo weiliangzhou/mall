@@ -1,6 +1,7 @@
 package com.zwl.dao.mapper;
 
 import com.zwl.model.po.MaidInfo;
+import com.zwl.model.vo.MaidInfoVo;
 import com.zwl.model.vo.XiaXianVo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -20,7 +21,7 @@ public interface MaidInfoMapper {
 
     int updateByPrimaryKey(MaidInfo record);
 
-    List<MaidInfo> getMaidInfoList(String userId);
+    List<MaidInfoVo> getMaidInfoList(String userId);
 
     List<XiaXianVo> getXiaXianList(String userId);
 

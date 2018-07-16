@@ -8,13 +8,13 @@ import java.util.Date;
 
 /**
  * @author 二师兄超级帅
- * @Title: MainInfoVo
+ * @Title: MaidInfoVo
  * @ProjectName parent
  * @Description: TODO
  * @date 2018/7/1614:33
  */
 @Data
-public class MainInfoVo {
+public class MaidInfoVo {
     //    -- 用户logo
 //--     realname
 //--     手机号

@@ -43,6 +43,8 @@ public class WxPayController {
     private UserAccountService userAccountService;
     @Autowired
     private OrderFlowService orderFlowService;
+    @Autowired
+    private UserQuotaCountService userQuotaCountService;
 
 
     private SimpleDateFormat sdf_yMdHms = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -165,61 +167,79 @@ public class WxPayController {
                 if (StringUtils.isNotBlank(referrerId)) {
                     User referrerUser = wxUserService.getUserByUserId(referrerId);
                     if (null != referrerUser) {
+                        String merchantId = order.getMerchantId();
+                        String orderNo = order.getOrderNo();
+                        Integer orderActualMoney = order.getActualMoney();
+                        Integer maidPercent = order.getMaidPercent();
+                        Long productId = order.getProductId();
+                        String productName = order.getProductName();
+                        Integer level = order.getLevel();
+                        String levelName = order.getLevelName();
                         //返佣规则：同级或者下级，高于当前级别是不返佣
 //                如果产品的等级是1，分佣比列按照产品的分佣百分比计算
 //                并且还要满足推荐人的邀请名额限定 院长 100 班长 50 学员10
 //                新增一张名额限定表 ss_quota_count
-//                        如果产品等级为1，则先判断邀请名额是否满足，如果不满足则直接跳过
+//                如果产品等级为1，则先判断推荐人的邀请名额是否满足，如果不满足则直接跳过
+//                如果产品等级为 456 则相应添加邀请名额
                         if (1 == memberLevel) {
-
-
+                            int userQuotaCount = userQuotaCountService.updateCountByUserId(referrerId);
+                            if (userQuotaCount == 0) {
+                                log.info("邀请小班名额已满，不返分佣");
+                                //发送通知等
+                                Map<String, String> xml = new HashMap<String, String>();
+                                xml.put("return_code", "SUCCESS");
+                                xml.put("return_msg", "OK");
+                                return PaymentKit.toXml(xml);
+                            } else {
+                                log.info("邀请小班名额成功-1,成功分佣");
+                            }
                         }
-
 
                         //在不是试听课的时候，查询当前用户有效会员等级并且小于等于推荐人的有效会员等级才可以返佣
 //                            Integer memberLevel=wxUserService.getMemberLevel(userId);
                         Integer referrerLevel = wxUserService.getMemberLevel(referrerId);
-                        if (null != referrerLevel & referrerLevel >= memberLevel & memberLevel != 1) {
-                            String merchantId = order.getMerchantId();
-                            String orderNo = order.getOrderNo();
-                            Integer orderActualMoney = order.getActualMoney();
-                            //通过userId获取推荐人对应的分佣比例
-                            Integer maidPercent = wxUserService.getMaidPercentByUserId(userId);
-//                                Integer maidPercent = order.getMaidPercent();
-                            Integer maidMoney = orderActualMoney * maidPercent / 100;
-                            Long productId = order.getProductId();
-                            String productName = order.getProductName();
-                            Integer level = order.getLevel();
-                            String levelName = order.getLevelName();
-                            MaidInfo maidInfo = new MaidInfo();
-                            maidInfo.setOrderNo(orderNo);
-                            //分佣发送给推荐人
-                            maidInfo.setUserId(referrerUser.getUserId());
-                            maidInfo.setMaidMoney(maidMoney);
-                            maidInfo.setMaidPercent(maidPercent);
-                            maidInfo.setOrderActualMoney(orderActualMoney);
-                            maidInfo.setMerchantId(merchantId);
-                            maidInfo.setProductId(productId);
-                            maidInfo.setProductName(productName);
-                            maidInfo.setLevel(level);
-                            maidInfo.setLevelName(levelName);
-                            log.info("回调支付成功，分佣信息" + maidInfo);
-                            int madiInfoCount = maidInfoService.save(maidInfo);
-                            if (madiInfoCount == 0)
-                                BSUtil.isTrue(false, "分佣失败");
-                            log.info("回调支付成功，结束分佣");
-                            //分佣完成之后，更新用户账户表ss_user_account
-                            log.info("回调支付成功，更新用户余额userId" + userId + "--->" + "maidMoney--->" + maidMoney);
-                            userAccountService.addBanlanceByUserId(referrerId, maidMoney);
-                            log.info("回调支付成功，更新用户余额成功");
+                        if (null != referrerLevel & referrerLevel >= memberLevel & memberLevel >= 4) {
+//                            //通过userId获取推荐人对应的分佣比例
+                            maidPercent = wxUserService.getMaidPercentByUserId(userId);
+//                             增加小班次数,可能是第一次购买需要insert，也可能是update
+                            switch (memberLevel) {
+                                case 4:
+                                    userQuotaCountService.saveOrUpdate(userId, 10);
+                                    break;
+                                case 5:
+                                    userQuotaCountService.saveOrUpdate(userId, 50);
+                                    break;
+                                case 6:
+                                    userQuotaCountService.saveOrUpdate(userId, 100);
+                                    break;
+                            }
 
-
-                            //发送订单购买公众号提醒
-//                            wxSenderService.sendBuyMsg(openid, productName, orderActualMoney);
 
                         }
-
-                        //}
+                        MaidInfo maidInfo = new MaidInfo();
+                        maidInfo.setOrderNo(orderNo);
+                        //分佣发送给推荐人
+                        maidInfo.setUserId(referrerUser.getUserId());
+                        Integer maidMoney = orderActualMoney * maidPercent / 100;
+                        maidInfo.setMaidMoney(maidMoney);
+                        maidInfo.setMaidPercent(maidPercent);
+                        maidInfo.setOrderActualMoney(orderActualMoney);
+                        maidInfo.setMerchantId(merchantId);
+                        maidInfo.setProductId(productId);
+                        maidInfo.setProductName(productName);
+                        maidInfo.setLevel(level);
+                        maidInfo.setLevelName(levelName);
+                        log.info("回调支付成功，分佣信息" + maidInfo);
+                        int madiInfoCount = maidInfoService.save(maidInfo);
+                        if (madiInfoCount == 0)
+                            BSUtil.isTrue(false, "分佣失败");
+                        log.info("回调支付成功，结束分佣");
+                        //分佣完成之后，更新用户账户表ss_user_account
+                        log.info("回调支付成功，更新用户余额userId" + userId + "--->" + "maidMoney--->" + maidMoney);
+                        userAccountService.addBanlanceByUserId(referrerId, maidMoney);
+                        log.info("回调支付成功，更新用户余额成功");
+                        //发送订单购买公众号提醒
+//                            wxSenderService.sendBuyMsg(openid, productName, orderActualMoney);
                     }
 
 
@@ -231,8 +251,11 @@ public class WxPayController {
                 return PaymentKit.toXml(xml);
             }
         }
-
-        return null;
+        //发送通知等
+        Map<String, String> xml = new HashMap<String, String>();
+        xml.put("return_code", "SUCCESS");
+        xml.put("return_msg", "OK");
+        return PaymentKit.toXml(xml);
     }
 
 

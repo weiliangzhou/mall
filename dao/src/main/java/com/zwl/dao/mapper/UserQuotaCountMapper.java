@@ -1,17 +1,15 @@
 package com.zwl.dao.mapper;
 
-import com.zwl.model.po.UserQuotaCount;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 public interface UserQuotaCountMapper {
-    int deleteByPrimaryKey(String id);
+    @Select("select count from ss_user_quota_count where id=#{userId} and available=1 ")
+    Integer getCountByUserId(@Param("userId") String userId);
 
-    int insert(UserQuotaCount record);
+    @Update("update ss_user_quota_count set  count =count-1 where type=1 and count-1>=0 and id=#{userId}")
+    int updateCountByUserId(@Param("userId") String userId);
 
-    int insertSelective(UserQuotaCount record);
-
-    UserQuotaCount selectByPrimaryKey(String id);
-
-    int updateByPrimaryKeySelective(UserQuotaCount record);
-
-    int updateByPrimaryKey(UserQuotaCount record);
+    int saveOrUpdate(@Param("userId") String userId, @Param("i") int i);
 }

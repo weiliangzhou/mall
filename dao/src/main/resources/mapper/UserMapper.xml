@@ -64,7 +64,7 @@
         FROM
         ss_user usr
         WHERE
-        datediff( now( ), usr.expires_time ) >=0
+         datediff( usr.expires_time,now() ) >=0
         and user_id=#{userId}
         and available=1
     </select>

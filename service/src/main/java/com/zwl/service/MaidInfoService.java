@@ -1,6 +1,7 @@
 package com.zwl.service;
 
 import com.zwl.model.po.MaidInfo;
+import com.zwl.model.vo.MaidInfoVo;
 import com.zwl.model.vo.XiaXianVo;
 
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
 public interface MaidInfoService {
     int save(MaidInfo maidInfo);
 
-    List<MaidInfo> getMaidInfoList(String userId);
+    List<MaidInfoVo> getMaidInfoList(String userId);
 
     List<XiaXianVo> getXiaXianList(String userId);
 

@@ -61,7 +61,7 @@ public class EncryptUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(EncryptUtil.md5("123中国"));
+        System.out.println(EncryptUtil.md5("123456"));
     }
 
 }

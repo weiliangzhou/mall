@@ -2,6 +2,7 @@ package com.zwl.serviceimpl;
 
 import com.zwl.dao.mapper.MaidInfoMapper;
 import com.zwl.model.po.MaidInfo;
+import com.zwl.model.vo.MaidInfoVo;
 import com.zwl.model.vo.XiaXianVo;
 import com.zwl.service.MaidInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class MaidInfoServiceImpl implements MaidInfoService {
     }
 
     @Override
-    public List<MaidInfo> getMaidInfoList(String userId) {
+    public List<MaidInfoVo> getMaidInfoList(String userId) {
         return maidInfoMapper.getMaidInfoList(userId);
     }
 

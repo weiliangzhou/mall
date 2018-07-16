@@ -5,16 +5,13 @@ import com.terran4j.commons.api2doc.annotations.Api2Doc;
 import com.terran4j.commons.api2doc.annotations.ApiComment;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.po.Information;
-import com.zwl.model.po.MaidInfo;
 import com.zwl.model.po.UserCertification;
+import com.zwl.model.vo.MaidInfoVVo;
 import com.zwl.model.vo.UserLoginInfoVo;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author 二师兄超级帅
@@ -55,9 +52,9 @@ public class WxController {
     @ApiComment("邀请列表")
     @RequestMapping(name = "邀请列表",
             value = "/auth/wx/getMaidInfoList", method = RequestMethod.POST)
-    public List<MaidInfo> getMaidInfoList(@ApiComment("userId") String userId) {
-        List<MaidInfo> maidInfoList = new ArrayList<>();
-        return maidInfoList;
+    public MaidInfoVVo getMaidInfoList(@ApiComment("userId") String userId, @ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize) {
+        MaidInfoVVo maidInfoVVo = new MaidInfoVVo();
+        return maidInfoVVo;
 
     }
 
@@ -95,7 +92,7 @@ public class WxController {
 
     @ApiComment(value = "获取资讯列表", seeClass = Information.class)
     @RequestMapping(name = "获取资讯列表",
-            value = "/wx/getInformationList", method = RequestMethod.POST)
+            value = "/noauth/wx/information/getInformationList", method = RequestMethod.POST)
     public Information getInformationList(@ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize, @ApiComment("商户号") String merchantId) {
         Information information = new Information();
         return information;

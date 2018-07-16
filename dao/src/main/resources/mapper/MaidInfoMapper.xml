@@ -185,7 +185,7 @@
       available = #{available,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
-    <select id="getMaidInfoList" resultType="com.zwl.model.vo.MainInfoVo" parameterType="string">
+    <select id="getMaidInfoList" resultType="com.zwl.model.vo.MaidInfoVo" parameterType="string">
       SELECT
       usr.logo_url as logoUrl,
       usr.real_name as realName,
