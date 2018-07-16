@@ -27,7 +27,7 @@ public class InformationController {
 
     @PostMapping("/noauth/wx/information/getInformationList")
     public String getInformationList(@RequestBody JSONObject jsonObject) {
-        String merchant_id = jsonObject.getString("merchant_id");
+        String merchant_id = jsonObject.getString("merchantId");
         Integer pageNum=jsonObject.getInteger("pageNum");
         Integer pageSize=jsonObject.getInteger("pageSize");
         PageHelper.startPage(pageNum, pageSize);

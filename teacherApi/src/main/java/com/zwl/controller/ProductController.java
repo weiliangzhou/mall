@@ -2,6 +2,7 @@ package com.zwl.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.zwl.model.baseresult.Result;
+import com.zwl.model.po.Product;
 import com.zwl.service.ProductService;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
