@@ -12,6 +12,8 @@ public class User {
     private String merchantId;
     private Integer registerFrom;
     private String realName;
+    private String logoUrl;
+    private String registerMobile;
     private String referrer;
     private Integer memberLevel;
     private String levelName;

@@ -36,12 +36,4 @@ public class OrderController {
         result.setData(orderList);
         return JSON.toJSONString(result);
     }
-
-    @PostMapping("/teacher/getOrderById")
-    public String getOrderById(String merchantId, String orderNo) {
-        Result result = new Result();
-        Order order = orderService.getOrderById(merchantId, orderNo);
-        result.setData(order);
-        return JSON.toJSONString(result);
-    }
 }

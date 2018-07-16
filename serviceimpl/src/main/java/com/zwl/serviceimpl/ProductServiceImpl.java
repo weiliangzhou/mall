@@ -4,11 +4,9 @@ import com.zwl.dao.mapper.OrderFlowMapper;
 import com.zwl.dao.mapper.OrderMapper;
 import com.zwl.dao.mapper.ProductMapper;
 import com.zwl.model.exception.BSUtil;
-import com.zwl.model.po.Order;
-import com.zwl.model.po.OrderFlow;
-import com.zwl.model.po.Product;
-import com.zwl.model.po.User;
+import com.zwl.model.po.*;
 import com.zwl.service.ProductService;
+import com.zwl.service.UserInfoService;
 import com.zwl.service.WxUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +33,8 @@ public class ProductServiceImpl implements ProductService {
     private OrderFlowMapper orderFlowMapper;
     @Autowired
     private WxUserService wxUserService;
+    @Autowired
+    private UserInfoService userInfoService;
 
     @Override
     public List getProductList(String merchantId) {
@@ -103,6 +103,8 @@ public class ProductServiceImpl implements ProductService {
         order.setMoney(price);
         order.setUserId(userId);
         order.setMerchantId(merchantId);
+        order.setRealName(user.getRealName());
+        order.setPhone(user.getRegisterMobile());
         try {
             orderMapper.insertSelective(order);
         } catch (Exception e) {

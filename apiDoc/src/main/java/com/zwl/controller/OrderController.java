@@ -28,15 +28,6 @@ public class OrderController {
         List<Order> orderList = new ArrayList<>();
         return orderList;
     }
-
-    @ApiComment("订单详情")
-    @RequestMapping(name = "订单详情",
-            value = "/teacher/getOrderById", method = RequestMethod.POST)
-    public Order getOrderById(@ApiComment("商户号") String merchantId, @ApiComment("orderNo") String orderNo) {
-        Order order = new Order();
-        return order;
-    }
-
     @ApiComment("个人消费列表")
     @RequestMapping(name = "个人消费列表",
             value = "/teacher/getOrderListByUserId", method = RequestMethod.POST)

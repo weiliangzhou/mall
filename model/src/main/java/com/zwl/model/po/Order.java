@@ -37,6 +37,10 @@ public class Order {
     @RestPackIgnore
     @JSONField(serialize = false)
     private String merchantId;
+    @ApiComment(value = "下单人", sample = "二师兄")
+    private String realName;
+    @ApiComment(value = "手机号", sample = "1234651231")
+    private String phone;
     @ApiComment(value = "微信订单号", sample = "wx1564646831")
     private String paymentNo;
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
