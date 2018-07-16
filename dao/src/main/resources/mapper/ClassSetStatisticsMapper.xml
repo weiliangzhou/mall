@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zwl.mapper.ClassSetStatisticsMapper" >
+  <resultMap id="BaseResultMap" type="com.zwl.model.po.ClassSetStatistics" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="class_set_id" property="classSetId" jdbcType="INTEGER" />
+    <result column="browse_count" property="browseCount" jdbcType="INTEGER" />
+    <result column="share_count" property="shareCount" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="available" property="available" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, class_set_id, browse_count, share_count, create_time, modify_time, available
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from ss_class_set_statistics
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from ss_class_set_statistics
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.zwl.model.po.ClassSetStatistics" >
+    insert into ss_class_set_statistics (id, class_set_id, browse_count, 
+      share_count, create_time, modify_time, 
+      available)
+    values (#{id,jdbcType=BIGINT}, #{classSetId,jdbcType=INTEGER}, #{browseCount,jdbcType=INTEGER}, 
+      #{shareCount,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, 
+      #{available,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zwl.model.po.ClassSetStatistics" >
+    insert into ss_class_set_statistics
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="classSetId != null" >
+        class_set_id,
+      </if>
+      <if test="browseCount != null" >
+        browse_count,
+      </if>
+      <if test="shareCount != null" >
+        share_count,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="available != null" >
+        available,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="classSetId != null" >
+        #{classSetId,jdbcType=INTEGER},
+      </if>
+      <if test="browseCount != null" >
+        #{browseCount,jdbcType=INTEGER},
+      </if>
+      <if test="shareCount != null" >
+        #{shareCount,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="available != null" >
+        #{available,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zwl.model.po.ClassSetStatistics" >
+    update ss_class_set_statistics
+    <set >
+      <if test="classSetId != null" >
+        class_set_id = #{classSetId,jdbcType=INTEGER},
+      </if>
+      <if test="browseCount != null" >
+        browse_count = #{browseCount,jdbcType=INTEGER},
+      </if>
+      <if test="shareCount != null" >
+        share_count = #{shareCount,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="available != null" >
+        available = #{available,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zwl.model.po.ClassSetStatistics" >
+    update ss_class_set_statistics
+    set class_set_id = #{classSetId,jdbcType=INTEGER},
+      browse_count = #{browseCount,jdbcType=INTEGER},
+      share_count = #{shareCount,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      available = #{available,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
