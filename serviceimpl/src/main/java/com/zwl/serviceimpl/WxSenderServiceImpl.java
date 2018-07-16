@@ -1,10 +1,10 @@
 package com.zwl.serviceimpl;
 
 import com.alibaba.fastjson.JSON;
+import com.zwl.model.wxpay.WxConstans;
 import com.zwl.service.WxAccessTokenService;
 import com.zwl.service.WxSenderService;
 import com.zwl.util.HttpsUtils;
-import com.zwl.wxpay.WxConstans;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

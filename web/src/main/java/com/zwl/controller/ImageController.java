@@ -1,7 +1,7 @@
 package com.zwl.controller;
 
-import com.zwl.baseresult.Result;
-import com.zwl.baseresult.ResultCodeEnum;
+import com.zwl.model.baseresult.Result;
+import com.zwl.model.baseresult.ResultCodeEnum;
 import com.zwl.util.AliOSSUtil;
 import com.zwl.util.FileCheckUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -53,10 +53,10 @@ public class ImageController {
            }
 
             // 检查上传目录
-            /*File targetFile = new File(uoloadPath);
+            File targetFile = new File(uoloadPath);
             if (!targetFile.exists()) {
                 targetFile.mkdirs();
-            }*/
+            }
 
             // 实例化输出流
             BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(uoloadPath + file.getOriginalFilename()));

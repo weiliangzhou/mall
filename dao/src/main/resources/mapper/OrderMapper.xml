@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zwl.dao.mapper.OrderMapper">
-    <resultMap id="BaseResultMap" type="com.zwl.model.Order">
+    <resultMap id="BaseResultMap" type="com.zwl.model.po.Order">
         <id column="order_no" property="orderNo" jdbcType="VARCHAR"/>
         <result column="product_id" property="productId" jdbcType="BIGINT"/>
         <result column="product_name" property="productName" jdbcType="VARCHAR"/>
@@ -36,7 +36,7 @@
     delete from ss_order
     where order_no = #{orderNo,jdbcType=VARCHAR}
   </delete>
-    <insert id="insert" parameterType="com.zwl.model.Order">
+    <insert id="insert" parameterType="com.zwl.model.po.Order">
     insert into ss_order (order_no, product_id, product_name, 
       actual_money, money, maid_percent, 
       pay_way, level, level_name, 
@@ -52,7 +52,7 @@
       #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{available,jdbcType=SMALLINT}
       )
   </insert>
-    <insert id="insertSelective" parameterType="com.zwl.model.Order">
+    <insert id="insertSelective" parameterType="com.zwl.model.po.Order">
         insert into ss_order
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="orderNo != null">
@@ -167,7 +167,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.zwl.model.Order">
+    <update id="updateByPrimaryKeySelective" parameterType="com.zwl.model.po.Order">
         update ss_order
         <set>
             <if test="productId != null">
@@ -224,7 +224,7 @@
         </set>
         where order_no = #{orderNo,jdbcType=VARCHAR}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.zwl.model.Order">
+    <update id="updateByPrimaryKey" parameterType="com.zwl.model.po.Order">
     update ss_order
     set product_id = #{productId,jdbcType=BIGINT},
       product_name = #{productName,jdbcType=VARCHAR},
@@ -267,6 +267,11 @@
         and order_no=#{orderNo}
         and merchant_id=#{merchantId}
     </select>
-
-
+    <select id="getOrderListByUserId" resultMap="BaseResultMap" parameterType="string">
+        select
+        <include refid="Base_Column_List"/>
+        from ss_order
+        where available=1
+        and user_id=#{userId}
+    </select>
 </mapper>

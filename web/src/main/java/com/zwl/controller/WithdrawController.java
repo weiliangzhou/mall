@@ -1,10 +1,9 @@
 package com.zwl.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.zwl.baseresult.Result;
-import com.zwl.baseresult.ResultCodeEnum;
-import com.zwl.groups.ApplyWithdraw;
-import com.zwl.model.Withdraw;
+import com.zwl.model.groups.ApplyWithdraw;
+import com.zwl.model.baseresult.Result;
+import com.zwl.model.po.Withdraw;
 import com.zwl.service.WithdrawService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -24,13 +23,12 @@ public class WithdrawController {
     @Autowired
     private WithdrawService withdrawService;
 
-    @PostMapping("/wx/withdraw/apply")
+    @PostMapping("/auth/wx/withdraw/apply")
     public String apply(@Validated(ApplyWithdraw.class) @RequestBody Withdraw withdraw) {
         Result result = new Result();
-         withdrawService.apply(withdraw);
+        withdrawService.apply(withdraw);
         return JSON.toJSONString(result);
     }
-
 
 
 }

@@ -1,6 +1,6 @@
 package com.zwl.service;
 
-import com.zwl.model.Withdraw;
+import com.zwl.model.po.Withdraw;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
  */
 public interface WithdrawService {
 
-    void approveWithdraw(Integer status, String operator, String withdrawId,String realIp);
+    void approveWithdraw(Integer status, String operator, String withdrawId, String realIp);
 
     void apply(Withdraw withdraw);
 

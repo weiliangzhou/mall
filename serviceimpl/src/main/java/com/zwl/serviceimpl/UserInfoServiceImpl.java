@@ -1,7 +1,7 @@
 package com.zwl.serviceimpl;
 
 import com.zwl.dao.mapper.UserInfoMapper;
-import com.zwl.model.UserInfo;
+import com.zwl.model.po.UserInfo;
 import com.zwl.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
-package com.zwl.token;
+package com.zwl.service;
 
-import com.zwl.model.TokenModel;
+import com.zwl.model.po.TokenModel;
 
 /**
  * @author 二师兄超级帅

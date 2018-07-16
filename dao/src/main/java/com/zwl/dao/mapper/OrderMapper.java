@@ -1,6 +1,6 @@
 package com.zwl.dao.mapper;
 
-import com.zwl.model.Order;
+import com.zwl.model.po.Order;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Update;
 
@@ -23,7 +23,9 @@ public interface OrderMapper {
 
     Order findOrderByOrderNo(String orderNo);
 
-    @Update("update ss_order set order_status =1 ,  payment_time =#{time_end}, payment_no=#{transaction_id} where order_no=#{out_trade_no}")
+    @Update("update ss_order set order_status =1 ,  payment_time =#{time_end}, payment_no=#{transaction_id} ,pay_way =1 where order_no=#{out_trade_no}")
     int updateOrder(@Param("out_trade_no") String out_trade_no, @Param("time_end") String time_end, @Param("transaction_id") String transaction_id);
     Order getOrderById(@Param("merchantId") String merchantId, @Param("orderNo") String orderNo);
+
+    List<Order> getOrderListByUserId(String userId);
 }

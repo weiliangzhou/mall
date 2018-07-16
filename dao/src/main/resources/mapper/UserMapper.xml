@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zwl.dao.mapper.UserMapper" >
-  <resultMap id="BaseResultMap" type="com.zwl.model.User" >
+  <resultMap id="BaseResultMap" type="com.zwl.model.po.User" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="user_id" property="userId" jdbcType="VARCHAR" />
     <result column="wechat_openid" property="wechatOpenid" jdbcType="VARCHAR" />
@@ -26,7 +26,7 @@
     level_name, expires_time, register_time, modify_time, available
   </sql>
   <!--新增用户-->
-  <insert id="insert" parameterType="com.zwl.model.User">
+  <insert id="insert" parameterType="com.zwl.model.po.User">
     <!--<selectKey keyProperty="userId" resultType="int" order="AFTER">
       select user_id from ss_user
     </selectKey>-->
@@ -37,7 +37,7 @@
     #{modifyTime,jdbcType=TIMESTAMP}, #{available,jdbcType=INTEGER})
   </insert>
   <!--根据参数查找一个用户-->
-  <select id="selectOneByParams" parameterType="com.zwl.model.User" resultMap="BaseResultMap">
+  <select id="selectOneByParams" parameterType="com.zwl.model.po.User" resultMap="BaseResultMap">
     select
       <include refid="Base_Column_List"/>
     from
@@ -78,10 +78,10 @@
         WHERE
             usr.user_id = t.referrer
             AND usr.member_level = sp.`level`
-        and available=1
+        and usr.available=1
     </select>
 
-    <update id="updateUserById" parameterType="com.zwl.model.User">
+    <update id="updateUserById" parameterType="com.zwl.model.po.User">
         update ss_user
         <set>
             <if test="wechatOpenid != null">
@@ -117,4 +117,13 @@
         </set>
         where user_id = #{userId,jdbcType=VARCHAR}
     </update>
+
+    <select id="getUserByUserId" resultMap="BaseResultMap" parameterType="string">
+        select
+        <include refid="Base_Column_List"/>
+        from ss_user
+        where available=1
+        and user_id=#{userId}
+
+    </select>
 </mapper>

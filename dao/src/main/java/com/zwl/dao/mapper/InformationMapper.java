@@ -1,6 +1,6 @@
 package com.zwl.dao.mapper;
 
-import com.zwl.model.Information;
+import com.zwl.model.po.Information;
 
 import java.util.List;
 

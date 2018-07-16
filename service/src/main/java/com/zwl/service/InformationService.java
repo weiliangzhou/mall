@@ -1,6 +1,6 @@
 package com.zwl.service;
 
-import com.zwl.model.Information;
+import com.zwl.model.po.Information;
 
 import java.util.List;
 
@@ -13,4 +13,8 @@ import java.util.List;
  */
 public interface InformationService {
     List<Information> getInformationList(String merchant_id);
+
+    int addInformation(Information information);
+
+    int updateInformation(Information information);
 }

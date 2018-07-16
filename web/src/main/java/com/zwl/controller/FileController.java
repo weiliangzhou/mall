@@ -1,9 +1,8 @@
 package com.zwl.controller;
 
-import com.zwl.baseresult.Result;
-import com.zwl.baseresult.ResultCodeEnum;
+import com.zwl.model.baseresult.Result;
+import com.zwl.model.baseresult.ResultCodeEnum;
 import com.zwl.util.AliOSSUtil;
-import com.zwl.util.FileCheckUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +15,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
+
 @Slf4j
 @RestController
 @RequestMapping("/file")

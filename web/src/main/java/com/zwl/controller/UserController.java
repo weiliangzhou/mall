@@ -2,19 +2,19 @@ package com.zwl.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.zwl.baseresult.Result;
-import com.zwl.baseresult.ResultCodeEnum;
-import com.zwl.model.Merchant;
-import com.zwl.model.TokenModel;
-import com.zwl.model.User;
-import com.zwl.model.UserInfo;
+import com.zwl.model.baseresult.Result;
+import com.zwl.model.baseresult.ResultCodeEnum;
+import com.zwl.model.po.Merchant;
+import com.zwl.model.po.TokenModel;
+import com.zwl.model.po.User;
+import com.zwl.model.po.UserInfo;
+import com.zwl.model.vo.UserLoginInfoVo;
 import com.zwl.service.MerchantService;
 import com.zwl.service.MiniAppWeChatService;
 import com.zwl.service.UserInfoService;
 import com.zwl.service.UserService;
 import com.zwl.serviceimpl.RedisTokenManagerImpl;
 import com.zwl.util.UUIDUtil;
-import com.zwl.vo.UserLoginInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -151,15 +151,5 @@ public class UserController {
         return result;
     }
 
-    @PostMapping("/getUserInfo")
-//    @ApiOperation(value="获取用户信息",tags={"获取用户信息copy"},notes="注意问题点")
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name="userName",value="用户名",dataType="string", paramType = "query")})
-    public User getUserInfo(@RequestParam("userName") String userName) {
-        User user = userService.getUserByUserName(userName);
-        // 生成一个token，保存用户登录状态
-//        TokenModel model = tokenManager.createToken(userId);
-//        model.getSignToken() userId_ashkdhaskdfaskufguks
-        return user;
-    }
+
 }

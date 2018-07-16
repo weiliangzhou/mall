@@ -1,7 +1,6 @@
 package com.zwl.dao.mapper;
 
-import com.zwl.model.Product;
-import org.apache.ibatis.annotations.Param;
+import com.zwl.model.po.Product;
 
 import java.util.List;
 

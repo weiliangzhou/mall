@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zwl.dao.mapper.UserCertificationMapper" >
-  <resultMap id="BaseResultMap" type="com.zwl.model.UserCertification" >
+  <resultMap id="BaseResultMap" type="com.zwl.model.po.UserCertification" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="operator" property="operator" jdbcType="VARCHAR" />
@@ -11,32 +11,33 @@
     <result column="img_2_url" property="img2Url" jdbcType="VARCHAR" />
     <result column="img_3_url" property="img3Url" jdbcType="VARCHAR" />
     <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="merchant_id" property="merchantId" jdbcType="VARCHAR" />
     <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="available" property="available" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, status, operator, realname, id_card, img_1_url, img_2_url, img_3_url, user_id, 
+    id, status, operator, realname, id_card, img_1_url, img_2_url, img_3_url, user_id, merchant_id,
     audit_time, create_time, modify_time, available
   </sql>
   <sql id="Insert_Column_List" >
-    status, operator, realname, id_card, img_1_url, img_2_url, img_3_url, user_id,
+    status, operator, realname, id_card, img_1_url, img_2_url, img_3_url, user_id,merchant_id
     audit_time, create_time, modify_time, available
   </sql>
   <!--新增-->
-  <insert id="insert" parameterType="com.zwl.model.UserCertification" >
+  <insert id="insert" parameterType="com.zwl.model.po.UserCertification" >
     insert into ss_user_certification (
     <include refid="Insert_Column_List"/>
     )
     values ( #{status,jdbcType=INTEGER}, #{operator,jdbcType=VARCHAR},
       #{realname,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, #{img1Url,jdbcType=VARCHAR},
       #{img2Url,jdbcType=VARCHAR}, #{img3Url,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR},
-      #{auditTime,jdbcType=TIMESTAMP}, now(), #{modifyTime,jdbcType=TIMESTAMP},
+      #{merchantId,jdbcType=VARCHAR},#{auditTime,jdbcType=TIMESTAMP}, now(), now(),
       #{available,jdbcType=INTEGER})
   </insert>
   <!--根据插入参数 修改用户实名信息-->
-  <update id="updateById" parameterType="com.zwl.model.UserCertification" >
+  <update id="updateById" parameterType="com.zwl.model.po.UserCertification" >
     update ss_user_certification
     <set >
       <if test="status != null" >
@@ -63,6 +64,9 @@
       <if test="userId != null" >
         user_id = #{userId,jdbcType=VARCHAR},
       </if>
+      <if test="merchantId != null" >
+        merchant_id = #{merchantId,jdbcType=VARCHAR},
+      </if>
       <if test="auditTime != null" >
         audit_time = #{auditTime,jdbcType=TIMESTAMP},
       </if>
@@ -76,11 +80,11 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
   <!--根据userId查询用户提交的实名认证信息-->
-  <select id="selectOneByUserId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <select id="selectOneByUserId" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select
     <include refid="Base_Column_List" />
     from ss_user_certification
-    where id = #{id,jdbcType=BIGINT}
+    where user_id = #{userId,jdbcType=BIGINT}
   </select>
   <!--查找merchantId下的所有用户实名申请信息-->
   <select id="selectListByMerchantId" resultMap="BaseResultMap" parameterType="java.lang.String" >
@@ -88,5 +92,12 @@
     <include refid="Base_Column_List" />
     from ss_user_certification
     where merchant_id = #{merchantId}
+  </select>
+  <!--根据Id查询用户提交的实名认证信息-->
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    from ss_user_certification
+    where id = #{id,jdbcType=BIGINT}
   </select>
 </mapper>

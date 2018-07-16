@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zwl.dao.mapper.WithdrawFlowMapper" >
-  <resultMap id="BaseResultMap" type="com.zwl.model.WithdrawFlow" >
+  <resultMap id="BaseResultMap" type="com.zwl.model.po.WithdrawFlow" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="withdraw_id" property="withdrawId" jdbcType="VARCHAR" />
     <result column="success_time" property="successTime" jdbcType="TIMESTAMP" />
@@ -27,7 +27,7 @@
     delete from ss_withdraw_flow
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.zwl.model.WithdrawFlow" >
+  <insert id="insert" parameterType="com.zwl.model.po.WithdrawFlow" >
     insert into ss_withdraw_flow (id, withdraw_id, success_time, 
       payment_time, payment_no, status, 
       operator, merchant_id, create_time, 
@@ -37,7 +37,7 @@
       #{operator,jdbcType=VARCHAR}, #{merchantId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{available,jdbcType=SMALLINT})
   </insert>
-  <insert id="insertSelective" parameterType="com.zwl.model.WithdrawFlow" >
+  <insert id="insertSelective" parameterType="com.zwl.model.po.WithdrawFlow" >
     insert into ss_withdraw_flow
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -104,7 +104,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zwl.model.WithdrawFlow" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.zwl.model.po.WithdrawFlow" >
     update ss_withdraw_flow
     <set >
       <if test="withdrawId != null" >
@@ -137,7 +137,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.zwl.model.WithdrawFlow" >
+  <update id="updateByPrimaryKey" parameterType="com.zwl.model.po.WithdrawFlow" >
     update ss_withdraw_flow
     set withdraw_id = #{withdrawId,jdbcType=VARCHAR},
       success_time = #{successTime,jdbcType=TIMESTAMP},

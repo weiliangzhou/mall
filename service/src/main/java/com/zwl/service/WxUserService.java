@@ -1,6 +1,6 @@
 package com.zwl.service;
 
-import com.zwl.model.User;
+import com.zwl.model.po.User;
 
 /**
  * 微信小程序用户service
@@ -14,9 +14,11 @@ public interface WxUserService {
 
     Integer getMemberLevel(String userId);
 
-    User getUserById(String userId);
+//    User getUserById(String userId);
+    User getUserByUserId(String userId);
 
     int updateUserById(User user);
 
     Integer getMaidPercentByUserId(String userId);
+
 }

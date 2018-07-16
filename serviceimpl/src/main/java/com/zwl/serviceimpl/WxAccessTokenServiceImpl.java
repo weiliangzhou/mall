@@ -1,8 +1,8 @@
 package com.zwl.serviceimpl;
 
+import com.zwl.model.wxpay.WxConstans;
 import com.zwl.service.WxAccessTokenService;
 import com.zwl.util.HttpsUtils;
-import com.zwl.wxpay.WxConstans;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zwl.dao.mapper.ProductMapper" >
-  <resultMap id="BaseResultMap" type="com.zwl.model.Product" >
+  <resultMap id="BaseResultMap" type="com.zwl.model.po.Product" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="level" property="level" jdbcType="INTEGER" />
     <result column="level_name" property="levelName" jdbcType="VARCHAR" />
@@ -28,7 +28,7 @@
     delete from ss_product
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.zwl.model.Product" >
+  <insert id="insert" parameterType="com.zwl.model.po.Product" >
     insert into ss_product (id, level, level_name, 
       product_name, maid_percent, validity_time, 
       price, merchant_id, create_time, 
@@ -38,7 +38,7 @@
       #{price,jdbcType=INTEGER}, #{merchantId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{modifyTime,jdbcType=TIMESTAMP}, #{available,jdbcType=SMALLINT})
   </insert>
-  <insert id="insertSelective" parameterType="com.zwl.model.Product" >
+  <insert id="insertSelective" parameterType="com.zwl.model.po.Product" >
     insert into ss_product
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -111,7 +111,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zwl.model.Product" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.zwl.model.po.Product" >
     update ss_product
     <set >
       <if test="level != null" >
@@ -147,7 +147,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.zwl.model.Product" >
+  <update id="updateByPrimaryKey" parameterType="com.zwl.model.po.Product" >
     update ss_product
     set level = #{level,jdbcType=INTEGER},
       level_name = #{levelName,jdbcType=VARCHAR},

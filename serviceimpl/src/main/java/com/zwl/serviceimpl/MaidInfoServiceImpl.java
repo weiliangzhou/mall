@@ -1,7 +1,8 @@
 package com.zwl.serviceimpl;
 
 import com.zwl.dao.mapper.MaidInfoMapper;
-import com.zwl.model.MaidInfo;
+import com.zwl.model.po.MaidInfo;
+import com.zwl.model.vo.XiaXianVo;
 import com.zwl.service.MaidInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,5 +29,15 @@ public class MaidInfoServiceImpl implements MaidInfoService {
     @Override
     public List<MaidInfo> getMaidInfoList(String userId) {
         return maidInfoMapper.getMaidInfoList(userId);
+    }
+
+    @Override
+    public List<XiaXianVo> getXiaXianList(String userId) {
+        return maidInfoMapper.getXiaXianList(userId);
+    }
+
+    @Override
+    public Integer getTotalMaidMoneyByUserId(String userId) {
+        return maidInfoMapper.getTotalMaidMoneyByUserId(userId);
     }
 }

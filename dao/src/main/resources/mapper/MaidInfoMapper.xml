@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zwl.dao.mapper.MaidInfoMapper">
-    <resultMap id="BaseResultMap" type="com.zwl.model.MaidInfo">
+    <resultMap id="BaseResultMap" type="com.zwl.model.po.MaidInfo">
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="order_no" property="orderNo" jdbcType="VARCHAR"/>
         <result column="user_id" property="userId" jdbcType="VARCHAR"/>
@@ -30,7 +30,7 @@
     delete from ss_maid_info
     where id = #{id,jdbcType=BIGINT}
   </delete>
-    <insert id="insert" parameterType="com.zwl.model.MaidInfo">
+    <insert id="insert" parameterType="com.zwl.model.po.MaidInfo">
     insert into ss_maid_info (id, order_no, user_id, 
       maid_money, maid_percent, order_actual_money, 
       merchant_id, product_id, product_name, 
@@ -42,7 +42,7 @@
       #{level,jdbcType=SMALLINT}, #{levelName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{available,jdbcType=INTEGER})
   </insert>
-    <insert id="insertSelective" parameterType="com.zwl.model.MaidInfo">
+    <insert id="insertSelective" parameterType="com.zwl.model.po.MaidInfo">
         insert into ss_maid_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -127,7 +127,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.zwl.model.MaidInfo">
+    <update id="updateByPrimaryKeySelective" parameterType="com.zwl.model.po.MaidInfo">
         update ss_maid_info
         <set>
             <if test="orderNo != null">
@@ -169,7 +169,7 @@
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.zwl.model.MaidInfo">
+    <update id="updateByPrimaryKey" parameterType="com.zwl.model.po.MaidInfo">
     update ss_maid_info
     set order_no = #{orderNo,jdbcType=VARCHAR},
       user_id = #{userId,jdbcType=VARCHAR},
@@ -192,4 +192,24 @@
         where available =1
         and user_id=#{userId}
     </select>
+
+    <select id="getXiaXianList" resultType="com.zwl.model.vo.XiaXianVo" parameterType="string">
+    SELECT
+        usr.real_name as realName,
+        so.actual_money as money,
+        so.payment_time as buyTime,
+        so.actual_money*sp.maid_percent/100 as maidMoney
+    FROM
+        ss_user usr,
+        ss_order so,
+        ss_product sp
+    WHERE
+        usr.available = 1
+        AND usr.referrer = #{userId}
+        AND so.available = 1
+        AND usr.user_id = so.user_id
+        and usr.member_level=sp.`level`
+    </select>
+
+
 </mapper>

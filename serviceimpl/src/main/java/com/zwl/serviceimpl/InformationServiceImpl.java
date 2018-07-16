@@ -1,7 +1,7 @@
 package com.zwl.serviceimpl;
 
 import com.zwl.dao.mapper.InformationMapper;
-import com.zwl.model.Information;
+import com.zwl.model.po.Information;
 import com.zwl.service.InformationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,5 +23,15 @@ public class InformationServiceImpl implements InformationService {
     @Override
     public List<Information> getInformationList(String merchantId) {
         return informationMapper.getInformationList(merchantId);
+    }
+
+    @Override
+    public int addInformation(Information information) {
+        return informationMapper.insertSelective(information);
+    }
+
+    @Override
+    public int updateInformation(Information information) {
+        return informationMapper.updateByPrimaryKeySelective(information);
     }
 }

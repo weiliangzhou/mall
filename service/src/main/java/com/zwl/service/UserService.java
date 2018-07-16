@@ -1,14 +1,12 @@
 package com.zwl.service;
 
 
-import com.zwl.model.User;
+import com.zwl.model.po.User;
 
 /**
  * 微信小程序用户service
  */
 public interface UserService {
-    User getUserByUserName(String userName);
-
     /**
      * 新增
      */

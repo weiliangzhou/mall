@@ -1,11 +1,11 @@
 package com.zwl.serviceimpl;
 
-import com.zwl.exception.BSUtil;
-import com.zwl.groups.AdminPay;
+import com.zwl.model.groups.AdminPay;
+import com.zwl.model.exception.BSUtil;
+import com.zwl.model.wxpay.*;
 import com.zwl.service.WithdrawService;
 import com.zwl.service.WxPayService;
 import com.zwl.util.HttpsUtils;
-import com.zwl.wxpay.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,7 +56,7 @@ public class WxPayServiceImpl implements WxPayService {
                 .setSpbillCreateIp(realIp)
                 .setTradeType("MWEB")
                 .setOpenId(openId)
-                .setSceneInfo("{\"h5_info\": {\"type\":\"Wap\",\"wap_url\": \"zwl.com\",\"wap_name\": \"二师兄超级帅\"}}")
+                .setSceneInfo("{\"h5_info\": {\"type\":\"Wap\",\"wap_url\": \"admin.com\",\"wap_name\": \"二师兄超级帅\"}}")
                 .setAttach("DY分店 H5支付测试  -By 二师兄超级帅")
                 .setPaternerKey(WxConstans.PARTNERKEY)
                 .build();

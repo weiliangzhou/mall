@@ -1,6 +1,6 @@
 package com.zwl.service;
 
-import com.zwl.wxpay.AdminPayVo;
+import com.zwl.model.wxpay.AdminPayVo;
 
 import java.util.Map;
 

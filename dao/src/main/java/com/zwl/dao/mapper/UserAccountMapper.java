@@ -1,6 +1,6 @@
 package com.zwl.dao.mapper;
 
-import com.zwl.model.UserAccount;
+import com.zwl.model.po.UserAccount;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Update;
 
@@ -19,6 +19,9 @@ public interface UserAccountMapper {
 
     Integer getBalanceByUserId(String userId);
 
-    @Update("update ss_user_account set balance= #{currentAmount} where user_id=#{userId}")
-    int updateBanlanceByUserId(@Param("userId") String userId, @Param("currentAmount") double currentAmount);
+    @Update("update ss_user_account set balance= balance+#{money} where user_id=#{userId}")
+    int addBanlanceByUserId(@Param("userId") String userId, @Param("money") Integer money);
+
+    @Update("update ss_user_account set balance= balance-#{money} where user_id=#{userId}")
+    int subBanlanceByUserId(@Param("userId") String userId, @Param("currentAmount") Integer money);
 }

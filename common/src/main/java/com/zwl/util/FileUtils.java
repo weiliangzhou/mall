@@ -1,5 +1,5 @@
-/*
-package com.zwl.util;
+package com.zwl.util;/*
+package com.admin.util;
 
 import org.springframework.web.multipart.MultipartFile;
 

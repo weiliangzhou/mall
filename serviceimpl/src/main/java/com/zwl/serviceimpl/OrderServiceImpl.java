@@ -1,7 +1,7 @@
 package com.zwl.serviceimpl;
 
 import com.zwl.dao.mapper.OrderMapper;
-import com.zwl.model.Order;
+import com.zwl.model.po.Order;
 import com.zwl.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,5 +38,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order getOrderById(String merchantId, String orderNo) {
         return orderMapper.getOrderById(merchantId,orderNo);
+    }
+
+    @Override
+    public List<Order> getOrderListByUserId(String userId) {
+        return orderMapper.getOrderListByUserId(userId);
     }
 }

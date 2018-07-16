@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zwl.dao.mapper.InformationCategoryMapper" >
-  <resultMap id="BaseResultMap" type="com.zwl.model.InformationCategory" >
+  <resultMap id="BaseResultMap" type="com.zwl.model.po.InformationCategory" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="is_show" property="isShow" jdbcType="INTEGER" />
     <result column="merchant_id" property="merchantId" jdbcType="VARCHAR" />
@@ -22,7 +22,7 @@
     delete from ss_information_category
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.zwl.model.InformationCategory" >
+  <insert id="insert" parameterType="com.zwl.model.po.InformationCategory" >
     insert into ss_information_category (id, is_show, merchant_id, 
       create_time, modify_time, available
       )
@@ -30,7 +30,7 @@
       #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{available,jdbcType=INTEGER}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.zwl.model.InformationCategory" >
+  <insert id="insertSelective" parameterType="com.zwl.model.po.InformationCategory" >
     insert into ss_information_category
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -73,7 +73,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zwl.model.InformationCategory" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.zwl.model.po.InformationCategory" >
     update ss_information_category
     <set >
       <if test="isShow != null" >
@@ -94,7 +94,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.zwl.model.InformationCategory" >
+  <update id="updateByPrimaryKey" parameterType="com.zwl.model.po.InformationCategory" >
     update ss_information_category
     set is_show = #{isShow,jdbcType=INTEGER},
       merchant_id = #{merchantId,jdbcType=VARCHAR},

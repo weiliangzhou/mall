@@ -1,8 +1,6 @@
 package com.zwl.dao.mapper;
 
-import com.zwl.model.User;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import com.zwl.model.po.User;
 
 public interface UserMapper {
 
@@ -22,10 +20,8 @@ public interface UserMapper {
      */
     User selectOneByParams(User user);
 
-    @Select("select user_name as userName ,pass_word as passWord  from ss_user where user_name =#{userName}")
-    User getUserByUserName(@Param("userName") String userName);
     User getUserByUserId(String userId);
-    User getUserById(String userId);
+//    User getUserById(String userId);
     int updateUserById(User user);
     Integer getMemberLevel(String userId);
 

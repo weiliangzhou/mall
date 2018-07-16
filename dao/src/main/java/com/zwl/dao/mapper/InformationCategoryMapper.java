@@ -1,6 +1,6 @@
 package com.zwl.dao.mapper;
 
-import com.zwl.model.InformationCategory;
+import com.zwl.model.po.InformationCategory;
 
 public interface InformationCategoryMapper {
     int deleteByPrimaryKey(Integer id);

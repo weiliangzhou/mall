@@ -1,7 +1,7 @@
 package com.zwl.serviceimpl;
 
 import com.zwl.dao.mapper.UserCertificationMapper;
-import com.zwl.model.UserCertification;
+import com.zwl.model.po.UserCertification;
 import com.zwl.service.CertificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,5 +30,10 @@ public class CertificationServiceImpl implements CertificationService {
     @Override
     public List<UserCertification> getListByMerchantId(String merchantId) {
         return userCertificationMapper.selectListByMerchantId(merchantId);
+    }
+
+    @Override
+    public UserCertification getById(Long id) {
+        return userCertificationMapper.selectById(id);
     }
 }

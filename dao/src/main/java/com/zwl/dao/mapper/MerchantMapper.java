@@ -1,6 +1,6 @@
 package com.zwl.dao.mapper;
 
-import com.zwl.model.Merchant;
+import com.zwl.model.po.Merchant;
 
 public interface MerchantMapper {
 

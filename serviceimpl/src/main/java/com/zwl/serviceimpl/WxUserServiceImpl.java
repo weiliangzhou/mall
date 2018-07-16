@@ -1,7 +1,7 @@
 package com.zwl.serviceimpl;
 
 import com.zwl.dao.mapper.UserMapper;
-import com.zwl.model.User;
+import com.zwl.model.po.User;
 import com.zwl.service.WxUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,9 +23,14 @@ public class WxUserServiceImpl implements WxUserService {
     }
 
     @Override
-    public User getUserById(String userId) {
-        return userMapper.getUserById(userId);
+    public User getUserByUserId(String userId) {
+        return userMapper.getUserByUserId(userId);
     }
+
+//    @Override
+//    public User getUserById(String userId) {
+//        return userMapper.getUserById(userId);
+//    }
 
     @Override
     public int updateUserById(User user) {

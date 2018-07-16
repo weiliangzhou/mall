@@ -1,6 +1,6 @@
 package com.zwl.service;
 
-import com.zwl.model.Merchant;
+import com.zwl.model.po.Merchant;
 
 /**
  * 商户service

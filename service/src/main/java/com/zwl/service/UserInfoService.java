@@ -1,6 +1,6 @@
 package com.zwl.service;
 
-import com.zwl.model.UserInfo;
+import com.zwl.model.po.UserInfo;
 
 /**
  * 用户详情service

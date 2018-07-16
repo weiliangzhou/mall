@@ -3,11 +3,11 @@ package com.zwl.serviceimpl;
 import com.zwl.dao.mapper.OrderFlowMapper;
 import com.zwl.dao.mapper.OrderMapper;
 import com.zwl.dao.mapper.ProductMapper;
-import com.zwl.dao.mapper.UserMapper;
-import com.zwl.exception.BSUtil;
-import com.zwl.model.Order;
-import com.zwl.model.OrderFlow;
-import com.zwl.model.Product;
+import com.zwl.model.exception.BSUtil;
+import com.zwl.model.po.Order;
+import com.zwl.model.po.OrderFlow;
+import com.zwl.model.po.Product;
+import com.zwl.model.po.User;
 import com.zwl.service.ProductService;
 import com.zwl.service.WxUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +33,6 @@ public class ProductServiceImpl implements ProductService {
     private OrderMapper orderMapper;
     @Autowired
     private OrderFlowMapper orderFlowMapper;
-    @Autowired
-    private UserMapper userMapper;
     @Autowired
     private WxUserService wxUserService;
 
@@ -74,6 +72,9 @@ public class ProductServiceImpl implements ProductService {
         SimpleDateFormat sdf_yMdHm = new SimpleDateFormat("yyyyMMddHHmm");
         String merchantId = product.getMerchantId();
         String userId = product.getUserId();
+        //获取userId的自增Id
+        User user = wxUserService.getUserByUserId(userId);
+        Long userLongId = user.getId();
         Long productId = product.getId();
         Product localProduct = productMapper.selectByPrimaryKey(productId);
         Integer level = localProduct.getLevel();
@@ -89,7 +90,7 @@ public class ProductServiceImpl implements ProductService {
 
         if (null != alreadyLevel && alreadyLevel >= level)
             BSUtil.isTrue(false, "不能重复购买此商品！");
-        String orderNo = sdf_yMdHm.format(new Date()) + merchantId + userId;
+        String orderNo = sdf_yMdHm.format(new Date()) + merchantId + userLongId;
         Order order = new Order();
         order.setOrderNo(orderNo);
         order.setProductId(productId);

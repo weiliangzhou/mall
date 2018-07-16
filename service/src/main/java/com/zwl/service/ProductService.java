@@ -1,6 +1,6 @@
 package com.zwl.service;
 
-import com.zwl.model.Product;
+import com.zwl.model.po.Product;
 
 import java.util.List;
 

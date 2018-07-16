@@ -1,6 +1,6 @@
 package com.zwl.dao.mapper;
 
-import com.zwl.model.OrderFlow;
+import com.zwl.model.po.OrderFlow;
 
 public interface OrderFlowMapper {
     int deleteByPrimaryKey(Long id);

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zwl.dao.mapper.MerchantMapper" >
-  <resultMap id="BaseResultMap" type="com.zwl.model.Merchant" >
+  <resultMap id="BaseResultMap" type="com.zwl.model.po.Merchant" >
     <id column="merchant_id" property="merchantId" jdbcType="VARCHAR" />
     <result column="merchant_name" property="merchantName" jdbcType="VARCHAR" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
@@ -16,7 +16,7 @@
     available
   </sql>
   <!--新增-->
-  <insert id="insert" parameterType="com.zwl.model.Merchant" >
+  <insert id="insert" parameterType="com.zwl.model.po.Merchant" >
     insert into ss_merchant (<include refid="Base_Column_List" />)
     values (#{merchantId,jdbcType=VARCHAR}, #{merchantName,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{appId,jdbcType=VARCHAR}, #{appSecret,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 

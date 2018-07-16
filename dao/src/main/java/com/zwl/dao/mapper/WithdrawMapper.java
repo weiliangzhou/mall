@@ -1,6 +1,6 @@
 package com.zwl.dao.mapper;
 
-import com.zwl.model.Withdraw;
+import com.zwl.model.po.Withdraw;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Update;
 

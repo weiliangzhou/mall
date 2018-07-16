@@ -1,6 +1,6 @@
 package com.zwl.dao.mapper;
 
-import com.zwl.model.UserCertification;
+import com.zwl.model.po.UserCertification;
 
 import java.util.List;
 
@@ -30,5 +30,10 @@ public interface UserCertificationMapper {
      * @return
      */
     List<UserCertification> selectListByMerchantId(String merchantId);
+    /**
+     * 根据Id查询用户提交的实名认证信息
+     * @return
+     */
+    UserCertification selectById(Long id);
 
 }

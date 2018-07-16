@@ -1,175 +1,153 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zwl.dao.mapper.InformationMapper">
-    <resultMap id="BaseResultMap" type="com.zwl.model.Information">
-        <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="information_id" property="informationId" jdbcType="VARCHAR"/>
-        <result column="merchant_id" property="merchantId" jdbcType="VARCHAR"/>
-        <result column="url" property="url" jdbcType="VARCHAR"/>
-        <result column="is_show" property="isShow" jdbcType="INTEGER"/>
-        <result column="title" property="title" jdbcType="VARCHAR"/>
-        <result column="logo_url" property="logoUrl" jdbcType="VARCHAR"/>
-        <result column="audio_url" property="audioUrl" jdbcType="VARCHAR"/>
-        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
-        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
-        <result column="available" property="available" jdbcType="INTEGER"/>
-    </resultMap>
-    <resultMap id="ResultMapWithBLOBs" type="com.zwl.model.Information" extends="BaseResultMap">
-        <result column="content" property="content" jdbcType="LONGVARCHAR"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-    id, information_id, merchant_id, url, is_show, title, logo_url, audio_url, create_time, 
-    modify_time, available
+<mapper namespace="com.zwl.dao.mapper.InformationMapper" >
+  <resultMap id="BaseResultMap" type="com.zwl.model.po.Information" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="merchant_id" property="merchantId" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="is_show" property="isShow" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="logo_url" property="logoUrl" jdbcType="VARCHAR" />
+    <result column="audio_url" property="audioUrl" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="available" property="available" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.zwl.model.po.Information" extends="BaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, merchant_id, url, is_show, title, logo_url, audio_url, create_time, modify_time, 
+    available
   </sql>
-    <sql id="Blob_Column_List">
+  <sql id="Blob_Column_List" >
     content
   </sql>
-    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer">
-        select
-        <include refid="Base_Column_List"/>
-        ,
-        <include refid="Blob_Column_List"/>
-        from ss_information
-        where id = #{id,jdbcType=INTEGER}
-    </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from ss_information
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from ss_information
     where id = #{id,jdbcType=INTEGER}
   </delete>
-    <insert id="insert" parameterType="com.zwl.model.Information">
-    insert into ss_information (id, information_id, merchant_id, 
-      url, is_show, title, 
-      logo_url, audio_url, create_time, 
-      modify_time, available, content
-      )
-    values (#{id,jdbcType=INTEGER}, #{informationId,jdbcType=VARCHAR}, #{merchantId,jdbcType=VARCHAR}, 
-      #{url,jdbcType=VARCHAR}, #{isShow,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 
-      #{logoUrl,jdbcType=VARCHAR}, #{audioUrl,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{modifyTime,jdbcType=TIMESTAMP}, #{available,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR}
-      )
+  
+  <insert id="insertSelective" parameterType="com.zwl.model.po.Information" >
+    insert into ss_information
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="merchantId != null" >
+        merchant_id,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+      <if test="isShow != null" >
+        is_show,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="logoUrl != null" >
+        logo_url,
+      </if>
+      <if test="audioUrl != null" >
+        audio_url,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="available != null" >
+        available,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="merchantId != null" >
+        #{merchantId,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="isShow != null" >
+        #{isShow,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="logoUrl != null" >
+        #{logoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="audioUrl != null" >
+        #{audioUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="available != null" >
+        #{available,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
   </insert>
-    <insert id="insertSelective" parameterType="com.zwl.model.Information">
-        insert into ss_information
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                id,
-            </if>
-            <if test="informationId != null">
-                information_id,
-            </if>
-            <if test="merchantId != null">
-                merchant_id,
-            </if>
-            <if test="url != null">
-                url,
-            </if>
-            <if test="isShow != null">
-                is_show,
-            </if>
-            <if test="title != null">
-                title,
-            </if>
-            <if test="logoUrl != null">
-                logo_url,
-            </if>
-            <if test="audioUrl != null">
-                audio_url,
-            </if>
-            <if test="createTime != null">
-                create_time,
-            </if>
-            <if test="modifyTime != null">
-                modify_time,
-            </if>
-            <if test="available != null">
-                available,
-            </if>
-            <if test="content != null">
-                content,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                #{id,jdbcType=INTEGER},
-            </if>
-            <if test="informationId != null">
-                #{informationId,jdbcType=VARCHAR},
-            </if>
-            <if test="merchantId != null">
-                #{merchantId,jdbcType=VARCHAR},
-            </if>
-            <if test="url != null">
-                #{url,jdbcType=VARCHAR},
-            </if>
-            <if test="isShow != null">
-                #{isShow,jdbcType=INTEGER},
-            </if>
-            <if test="title != null">
-                #{title,jdbcType=VARCHAR},
-            </if>
-            <if test="logoUrl != null">
-                #{logoUrl,jdbcType=VARCHAR},
-            </if>
-            <if test="audioUrl != null">
-                #{audioUrl,jdbcType=VARCHAR},
-            </if>
-            <if test="createTime != null">
-                #{createTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="modifyTime != null">
-                #{modifyTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="available != null">
-                #{available,jdbcType=INTEGER},
-            </if>
-            <if test="content != null">
-                #{content,jdbcType=LONGVARCHAR},
-            </if>
-        </trim>
-    </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.zwl.model.Information">
-        update ss_information
-        <set>
-            <if test="informationId != null">
-                information_id = #{informationId,jdbcType=VARCHAR},
-            </if>
-            <if test="merchantId != null">
-                merchant_id = #{merchantId,jdbcType=VARCHAR},
-            </if>
-            <if test="url != null">
-                url = #{url,jdbcType=VARCHAR},
-            </if>
-            <if test="isShow != null">
-                is_show = #{isShow,jdbcType=INTEGER},
-            </if>
-            <if test="title != null">
-                title = #{title,jdbcType=VARCHAR},
-            </if>
-            <if test="logoUrl != null">
-                logo_url = #{logoUrl,jdbcType=VARCHAR},
-            </if>
-            <if test="audioUrl != null">
-                audio_url = #{audioUrl,jdbcType=VARCHAR},
-            </if>
-            <if test="createTime != null">
-                create_time = #{createTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="modifyTime != null">
-                modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="available != null">
-                available = #{available,jdbcType=INTEGER},
-            </if>
-            <if test="content != null">
-                content = #{content,jdbcType=LONGVARCHAR},
-            </if>
-        </set>
-        where id = #{id,jdbcType=INTEGER}
-    </update>
-    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.zwl.model.Information">
+  <update id="updateByPrimaryKeySelective" parameterType="com.zwl.model.po.Information" >
     update ss_information
-    set information_id = #{informationId,jdbcType=VARCHAR},
-      merchant_id = #{merchantId,jdbcType=VARCHAR},
+    <set >
+      <if test="merchantId != null" >
+        merchant_id = #{merchantId,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="isShow != null" >
+        is_show = #{isShow,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="logoUrl != null" >
+        logo_url = #{logoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="audioUrl != null" >
+        audio_url = #{audioUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="available != null" >
+        available = #{available,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.zwl.model.po.Information" >
+    update ss_information
+    set merchant_id = #{merchantId,jdbcType=VARCHAR},
       url = #{url,jdbcType=VARCHAR},
       is_show = #{isShow,jdbcType=INTEGER},
       title = #{title,jdbcType=VARCHAR},
@@ -181,10 +159,9 @@
       content = #{content,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
-    <update id="updateByPrimaryKey" parameterType="com.zwl.model.Information">
+  <update id="updateByPrimaryKey" parameterType="com.zwl.model.po.Information" >
     update ss_information
-    set information_id = #{informationId,jdbcType=VARCHAR},
-      merchant_id = #{merchantId,jdbcType=VARCHAR},
+    set merchant_id = #{merchantId,jdbcType=VARCHAR},
       url = #{url,jdbcType=VARCHAR},
       is_show = #{isShow,jdbcType=INTEGER},
       title = #{title,jdbcType=VARCHAR},
@@ -195,12 +172,12 @@
       available = #{available,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
-
-    <select id="getInformationList" resultMap="BaseResultMap" parameterType="string">
-        select
-        <include refid="Base_Column_List"/>
-        from ss_information
-        where available =1
-        and is_show =1
-    </select>
+  <select id="getInformationList" resultMap="BaseResultMap" parameterType="string">
+    select
+    <include refid="Base_Column_List"/>
+    from ss_information
+    where available =1
+    and is_show =1
+    order  by modify_time desc
+  </select>
 </mapper>

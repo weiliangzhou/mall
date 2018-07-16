@@ -1,9 +1,10 @@
 package com.zwl.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
-import com.zwl.baseresult.Result;
-import com.zwl.model.Information;
+import com.zwl.model.baseresult.Result;
+import com.zwl.model.po.Information;
 import com.zwl.service.InformationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +25,7 @@ public class InformationController {
     @Autowired
     private InformationService informationService;
 
-    @PostMapping("/wx/getInformationList")
+    @PostMapping("/noauth/wx/information/getInformationList")
     public String getInformationList(@RequestBody JSONObject jsonObject) {
         String merchant_id = jsonObject.getString("merchant_id");
         Integer pageNum=jsonObject.getInteger("pageNum");
@@ -33,14 +34,14 @@ public class InformationController {
         Result result = new Result();
         List<Information> informationList = informationService.getInformationList(merchant_id);
         result.setData(informationList);
-        return JSONObject.toJSONString(result);
+        return JSON.toJSONString(result);
     }
-    @PostMapping("/wx/getInformationInfo")
-    public String getInformationInfo(@RequestBody JSONObject jsonObject) {
-        String merchant_id = jsonObject.getString("informationId");
-        Result result = new Result();
-        List<Information> informationList = informationService.getInformationList(merchant_id);
-        result.setData(informationList);
-        return JSONObject.toJSONString(result);
-    }
+//    @PostMapping("/wx/getInformationInfo")
+//    public String getInformationInfo(@RequestBody JSONObject jsonObject) {
+//        String merchant_id = jsonObject.getString("informationId");
+//        Result result = new Result();
+//        List<Information> informationList = informationService.getInformationList(merchant_id);
+//        result.setData(informationList);
+//        return JSONObject.toJSONString(result);
+//    }
 }

@@ -3,8 +3,8 @@ package com.zwl.controller;
 import com.alibaba.fastjson.JSON;
 import com.terran4j.commons.api2doc.annotations.Api2Doc;
 import com.terran4j.commons.api2doc.annotations.ApiComment;
-import com.zwl.baseresult.Result;
-import com.zwl.model.Withdraw;
+import com.zwl.model.baseresult.Result;
+import com.zwl.model.po.Withdraw;
 import com.zwl.service.WithdrawService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +30,7 @@ public class WithdrawController {
     @ApiComment("提现列表")
     @RequestMapping(name = "提现列表",
             value = "/admin/getWithdrawList", method = RequestMethod.POST)
-    public List<Withdraw> getWithdrawList(@ApiComment("pageNum") Integer pageNum,@ApiComment("pageSize") Integer pageSize) {
+    public List<Withdraw> getWithdrawList(@ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize) {
         List<Withdraw> withdrawList = withdrawService.getWithdrawList();
         return withdrawList;
     }

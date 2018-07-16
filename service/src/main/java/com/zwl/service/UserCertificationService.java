@@ -1,6 +1,6 @@
 package com.zwl.service;
 
-import com.zwl.model.UserCertification;
+import com.zwl.model.po.UserCertification;
 
 import java.util.List;
 

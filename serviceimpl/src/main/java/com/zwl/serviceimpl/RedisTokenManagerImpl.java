@@ -1,11 +1,10 @@
 package com.zwl.serviceimpl;
 
-import com.zwl.model.TokenModel;
-import com.zwl.token.TokenManager;
+import com.zwl.model.po.TokenModel;
+import com.zwl.service.TokenManager;
 import com.zwl.util.Des3;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;

@@ -1,6 +1,6 @@
 package com.zwl.dao.mapper;
 
-import com.zwl.model.WithdrawFlow;
+import com.zwl.model.po.WithdrawFlow;
 
 public interface WithdrawFlowMapper {
     int deleteByPrimaryKey(Long id);

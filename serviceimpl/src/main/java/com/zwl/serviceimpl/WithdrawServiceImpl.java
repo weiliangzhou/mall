@@ -3,15 +3,15 @@ package com.zwl.serviceimpl;
 import com.zwl.dao.mapper.UserAccountMapper;
 import com.zwl.dao.mapper.WithdrawFlowMapper;
 import com.zwl.dao.mapper.WithdrawMapper;
-import com.zwl.exception.BSUtil;
-import com.zwl.model.User;
-import com.zwl.model.Withdraw;
-import com.zwl.model.WithdrawFlow;
+import com.zwl.model.exception.BSUtil;
+import com.zwl.model.po.User;
+import com.zwl.model.po.Withdraw;
+import com.zwl.model.po.WithdrawFlow;
+import com.zwl.model.wxpay.AdminPayVo;
 import com.zwl.service.WithdrawService;
 import com.zwl.service.WxPayService;
 import com.zwl.service.WxUserService;
 import com.zwl.util.UUIDUtil;
-import com.zwl.wxpay.AdminPayVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -89,7 +89,7 @@ public class WithdrawServiceImpl implements WithdrawService {
         if (money >= balance)
             BSUtil.isTrue(false, "可用余额不足");
 //        需校验该用户是否实名，未实名则返回norealname
-        User user = wxUserService.getUserById(userId);
+        User user = wxUserService.getUserByUserId(userId);
         String realName = user.getRealName();
         if (StringUtils.isBlank(realName))
             BSUtil.isTrue(false, "未实名");
@@ -98,8 +98,8 @@ public class WithdrawServiceImpl implements WithdrawService {
 //        发送支付信息成功
 //        发送支付信息失败
 //        同时记录提现流水表
-        Integer currentAmount = balance - money;// Arith.sub(balance, money);
-        int difBalance = userAccountMapper.updateBanlanceByUserId(userId, currentAmount);
+//        Integer currentAmount = balance - money;// Arith.sub(balance, money);
+        int difBalance = userAccountMapper.subBanlanceByUserId(userId, money);
         if (difBalance == 0)
             BSUtil.isTrue(false, "更新余额异常");
         withdraw.setWithdrawId(UUIDUtil.getUUID32());
