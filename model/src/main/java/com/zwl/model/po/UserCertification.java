@@ -26,6 +26,8 @@ public class UserCertification {
     private String userId;
     @ApiComment(value = "商户id", sample = "0571XUDONGYA")
     private String merchantId;
+    @ApiComment(value = "驳回原因", sample = "身份证号有误")
+    private String rejectReason;
     @ApiComment(value = "审核时间", sample = "2018-7-11 16:41:06")
     private Date auditTime;
     @ApiComment(value = "创建时间", sample = "2018-7-11 16:41:43")
