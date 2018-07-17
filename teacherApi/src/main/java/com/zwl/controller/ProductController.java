@@ -38,6 +38,9 @@ public class ProductController {
 
     @PostMapping(value = "/teacher/updateProduct")
     public String updateProduct(@Validated(Update.class) @RequestBody Product product) {
+        //前端页面编辑传入的是元单位 ，需要转换成分
+        Integer price=product.getPrice()*100;
+        product.setPrice(price);
         Result result = new Result();
         productService.updateProduct(product);
         return JSON.toJSONString(result);
