@@ -66,7 +66,8 @@ spring:
 #        max-connections: 50
 #        expiry-timeout: 10000
 #        idle-timeout: 30000
-
+  jackson:
+    default-property-inclusion:  non_null
 mapper:
     config-location: /mapper/*.xml
 

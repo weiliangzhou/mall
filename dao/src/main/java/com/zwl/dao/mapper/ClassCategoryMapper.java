@@ -12,12 +12,6 @@ public interface ClassCategoryMapper {
     int insert(ClassCategory classCategory);
 
     /**
-     * 获取商户下的所有课程分类
-     * @return
-     */
-    List<ClassCategory> selectListByMerchantId(String merchantId);
-
-    /**
      * 修改
      * @return
      */
@@ -27,5 +21,5 @@ public interface ClassCategoryMapper {
      * 获取商户下的所有课程分类
      * @return
      */
-    List<ClassCategory> selectListByparams(ClassCategory classCategory);
+    List<ClassCategory> selectListByParams(ClassCategory classCategory);
 }

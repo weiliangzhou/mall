@@ -15,7 +15,7 @@ public interface ClassCategoryService {
      * 获取商户下的所有课程分类
      * @return
      */
-    List<ClassCategory> getListByMerchantId(String merchantId);
+    List<ClassCategory> getListByParams(ClassCategory classCategory);
 
     /**
      * 修改
