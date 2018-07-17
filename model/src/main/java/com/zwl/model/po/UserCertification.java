@@ -8,7 +8,7 @@ import java.util.Date;
 @Data
 public class UserCertification {
     private Long id;
-    @ApiComment(value = "审核状态", sample = "0未提交1审核中 1审核通过 2未通过")
+    @ApiComment(value = "审核状态", sample = "0未提交1审核中 2审核通过 3未通过")
     private Integer status;
     @ApiComment(value = "审核人员", sample = "admin")
     private String operator;
