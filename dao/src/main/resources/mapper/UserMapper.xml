@@ -8,6 +8,7 @@
     <result column="wechat_union_id" property="wechatUnionId" jdbcType="VARCHAR" />
     <result column="merchant_id" property="merchantId" jdbcType="VARCHAR" />
     <result column="register_from" property="registerFrom" />
+    <result column="register_mobile" property="registerMobile" />
     <result column="real_name" property="realName" jdbcType="VARCHAR" />
     <result column="referrer" property="referrer" jdbcType="VARCHAR" />
     <result column="member_level" property="memberLevel" jdbcType="SMALLINT" />
@@ -18,11 +19,11 @@
     <result column="available" property="available" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, user_id, wechat_openid, wechat_union_id, merchant_id, register_from, real_name, referrer, member_level,
+    id, user_id, wechat_openid, wechat_union_id, merchant_id, register_from, register_mobile,real_name, referrer, member_level,
     level_name, expires_time, register_time, modify_time, available
   </sql>
   <sql id="Insert_Column_List" >
-    user_id, wechat_openid, wechat_union_id, merchant_id, register_from, real_name, referrer, member_level,
+    user_id, wechat_openid, wechat_union_id, merchant_id, register_from, register_mobile,real_name, referrer, member_level,
     level_name, expires_time, register_time, modify_time, available
   </sql>
   <!--新增用户-->
@@ -32,7 +33,7 @@
     </selectKey>-->
     insert into ss_user (<include refid="Insert_Column_List"/>)
     values ( #{userId,jdbcType=VARCHAR}, #{wechatOpenid,jdbcType=VARCHAR}, #{wechatUnionId,jdbcType=VARCHAR},
-    #{merchantId,jdbcType=VARCHAR}, #{registerFrom,jdbcType=SMALLINT}, #{realName,jdbcType=VARCHAR}, #{referrer,jdbcType=VARCHAR}, #{memberLevel,jdbcType=SMALLINT},
+    #{merchantId,jdbcType=VARCHAR}, #{registerFrom,jdbcType=SMALLINT}, #{registerMobile,jdbcType=VARCHAR},#{realName,jdbcType=VARCHAR}, #{referrer,jdbcType=VARCHAR}, #{memberLevel,jdbcType=SMALLINT},
     #{levelName,jdbcType=VARCHAR}, #{expiresTime,jdbcType=TIMESTAMP}, now(),
     #{modifyTime,jdbcType=TIMESTAMP}, #{available,jdbcType=INTEGER})
   </insert>

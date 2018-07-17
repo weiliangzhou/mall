@@ -4,18 +4,18 @@ import com.terran4j.commons.api2doc.annotations.Api2Doc;
 import com.terran4j.commons.api2doc.annotations.ApiComment;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.po.UserCertification;
+import com.zwl.model.vo.CertificationVo;
+import com.zwl.model.vo.PageCertificationVo;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 用户实名认证controller
  */
 @Api2Doc(name = "用户实名认证")
-@ApiComment(seeClass = UserCertification.class)
+@ApiComment(seeClass = CertificationVo.class)
 @RestController
 @RequestMapping("/admin/certification")
 public class CertificationController {
@@ -25,8 +25,8 @@ public class CertificationController {
      *
      * @return
      */
-    @ApiComment("审核用户提交的实名信息")
-    @RequestMapping(name = "审核用户提交的实名信息",
+    @ApiComment("审核实名信息")
+    @RequestMapping(name = "审核实名信息",
             value = "/modifyById", method = RequestMethod.POST)
     public Result modifyById(@ApiComment("实名认证id") Long id) {
         Result result = new Result();
@@ -38,12 +38,13 @@ public class CertificationController {
      *
      * @return
      */
-    @ApiComment("查找所有用户实名申请信息")
-    @RequestMapping(name = "查找所有用户实名申请信息",
-            value = "/getListByMerchantId", method = RequestMethod.POST)
-    public List<UserCertification> getListByMerchantId(@ApiComment("商户号") String merchantId) {
-        List<UserCertification> list = new ArrayList<>();
-        return list;
+    @ApiComment("分页获取实名认证信息列表")
+    @RequestMapping(name = "分页获取实名认证信息列表",
+            value = "/getPageListByMerchantId", method = RequestMethod.POST)
+    public PageCertificationVo getListByMerchantId(@ApiComment("商户号") String merchantId, @ApiComment("当前页码") Integer pageNum,
+                                                   @ApiComment("每页条数") Integer pageSize) {
+        PageCertificationVo pageCertificationVo=new PageCertificationVo();
+        return pageCertificationVo;
     }
 
     /**
@@ -51,8 +52,8 @@ public class CertificationController {
      *
      * @return
      */
-    @ApiComment("根据Id查询用户提交的实名认证信息")
-    @RequestMapping(name = "根据Id查询用户提交的实名认证信息",
+    @ApiComment("根据Id查询实名认证详情")
+    @RequestMapping(name = "根据Id查询实名认证详情",
             value = "/getById", method = RequestMethod.POST)
     public UserCertification getById(@ApiComment("实名认证id") Long id) {
         UserCertification userCertification = new UserCertification();

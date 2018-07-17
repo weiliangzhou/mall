@@ -19,7 +19,7 @@ import java.util.List;
  * 课程分类controller
  */
 @RestController
-@RequestMapping("/admin/classcategory")
+@RequestMapping("/teacher/classcategory")
 public class ClassCategoryController {
     @Autowired
     private ClassCategoryService classCategoryService;
@@ -56,8 +56,8 @@ public class ClassCategoryController {
         PageHelper.startPage(pageNum,pageSize);
         ClassCategory query = new ClassCategory();
         query.setMerchantId(merchantId);
-        List<ClassCategory> listRuslt = classCategoryService.getListByParams(query);
-        PageResult p=new PageResult(listRuslt);
+        List<ClassCategory> list = classCategoryService.getListByParams(query);
+        PageResult p=new PageResult(list);
         result.setData(p);
         return result;
     }
