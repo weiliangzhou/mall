@@ -163,18 +163,18 @@ public class WxPayController {
                 wxUserService.updateUserById(user);
                 //订单支付成功，返佣给推荐人
                 log.info("回调支付成功，开始分佣");
+                String merchantId = order.getMerchantId();
+                String orderNo = order.getOrderNo();
+                Integer orderActualMoney = order.getActualMoney();
+                Integer maidPercent = order.getMaidPercent();
+                Long productId = order.getProductId();
+                String productName = order.getProductName();
+                Integer level = order.getLevel();
+                String levelName = order.getLevelName();
                 String referrerId = user.getReferrer();
                 if (StringUtils.isNotBlank(referrerId)) {
                     User referrerUser = wxUserService.getUserByUserId(referrerId);
                     if (null != referrerUser) {
-                        String merchantId = order.getMerchantId();
-                        String orderNo = order.getOrderNo();
-                        Integer orderActualMoney = order.getActualMoney();
-                        Integer maidPercent = order.getMaidPercent();
-                        Long productId = order.getProductId();
-                        String productName = order.getProductName();
-                        Integer level = order.getLevel();
-                        String levelName = order.getLevelName();
                         //返佣规则：同级或者下级，高于当前级别是不返佣
 //                如果产品的等级是1，分佣比列按照产品的分佣百分比计算
 //                并且还要满足推荐人的邀请名额限定 院长 100 班长 50 学员10
@@ -238,12 +238,11 @@ public class WxPayController {
                         log.info("回调支付成功，更新用户余额userId" + userId + "--->" + "maidMoney--->" + maidMoney);
                         userAccountService.addBanlanceByUserId(referrerId, maidMoney);
                         log.info("回调支付成功，更新用户余额成功");
-                        //发送订单购买公众号提醒
-//                            wxSenderService.sendBuyMsg(openid, productName, orderActualMoney);
+
                     }
-
-
                 }
+                //发送订单购买公众号提醒
+//                wxSenderService.sendBuyMsg(openid, productName, orderActualMoney, merchantId);
                 //发送通知等
                 Map<String, String> xml = new HashMap<String, String>();
                 xml.put("return_code", "SUCCESS");

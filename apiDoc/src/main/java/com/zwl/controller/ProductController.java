@@ -43,7 +43,7 @@ public class ProductController {
                                 @ApiComment("产品名称") String productName,
                                 @ApiComment("分佣百分比") Integer maidPercent,
                                 @ApiComment("时效（天为单位）") Integer validityTime,
-                                @ApiComment("产品价格") Integer price,
+                                @ApiComment("产品价格") Integer priceDesc,
                                 @ApiComment("商户号") String merchantId
     ) {
         Result result = new Result();

@@ -15,22 +15,34 @@ public class Order {
     private Long productId;
     @ApiComment(value = "产品名称", sample = "套餐A")
     private String productName;
-    @ApiComment(value = "实际付款金额", sample = "98000")
+    @RestPackIgnore
+    @JSONField(serialize = false)
     private Integer actualMoney;
-    @ApiComment(value = "订单金额", sample = "98000")
+    @ApiComment(value = "实际付款金额", sample = "980")
+    private Integer actualMoneyDesc;
+    @ApiComment(value = "订单金额", sample = "980")
+    private Integer moneyDesc;
+    @RestPackIgnore
+    @JSONField(serialize = false)
     private Integer money;
     @ApiComment(value = "分佣百分比", sample = "50")
     private Integer maidPercent;
-    @ApiComment(value = "支付方式", sample = "1")
+    @RestPackIgnore
+    @JSONField(serialize = false)
     private Integer payWay;
+    @ApiComment(value = "支付方式", sample = "微信")
+    private String payWayDesc;
     @ApiComment(value = "产品等级", sample = "1")
     private Integer level;
     @ApiComment(value = "等级名称", sample = "学员")
     private String levelName;
     @ApiComment(value = "有效期", sample = "365")
     private Integer validityTime;
-    @ApiComment(value = "订单状态", sample = "订单状态  0待支付 1成功  -1超时关闭")
+    @RestPackIgnore
+    @JSONField(serialize = false)
     private Integer orderStatus;
+    @ApiComment(value = "订单状态", sample = "订单状态  待支付 成功  超时关闭")
+    private String orderStatusDesc;
     @RestPackIgnore
     @JSONField(serialize = false)
     private String userId;
@@ -48,11 +60,46 @@ public class Order {
     private Date paymentTime;
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     @ApiComment(value = "创建时间", sample = "2018-07-05 18:00:00")
-    private Date createTime=new Date();
+    private Date createTime = new Date();
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     @ApiComment(value = "更新时间", sample = "2018-07-05 18:00:00")
     private Date modifyTime;
     @RestPackIgnore
     @JSONField(serialize = false)
     private Integer available;
+
+    public Integer getActualMoneyDesc() {
+        return this.actualMoney / 100;
+    }
+
+    public Integer getMoneyDesc() {
+        return this.money / 100;
+    }
+
+    public String getOrderStatusDesc() {
+        switch (this.orderStatus == null ? 0 : this.orderStatus) {
+            case 0:
+                return "未支付";
+            case 1:
+                return "成功";
+            case -1:
+                return "订单超时";
+            default:
+                return "";
+        }
+
+
+    }
+
+    public String getPayWayDesc() {
+        switch (this.payWay == null ? 0 : this.payWay) {
+            case 1:
+                return "微信";
+            default:
+                return "";
+        }
+
+    }
+
+
 }

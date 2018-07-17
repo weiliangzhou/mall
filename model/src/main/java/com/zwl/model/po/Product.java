@@ -31,8 +31,11 @@ public class Product {
     @ApiComment(value = "时效（天为单位）", sample = "50")
     private Integer validityTime;
     @NotNull(message = "产品价格不能为空", groups = {Update.class})
-    @ApiComment(value = "产品价格", sample = "9900分为单位")
+    @RestPackIgnore
+    @JSONField(serialize = false)
     private Integer price;
+    @ApiComment(value = "产品价格", sample = "99元为单位")
+    private String priceDesc;
     @NotBlank(message = "商户号不能为空", groups = {Buy.class})
     @JSONField(serialize = false)
     @RestPackIgnore
@@ -55,4 +58,9 @@ public class Product {
     @JSONField(serialize = false)
     @NotBlank(message = "微信H5支付终端ip不能为空")
     private String spbillCreateIp;
+
+    public String getPriceDesc() {
+        return this.price / 100 + "";
+    }
+
 }
