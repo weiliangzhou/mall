@@ -237,4 +237,11 @@
     from ss_withdraw
     where available=1
   </select>
+  <select id="getWithdrawListByUserId" resultMap="BaseResultMap" parameterType="string">
+    select
+    <include refid="Base_Column_List"/>
+    from ss_withdraw
+    where available=1
+    and user_id=#{userId}
+  </select>
 </mapper>

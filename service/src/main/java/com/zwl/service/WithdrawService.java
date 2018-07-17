@@ -18,6 +18,7 @@ public interface WithdrawService {
     void apply(Withdraw withdraw);
 
     List<Withdraw> getWithdrawList();
+    List<Withdraw> getWithdrawListByUserId(String userId);
 
     int updateByWithdrawId(String partner_trade_no, String partner_trade_no1, String payment_no);
 }

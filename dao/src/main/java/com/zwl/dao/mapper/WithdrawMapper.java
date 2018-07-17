@@ -27,4 +27,6 @@ public interface WithdrawMapper {
     Withdraw getByWithdrawId(String withdrawId);
 
     int updateByWithdrawId(String partner_trade_no, String partner_trade_no1, String payment_no);
+
+    List<Withdraw> getWithdrawListByUserId(String userId);
 }
