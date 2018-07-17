@@ -1,6 +1,7 @@
 package com.zwl.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.po.Product;
 import com.zwl.service.ProductService;
@@ -27,7 +28,8 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping("/teacher/getProductList")
-    public String getProductList(@RequestParam("merchantId") String merchantId) {
+    public String getProductList(@RequestBody JSONObject jsonObject) {
+        String merchantId=jsonObject.getString("merchantId");
         Result result = new Result();
         List<Product> productList = productService.getProductList(merchantId);
         result.setData(productList);

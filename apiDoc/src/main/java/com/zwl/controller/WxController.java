@@ -6,12 +6,16 @@ import com.terran4j.commons.api2doc.annotations.ApiComment;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.po.Information;
 import com.zwl.model.po.UserCertification;
+import com.zwl.model.po.Withdraw;
 import com.zwl.model.vo.MaidInfoVVo;
 import com.zwl.model.vo.UserLoginInfoVo;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author 二师兄超级帅
@@ -36,7 +40,7 @@ public class WxController {
     @ApiComment("提现")
     @RequestMapping(name = "提现",
             value = "/auth/wx/withdraw/apply", method = RequestMethod.POST)
-    public Result apply(@ApiComment("收款方式 微信1") Short payWay, @ApiComment("收款账号") String account, @ApiComment("提现金额") Integer money, @ApiComment("userId") String userId, @ApiComment("商户号") String merchantId) {
+    public Result apply(@ApiComment("收款方式 微信1") Integer payWay, @ApiComment("收款账号") String account, @ApiComment("提现金额") Integer money, @ApiComment("userId") String userId, @ApiComment("商户号") String merchantId) {
         //       收款方式不能为空 -1
 //        收款账号不能为空 -2
 //        提现金额不能为空 -3
@@ -48,6 +52,15 @@ public class WxController {
         Result result = new Result();
         return result;
     }
+
+    @ApiComment("提现列表")
+    @RequestMapping(name = "提现列表",
+            value = "/auth/wx/withdraw/getWithdrawList", method = RequestMethod.POST)
+    public List<Withdraw> getWithdrawList(@ApiComment("userId") String userId,@ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize) {
+        List<Withdraw> withdrawList = new ArrayList<>();
+        return withdrawList;
+    }
+
 
     @ApiComment("邀请列表")
     @RequestMapping(name = "邀请列表",

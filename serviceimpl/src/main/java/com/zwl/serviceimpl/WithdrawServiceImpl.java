@@ -47,6 +47,11 @@ public class WithdrawServiceImpl implements WithdrawService {
     }
 
     @Override
+    public List<Withdraw> getWithdrawListByUserId(String userId) {
+        return withdrawMapper.getWithdrawListByUserId(userId);
+    }
+
+    @Override
     public int updateByWithdrawId(String partner_trade_no, String partner_trade_no1, String payment_no) {
         return withdrawMapper.updateByWithdrawId(partner_trade_no, partner_trade_no1, payment_no);
     }

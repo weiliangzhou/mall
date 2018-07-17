@@ -46,6 +46,7 @@ public class Withdraw {
     @ApiComment(value = "微信支付订单号", sample = "201808080910")
     private String paymentNo;
     @ApiComment(value = "微信支付成功时间", sample = "2018-07-05 18:00:00")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date paymentTime;
     @ApiComment(value = "创建时间", sample = "2018-07-05 18:00:00")
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
