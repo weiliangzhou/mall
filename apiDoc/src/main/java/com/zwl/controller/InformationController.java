@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.terran4j.commons.api2doc.annotations.Api2Doc;
 import com.terran4j.commons.api2doc.annotations.ApiComment;
 import com.zwl.model.baseresult.Result;
+import com.zwl.model.po.Information;
 import com.zwl.service.InformationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +37,14 @@ public class InformationController {
     public String updateInformation(@ApiComment("id") String id,@ApiComment("商户号") String merchantId, @ApiComment("标题") String title, @ApiComment("内容") String content) {
         Result result = new Result();
         return JSONObject.toJSONString(result);
+    }
+
+    @ApiComment(value = "获取资讯列表", seeClass = Information.class)
+    @RequestMapping(name = "获取资讯列表",
+            value = "/teacher/getInformationList", method = RequestMethod.POST)
+    public Information getInformationList(@ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize, @ApiComment("商户号") String merchantId) {
+        Information information = new Information();
+        return information;
     }
 
 }
