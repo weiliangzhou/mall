@@ -28,7 +28,9 @@ public class WxSenderServiceImpl implements WxSenderService {
     private WxAccessTokenService wxAccessTokenService;
 
     @Override
-    public void sendBuyMsg(String openid, String productName, Integer price) {
+    public void sendBuyMsg(String openid, String productName, Integer price,String merchantId) {
+//        openid="oOkIC0Yx_LCl5KgqENsBChuHH200";
+//        merchantId="1509688041";
 //        touser	是	接收者openid
 //        template_id	是	模板ID
 //        url	否	模板跳转链接
@@ -37,7 +39,7 @@ public class WxSenderServiceImpl implements WxSenderService {
 //        pagepath	否	所需跳转到小程序的具体页面路径，支持带参数,（示例index?foo=bar），暂不支持小游戏
 //        data	是	模板数据
 //        color	否	模板内容字体颜色，不填默认为黑色
-        String accessToken = wxAccessTokenService.getAccessToken();
+        String accessToken = wxAccessTokenService.getAccessToken(merchantId);
         String bugmsgurl = WxConstans.SEND_BUG_MSG + accessToken;
         SimpleDateFormat sdf_yMdHms = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Map miniprogramMap = new HashMap<>();
