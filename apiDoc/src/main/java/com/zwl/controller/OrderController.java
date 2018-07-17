@@ -3,6 +3,7 @@ package com.zwl.controller;
 import com.terran4j.commons.api2doc.annotations.Api2Doc;
 import com.terran4j.commons.api2doc.annotations.ApiComment;
 import com.zwl.model.po.Order;
+import com.zwl.model.vo.OrderVo;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,9 +25,9 @@ public class OrderController {
     @ApiComment("订单列表")
     @RequestMapping(name = "订单列表",
             value = "/teacher/getOrderList", method = RequestMethod.POST)
-    public List<Order> getOrderList(@ApiComment("商户号") String merchantId, @ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize) {
-        List<Order> orderList = new ArrayList<>();
-        return orderList;
+    public OrderVo getOrderList(@ApiComment("商户号") String merchantId, @ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize) {
+        OrderVo orderVo=new OrderVo();
+        return orderVo;
     }
     @ApiComment("个人消费列表")
     @RequestMapping(name = "个人消费列表",

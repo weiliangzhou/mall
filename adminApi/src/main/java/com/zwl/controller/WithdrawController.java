@@ -2,9 +2,11 @@ package com.zwl.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.po.Withdraw;
+import com.zwl.model.vo.WithdrawVo;
 import com.zwl.model.wxpay.IpKit;
 import com.zwl.model.wxpay.StrKit;
 import com.zwl.service.WithdrawService;
@@ -33,9 +35,13 @@ public class WithdrawController {
         Integer pageNum = jsonObject.getInteger("pageNum");
         Integer pageSize = jsonObject.getInteger("pageSize");
         Result result = new Result();
-        PageHelper.startPage(pageNum, pageSize);
+        Page page = PageHelper.startPage(pageNum, pageSize);
         List<Withdraw> withdrawList = withdrawService.getWithdrawList();
-        result.setData(withdrawList);
+        WithdrawVo withdrawVo = new WithdrawVo();
+        withdrawVo.setTotalPage(page.getTotal());
+        withdrawVo.setPageNum(pageNum);
+        withdrawVo.setWithdrawList(withdrawList);
+        result.setData(withdrawVo);
         return JSON.toJSONString(result);
     }
 

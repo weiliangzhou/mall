@@ -2,9 +2,13 @@ package com.zwl.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.po.Information;
+import com.zwl.model.po.Order;
+import com.zwl.model.vo.InformationVo;
+import com.zwl.model.vo.OrderVo;
 import com.zwl.service.InformationService;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +32,17 @@ public class InformationController {
     private InformationService informationService;
     @PostMapping("/teacher/getInformationList")
     public String getInformationList(@RequestBody JSONObject jsonObject) {
-        String merchant_id = jsonObject.getString("merchantId");
+        String merchantId =jsonObject.getString("merchantId");
         Integer pageNum=jsonObject.getInteger("pageNum");
         Integer pageSize=jsonObject.getInteger("pageSize");
-        PageHelper.startPage(pageNum, pageSize);
         Result result = new Result();
-        List<Information> informationList = informationService.getInformationList(merchant_id);
-        result.setData(informationList);
+        Page page = PageHelper.startPage(pageNum, pageSize);
+        List<Information> informationList = informationService.getInformationList(merchantId);
+        InformationVo informationVo=new InformationVo();
+        informationVo.setTotalPage(page.getTotal());
+        informationVo.setPageNum(pageNum);
+        informationVo.setInformationList(informationList);
+        result.setData(informationVo);
         return JSON.toJSONString(result);
     }
 

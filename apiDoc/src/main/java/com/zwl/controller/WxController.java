@@ -56,7 +56,7 @@ public class WxController {
     @ApiComment("提现列表")
     @RequestMapping(name = "提现列表",
             value = "/auth/wx/withdraw/getWithdrawList", method = RequestMethod.POST)
-    public List<Withdraw> getWithdrawList(@ApiComment("userId") String userId) {
+    public List<Withdraw> getWithdrawList(@ApiComment("userId") String userId,@ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize) {
         List<Withdraw> withdrawList = new ArrayList<>();
         return withdrawList;
     }
