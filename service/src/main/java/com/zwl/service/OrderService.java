@@ -12,8 +12,10 @@ import java.util.List;
  * @date 2018/7/920:51
  */
 public interface OrderService {
-    List<Order> getOrderList(String merchantId);
+    List<Order> getOrderList(Order order);
+
     Order findOrderByOrderNo(String OrderNo);
+
     int updateOrder(String out_trade_no, String time_end, String transaction_id);
 
     Order getOrderById(String merchantId, String orderNo);

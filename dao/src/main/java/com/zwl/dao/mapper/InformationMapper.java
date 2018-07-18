@@ -19,5 +19,5 @@ public interface InformationMapper {
 
     int updateByPrimaryKey(Information record);
 
-    List<Information> getInformationList(String merchantId);
+    List<Information> getInformationList(Information information);
 }

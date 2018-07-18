@@ -53,7 +53,7 @@ public class InformationController {
     @ApiComment(value = "获取资讯列表", seeClass = Information.class)
     @RequestMapping(name = "获取资讯列表",
             value = "/teacher/information/getInformationList", method = RequestMethod.POST)
-    public Information getInformationList(@ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize, @ApiComment("商户号") String merchantId) {
+    public Information getInformationList(@ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize, @ApiComment("商户号") String merchantId,@ApiComment("标题") String title) {
         Information information = new Information();
         return information;
     }

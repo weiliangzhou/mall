@@ -15,7 +15,7 @@ public class WxConstans {
 
     //    H5支付url
     public static final String PAY_URL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
-    public static final String USER_NOTIFY_URL = "https:/wx/pay_notify.do";
+    public static final String USER_NOTIFY_URL = "https://xdy.wegoo.com.cn:18081/wx/pay/pay_notify.do";
     //    企业付款url
     public static final String ADMIN_PAY_URL = " https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
     //    密钥设置

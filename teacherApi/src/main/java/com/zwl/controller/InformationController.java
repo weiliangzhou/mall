@@ -37,9 +37,13 @@ public class InformationController {
         String merchantId = jsonObject.getString("merchantId");
         Integer pageNum = jsonObject.getInteger("pageNum");
         Integer pageSize = jsonObject.getInteger("pageSize");
+        String title = jsonObject.getString("title");
+        Information information=new Information();
+        information.setTitle(title);
+        information.setMerchantId(merchantId);
         Result result = new Result();
         Page page = PageHelper.startPage(pageNum, pageSize);
-        List<Information> informationList = informationService.getInformationList(merchantId);
+        List<Information> informationList = informationService.getInformationList(information);
         InformationVo informationVo = new InformationVo();
         informationVo.setTotalPage(page.getTotal());
         informationVo.setPageNum(pageNum);
