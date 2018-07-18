@@ -1,5 +1,6 @@
 package com.zwl.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.terran4j.commons.api2doc.annotations.Api2Doc;
 import com.terran4j.commons.api2doc.annotations.ApiComment;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author 二师兄超级帅
@@ -31,12 +33,21 @@ public class InformationController {
         Result result = new Result();
         return JSONObject.toJSONString(result);
     }
+
     @ApiComment("资讯编辑")
     @RequestMapping(name = "资讯编辑",
             value = "/teacher/updateInformation", method = RequestMethod.POST)
-    public String updateInformation(@ApiComment("id") String id,@ApiComment("商户号") String merchantId, @ApiComment("标题") String title, @ApiComment("内容") String content,@ApiComment("url") String logoUrl) {
+    public String updateInformation(@ApiComment("id") String id, @ApiComment("商户号") String merchantId, @ApiComment("标题") String title, @ApiComment("内容") String content, @ApiComment("url") String logoUrl) {
         Result result = new Result();
         return JSONObject.toJSONString(result);
+    }
+
+    @ApiComment("资讯编辑上传图片")
+    @RequestMapping(name = "资讯编辑上传图片",
+            value = "/teacher/upload", method = RequestMethod.POST)
+    public String imageUpload(@ApiComment("文件") MultipartFile file) {
+        Result result = new Result();
+        return JSON.toJSONString(result);
     }
 
     @ApiComment(value = "获取资讯列表", seeClass = Information.class)
@@ -46,5 +57,6 @@ public class InformationController {
         Information information = new Information();
         return information;
     }
+
 
 }
