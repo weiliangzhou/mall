@@ -1,6 +1,7 @@
 package com.zwl.service;
 
 import com.zwl.model.po.Product;
+import com.zwl.model.vo.BuyResult;
 
 import java.util.List;
 
@@ -14,6 +15,8 @@ import java.util.List;
 public interface ProductService {
 
     List<Product> getProductList(String merchantId);
+
     void updateProduct(Product product);
-    String buy(Product product);
+
+    BuyResult buy(Product product);
 }

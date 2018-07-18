@@ -1,21 +1,20 @@
 package com.zwl.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.terran4j.commons.api2doc.annotations.Api2Doc;
 import com.terran4j.commons.api2doc.annotations.ApiComment;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.po.Information;
 import com.zwl.model.po.UserCertification;
 import com.zwl.model.po.Withdraw;
+import com.zwl.model.vo.BuyResult;
 import com.zwl.model.vo.MaidInfoVVo;
 import com.zwl.model.vo.UserLoginInfoVo;
-import com.zwl.model.wxpay.IpKit;
-import com.zwl.model.wxpay.StrKit;
-import com.zwl.model.wxpay.WxPayVo;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,11 +32,11 @@ public class WxController {
     @ApiComment("购买")
     @RequestMapping(name = "购买",
             value = "/wx/product/auth/buy", method = RequestMethod.POST)
-    public String buy(@ApiComment("产品id") String id, @ApiComment("微信商户号") String merchantId, @ApiComment("userId") String userId) {
-        Result result = new Result();
-        result.setData(0);
-        return JSON.toJSONString(result);
+    public BuyResult buy(@ApiComment("产品id") String id, @ApiComment("微信商户号") String merchantId, @ApiComment("userId") String userId) {
+        BuyResult buyResult = new BuyResult();
+        return buyResult;
     }
+
     @ApiComment("支付")
     @RequestMapping(name = "支付",
             value = "/wx/pay/auth/pay.do", method = RequestMethod.POST)
@@ -46,6 +45,7 @@ public class WxController {
         result.setData(0);
         return JSON.toJSONString(result);
     }
+
     @ApiComment("提现")
     @RequestMapping(name = "提现",
             value = "/wx/withdraw/auth/apply", method = RequestMethod.POST)
@@ -65,7 +65,7 @@ public class WxController {
     @ApiComment("提现列表")
     @RequestMapping(name = "提现列表",
             value = "/wx/withdraw/auth/getWithdrawList", method = RequestMethod.POST)
-    public List<Withdraw> getWithdrawList(@ApiComment("userId") String userId,@ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize) {
+    public List<Withdraw> getWithdrawList(@ApiComment("userId") String userId, @ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize) {
         List<Withdraw> withdrawList = new ArrayList<>();
         return withdrawList;
     }

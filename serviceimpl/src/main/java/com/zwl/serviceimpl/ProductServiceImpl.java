@@ -5,6 +5,7 @@ import com.zwl.dao.mapper.OrderMapper;
 import com.zwl.dao.mapper.ProductMapper;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.*;
+import com.zwl.model.vo.BuyResult;
 import com.zwl.service.ProductService;
 import com.zwl.service.UserInfoService;
 import com.zwl.service.WxUserService;
@@ -63,7 +64,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public String buy(Product product) {
+    public BuyResult  buy(Product product) {
 //        String productId, String merchantId, String userId
         //查询产品信息
         //生成订单(订单号使用 年月日时分秒+mch_no+userId（自增的Id）)
@@ -117,6 +118,10 @@ public class ProductServiceImpl implements ProductService {
         orderFlow.setActualMoney(price);
         orderFlow.setMoney(price);
         orderFlowMapper.insertSelective(orderFlow);
-        return orderNo;
+        BuyResult buyResult=new BuyResult();
+        buyResult.setOrderNo(orderNo);
+        buyResult.setTotalFee(price);
+        buyResult.setTotalFeeDesc(price/100+"");
+        return buyResult;
     }
 }
