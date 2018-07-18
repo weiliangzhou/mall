@@ -2,9 +2,11 @@ package com.zwl.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.zwl.model.baseresult.Result;
+import com.zwl.model.baseresult.ResultCodeEnum;
 import com.zwl.model.po.UserCertification;
 import com.zwl.service.CertificationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,6 +46,11 @@ public class CertificationController {
         Result result = new Result();
         String userId = jsonObject.getString("userId");
         UserCertification userCertification = certificationService.getOneByUserId(userId);
+        if(StringUtils.isEmpty(userCertification)){
+            result.setCode(ResultCodeEnum.EXCEPTION);
+            result.setMessage("查无用户");
+            return result;
+        }
         result.setData(userCertification);
         return result;
     }

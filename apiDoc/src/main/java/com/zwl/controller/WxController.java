@@ -72,7 +72,7 @@ public class WxController {
     }
 
     @ApiComment("小程序授权登录")
-    @RequestMapping(name = "授权登录", value = "/wx/user/authorization", method = RequestMethod.POST)
+    @RequestMapping(name = "授权登录", value = "/wx/user/auth/authorization", method = RequestMethod.POST)
     public UserLoginInfoVo wechatLogin(
             @ApiComment("小程序授权微信登录code") String code, @ApiComment("商户号") String merchantId,
             @ApiComment("用户的微信手机号") String wechatMobile, @ApiComment("微信昵称") String nickName,

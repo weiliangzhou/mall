@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api2Doc(name = "用户实名认证")
 @ApiComment(seeClass = CertificationVo.class)
 @RestController
-@RequestMapping("/admin/certification")
+@RequestMapping("/teacher/certification")
 public class CertificationController {
 
     /**

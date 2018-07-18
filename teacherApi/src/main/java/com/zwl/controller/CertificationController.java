@@ -31,7 +31,6 @@ public class CertificationController {
     private UserService userService;
     /**
      * 审核用户提交的实名信息
-     *
      * @param userCertification
      * @return
      */
@@ -44,7 +43,6 @@ public class CertificationController {
 
     /**
      * 查找merchantId下的所有用户实名申请信息
-     *
      * @return
      */
     @PostMapping("/getPageListByMerchantId")
@@ -65,6 +63,7 @@ public class CertificationController {
             certificationVo.setRealname(userCertification.getRealname());
             certificationVo.setModifyTime(userCertification.getModifyTime());
             certificationVo.setStatus(userCertification.getStatus());
+            certificationVo.setId(userCertification.getId());
             listVo.add(certificationVo);
         }
        /* CertificationVo certificationVo = new CertificationVo();
@@ -81,7 +80,6 @@ public class CertificationController {
 
     /**
      * 根据Id查询用户提交的实名认证信息
-     *
      * @return
      */
     @PostMapping("/getById")
