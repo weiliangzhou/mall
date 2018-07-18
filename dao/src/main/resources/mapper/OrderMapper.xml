@@ -90,7 +90,9 @@
             <if test="paymentTime != null">
                 payment_time,
             </if>
-
+            <if test="createTime != null">
+                create_time,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="orderNo != null">
@@ -144,8 +146,12 @@
             <if test="paymentTime != null">
                 #{paymentTime,jdbcType=TIMESTAMP},
             </if>
+            <if test="createTime != null">
+               now(),
+            </if>
 
         </trim>
+
     </insert>
 
     <select id="getOrderList" resultMap="BaseResultMap" parameterType="com.zwl.model.po.Order">

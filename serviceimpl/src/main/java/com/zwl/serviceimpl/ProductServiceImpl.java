@@ -109,7 +109,7 @@ public class ProductServiceImpl implements ProductService {
             orderMapper.insertSelective(order);
         } catch (Exception e) {
             e.printStackTrace();
-            BSUtil.isTrue(false, "重复下单,请稍后重试！");
+//            BSUtil.isTrue(false, "重复下单,请稍后重试！");
         }
         OrderFlow orderFlow = new OrderFlow();
         orderFlow.setOrderNo(orderNo);
