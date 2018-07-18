@@ -23,7 +23,7 @@ import java.io.IOException;
  */
 @Order(1)
 // 重点
-@WebFilter(filterName = "tokenFilter", urlPatterns = "/wx/*/auth")
+@WebFilter(filterName = "tokenFilter", urlPatterns = "/wx/*")
 @Slf4j
 public class TokenFilter implements Filter {
 
@@ -45,20 +45,20 @@ public class TokenFilter implements Filter {
         log.info("<<token>>请求url:" + requestURL + "  token:" + token);
 
 
-//        // 注册、登录、注册短信、首页、回调 不需要token
-//        if (requestURL.contains("/pay_notify.do")||requestURL.contains("/information/getInformationList")) {
-//            chain.doFilter(request, response);
-//            return;
-//        }
-//        if (requestURL.contains("/wx/user/authorization")) {
-//            chain.doFilter(request, response);
-//            return;
-//        }
-//        //测试图片上传
-//        if (requestURL.contains("/file/*")) {
-//            chain.doFilter(request, response);
-//            return;
-//        }
+        // 注册、登录、注册短信、首页、回调 不需要token
+        if (requestURL.contains("/pay_notify.do")||requestURL.contains("/information/getInformationList")) {
+            chain.doFilter(request, response);
+            return;
+        }
+        if (requestURL.contains("/wx/user/authorization")) {
+            chain.doFilter(request, response);
+            return;
+        }
+        //测试图片上传
+        if (requestURL.contains("/file/*")) {
+            chain.doFilter(request, response);
+            return;
+        }
         // 验证token
         // token="nprI2s/ITAaGaLJfL+QkZZYKhMAH3C3PkQEbpv+qQwOFG7hECEPeR4lKz5NTpQ177Sk1MdBj1GEjyNM2V0G2Nbj3FfKz6X+C";
         // 这里token如果接收有空格的地方，，那就是+号没有处理好。。可以考虑变成%2B
