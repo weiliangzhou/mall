@@ -33,4 +33,14 @@ public class ClassCategoryController {
 
         return result;
     }
+
+    @ApiComment(value = "修改课程分类", seeClass = ClassCategory.class)
+    @RequestMapping(name = "修改课程分类",
+            value = "/modify", method = RequestMethod.POST)
+    public Result modify(@ApiComment("id") Long id,@ApiComment("title") String title, @ApiComment("isShow") String isShow,
+                      @ApiComment("merchantId") String merchantId) {
+        Result result = new Result();
+
+        return result;
+    }
 }
