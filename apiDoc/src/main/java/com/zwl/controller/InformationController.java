@@ -28,7 +28,7 @@ public class InformationController {
 
     @ApiComment("资讯添加")
     @RequestMapping(name = "资讯添加",
-            value = "/teacher/addInformation", method = RequestMethod.POST)
+            value = "/teacher/information/addInformation", method = RequestMethod.POST)
     public String addInformation(@ApiComment("商户号") String merchantId, @ApiComment("标题") String title, @ApiComment("内容") String content, @ApiComment("url") String logoUrl) {
         Result result = new Result();
         return JSONObject.toJSONString(result);
@@ -36,7 +36,7 @@ public class InformationController {
 
     @ApiComment("资讯编辑")
     @RequestMapping(name = "资讯编辑",
-            value = "/teacher/updateInformation", method = RequestMethod.POST)
+            value = "/teacher/information/updateInformation", method = RequestMethod.POST)
     public String updateInformation(@ApiComment("id") String id, @ApiComment("商户号") String merchantId, @ApiComment("标题") String title, @ApiComment("内容") String content, @ApiComment("url") String logoUrl) {
         Result result = new Result();
         return JSONObject.toJSONString(result);
@@ -44,7 +44,7 @@ public class InformationController {
 
     @ApiComment("资讯编辑上传图片")
     @RequestMapping(name = "资讯编辑上传图片",
-            value = "/teacher/upload", method = RequestMethod.POST)
+            value = "/teacher/information/upload", method = RequestMethod.POST)
     public String imageUpload(@ApiComment("文件") MultipartFile file) {
         Result result = new Result();
         return JSON.toJSONString(result);
@@ -52,7 +52,7 @@ public class InformationController {
 
     @ApiComment(value = "获取资讯列表", seeClass = Information.class)
     @RequestMapping(name = "获取资讯列表",
-            value = "/teacher/getInformationList", method = RequestMethod.POST)
+            value = "/teacher/information/getInformationList", method = RequestMethod.POST)
     public Information getInformationList(@ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize, @ApiComment("商户号") String merchantId) {
         Information information = new Information();
         return information;

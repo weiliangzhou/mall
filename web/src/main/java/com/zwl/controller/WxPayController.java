@@ -28,6 +28,7 @@ import java.util.Map;
 
 @RestController
 @Slf4j
+@RequestMapping("/wx/pay")
 public class WxPayController {
     @Autowired
     private OrderService orderService;
@@ -61,7 +62,7 @@ public class WxPayController {
      * 微信H5 支付
      * 注意：必须再web页面中发起支付且域名已添加到开发配置中
      */
-    @RequestMapping(value = "/auth/wx/pay.do", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/auth/pay.do", method = {RequestMethod.POST, RequestMethod.GET})
     public String wapPay(HttpServletRequest request, @RequestBody JSONObject jsonObject) {
         String realIp = IpKit.getRealIp(request);
         if (StrKit.isBlank(realIp)) {
@@ -70,14 +71,14 @@ public class WxPayController {
         String openId = jsonObject.getString("openId");
         String orderNo = jsonObject.getString("orderNo");
         String totalFee = jsonObject.getString("totalFee");
-        Map resultMap = wxPayService.pay(realIp, openId, orderNo, totalFee);
+        WxPayVo wxPayVo = wxPayService.pay(realIp, openId, orderNo, totalFee);
         Result result_return = new Result();
-        result_return.setData(resultMap);
+        result_return.setData(wxPayVo);
         return JSON.toJSONString(result_return);
     }
 
 
-    @RequestMapping(value = "/wx/pay_notify.do", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/noauth/pay_notify.do", method = {RequestMethod.POST, RequestMethod.GET})
     @Transactional
     public String pay_notify(HttpServletRequest request) {
         // 支付结果通用通知文档: https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_7

@@ -15,5 +15,5 @@ public interface ProductService {
 
     List<Product> getProductList(String merchantId);
     void updateProduct(Product product);
-    void buy(Product product);
+    String buy(Product product);
 }

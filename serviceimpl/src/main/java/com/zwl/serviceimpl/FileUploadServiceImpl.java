@@ -23,9 +23,9 @@ import java.io.FileOutputStream;
 @Slf4j
 public class FileUploadServiceImpl implements FileUploadService {
     //    windows
-    private static String uploadPath = "F:\\sass\\image\\";
+//    private static String uploadPath = "F:\\sass\\image\\";
     //    linux
-//    private static String uploadPath = "/home/upload";
+    private static String uploadPath = "/home/upload";
 
     @Override
     public String upload(MultipartFile file, int type) {

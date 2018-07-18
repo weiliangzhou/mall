@@ -9,6 +9,7 @@ import com.zwl.service.InformationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -21,11 +22,12 @@ import java.util.List;
  * @date 2018/7/1215:04
  */
 @RestController
+@RequestMapping("/wx/information")
 public class InformationController {
     @Autowired
     private InformationService informationService;
 
-    @PostMapping("/noauth/wx/information/getInformationList")
+    @PostMapping("/noauth/getInformationList")
     public String getInformationList(@RequestBody JSONObject jsonObject) {
         String merchant_id = jsonObject.getString("merchantId");
         Integer pageNum=jsonObject.getInteger("pageNum");
