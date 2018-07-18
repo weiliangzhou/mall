@@ -12,10 +12,8 @@ import com.zwl.service.InformationService;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -40,7 +38,7 @@ public class InformationController {
         Integer pageNum = jsonObject.getInteger("pageNum");
         Integer pageSize = jsonObject.getInteger("pageSize");
         String title = jsonObject.getString("title");
-        Information information = new Information();
+        Information information=new Information();
         information.setTitle(title);
         information.setMerchantId(merchantId);
         Result result = new Result();
@@ -76,5 +74,12 @@ public class InformationController {
         return JSONObject.toJSONString(result);
     }
 
+    @PostMapping("/upload")
+    public String imageUpload(@RequestParam("file") MultipartFile file) {
+        Result result = new Result();
+        String url = fileUploadService.upload(file, 1);
+        result.setData(url);
+        return JSON.toJSONString(result);
+    }
 
 }
