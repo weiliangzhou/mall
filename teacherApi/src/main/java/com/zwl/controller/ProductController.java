@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.po.Product;
 import com.zwl.service.ProductService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -23,6 +24,7 @@ import java.util.List;
  * @date 2018/7/515:25
  */
 @RestController
+@Slf4j
 public class ProductController {
     @Autowired
     private ProductService productService;
@@ -39,7 +41,7 @@ public class ProductController {
     @PostMapping(value = "/teacher/updateProduct")
     public String updateProduct(@Validated(Update.class) @RequestBody Product product) {
         //前端页面编辑传入的是元单位 ，需要转换成分
-        Integer price=Integer.parseInt(product.getPriceDesc())*100;
+        Integer price=product.getPrice()*100;
         product.setPrice(price);
         Result result = new Result();
         productService.updateProduct(product);

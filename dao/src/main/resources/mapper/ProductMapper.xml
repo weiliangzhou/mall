@@ -24,20 +24,7 @@
     from ss_product
     where id = #{id,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from ss_product
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.zwl.model.po.Product" >
-    insert into ss_product (id, level, level_name, 
-      product_name, maid_percent, validity_time, 
-      price, merchant_id, create_time, 
-      modify_time, available)
-    values (#{id,jdbcType=BIGINT}, #{level,jdbcType=INTEGER}, #{levelName,jdbcType=VARCHAR}, 
-      #{productName,jdbcType=VARCHAR}, #{maidPercent,jdbcType=INTEGER}, #{validityTime,jdbcType=INTEGER}, 
-      #{price,jdbcType=INTEGER}, #{merchantId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{modifyTime,jdbcType=TIMESTAMP}, #{available,jdbcType=SMALLINT})
-  </insert>
+
   <insert id="insertSelective" parameterType="com.zwl.model.po.Product" >
     insert into ss_product
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -114,9 +101,6 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.zwl.model.po.Product" >
     update ss_product
     <set >
-      <if test="level != null" >
-        level = #{level,jdbcType=INTEGER},
-      </if>
       <if test="levelName != null" >
         level_name = #{levelName,jdbcType=VARCHAR},
       </if>
@@ -135,30 +119,10 @@
       <if test="merchantId != null" >
         merchant_id = #{merchantId,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null" >
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="modifyTime != null" >
-        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="available != null" >
         available = #{available,jdbcType=SMALLINT},
       </if>
     </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.zwl.model.po.Product" >
-    update ss_product
-    set level = #{level,jdbcType=INTEGER},
-      level_name = #{levelName,jdbcType=VARCHAR},
-      product_name = #{productName,jdbcType=VARCHAR},
-      maid_percent = #{maidPercent,jdbcType=INTEGER},
-      validity_time = #{validityTime,jdbcType=INTEGER},
-      price = #{price,jdbcType=INTEGER},
-      merchant_id = #{merchantId,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-      available = #{available,jdbcType=SMALLINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="getProductList" resultMap="BaseResultMap" parameterType="string">

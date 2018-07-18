@@ -3,6 +3,7 @@ package com.zwl.serviceimpl;
 import com.zwl.model.po.TokenModel;
 import com.zwl.service.TokenManager;
 import com.zwl.util.Des3;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -37,10 +38,11 @@ public class RedisTokenManagerImpl implements TokenManager {
             return null;
         }
         String token_a = Des3.decryptMode(authentication);
-        String[] param = token_a.split("_");
-        if (param.length != 2) {
+        if (StringUtils.isBlank(token_a))
             return null;
-        }
+        String[] param = token_a.split("_");
+        if (param.length != 2)
+            return null;
         // 使用userId和源token简单拼接成的token，可以增加加密措施
         String userId = param[0];
         String token = param[1];

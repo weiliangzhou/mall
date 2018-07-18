@@ -25,6 +25,7 @@ public class Information {
     @ApiComment(value = "标题 ", sample = "小米上市了")
     @NotBlank(message = "title不能为空", groups = {Update.class})
     private String title;
+    @NotBlank(message = "logoUrl不能为空", groups = {Update.class})
     @ApiComment(value = "logoUrl", sample = "logoUrl")
     private String logoUrl;
     @ApiComment(value = "音频地址", sample = "音频地址")

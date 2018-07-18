@@ -27,14 +27,14 @@ public class InformationController {
     @ApiComment("资讯添加")
     @RequestMapping(name = "资讯添加",
             value = "/teacher/addInformation", method = RequestMethod.POST)
-    public String addInformation(@ApiComment("商户号") String merchantId, @ApiComment("标题") String title, @ApiComment("内容") String content) {
+    public String addInformation(@ApiComment("商户号") String merchantId, @ApiComment("标题") String title, @ApiComment("内容") String content, @ApiComment("url") String logoUrl) {
         Result result = new Result();
         return JSONObject.toJSONString(result);
     }
     @ApiComment("资讯编辑")
     @RequestMapping(name = "资讯编辑",
             value = "/teacher/updateInformation", method = RequestMethod.POST)
-    public String updateInformation(@ApiComment("id") String id,@ApiComment("商户号") String merchantId, @ApiComment("标题") String title, @ApiComment("内容") String content) {
+    public String updateInformation(@ApiComment("id") String id,@ApiComment("商户号") String merchantId, @ApiComment("标题") String title, @ApiComment("内容") String content,@ApiComment("url") String logoUrl) {
         Result result = new Result();
         return JSONObject.toJSONString(result);
     }

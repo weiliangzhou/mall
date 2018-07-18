@@ -1,8 +1,10 @@
 package com.zwl.model.exception;
 
+import com.alibaba.fastjson.JSON;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.baseresult.ResultCodeEnum;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,12 +25,12 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    Result handleException(Exception e) {
+    String handleException(Exception e) {
         log.error(e.getMessage(), e);
         Result response = new Result();
         response.setCode(ResultCodeEnum.FAIL);
         response.setMessage("操作失败！");
-        return response;
+        return JSON.toJSONString(response);
     }
 
     /**
@@ -39,13 +41,14 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(BusinessException.class)
     @ResponseBody
-    Result handleBusinessException(BusinessException e) {
+    String handleBusinessException(BusinessException e) {
         log.error(e.getMessage(), e);
         Result response = new Result();
         response.setCode(ResultCodeEnum.FAIL);
         response.setMessage(e.getMessage());
-        return response;
+        return JSON.toJSONString(response);
     }
+
 
     /**
      * 处理所有接口数据验证异常
@@ -55,12 +58,11 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
-    Result handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+    String handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.error(e.getMessage(), e);
-
         Result response = new Result();
         response.setCode(ResultCodeEnum.FAIL);
         response.setMessage(e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
-        return response;
+        return JSON.toJSONString(response);
     }
 }

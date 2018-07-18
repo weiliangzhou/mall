@@ -25,7 +25,7 @@ public class ImageController {
      * 本地存放目录
      */
 //    private static String uoloadPath = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "upload/";
-    private static String uoloadPath = "F:\\sass\\image\\";
+    private static String uploadPath = "F:\\sass\\image\\";
 
     @PostMapping("/upload")
     public Result imageUpload(@RequestParam("file") MultipartFile file) {
@@ -53,19 +53,19 @@ public class ImageController {
            }
 
             // 检查上传目录
-            File targetFile = new File(uoloadPath);
+            File targetFile = new File(uploadPath);
             if (!targetFile.exists()) {
                 targetFile.mkdirs();
             }
 
             // 实例化输出流
-            BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(uoloadPath + file.getOriginalFilename()));
+            BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(uploadPath + file.getOriginalFilename()));
             out.write(file.getBytes());
             out.flush();
             out.close();
 
             // 上传到OSS
-            String url = AliOSSUtil.uploadLocalFile(new File(uoloadPath + file.getOriginalFilename()), "upload/image/");
+            String url = AliOSSUtil.uploadLocalFile(new File(uploadPath + file.getOriginalFilename()), "upload/image/");
             if (url == null) {
                 //TODO:上传失败的业务处理
                 result.setCode(ResultCodeEnum.FAIL);
