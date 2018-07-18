@@ -17,4 +17,6 @@ public interface InformationService {
     int addInformation(Information information);
 
     int updateInformation(Information information);
+
+    int deleteInformation(Integer id);
 }

@@ -34,4 +34,9 @@ public class InformationServiceImpl implements InformationService {
     public int updateInformation(Information information) {
         return informationMapper.updateByPrimaryKeySelective(information);
     }
+
+    @Override
+    public int deleteInformation(Integer id) {
+        return informationMapper.deleteInformation(id);
+    }
 }

@@ -50,7 +50,7 @@ public class TokenFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-        if (requestURL.contains("/wx/user/authorization")) {
+        if (requestURL.contains("/user/authorization")) {
             chain.doFilter(request, response);
             return;
         }
