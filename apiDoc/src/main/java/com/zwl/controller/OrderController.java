@@ -24,14 +24,14 @@ import java.util.List;
 public class OrderController {
     @ApiComment("订单列表")
     @RequestMapping(name = "订单列表",
-            value = "/teacher/getOrderList", method = RequestMethod.POST)
+            value = "/teacher/order/getOrderList", method = RequestMethod.POST)
     public OrderVo getOrderList(@ApiComment("商户号") String merchantId, @ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize, @ApiComment("手机号") String phone, @ApiComment("订单状态 0未付款 1成功 -1超时关闭") Integer orderStatus) {
         OrderVo orderVo=new OrderVo();
         return orderVo;
     }
     @ApiComment("个人消费列表")
     @RequestMapping(name = "个人消费列表",
-            value = "/teacher/getOrderListByUserId", method = RequestMethod.POST)
+            value = "/teacher/order/getOrderListByUserId", method = RequestMethod.POST)
     public List<Order> getOrderListByUserId(@ApiComment("userId") String userId, @ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize) {
         List<Order> orderList = new ArrayList<>();
         return orderList;
