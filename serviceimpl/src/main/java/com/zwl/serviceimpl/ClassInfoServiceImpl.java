@@ -57,7 +57,25 @@ public class ClassInfoServiceImpl implements ClassInfoService {
 
     @Override
     public int modifyByParams(ClassInfo classInfo) {
-        if (CheckTitle(classInfo)) return -1;
+//        if (CheckTitle(classInfo)) return -1;
+        int count=0;
+        //是单节 只查单节（不属于套课）标题重复
+        if (!StringUtils.isEmpty(classInfo.getCategoryId()) && StringUtils.isEmpty(classInfo.getClassSetId())){
+            count=classInfoMapper.selecetCountByTitleUpdate(classInfo.getTitle(),classInfo.getId(),
+                    classInfo.getCategoryId(),classInfo.getMerchantId());
+            if(count>0){
+                return -1;
+            }
+        }
+        //属于套课 查重
+        if (StringUtils.isEmpty(classInfo.getCategoryId()) && !StringUtils.isEmpty(classInfo.getClassSetId())){
+            count=classInfoMapper.selecetCountBySetTitle(classInfo.getTitle(),classInfo.getId(),classInfo.getClassSetId()
+                    ,classInfo.getMerchantId());
+            if(count>0){
+                return -1;
+            }
+        }
+
         return classInfoMapper.updateByParams(classInfo);
     }
 

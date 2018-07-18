@@ -19,7 +19,7 @@ public class ClassSet {
 
     private String merchantId;
 
-    private Boolean isShow;
+    private Integer isShow;
 
     private Integer requiredMemberLevel;
 

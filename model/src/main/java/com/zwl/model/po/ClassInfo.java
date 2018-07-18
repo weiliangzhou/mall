@@ -23,6 +23,8 @@ public class ClassInfo {
 
     private String title;
 
+    private Integer isShow;
+
     private String content;
 
     private Long listenCount;

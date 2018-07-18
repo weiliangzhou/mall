@@ -1,6 +1,7 @@
 package com.zwl.service;
 
 import com.zwl.model.po.ClassSet;
+import com.zwl.model.vo.ClassVo;
 
 import java.util.List;
 
@@ -31,4 +32,12 @@ public interface ClassSetService {
      * @return
      */
     ClassSet getById(Long id);
+
+    /**
+     * 获取所有的课程列表
+     * 包括套课程 和 单独的节课程
+     * @param merchantId
+     * @return
+     */
+    List<ClassVo> getAllClass(String merchantId);
 }

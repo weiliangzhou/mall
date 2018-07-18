@@ -1,117 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zwl.mapper.ClassSetMapper" >
+<mapper namespace="com.zwl.dao.mapper.ClassSetMapper" >
   <resultMap id="BaseResultMap" type="com.zwl.model.po.ClassSet" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="title" property="title" jdbcType="VARCHAR" />
     <result column="banner_url" property="bannerUrl" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
     <result column="category_id" property="categoryId" jdbcType="INTEGER" />
+    <result column="merchant_id" property="merchantId" jdbcType="VARCHAR" />
     <result column="is_show" property="isShow" jdbcType="BIT" />
     <result column="required_member_level" property="requiredMemberLevel" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="available" property="available" jdbcType="INTEGER" />
   </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.zwl.model.po.ClassSet" extends="BaseResultMap" >
-    <result column="content" property="content" jdbcType="LONGVARCHAR" />
-  </resultMap>
   <sql id="Base_Column_List" >
-    id, title, banner_url, category_id, is_show, required_member_level, create_time, 
-    modify_time, available
+    id, title, banner_url,content, category_id, merchant_id, is_show, required_member_level,
+    create_time, modify_time, available
   </sql>
-  <sql id="Blob_Column_List" >
-    content
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from ss_class_set
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from ss_class_set
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
+  <!--新增套课程-->
   <insert id="insert" parameterType="com.zwl.model.po.ClassSet" >
-    insert into ss_class_set (id, title, banner_url, 
-      category_id, is_show, required_member_level, 
-      create_time, modify_time, available, 
-      content)
-    values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{bannerUrl,jdbcType=VARCHAR}, 
-      #{categoryId,jdbcType=INTEGER}, #{isShow,jdbcType=BIT}, #{requiredMemberLevel,jdbcType=INTEGER}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{available,jdbcType=INTEGER}, 
-      #{content,jdbcType=LONGVARCHAR})
+    insert into ss_class_set (id, title, banner_url,content,
+      category_id, merchant_id, is_show,
+      required_member_level, create_time, modify_time,
+      available)
+    values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{bannerUrl,jdbcType=VARCHAR},#{content,jdbcType=LONGVARCHAR},
+      #{categoryId,jdbcType=INTEGER}, #{merchantId,jdbcType=VARCHAR}, #{isShow,jdbcType=BIT},
+      #{requiredMemberLevel,jdbcType=INTEGER}, now(), now(),
+      #{available,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.zwl.model.po.ClassSet" >
-    insert into ss_class_set
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="title != null" >
-        title,
-      </if>
-      <if test="bannerUrl != null" >
-        banner_url,
-      </if>
-      <if test="categoryId != null" >
-        category_id,
-      </if>
-      <if test="isShow != null" >
-        is_show,
-      </if>
-      <if test="requiredMemberLevel != null" >
-        required_member_level,
-      </if>
-      <if test="createTime != null" >
-        create_time,
-      </if>
-      <if test="modifyTime != null" >
-        modify_time,
-      </if>
-      <if test="available != null" >
-        available,
-      </if>
-      <if test="content != null" >
-        content,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="title != null" >
-        #{title,jdbcType=VARCHAR},
-      </if>
-      <if test="bannerUrl != null" >
-        #{bannerUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="categoryId != null" >
-        #{categoryId,jdbcType=INTEGER},
-      </if>
-      <if test="isShow != null" >
-        #{isShow,jdbcType=BIT},
-      </if>
-      <if test="requiredMemberLevel != null" >
-        #{requiredMemberLevel,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null" >
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="modifyTime != null" >
-        #{modifyTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="available != null" >
-        #{available,jdbcType=INTEGER},
-      </if>
-      <if test="content != null" >
-        #{content,jdbcType=LONGVARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zwl.model.po.ClassSet" >
+  <!--修改指定id的套课程参数-->
+  <update id="updateByParams" parameterType="com.zwl.model.po.ClassSet" >
     update ss_class_set
     <set >
       <if test="title != null" >
@@ -123,50 +42,123 @@
       <if test="categoryId != null" >
         category_id = #{categoryId,jdbcType=INTEGER},
       </if>
+      <if test="merchantId != null" >
+        merchant_id = #{merchantId,jdbcType=VARCHAR},
+      </if>
       <if test="isShow != null" >
         is_show = #{isShow,jdbcType=BIT},
       </if>
       <if test="requiredMemberLevel != null" >
         required_member_level = #{requiredMemberLevel,jdbcType=INTEGER},
       </if>
-      <if test="createTime != null" >
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="modifyTime != null" >
-        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="available != null" >
         available = #{available,jdbcType=INTEGER},
       </if>
       <if test="content != null" >
-        content = #{content,jdbcType=LONGVARCHAR},
+        content = #{content,jdbcType=LONGVARCHAR}
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.zwl.model.po.ClassSet" >
-    update ss_class_set
-    set title = #{title,jdbcType=VARCHAR},
-      banner_url = #{bannerUrl,jdbcType=VARCHAR},
-      category_id = #{categoryId,jdbcType=INTEGER},
-      is_show = #{isShow,jdbcType=BIT},
-      required_member_level = #{requiredMemberLevel,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-      available = #{available,jdbcType=INTEGER},
-      content = #{content,jdbcType=LONGVARCHAR}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.zwl.model.po.ClassSet" >
-    update ss_class_set
-    set title = #{title,jdbcType=VARCHAR},
-      banner_url = #{bannerUrl,jdbcType=VARCHAR},
-      category_id = #{categoryId,jdbcType=INTEGER},
-      is_show = #{isShow,jdbcType=BIT},
-      required_member_level = #{requiredMemberLevel,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-      available = #{available,jdbcType=INTEGER}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
+<!--获取merchantId下的所有套课程-->
+  <select id="selectListByMerchantId" resultMap="BaseResultMap" parameterType="java.lang.String">
+    SELECT
+      <include refid="Base_Column_List" />
+    from
+      ss_class_set
+    where
+      merchant_id = #{merchantId}
+  </select>
+  <!--根据id获取一个套课程详情-->
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.String">
+    SELECT
+    <include refid="Base_Column_List" />
+    from
+      ss_class_set
+    where
+      id = #{id}
+  </select>
+
+  <!--根据参数查询-->
+  <select id="selectListByParams" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT
+      <include refid="Base_Column_List" />
+    from
+      ss_class_set
+    <where>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR}
+      </if>
+      <if test="bannerUrl != null" >
+        AND banner_url = #{bannerUrl,jdbcType=VARCHAR}
+      </if>
+      <if test="categoryId != null" >
+        AND category_id = #{categoryId,jdbcType=INTEGER}
+      </if>
+      <if test="merchantId != null" >
+        AND merchant_id = #{merchantId,jdbcType=VARCHAR}
+      </if>
+      <if test="isShow != null" >
+        AND is_show = #{isShow,jdbcType=BIT}
+      </if>
+      <if test="requiredMemberLevel != null" >
+        AND required_member_level = #{requiredMemberLevel,jdbcType=INTEGER}
+      </if>
+      <if test="available != null" >
+        AND available = #{available,jdbcType=INTEGER}
+      </if>
+      <if test="content != null" >
+        AND content = #{content,jdbcType=LONGVARCHAR}
+      </if>
+    </where>
+  </select>
+
+  <resultMap id="AllClassResultMap" type="com.zwl.model.vo.ClassVo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="category_title" property="categoryTitle" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="merchant_id" property="merchantId" jdbcType="VARCHAR" />
+    <result column="class_type" property="classType" />
+  </resultMap>
+  <!--查询所有的套课 和单独的节课程lsit-->
+  <select id="selectAllClass" parameterType="java.lang.String" resultMap="AllClassResultMap">
+      SELECT *
+       from (
+( SELECT
+  scs.id 	AS id,
+	scs.title AS title,
+	scc.title AS category_title,
+	scs.modify_time AS modify_time,
+  scs.merchant_id AS merchantId,
+	1 AS class_type
+  FROM
+    ss_class_category scc,
+    ss_class_set scs
+  WHERE
+    scc.id = scs.category_id
+    AND scc.available = 1
+    AND scs.available = 1
+    AND scs.merchant_id =#{merchantId}
+  ) UNION ALL
+  (
+  SELECT
+		sci.id AS id,
+    sci.title AS title,
+		scc.title AS category_title,
+		sci.modify_time AS modify_time,
+    sci.merchant_id AS merchantId,
+		2 AS class_type
+  FROM
+    ss_class_category scc,
+    ss_class_info sci
+  WHERE
+    scc.id = sci.category_id
+    AND sci.class_set_id IS NULL
+    AND sci.merchant_id = #{merchantId}
+    AND scc.available = 1
+    AND sci.available = 1
+  ) ) t
+ORDER BY t.modify_time DESC
+  </select>
 </mapper>
