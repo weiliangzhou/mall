@@ -114,7 +114,7 @@ public class WxController {
 
     @ApiComment(value = "获取资讯列表", seeClass = Information.class)
     @RequestMapping(name = "获取资讯列表",
-            value = "/wx/information/noauth/getInformationList", method = RequestMethod.POST)
+            value = "/wx/information/getInformationList", method = RequestMethod.POST)
     public Information getInformationList(@ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize, @ApiComment("商户号") String merchantId) {
         Information information = new Information();
         return information;

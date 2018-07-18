@@ -13,6 +13,7 @@ import com.zwl.service.WithdrawService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,11 +27,12 @@ import java.util.List;
  * @date 2018/7/520:52
  */
 @RestController
+@RequestMapping("/admin/withdraw")
 public class WithdrawController {
     @Autowired
     private WithdrawService withdrawService;
 
-    @PostMapping("/admin/getWithdrawList")
+    @PostMapping("/getWithdrawList")
     public String getWithdrawList(@RequestBody JSONObject jsonObject) {
         Integer pageNum = jsonObject.getInteger("pageNum");
         Integer pageSize = jsonObject.getInteger("pageSize");
@@ -45,7 +47,7 @@ public class WithdrawController {
         return JSON.toJSONString(result);
     }
 
-    @PostMapping("/admin/approveWithdraw")
+    @PostMapping("/approveWithdraw")
     public String approveWithdraw(HttpServletRequest request, @RequestBody JSONObject jsonObject) {
         Integer status = jsonObject.getInteger("status");
         String operator = jsonObject.getString("operator");
