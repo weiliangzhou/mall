@@ -25,7 +25,10 @@ public class ImageController {
      * 本地存放目录
      */
 //    private static String uoloadPath = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "upload/";
-    private static String uoloadPath = "F:\\sass\\image\\";
+//    windows
+    private static String uploadPath = "F:\\sass\\image\\";
+    //    linux
+//    private static String uploadPath = "/home/upload";
 
     @PostMapping("/upload")
     public Result imageUpload(@RequestParam("file") MultipartFile file) {
@@ -41,38 +44,38 @@ public class ImageController {
             log.info("Name：" + file.getName());
             log.info("Size：" + file.getSize());
             //TODO:文件大小、名称、类型检查的业务处理
-            if(file.getSize()>1024*1024){
+            if (file.getSize() > 1024 * 1024 * 3) {
                 result.setCode(ResultCodeEnum.FAIL);
                 result.setMessage("上传图片大小不能超过1M！");
                 return result;
             }
-           if(!FileCheckUtil.isImageType(file.getContentType())){
-               result.setCode(ResultCodeEnum.FAIL);
-               result.setMessage("请上传正确的图片类型！");
-               return result;
-           }
+            if (!FileCheckUtil.isImageType(file.getContentType())) {
+                result.setCode(ResultCodeEnum.FAIL);
+                result.setMessage("请上传正确的图片类型！");
+                return result;
+            }
 
             // 检查上传目录
-            File targetFile = new File(uoloadPath);
+            File targetFile = new File(uploadPath);
             if (!targetFile.exists()) {
                 targetFile.mkdirs();
             }
 
             // 实例化输出流
-            BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(uoloadPath + file.getOriginalFilename()));
+            BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(uploadPath + file.getOriginalFilename()));
             out.write(file.getBytes());
             out.flush();
             out.close();
 
             // 上传到OSS
-            String url = AliOSSUtil.uploadLocalFile(new File(uoloadPath + file.getOriginalFilename()), "upload/image/");
+            String url = AliOSSUtil.uploadLocalFile(new File(uploadPath + file.getOriginalFilename()), "upload/image/");
             if (url == null) {
                 //TODO:上传失败的业务处理
                 result.setCode(ResultCodeEnum.FAIL);
                 return result;
             }
             log.info("上传完毕,访问地址:" + url);
-            HashMap<String,Object> reslutMapData=new HashMap<>();
+            HashMap<String, Object> reslutMapData = new HashMap<>();
             reslutMapData.put("imageUrl", url);
             result.setData(reslutMapData);
             return result;

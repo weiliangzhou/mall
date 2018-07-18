@@ -6,16 +6,14 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.po.Information;
-import com.zwl.model.po.Order;
 import com.zwl.model.vo.InformationVo;
-import com.zwl.model.vo.OrderVo;
+import com.zwl.service.FileUploadService;
 import com.zwl.service.InformationService;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -26,19 +24,23 @@ import java.util.List;
  * @Description: TODO
  * @date 2018/7/1215:04
  */
+@RequestMapping("/teacher/information")
 @RestController
 public class InformationController {
     @Autowired
     private InformationService informationService;
-    @PostMapping("/teacher/getInformationList")
+    @Autowired
+    private FileUploadService fileUploadService;
+
+    @PostMapping("/getInformationList")
     public String getInformationList(@RequestBody JSONObject jsonObject) {
-        String merchantId =jsonObject.getString("merchantId");
-        Integer pageNum=jsonObject.getInteger("pageNum");
-        Integer pageSize=jsonObject.getInteger("pageSize");
+        String merchantId = jsonObject.getString("merchantId");
+        Integer pageNum = jsonObject.getInteger("pageNum");
+        Integer pageSize = jsonObject.getInteger("pageSize");
         Result result = new Result();
         Page page = PageHelper.startPage(pageNum, pageSize);
         List<Information> informationList = informationService.getInformationList(merchantId);
-        InformationVo informationVo=new InformationVo();
+        InformationVo informationVo = new InformationVo();
         informationVo.setTotalPage(page.getTotal());
         informationVo.setPageNum(pageNum);
         informationVo.setInformationList(informationList);
@@ -46,18 +48,26 @@ public class InformationController {
         return JSON.toJSONString(result);
     }
 
-    @PostMapping("/teacher/addInformation")
+    @PostMapping("/addInformation")
     public String addInformation(@Validated(Update.class) @RequestBody Information information) {
         Result result = new Result();
         int count = informationService.addInformation(information);
         return JSONObject.toJSONString(result);
     }
 
-    @PostMapping("/teacher/updateInformation")
+    @PostMapping("/updateInformation")
     public String updateInformation(@Validated(Update.class) @RequestBody Information information) {
         Result result = new Result();
         int count = informationService.updateInformation(information);
         return JSONObject.toJSONString(result);
+    }
+
+    @PostMapping("/upload")
+    public String imageUpload(@RequestParam("file") MultipartFile file) {
+        Result result = new Result();
+        String url = fileUploadService.upload(file, 1);
+        result.setData(url);
+        return JSON.toJSONString(result);
     }
 
 }

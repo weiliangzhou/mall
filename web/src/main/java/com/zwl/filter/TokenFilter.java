@@ -23,7 +23,7 @@ import java.io.IOException;
  */
 @Order(1)
 // 重点
-@WebFilter(filterName = "tokenFilter", urlPatterns = "/auth/wx/*")
+@WebFilter(filterName = "tokenFilter", urlPatterns = "/wx/*/auth")
 @Slf4j
 public class TokenFilter implements Filter {
 
@@ -75,6 +75,7 @@ public class TokenFilter implements Filter {
             // 如果验证token失败
             Result result = new Result();
             result.setCode(ResultCodeEnum.TOKEN_ERROR);
+            response.setCharacterEncoding("UTF-8");
             response.getWriter().println(JSON.toJSONString(result));
             return;
         }

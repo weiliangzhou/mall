@@ -12,6 +12,7 @@ import com.zwl.service.UserQuotaCountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -24,13 +25,14 @@ import java.util.List;
  * @date 2018/7/1019:26
  */
 @RestController
+@RequestMapping("/wx/maidInfo")
 public class MaidInfoController {
     @Autowired
     private MaidInfoService maidInfoService;
     @Autowired
     private UserQuotaCountService userQuotaCountService;
 
-    @PostMapping("/auth/wx/getMaidInfoList")
+    @PostMapping("/auth/getMaidInfoList")
     public String getMaidInfoList(@RequestBody JSONObject jsonObject) {
         String userId=jsonObject.getString("userId");
         Integer pageNum = jsonObject.getInteger("pageNum");

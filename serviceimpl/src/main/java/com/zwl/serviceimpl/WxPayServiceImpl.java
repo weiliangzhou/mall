@@ -33,7 +33,7 @@ public class WxPayServiceImpl implements WxPayService {
     private SimpleDateFormat sdf_yMdHms = new SimpleDateFormat("yyyyMMddHHmmss");
 
     @Override
-    public Map pay(String realIp, String openId, String orderNo, String totalFee) {
+    public WxPayVo pay(String realIp, String openId, String orderNo, String totalFee) {
         log.info("开始微信支付");
 
         //此域名必须在商户平台--"产品中心"--"开发配置"中添加
@@ -95,12 +95,12 @@ public class WxPayServiceImpl implements WxPayService {
 //        package	String	是	统一下单接口返回的 prepay_id 参数值，提交格式如：prepay_id=*
 //        signType	String	是	签名类型，默认为MD5，支持HMAC-SHA256和MD5。注意此处需与统一下单的签名类型一致
 //        paySign	String	是	签名,具体签名方案参见微信公众号支付帮助文档;
-        Map resultMap = new HashMap();
-        resultMap.put("timeStamp", sdf_yMdHms.format(new Date()));
-        resultMap.put("nonceStr", params.get("nonceStr"));
-        resultMap.put("package", prepay_id);
-        resultMap.put("paySign", params.get("sign"));
-        return resultMap;
+        WxPayVo wxPayVo=new WxPayVo();
+        wxPayVo.setTimeStamp(sdf_yMdHms.format(new Date()));
+        wxPayVo.setNonceStr(params.get("nonceStr"));
+        wxPayVo.setPackageStr(prepay_id);
+        wxPayVo.setPaySign( params.get("sign"));
+        return wxPayVo;
     }
 
     @Override

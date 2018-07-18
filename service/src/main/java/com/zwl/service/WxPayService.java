@@ -1,6 +1,7 @@
 package com.zwl.service;
 
 import com.zwl.model.wxpay.AdminPayVo;
+import com.zwl.model.wxpay.WxPayVo;
 
 import java.util.Map;
 
@@ -12,7 +13,7 @@ import java.util.Map;
  * @date 2018/7/1014:23
  */
 public interface WxPayService {
-    Map pay(String realIp, String openId, String orderNo, String totalFee);
+    WxPayVo pay(String realIp, String openId, String orderNo, String totalFee);
 
     void adminPay(AdminPayVo adminPayVo);
 }

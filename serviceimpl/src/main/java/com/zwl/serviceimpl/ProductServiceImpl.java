@@ -63,7 +63,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void buy(Product product) {
+    public String buy(Product product) {
 //        String productId, String merchantId, String userId
         //查询产品信息
         //生成订单(订单号使用 年月日时分秒+mch_no+userId（自增的Id）)
@@ -117,5 +117,6 @@ public class ProductServiceImpl implements ProductService {
         orderFlow.setActualMoney(price);
         orderFlow.setMoney(price);
         orderFlowMapper.insertSelective(orderFlow);
+        return orderNo;
     }
 }

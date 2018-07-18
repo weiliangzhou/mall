@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -19,14 +20,16 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2018/7/515:25
  */
 @RestController
+@RequestMapping("/wx/product")
 public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @PostMapping("/auth/wx/product/buy")
+    @PostMapping("/auth/buy")
     public String buy(@Validated(Buy.class) @RequestBody Product product) {
         Result result = new Result();
-        productService.buy(product);
+        String orderNo=productService.buy(product);
+        result.setData(orderNo);
         return JSON.toJSONString(result);
     }
 

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -23,18 +24,19 @@ import java.util.List;
  * @date 2018/7/520:52
  */
 @RestController
+@RequestMapping("/wx/withdraw")
 public class WithdrawController {
     @Autowired
     private WithdrawService withdrawService;
 
-    @PostMapping("/auth/wx/withdraw/apply")
+    @PostMapping("/auth/apply")
     public String apply(@Validated(ApplyWithdraw.class) @RequestBody Withdraw withdraw) {
         Result result = new Result();
         withdrawService.apply(withdraw);
         return JSON.toJSONString(result);
     }
 
-    @PostMapping("/auth/wx/withdraw/getWithdrawList")
+    @PostMapping("/auth/getWithdrawList")
     public String getWithdrawList(@RequestBody JSONObject jsonObject) {
         Integer pageNum = jsonObject.getInteger("pageNum");
         Integer pageSize = jsonObject.getInteger("pageSize");
