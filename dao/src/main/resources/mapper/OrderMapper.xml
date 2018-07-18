@@ -90,7 +90,9 @@
             <if test="paymentTime != null">
                 payment_time,
             </if>
-
+            <if test="createTime != null">
+                create_time,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="orderNo != null">
@@ -144,16 +146,27 @@
             <if test="paymentTime != null">
                 #{paymentTime,jdbcType=TIMESTAMP},
             </if>
+            <if test="createTime != null">
+               now(),
+            </if>
 
         </trim>
+
     </insert>
 
-    <select id="getOrderList" resultMap="BaseResultMap" parameterType="string">
+    <select id="getOrderList" resultMap="BaseResultMap" parameterType="com.zwl.model.po.Order">
         select
         <include refid="Base_Column_List"/>
         from ss_order
         where available=1
         and merchant_id=#{merchantId}
+        <if test="phone!=null">
+            and phone like CONCAT('%',#{phone},'%')
+        </if>
+        <if test="orderStatus!=null">
+            and order_status = #{orderStatus}
+        </if>
+
     </select>
     <select id="findOrderByOrderNo" resultMap="BaseResultMap" parameterType="string">
         select

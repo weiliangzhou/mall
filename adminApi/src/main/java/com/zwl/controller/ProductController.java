@@ -6,6 +6,7 @@ import com.zwl.model.po.Product;
 import com.zwl.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -17,12 +18,13 @@ import java.util.List;
  * @Description: TODO
  * @date 2018/7/515:25
  */
-@RestController()
+@RestController
+@RequestMapping("/admin/product")
 public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @PostMapping("/admin/getProductList")
+    @PostMapping("/getProductList")
     public String getProductList(String merchantId) {
         Result result = new Result();
         List<Product> productList = productService.getProductList(merchantId);
@@ -30,7 +32,7 @@ public class ProductController {
         return JSON.toJSONString(result);
     }
 
-    @PostMapping("/admin/updateProduct")
+    @PostMapping("/updateProduct")
     public Result updateProduct(Product product) {
         Result result = new Result();
         productService.updateProduct(product);

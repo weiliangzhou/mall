@@ -29,7 +29,7 @@ public class ProductController {
 
     @ApiComment("代理级别列表")
     @RequestMapping(name = "代理级别列表",
-            value = "/teacher/getProductList", method = RequestMethod.POST)
+            value = "/teacher/product/getProductList", method = RequestMethod.POST)
     public List<Product> getAdminProductList(@ApiComment("商户号") String merchantId) {
         List<Product> productList = new ArrayList<>();
         return productList;
@@ -37,7 +37,7 @@ public class ProductController {
 
     @ApiComment("编辑代理")
     @RequestMapping(name = "编辑代理",
-            value = "/teacher/updateProduct", method = RequestMethod.POST)
+            value = "/teacher/product/updateProduct", method = RequestMethod.POST)
     public Result updateProduct(@ApiComment("产品id") Integer id,
                                 @ApiComment("等级名称") String levelName,
                                 @ApiComment("产品名称") String productName,

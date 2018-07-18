@@ -42,7 +42,7 @@ public class UserController {
     /**
      * 用户小程序微信授权登录
      */
-    @PostMapping("/auth/authorization")
+    @PostMapping("/authorization")
     public Result authorization(@RequestBody UserLoginInfoVo userLoginInfoVo) {
         Result result = new Result();
         //根据merchantid获取appid和secret

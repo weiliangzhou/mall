@@ -78,7 +78,7 @@ public class WxPayController {
     }
 
 
-    @RequestMapping(value = "/noauth/pay_notify.do", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/pay_notify.do", method = {RequestMethod.POST, RequestMethod.GET})
     @Transactional
     public String pay_notify(HttpServletRequest request) {
         // 支付结果通用通知文档: https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_7

@@ -9,10 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,11 +22,12 @@ import java.util.List;
  */
 @RestController
 @Slf4j
+@RequestMapping("/teacher/product")
 public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @PostMapping("/teacher/getProductList")
+    @PostMapping("/getProductList")
     public String getProductList(@RequestBody JSONObject jsonObject) {
         String merchantId=jsonObject.getString("merchantId");
         Result result = new Result();
@@ -38,7 +36,7 @@ public class ProductController {
         return JSON.toJSONString(result);
     }
 
-    @PostMapping(value = "/teacher/updateProduct")
+    @PostMapping(value = "/updateProduct")
     public String updateProduct(@Validated(Update.class) @RequestBody Product product) {
         //前端页面编辑传入的是元单位 ，需要转换成分
         Integer price=product.getPrice()*100;

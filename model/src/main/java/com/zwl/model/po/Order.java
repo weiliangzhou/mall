@@ -68,12 +68,13 @@ public class Order {
     @JSONField(serialize = false)
     private Integer available;
 
+
     public Integer getActualMoneyDesc() {
-        return this.actualMoney / 100;
+        return this.actualMoney == null ? 0 : this.actualMoney / 100;
     }
 
     public Integer getMoneyDesc() {
-        return this.money / 100;
+        return this.money == null ? 0 : (this.money / 100);
     }
 
     public String getOrderStatusDesc() {
@@ -100,6 +101,5 @@ public class Order {
         }
 
     }
-
 
 }

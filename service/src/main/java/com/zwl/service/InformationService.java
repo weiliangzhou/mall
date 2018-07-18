@@ -12,9 +12,11 @@ import java.util.List;
  * @date 2018/7/1215:07
  */
 public interface InformationService {
-    List<Information> getInformationList(String merchant_id);
+    List<Information> getInformationList(Information information);
 
     int addInformation(Information information);
 
     int updateInformation(Information information);
+
+    int deleteInformation(Integer id);
 }

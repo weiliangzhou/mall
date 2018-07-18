@@ -27,14 +27,16 @@ public class InformationController {
     @Autowired
     private InformationService informationService;
 
-    @PostMapping("/noauth/getInformationList")
+    @PostMapping("/getInformationList")
     public String getInformationList(@RequestBody JSONObject jsonObject) {
-        String merchant_id = jsonObject.getString("merchantId");
+        String merchantId = jsonObject.getString("merchantId");
         Integer pageNum=jsonObject.getInteger("pageNum");
         Integer pageSize=jsonObject.getInteger("pageSize");
         PageHelper.startPage(pageNum, pageSize);
         Result result = new Result();
-        List<Information> informationList = informationService.getInformationList(merchant_id);
+        Information information=new Information();
+        information.setMerchantId(merchantId);
+        List<Information> informationList = informationService.getInformationList(information);
         result.setData(informationList);
         return JSON.toJSONString(result);
     }

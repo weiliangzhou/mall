@@ -37,9 +37,13 @@ public class InformationController {
         String merchantId = jsonObject.getString("merchantId");
         Integer pageNum = jsonObject.getInteger("pageNum");
         Integer pageSize = jsonObject.getInteger("pageSize");
+        String title = jsonObject.getString("title");
+        Information information=new Information();
+        information.setTitle(title);
+        information.setMerchantId(merchantId);
         Result result = new Result();
         Page page = PageHelper.startPage(pageNum, pageSize);
-        List<Information> informationList = informationService.getInformationList(merchantId);
+        List<Information> informationList = informationService.getInformationList(information);
         InformationVo informationVo = new InformationVo();
         informationVo.setTotalPage(page.getTotal());
         informationVo.setPageNum(pageNum);
@@ -48,17 +52,25 @@ public class InformationController {
         return JSON.toJSONString(result);
     }
 
-    @PostMapping("/addInformation")
+    @PostMapping("/add")
     public String addInformation(@Validated(Update.class) @RequestBody Information information) {
         Result result = new Result();
         int count = informationService.addInformation(information);
         return JSONObject.toJSONString(result);
     }
 
-    @PostMapping("/updateInformation")
+    @PostMapping("/update")
     public String updateInformation(@Validated(Update.class) @RequestBody Information information) {
         Result result = new Result();
         int count = informationService.updateInformation(information);
+        return JSONObject.toJSONString(result);
+    }
+
+    @PostMapping("/delete")
+    public String deleteInformation(@RequestBody JSONObject jsonObject) {
+        Result result = new Result();
+        Integer id = jsonObject.getInteger("id");
+        int count = informationService.deleteInformation(id);
         return JSONObject.toJSONString(result);
     }
 

@@ -30,7 +30,7 @@ public class WithdrawController {
 
     @ApiComment("提现列表")
     @RequestMapping(name = "提现列表",
-            value = "/admin/getWithdrawList", method = RequestMethod.POST)
+            value = "/admin/withdraw/getWithdrawList", method = RequestMethod.POST)
     public WithdrawVo getWithdrawList(@ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize) {
         WithdrawVo withdrawVo = new WithdrawVo();
         return withdrawVo;
@@ -38,7 +38,7 @@ public class WithdrawController {
 
     @ApiComment("提现审核")
     @RequestMapping(name = "提现审核",
-            value = "/admin/approveWithdraw", method = RequestMethod.POST)
+            value = "/admin/withdraw/approveWithdraw", method = RequestMethod.POST)
     public String approveWithdraw(@ApiComment("0审核中 1审核通过 2未通过") Short status, @ApiComment("审核人") String operator, @ApiComment("提现业务id") Long withdrawId) {
         Result result = new Result();
         return JSON.toJSONString(result);

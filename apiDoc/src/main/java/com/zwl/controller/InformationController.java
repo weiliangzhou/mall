@@ -28,16 +28,23 @@ public class InformationController {
 
     @ApiComment("资讯添加")
     @RequestMapping(name = "资讯添加",
-            value = "/teacher/information/addInformation", method = RequestMethod.POST)
-    public String addInformation(@ApiComment("商户号") String merchantId, @ApiComment("标题") String title, @ApiComment("内容") String content, @ApiComment("url") String logoUrl) {
+            value = "/teacher/information/add", method = RequestMethod.POST)
+    public String addInformation(@ApiComment("商户号") String merchantId, @ApiComment("标题") String title, @ApiComment("内容") String content, @ApiComment("url") String logoUrl, @ApiComment("音频") String audioUrl) {
         Result result = new Result();
         return JSONObject.toJSONString(result);
     }
 
     @ApiComment("资讯编辑")
     @RequestMapping(name = "资讯编辑",
-            value = "/teacher/information/updateInformation", method = RequestMethod.POST)
-    public String updateInformation(@ApiComment("id") String id, @ApiComment("商户号") String merchantId, @ApiComment("标题") String title, @ApiComment("内容") String content, @ApiComment("url") String logoUrl) {
+            value = "/teacher/information/update", method = RequestMethod.POST)
+    public String updateInformation(@ApiComment("id") String id, @ApiComment("商户号") String merchantId, @ApiComment("标题") String title, @ApiComment("内容") String content, @ApiComment("图片") String logoUrl, @ApiComment("音频") String audioUrl) {
+        Result result = new Result();
+        return JSONObject.toJSONString(result);
+    }
+    @ApiComment("资讯删除")
+    @RequestMapping(name = "资讯删除",
+            value = "/teacher/information/delete", method = RequestMethod.POST)
+    public String deleteInformation(@ApiComment("id") String id){
         Result result = new Result();
         return JSONObject.toJSONString(result);
     }
@@ -53,7 +60,7 @@ public class InformationController {
     @ApiComment(value = "获取资讯列表", seeClass = Information.class)
     @RequestMapping(name = "获取资讯列表",
             value = "/teacher/information/getInformationList", method = RequestMethod.POST)
-    public Information getInformationList(@ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize, @ApiComment("商户号") String merchantId) {
+    public Information getInformationList(@ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize, @ApiComment("商户号") String merchantId, @ApiComment("标题") String title) {
         Information information = new Information();
         return information;
     }

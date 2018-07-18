@@ -34,37 +34,37 @@ public class AliOSSUtil {
      */
     private final static String FILE_HOST = "http://file.weigoo.com/";
 
-    /**
-     * 上传文件到bucket
-     *
-     * @param file     本地文件
-     * @param dir      bucket存放目录(末尾要加/)
-     * @param fileName 上传文件名
-     * @return 访问地址
-     */
-    public static String uploadLocalFile(File file, String dir, String fileName) {
-        if (file == null || !file.exists()) {
-            return null;
-        }
-        // 创建OSSClient实例
-        OSSClient ossClient = new OSSClient(END_POINT, ACCESS_KEY_ID, ACCESS_KEY_SECRET);
-        try {
-            // 上传文件
-            PutObjectResult result = ossClient.putObject(new PutObjectRequest(BUCKET_NAME, dir + fileName, file));
-            if (null != result) {
-                return FILE_HOST + dir + fileName;
-            } else {
-                return null;
-            }
-        } catch (OSSException | ClientException oe) {
-            log.error("上传OSS失败:", oe);
-            oe.printStackTrace();
-            return null;
-        } finally {
-            // 关闭OSS服务
-            ossClient.shutdown();
-        }
-    }
+//    /**
+//     * 上传文件到bucket
+//     *
+//     * @param file     本地文件
+//     * @param dir      bucket存放目录(末尾要加/)
+//     * @param fileName 上传文件名
+//     * @return 访问地址
+//     */
+//    public static String uploadLocalFile(File file, String dir, String fileName) {
+//        if (file == null || !file.exists()) {
+//            return null;
+//        }
+//        // 创建OSSClient实例
+//        OSSClient ossClient = new OSSClient(END_POINT, ACCESS_KEY_ID, ACCESS_KEY_SECRET);
+//        try {
+//            // 上传文件
+//            PutObjectResult result = ossClient.putObject(new PutObjectRequest(BUCKET_NAME, dir + fileName, file));
+//            if (null != result) {
+//                return FILE_HOST + dir + fileName;
+//            } else {
+//                return null;
+//            }
+//        } catch (OSSException | ClientException oe) {
+//            log.error("上传OSS失败:", oe);
+//            oe.printStackTrace();
+//            return null;
+//        } finally {
+//            // 关闭OSS服务
+//            ossClient.shutdown();
+//        }
+//    }
 
     /**
      * 上传文件到bucket

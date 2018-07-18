@@ -31,11 +31,6 @@
     from ss_information
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from ss_information
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  
   <insert id="insertSelective" parameterType="com.zwl.model.po.Information" >
     insert into ss_information
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -159,25 +154,16 @@
       content = #{content,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.zwl.model.po.Information" >
-    update ss_information
-    set merchant_id = #{merchantId,jdbcType=VARCHAR},
-      url = #{url,jdbcType=VARCHAR},
-      is_show = #{isShow,jdbcType=INTEGER},
-      title = #{title,jdbcType=VARCHAR},
-      logo_url = #{logoUrl,jdbcType=VARCHAR},
-      audio_url = #{audioUrl,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-      available = #{available,jdbcType=INTEGER}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <select id="getInformationList" resultMap="BaseResultMap" parameterType="string">
+
+  <select id="getInformationList" resultMap="BaseResultMap" parameterType="com.zwl.model.po.Information">
     select
     <include refid="Base_Column_List"/>
     from ss_information
     where available =1
     and is_show =1
+    <if test="title != null" >
+     and title like  CONCAT('%',#{title},'%')
+    </if>
     order  by modify_time desc
   </select>
 </mapper>

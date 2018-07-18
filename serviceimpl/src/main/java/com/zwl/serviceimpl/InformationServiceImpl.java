@@ -21,8 +21,8 @@ public class InformationServiceImpl implements InformationService {
     private InformationMapper informationMapper;
 
     @Override
-    public List<Information> getInformationList(String merchantId) {
-        return informationMapper.getInformationList(merchantId);
+    public List<Information> getInformationList(Information information) {
+        return informationMapper.getInformationList(information);
     }
 
     @Override
@@ -33,5 +33,10 @@ public class InformationServiceImpl implements InformationService {
     @Override
     public int updateInformation(Information information) {
         return informationMapper.updateByPrimaryKeySelective(information);
+    }
+
+    @Override
+    public int deleteInformation(Integer id) {
+        return informationMapper.deleteInformation(id);
     }
 }
