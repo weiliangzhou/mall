@@ -110,7 +110,7 @@ public class ProductServiceImpl implements ProductService {
             orderMapper.insertSelective(order);
         } catch (Exception e) {
             e.printStackTrace();
-//            BSUtil.isTrue(false, "重复下单,请稍后重试！");
+            BSUtil.isTrue(false, "系统繁忙,请稍后重试！");
         }
         OrderFlow orderFlow = new OrderFlow();
         orderFlow.setOrderNo(orderNo);
@@ -122,6 +122,7 @@ public class ProductServiceImpl implements ProductService {
         buyResult.setOrderNo(orderNo);
         buyResult.setTotalFee(price);
         buyResult.setTotalFeeDesc(price/100+"");
+        buyResult.setOpenId(user.getWechatOpenid());
         return buyResult;
     }
 }

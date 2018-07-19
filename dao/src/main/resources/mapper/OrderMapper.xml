@@ -166,6 +166,9 @@
         <if test="orderStatus!=null">
             and order_status = #{orderStatus}
         </if>
+        <if test="userId!=null">
+            and user_id =#{userId})
+        </if>
 
     </select>
     <select id="findOrderByOrderNo" resultMap="BaseResultMap" parameterType="string">

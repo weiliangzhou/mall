@@ -12,6 +12,7 @@ import lombok.Data;
 @Data
 public class BuyResult {
     private String orderNo;
+    private String openId;
     private Integer totalFee;
     private String totalFeeDesc;
 }
