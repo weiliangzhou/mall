@@ -243,7 +243,7 @@ public class WxPayController {
                     }
                 }
                 //发送订单购买公众号提醒
-//                wxSenderService.sendBuyMsg(openid, productName, orderActualMoney, merchantId);
+                wxSenderService.sendBuyMsg(openid, productName, orderActualMoney, merchantId);
                 //发送通知等
                 Map<String, String> xml = new HashMap<String, String>();
                 xml.put("return_code", "SUCCESS");
