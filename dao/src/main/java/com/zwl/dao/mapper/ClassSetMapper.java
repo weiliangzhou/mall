@@ -1,6 +1,9 @@
 package com.zwl.dao.mapper;
 
 import com.zwl.model.po.ClassSet;
+import com.zwl.model.vo.ClassVo;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -37,4 +40,20 @@ public interface ClassSetMapper {
      * @return
      */
     List<ClassSet> selectListByParams(ClassSet classSet);
+
+    /**
+     * 更新前查找是否已经title的字段，排除当前id
+     * @param title
+     * @param id
+     */
+    @Select("Select count(id) from ss_class_set   where  title=#{ title}  and merchant_id=#{merchantId} and id <> #{id}")
+    int selecetCountByTitleUpdate(@Param("title") String title, @Param("id") Long id,@Param("merchantId") String merchantId);
+
+    /**
+     * 获取所有的课程列表
+     * 包括套课程 和 单独的节课程
+     * @param merchantId
+     * @return
+     */
+    List<ClassVo> selectAllClass(String merchantId);
 }

@@ -2,6 +2,7 @@ package com.zwl.serviceimpl;
 
 import com.zwl.dao.mapper.ClassSetMapper;
 import com.zwl.model.po.ClassSet;
+import com.zwl.model.vo.ClassVo;
 import com.zwl.service.ClassSetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,10 +28,11 @@ public class ClassSetServiceImpl implements ClassSetService {
     @Override
     public int modifyByParams(ClassSet classSet) {
         //先查询是否同名
-        ClassSet query=new ClassSet();
+        /*ClassSet query=new ClassSet();
         query.setTitle(classSet.getTitle());
-        List<ClassSet> list=classSetMapper.selectListByParams(query);
-        if(list!=null && list.size()>0){
+        List<ClassSet> list=classSetMapper.selectListByParams(query);*/
+        int count=classSetMapper.selecetCountByTitleUpdate(classSet.getTitle(),classSet.getId(),classSet.getMerchantId());
+        if(count>0){
             return -1;
         }
         return classSetMapper.updateByParams(classSet);
@@ -44,5 +46,10 @@ public class ClassSetServiceImpl implements ClassSetService {
     @Override
     public ClassSet getById(Long id) {
         return classSetMapper.selectById(id);
+    }
+
+    @Override
+    public List<ClassVo> getAllClass(String merchantId) {
+        return classSetMapper.selectAllClass(merchantId);
     }
 }

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 节课程controller
  */
-@RequestMapping("/wx/classinfo")
+@RequestMapping("/teacher/classinfo")
 @RestController
 public class ClassInfoController {
     @Autowired
@@ -22,6 +22,7 @@ public class ClassInfoController {
     @PostMapping("/add")
     public Result add(@RequestBody ClassInfo classInfo){
         Result result = new Result();
+        classInfo.setAvailable(1);
         int addFlag=classInfoService.add(classInfo);
         if(addFlag==-1){
             result.setCode(ResultCodeEnum.FAIL);
