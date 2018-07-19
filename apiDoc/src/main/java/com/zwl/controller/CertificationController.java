@@ -28,7 +28,7 @@ public class CertificationController {
     @ApiComment("审核实名信息")
     @RequestMapping(name = "审核实名信息",
             value = "/modifyById", method = RequestMethod.POST)
-    public Result modifyById(@ApiComment("实名认证id") Long id) {
+    public Result modifyById(@ApiComment("实名认证id") Long id,@ApiComment("审核状态") Integer status,@ApiComment("审核人员id") String operator) {
         Result result = new Result();
         return result;
     }
@@ -49,14 +49,13 @@ public class CertificationController {
 
     /**
      * 根据Id查询用户提交的实名认证信息
-     *
      * @return
      */
     @ApiComment("根据Id查询实名认证详情")
     @RequestMapping(name = "根据Id查询实名认证详情",
             value = "/getById", method = RequestMethod.POST)
-    public UserCertification getById(@ApiComment("实名认证id") Long id) {
-        UserCertification userCertification = new UserCertification();
-        return userCertification;
+    public CertificationVo getById(@ApiComment("实名认证id") Long id) {
+        CertificationVo certificationVo = new CertificationVo();
+        return certificationVo;
     }
 }

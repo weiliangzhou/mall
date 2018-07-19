@@ -1,6 +1,7 @@
 package com.zwl.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Lists;
 import com.zwl.model.baseresult.PageResult;
@@ -8,6 +9,8 @@ import com.zwl.model.baseresult.Result;
 import com.zwl.model.po.User;
 import com.zwl.model.po.UserCertification;
 import com.zwl.model.vo.CertificationVo;
+import com.zwl.model.vo.PageCertificationVo;
+import com.zwl.model.vo.PageClassInfoVo;
 import com.zwl.service.CertificationService;
 import com.zwl.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +54,7 @@ public class CertificationController {
         String merchantId = jsonObject.getString("merchantId");
         Integer pageNum = jsonObject.getInteger("pageNum");
         Integer pageSize = jsonObject.getInteger("pageSize");
-        PageHelper.startPage(pageNum, pageSize);
+        Page page =PageHelper.startPage(pageNum, pageSize);
         List<UserCertification> list = certificationService.getListByMerchantId(merchantId);
         List<CertificationVo> listVo=new ArrayList<>();
         for (UserCertification uc:list
@@ -73,8 +76,14 @@ public class CertificationController {
             certificationVo.setRealname(temp.getRealname());
             listVo.add(certificationVo);
         });*/
-        PageResult p = new PageResult(listVo);
-        result.setData(p);
+       /* PageResult p = new PageResult(listVo);
+        result.setData(p);*/
+
+        PageCertificationVo pageVo=new PageCertificationVo();
+        pageVo.setPageNum(pageNum);
+        pageVo.setTotalPage(page.getTotal());
+        pageVo.setList(listVo);
+        result.setData(pageVo);
         return result;
     }
 
@@ -87,7 +96,23 @@ public class CertificationController {
         Result result = new Result();
         Long id = Long.parseLong(jsonObject.getString("id"));
         UserCertification userCertification = certificationService.getById(id);
-        result.setData(userCertification);
+
+        User user=userService.getByUserId(userCertification.getUserId());
+        CertificationVo certificationVo=new CertificationVo();
+        certificationVo.setRegisterMobile(user.getRegisterMobile());
+        certificationVo.setId(userCertification.getId());
+        certificationVo.setStatus(userCertification.getStatus());
+        certificationVo.setModifyTime(userCertification.getModifyTime());
+        certificationVo.setAuditTime(userCertification.getAuditTime());
+        certificationVo.setRejectReason(userCertification.getRejectReason());
+        certificationVo.setRealname(userCertification.getRealname());
+        certificationVo.setIdCard(userCertification.getIdCard());
+        certificationVo.setImg1Url(userCertification.getImg1Url());
+        certificationVo.setImg2Url(userCertification.getImg2Url());
+        certificationVo.setImg3Url(userCertification.getImg3Url());
+
+
+        result.setData(certificationVo);
         return result;
     }
 }
