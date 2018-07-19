@@ -167,7 +167,7 @@
             and order_status = #{orderStatus}
         </if>
         <if test="userId!=null">
-            and user_id =#{userId})
+            and user_id =#{userId}
         </if>
 
     </select>
