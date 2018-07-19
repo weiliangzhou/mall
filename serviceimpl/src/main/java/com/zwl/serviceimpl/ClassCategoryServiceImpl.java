@@ -45,4 +45,9 @@ public class ClassCategoryServiceImpl implements ClassCategoryService {
         }
         return classCategoryMapper.updateByParams(classCategory);
     }
+
+    @Override
+    public ClassCategory getById(Long id) {
+        return classCategoryMapper.getById(id);
+    }
 }

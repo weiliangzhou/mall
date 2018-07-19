@@ -30,4 +30,11 @@ public interface ClassInfoService {
      * @return
      */
     List<ClassInfo> getListByMerchantId(String merchantId);
+
+    /**
+     * 根据ClassSetId获取所属的节课程列表
+     * @return
+     */
+    List<ClassInfo> getByClassSetId(Long classSetId);
+
 }

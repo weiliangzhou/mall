@@ -4,12 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.terran4j.commons.api2doc.annotations.Api2Doc;
 import com.terran4j.commons.api2doc.annotations.ApiComment;
 import com.zwl.model.baseresult.Result;
-import com.zwl.model.po.Information;
-import com.zwl.model.po.UserCertification;
-import com.zwl.model.po.Withdraw;
-import com.zwl.model.vo.BuyResult;
-import com.zwl.model.vo.MaidInfoVVo;
-import com.zwl.model.vo.UserLoginInfoVo;
+import com.zwl.model.po.*;
+import com.zwl.model.vo.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -152,4 +148,37 @@ public class WxController {
         return result;
     }
 
+    @ApiComment("课程列表")
+    @RequestMapping(name = "课程列表",
+            value = "/wx/classset/getPageAllClass", method = RequestMethod.POST)
+    public PageClassVo getPageAllClass(@ApiComment("merchantId") String merchantId, @ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize) {
+        PageClassVo pageClassVo=new PageClassVo();
+        return pageClassVo;
+    }
+    @ApiComment("根据id查询套课程")
+    @RequestMapping(name = "根据id查询套课程",
+            value = "/wx/classset/getById", method = RequestMethod.POST)
+    public ClassSet getById(@ApiComment("id") Long id) {
+        ClassSet classSet=new ClassSet();
+        return classSet;
+    }
+
+    @ApiComment("获取套课程下的节课程列表")
+    @RequestMapping(name = "获取套课程下的节课程列表",
+            value = "/wx/classinfo/getPageByClassSetId", method = RequestMethod.POST)
+    public PageClassInfoVo getPageByClassSetId(@ApiComment("classSetId") Long classSetId, @ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize){
+        Result result = new Result();
+        PageClassInfoVo pageVo=new PageClassInfoVo();
+
+        return pageVo;
+    }
+
+    @ApiComment("根据Id获取节课程")
+    @RequestMapping(name = "根据Id获取节课程",
+            value = "/wx/classinfo/getById", method = RequestMethod.POST)
+    public ClassInfo getClassinfoById(@ApiComment("id") Long id){
+
+        ClassInfo classInfo=new ClassInfo();
+        return classInfo;
+    }
 }

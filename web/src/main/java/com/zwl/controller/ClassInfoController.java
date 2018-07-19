@@ -20,40 +20,11 @@ import java.util.List;
 /**
  * 节课程controller
  */
-@RequestMapping("/teacher/classinfo")
+@RequestMapping("/wx/classinfo")
 @RestController
 public class ClassInfoController {
     @Autowired
     private ClassInfoService classInfoService;
-    @Autowired
-    private ClassCategoryService classCategoryService;
-
-    @PostMapping("/add")
-    public Result add(@RequestBody ClassInfo classInfo){
-        Result result = new Result();
-        classInfo.setAvailable(1);
-        int addFlag=classInfoService.add(classInfo);
-        if(addFlag==-1){
-            result.setCode(ResultCodeEnum.FAIL);
-            result.setMessage("已经存在相同的名称");
-        }else if(addFlag==0){
-            result.setCode(ResultCodeEnum.FAIL);
-        }
-        return result;
-    }
-    @PostMapping("/modify")
-    public Result modify(@RequestBody ClassInfo classInfo){
-        Result result = new Result();
-        int modifyFlag=classInfoService.modifyByParams(classInfo);
-        if(modifyFlag==-1){
-            result.setCode(ResultCodeEnum.FAIL);
-            result.setMessage("已经存在相同的名称");
-        }else if(modifyFlag==0){
-            result.setCode(ResultCodeEnum.FAIL);
-        }
-        return result;
-    }
-
     /**
      * 根据ClassSetId获取所属的节课程列表
      * @return
@@ -73,6 +44,7 @@ public class ClassInfoController {
         result.setData(pageVo);
         return result;
     }
+
     /**
      * 根据Id获取节课程
      * @return

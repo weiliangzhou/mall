@@ -58,5 +58,9 @@ public interface ClassInfoMapper {
             "merchant_id=#{merchantId} and id <> #{id}")
     int selecetCountBySetTitle(@Param("title") String title, @Param("id") Long id,@Param("classSetId") Long classSetId
             ,@Param("merchantId") String merchantId);
-
+    /**
+     * 根据ClassSetId获取节课程详情
+     * @return
+     */
+    List<ClassInfo> selectByClassSetId(Long classSetId);
 }

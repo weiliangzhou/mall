@@ -22,4 +22,10 @@ public interface ClassCategoryMapper {
      * @return
      */
     List<ClassCategory> selectListByParams(ClassCategory classCategory);
+    /**
+     * 根据id获取
+     * @param id
+     * @return
+     */
+    ClassCategory getById(Long id);
 }

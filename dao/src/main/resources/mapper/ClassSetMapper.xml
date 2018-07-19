@@ -70,7 +70,7 @@
       merchant_id = #{merchantId}
   </select>
   <!--根据id获取一个套课程详情-->
-  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.String">
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long">
     SELECT
     <include refid="Base_Column_List" />
     from
@@ -112,6 +112,16 @@
       </if>
     </where>
   </select>
+ <!--根据ClassSetId获取节课程详情-->
+  <select id="selectByClassSetId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT
+      <include refid="Base_Column_List" />
+    from
+      ss_class_set
+    where
+      category_id=#{categoryId}
+  </select>
+
 
   <resultMap id="AllClassResultMap" type="com.zwl.model.vo.ClassVo" >
     <id column="id" property="id" jdbcType="BIGINT" />

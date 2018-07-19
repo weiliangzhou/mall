@@ -1,12 +1,14 @@
 package com.zwl.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.zwl.model.baseresult.PageResult;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.baseresult.ResultCodeEnum;
 import com.zwl.model.po.ClassSet;
 import com.zwl.model.vo.ClassVo;
+import com.zwl.model.vo.PageClassVo;
 import com.zwl.service.ClassSetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,17 +61,37 @@ public class ClassSetController {
         return result;
     }
 
+    /**
+     * @param jsonObject
+     * @return
+     */
     @PostMapping("/getPageAllClass")
     public Result getPageAllClass(@RequestBody JSONObject jsonObject) {
         Result result = new Result();
         String merchantId = jsonObject.getString("merchantId");
         Integer pageNum = jsonObject.getInteger("pageNum");
         Integer pageSize = jsonObject.getInteger("pageSize");
-        PageHelper.startPage(pageNum, pageSize);
+        Page page=PageHelper.startPage(pageNum, pageSize);
         List<ClassVo> list=classSetService.getAllClass(merchantId);
-        PageResult p = new PageResult(list);
-        result.setData(p);
+        PageClassVo pageClassVo=new PageClassVo();
+        pageClassVo.setPageNum(pageNum);
+        pageClassVo.setTotalPage(page.getTotal());
+        pageClassVo.setList(list);
+        result.setData(pageClassVo);
         return result;
     }
+    /**
+     * @param jsonObject
+     * @return
+     */
+    @PostMapping("/getById")
+    public Result getById(@RequestBody JSONObject jsonObject) {
+        Result result = new Result();
+        Long id = jsonObject.getLong("id");
+        ClassSet classSet=classSetService.getById(id);
+        result.setData(classSet);
+        return result;
+    }
+
 
 }

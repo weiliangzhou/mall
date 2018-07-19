@@ -22,4 +22,12 @@ public interface ClassCategoryService {
      * @return
      */
     int modifyByParams(ClassCategory classCategory);
+
+    /**
+     * 根据id获取
+     * @param id
+     * @return
+     */
+    ClassCategory getById(Long id);
+
 }

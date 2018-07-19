@@ -83,4 +83,10 @@ public class ClassInfoServiceImpl implements ClassInfoService {
     public List<ClassInfo> getListByMerchantId(String merchantId) {
         return classInfoMapper.selectListByMerchantId(merchantId);
     }
+
+    @Override
+    public List<ClassInfo> getByClassSetId(Long classSetId) {
+        return classInfoMapper.selectByClassSetId(classSetId);
+    }
+
 }
