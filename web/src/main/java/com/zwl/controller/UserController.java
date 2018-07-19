@@ -87,6 +87,10 @@ public class UserController {
             user.setUserId(userId);
             user.setMerchantId(userLoginInfoVo.getMerchantId());
             user.setRegisterFrom(1);
+            //推荐人userId
+           /* if (StringUtils.isEmpty(userLoginInfoVo.getReferrer()))
+                user.setReferrer("admin");*/
+            user.setReferrer(userLoginInfoVo.getReferrer());
 //        user.setMemberLevel("0");
             //插入用户表
             userService.addUser(user);
@@ -94,7 +98,6 @@ public class UserController {
 //            userInfo.setAvailable(1);
             //插入用户详情表
            userInfoService.add(userInfo);
-
 
         } else {
             userId = userQuery.getUserId();

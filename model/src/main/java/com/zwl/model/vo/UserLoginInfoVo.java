@@ -23,4 +23,6 @@ public class UserLoginInfoVo {
     private String nickName;
     @ApiComment(value = "微信用户头像", sample = "https://wx.qlogo.cn/mmopen/vi_32/pM9miba3MPibic2cxVdbSZlEneEOKPXTqqwVwGjOwDGLXkwj049fbgPLG4HfPMedjsiaekpITiagEw5P19jIVY0ZGxw/132")
     private String logoUrl;
+    @ApiComment(value = "推荐人userID", sample = "admin")
+    private String referrer;
 }
