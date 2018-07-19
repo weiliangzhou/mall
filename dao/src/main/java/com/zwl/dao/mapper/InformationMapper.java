@@ -10,6 +10,7 @@ public interface InformationMapper {
     int insertSelective(Information record);
     int updateByPrimaryKeySelective(Information record);
     List<Information> getInformationList(Information information);
+    List<Information> getWxInformationList(Information information);
     @Update("update ss_information set available =0 where id=#{id}")
     int deleteInformation(@Param("id") Integer id);
 }

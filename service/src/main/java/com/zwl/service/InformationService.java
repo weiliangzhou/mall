@@ -19,4 +19,6 @@ public interface InformationService {
     int updateInformation(Information information);
 
     int deleteInformation(Integer id);
+
+    List<Information> getWxInformationList(Information information);
 }

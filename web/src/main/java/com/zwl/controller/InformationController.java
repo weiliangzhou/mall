@@ -36,7 +36,7 @@ public class InformationController {
         Result result = new Result();
         Information information=new Information();
         information.setMerchantId(merchantId);
-        List<Information> informationList = informationService.getInformationList(information);
+        List<Information> informationList = informationService.getWxInformationList(information);
         result.setData(informationList);
         return JSON.toJSONString(result);
     }

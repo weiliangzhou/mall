@@ -45,17 +45,14 @@
       <if test="audioUrl != null" >
         audio_url,
       </if>
+      <if test="content != null" >
+        content,
+      </if>
       <if test="createTime != null" >
         create_time,
       </if>
-      <if test="modifyTime != null" >
-        modify_time,
-      </if>
       <if test="available != null" >
         available,
-      </if>
-      <if test="content != null" >
-        content,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -80,11 +77,14 @@
       <if test="audioUrl != null" >
         #{audioUrl,jdbcType=VARCHAR},
       </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="available != null" >
         #{available,jdbcType=INTEGER},
-      </if>
-      <if test="content != null" >
-        #{content,jdbcType=LONGVARBINARY},
       </if>
     </trim>
   </insert>
@@ -128,9 +128,19 @@
     <include refid="Base_Column_List" />
     from ss_information
     where available =1
-    and is_show =1
     <if test="title != null" >
      and title like  CONCAT('%',#{title},'%')
+    </if>
+    order  by modify_time desc
+  </select>
+  <select id="getWxInformationList" resultMap="BaseResultMap" parameterType="com.zwl.model.po.Information">
+    select
+    <include refid="Base_Column_List" />
+    from ss_information
+    where available =1
+    and is_show=1
+    <if test="title != null" >
+      and title like  CONCAT('%',#{title},'%')
     </if>
     order  by modify_time desc
   </select>
