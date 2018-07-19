@@ -7,14 +7,15 @@ import com.github.pagehelper.PageHelper;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.po.Information;
 import com.zwl.model.vo.InformationVo;
-import com.zwl.service.FileUploadService;
 import com.zwl.service.InformationService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -31,8 +32,6 @@ import java.util.List;
 public class InformationController {
     @Autowired
     private InformationService informationService;
-    @Autowired
-    private FileUploadService fileUploadService;
 
     @PostMapping("/getInformationList")
     public String getInformationList(@RequestBody JSONObject jsonObject) {
@@ -74,14 +73,6 @@ public class InformationController {
         Integer id = jsonObject.getInteger("id");
         int count = informationService.deleteInformation(id);
         return JSONObject.toJSONString(result);
-    }
-
-    @PostMapping("/upload")
-    public String imageUpload(@RequestParam("file") MultipartFile file) {
-        Result result = new Result();
-        String url = fileUploadService.upload(file, 1);
-        result.setData(url);
-        return JSON.toJSONString(result);
     }
 
 
