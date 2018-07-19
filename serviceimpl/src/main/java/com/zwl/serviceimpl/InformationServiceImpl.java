@@ -39,4 +39,9 @@ public class InformationServiceImpl implements InformationService {
     public int deleteInformation(Integer id) {
         return informationMapper.deleteInformation(id);
     }
+
+    @Override
+    public List<Information> getWxInformationList(Information information) {
+        return informationMapper.getWxInformationList(information);
+    }
 }

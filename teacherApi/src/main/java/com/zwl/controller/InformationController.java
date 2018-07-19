@@ -9,6 +9,7 @@ import com.zwl.model.po.Information;
 import com.zwl.model.vo.InformationVo;
 import com.zwl.service.FileUploadService;
 import com.zwl.service.InformationService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -26,6 +27,7 @@ import java.util.List;
  */
 @RequestMapping("/teacher/information")
 @RestController
+@Slf4j
 public class InformationController {
     @Autowired
     private InformationService informationService;
@@ -38,7 +40,7 @@ public class InformationController {
         Integer pageNum = jsonObject.getInteger("pageNum");
         Integer pageSize = jsonObject.getInteger("pageSize");
         String title = jsonObject.getString("title");
-        Information information=new Information();
+        Information information = new Information();
         information.setTitle(title);
         information.setMerchantId(merchantId);
         Result result = new Result();
@@ -81,5 +83,6 @@ public class InformationController {
         result.setData(url);
         return JSON.toJSONString(result);
     }
+
 
 }

@@ -37,7 +37,7 @@ public class InformationController {
     @ApiComment("资讯编辑")
     @RequestMapping(name = "资讯编辑",
             value = "/teacher/information/update", method = RequestMethod.POST)
-    public String updateInformation(@ApiComment("id") String id, @ApiComment("商户号") String merchantId, @ApiComment("标题") String title, @ApiComment("内容") String content, @ApiComment("图片") String logoUrl, @ApiComment("音频") String audioUrl) {
+    public String updateInformation(@ApiComment("id") String id, @ApiComment("商户号") String merchantId, @ApiComment("标题") String title, @ApiComment("内容") byte[] content, @ApiComment("图片") String logoUrl, @ApiComment("音频") String audioUrl) {
         Result result = new Result();
         return JSONObject.toJSONString(result);
     }
