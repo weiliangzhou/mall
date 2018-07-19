@@ -31,16 +31,17 @@ public class OrderController {
 
     @PostMapping("/getOrderList")
     public String getOrderList(@RequestBody JSONObject jsonObject) {
-
         String merchantId = jsonObject.getString("merchantId");
         Integer pageNum = jsonObject.getInteger("pageNum");
         Integer pageSize = jsonObject.getInteger("pageSize");
         String phone = jsonObject.getString("phone");
         Integer orderStatus = jsonObject.getInteger("orderStatus");
+        String userId=jsonObject.getString("userId");
         Order order = new Order();
         order.setMerchantId(merchantId);
         order.setPhone(phone);
         order.setOrderStatus(orderStatus);
+        order.setUserId(userId);
         Result result = new Result();
         Page page = PageHelper.startPage(pageNum, pageSize);
         List<Order> orderList = orderService.getOrderList(order);

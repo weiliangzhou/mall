@@ -44,26 +44,24 @@ public class WxPayServiceImpl implements WxPayService {
         String timeStart = sdf_yMdHms.format(cal.getTime());
         cal.add(Calendar.DAY_OF_MONTH, +5);
         String timeExpire = sdf_yMdHms.format(cal.getTime());
-        Map<String, String> params = WxPayH5.New()
-                .setAppId(WxConstans.APPID)
-                .setMchId(WxConstans.MCHID)
-                .setBody("IJPay H5支付测试  -By 二师兄超级帅")
-                .setOutTradeNo(orderNo)
-                .setTotalFee(totalFee)
-                .setTimeStart(timeStart)
-                .setTimeExpire(timeExpire)
-                .setNotifyUrl(WxConstans.USER_NOTIFY_URL)
-                .setSpbillCreateIp(realIp)
-                .setTradeType("MWEB")
-                .setOpenId(openId)
-                .setSceneInfo("{\"h5_info\": {\"type\":\"Wap\",\"wap_url\": \"admin.com\",\"wap_name\": \"二师兄超级帅\"}}")
-                .setAttach("DY分店 H5支付测试  -By 二师兄超级帅")
-                .setPaternerKey(WxConstans.PARTNERKEY)
-                .build();
-
+        Map payMap=new HashMap();
+        payMap.put("appid",WxConstans.XCX_APPID);
+        payMap.put("mch_id",WxConstans.MCHID);
+        payMap.put("nonce_str", String.valueOf(System.currentTimeMillis()));
+        payMap.put("body", "测试，二师兄");
+        payMap.put("attach", "测试，二师兄");
+        payMap.put("out_trade_no", orderNo);
+        payMap.put("total_fee", totalFee);
+        payMap.put("spbill_create_ip", realIp);
+        payMap.put("time_start", timeStart);
+        payMap.put("time_expire", timeExpire);
+        payMap.put("notify_url", WxConstans.USER_NOTIFY_URL);
+        payMap.put("trade_type", "JSAPI");
+        payMap.put("openid", openId);
+        payMap.put("sign", PaymentKit.createSign(payMap, WxConstans.PARTNERKEY));
         //获取微信返回的结果
-        log.info("开始发送微信支付xml--->" + PaymentKit.toXml(params));
-        String xmlResult = HttpsUtils.sendPost(WxConstans.PAY_URL, PaymentKit.toXml(params)).toString();
+        log.info("开始发送微信支付xml--->" + PaymentKit.toXml(payMap));
+        String xmlResult = HttpsUtils.sendPost(WxConstans.PAY_URL, PaymentKit.toXml(payMap)).toString();
         Map<String, String> result = PaymentKit.xmlToMap(xmlResult);
         log.info("结束发送微信支付xml--->" + result);
         String return_code = result.get("return_code");
@@ -81,7 +79,7 @@ public class WxPayServiceImpl implements WxPayService {
         String trade_type = result.get("trade_type");//交易类型  H5支付固定传MWEB
         String prepay_id = result.get("prepay_id");//预支付交易会话标识
         String mweb_url = result.get("mweb_url");//支付跳转链接
-        log.info("prepay_id:" + prepay_id + " mweb_url:" + mweb_url);
+//        log.info("prepay_id:" + prepay_id + " mweb_url:" + mweb_url);
 //        String appid = result.get("appid");//公众账号ID
 //        String mch_id = result.get("mch_id");//商户号
 //        String device_info = result.get("device_info");//设备号
@@ -97,9 +95,9 @@ public class WxPayServiceImpl implements WxPayService {
 //        paySign	String	是	签名,具体签名方案参见微信公众号支付帮助文档;
         WxPayVo wxPayVo=new WxPayVo();
         wxPayVo.setTimeStamp(sdf_yMdHms.format(new Date()));
-        wxPayVo.setNonceStr(params.get("nonceStr"));
+        wxPayVo.setNonceStr(payMap.get("nonceStr").toString());
         wxPayVo.setPackageStr(prepay_id);
-        wxPayVo.setPaySign( params.get("sign"));
+        wxPayVo.setPaySign( payMap.get("sign").toString());
         return wxPayVo;
     }
 
@@ -152,4 +150,5 @@ public class WxPayServiceImpl implements WxPayService {
         if (0 == updateCount)
             BSUtil.isTrue(false, "微信付款成功，更新数据库异常");
     }
+
 }

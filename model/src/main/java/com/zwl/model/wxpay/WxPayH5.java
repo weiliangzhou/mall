@@ -54,7 +54,7 @@ public class WxPayH5 implements Serializable {
         map.put("notify_url", this.getNotifyUrl());
         map.put("trade_type", this.getTradeType());
         map.put("openid", this.getOpenId());
-        map.put("scene_info", this.getSceneInfo());
+//        map.put("scene_info", this.getSceneInfo());
         map.put("sign", PaymentKit.createSign(map, this.getPaternerKey()));
         return map;
     }

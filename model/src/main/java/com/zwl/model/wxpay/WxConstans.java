@@ -2,15 +2,17 @@ package com.zwl.model.wxpay;
 
 /**
  * @author 二师兄超级帅
- * @Title: WxConstans
+ * @Title:
  * @ProjectName parent
  * @Description: TODO
  * @date 2018/7/915:18
  */
 public class WxConstans {
-
-    public static final String APPID = "wx754b4a23873787bb";
-    public static final String MCHID = "1490776702";
+    //公众号APPID
+    public static final String APPID = "wx32966989d0bc098d";
+    //小程序APPID
+    public static final String XCX_APPID = "wx754b4a23873787bb";
+    public static final String MCHID = "1509688041";
     public static final String PAGEPATH = "pages/home/home";
 
     //    H5支付url
@@ -19,7 +21,7 @@ public class WxConstans {
     //    企业付款url
     public static final String ADMIN_PAY_URL = " https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
     //    微信支付密钥设置
-    public static final String PARTNERKEY = "121dde96707bbe553ec6b4393377ced2";
+    public static final String PARTNERKEY = "612aa0e07599468997974318e654509f";
     //获取公众号全局授权，有效期为2小时，存入redis，如果redis未找到则重新发起请求
     public static final String ACCESS_TOKEN = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx32966989d0bc098d&secret=b6ec9acfe8834c5f132ec94872f91996";
     //发送消息模版
