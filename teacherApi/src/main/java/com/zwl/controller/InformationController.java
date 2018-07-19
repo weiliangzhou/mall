@@ -62,7 +62,7 @@ public class InformationController {
     }
 
     @PostMapping("/update")
-    public String updateInformation(@Validated(Update.class) @RequestBody Information information, @RequestParam("ueditor") MultipartFile file) {
+    public String updateInformation(@Validated(Update.class) @RequestBody Information information) {
         Result result = new Result();
         int count = informationService.updateInformation(information);
         return JSONObject.toJSONString(result);
