@@ -1,5 +1,6 @@
 package com.zwl.serviceimpl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zwl.model.wxpay.WxConstans;
 import com.zwl.service.WxAccessTokenService;
 import com.zwl.util.HttpsUtils;
@@ -29,7 +30,9 @@ public class WxAccessTokenServiceImpl implements WxAccessTokenService {
 //        access_token的有效期目前为2个小时
         String accessToken = stringRedisTemplate.boundValueOps("accessToken"+merchantId).get();
         if (accessToken == null) {
-            accessToken = HttpsUtils.sendGet(WxConstans.ACCESS_TOKEN,null);
+            String result = HttpsUtils.sendGet(WxConstans.ACCESS_TOKEN,null);
+            JSONObject jsonObject=JSONObject.parseObject(result);
+            accessToken=jsonObject.getString("access_token");
             stringRedisTemplate.boundValueOps("accessToken"+merchantId).set(accessToken, 2, TimeUnit.HOURS);
         }
         return accessToken;
