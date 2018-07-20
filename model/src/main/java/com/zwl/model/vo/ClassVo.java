@@ -16,6 +16,8 @@ public class ClassVo {
     private String title;
     @ApiComment(value = "所属的课程分类名称", sample = "朋友圈学习")
     private String categoryTitle;
+    @ApiComment(value = "套或节课程新建时间", sample = "2018-7-19 14:05:24")
+    private Date createTime;
     @ApiComment(value = "套或节课程更新时间", sample = "2018-7-19 14:05:24")
     private Date modifyTime;
     @ApiComment(value = "商户id", sample = "0571XUDONGYAO")

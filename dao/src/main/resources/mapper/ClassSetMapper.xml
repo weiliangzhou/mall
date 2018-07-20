@@ -127,6 +127,7 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="title" property="title" jdbcType="VARCHAR" />
     <result column="category_title" property="categoryTitle" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime"  />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="merchant_id" property="merchantId" jdbcType="VARCHAR" />
     <result column="class_type" property="classType" />
@@ -139,8 +140,9 @@
   scs.id 	AS id,
 	scs.title AS title,
 	scc.title AS category_title,
+	scs.create_time AS create_time,
 	scs.modify_time AS modify_time,
-  scs.merchant_id AS merchantId,
+    scs.merchant_id AS merchantId,
 	1 AS class_type
   FROM
     ss_class_category scc,
@@ -153,12 +155,13 @@
   ) UNION ALL
   (
   SELECT
-		sci.id AS id,
+	sci.id AS id,
     sci.title AS title,
-		scc.title AS category_title,
-		sci.modify_time AS modify_time,
+	scc.title AS category_title,
+	scc.create_time AS create_time,
+	sci.modify_time AS modify_time,
     sci.merchant_id AS merchantId,
-		2 AS class_type
+	2 AS class_type
   FROM
     ss_class_category scc,
     ss_class_info sci

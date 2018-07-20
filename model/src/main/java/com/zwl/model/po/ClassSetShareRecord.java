@@ -5,9 +5,9 @@ import java.util.Date;
 public class ClassSetShareRecord {
     private Long id;
 
-    private Integer classSetId;
+    private Long classSetId;
 
-    private Integer shareUserId;
+    private String shareUserId;
 
     private Date createTime;
 
@@ -23,20 +23,20 @@ public class ClassSetShareRecord {
         this.id = id;
     }
 
-    public Integer getClassSetId() {
+    public Long getClassSetId() {
         return classSetId;
     }
 
-    public void setClassSetId(Integer classSetId) {
+    public void setClassSetId(Long classSetId) {
         this.classSetId = classSetId;
     }
 
-    public Integer getShareUserId() {
+    public String getShareUserId() {
         return shareUserId;
     }
 
-    public void setShareUserId(Integer shareUserId) {
-        this.shareUserId = shareUserId;
+    public void setShareUserId(String shareUserId) {
+        this.shareUserId = shareUserId == null ? null : shareUserId.trim();
     }
 
     public Date getCreateTime() {

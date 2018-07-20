@@ -23,7 +23,7 @@ public class UserController {
             value = "/add", method = RequestMethod.POST)
     public Result add(@ApiComment("registerMobile") String registerMobile,@ApiComment("商户号") String merchantId,
                       @ApiComment("当前操作人员id") String operator,@ApiComment("真实姓名") String realName,
-                      @ApiComment("会员等级") String memberLevel) {
+                      @ApiComment("会员等级") String memberLevel, @ApiComment("会员等级名称") String levelName) {
         Result result = new Result();
         return result;
     }
@@ -34,7 +34,7 @@ public class UserController {
      */
     @ApiComment("根据会员等级获取用户列表")
     @RequestMapping(name = "根据会员等级获取用户列表",
-            value = "/getPageListByMerchantId", method = RequestMethod.POST)
+            value = "/getPageListByLevel", method = RequestMethod.POST)
     public PageUserVo getPageList(@ApiComment("商户号") String merchantId, @ApiComment("当前页码") Integer pageNum,
                               @ApiComment("每页条数") Integer pageSize,@ApiComment("最低会员等级") Integer loweLevel,@ApiComment("最高会员等级") Integer topLevel
     ) {
@@ -49,7 +49,8 @@ public class UserController {
     @RequestMapping(name = "修改用户等级",
             value = "/modify", method = RequestMethod.POST)
     public Result modify(@ApiComment("用户id") String userId,@ApiComment("商户号") String merchantId,
-                         @ApiComment("当前操作人员id") String operator, @ApiComment("会员等级") String memberLevel) {
+                         @ApiComment("当前操作人员id") String operator, @ApiComment("会员等级") String memberLevel,
+                         @ApiComment("会员等级名称") String levelName) {
         Result result = new Result();
         return result;
     }

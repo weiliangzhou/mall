@@ -9,6 +9,8 @@ import com.zwl.model.po.OperateUserRecord;
 import com.zwl.model.po.User;
 import com.zwl.model.vo.PageUserVo;
 import com.zwl.model.vo.UserVo;
+import com.zwl.model.vo.XiaXianVo;
+import com.zwl.service.MaidInfoService;
 import com.zwl.service.OperateUserRecordService;
 import com.zwl.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private OperateUserRecordService operateUserRecordService;
+    @Autowired
+    private MaidInfoService maidInfoService;
     /**
      * 商户后台 添加用户
      */
@@ -42,25 +46,29 @@ public class UserController {
         String registerMobile = jsonObject.getString("registerMobile");
 //        String referrerMobile = jsonObject.getString("referrerMobile");
         Integer memberLevel = jsonObject.getInteger("memberLevel");
+        String levelName = jsonObject.getString("levelName");
         String operator= jsonObject.getString("operator");
 
         //根据导入的注册手机号，查找
         User query = new User();
         query.setRegisterMobile(registerMobile);
-        query.setRealName(realName);
+//        query.setRealName(realName);
         query.setMerchantId(merchantId);
 
         User user=userService.getOneByParams(query);
 
         if (StringUtils.isEmpty(user)){
             result.setCode(ResultCodeEnum.FAIL);
-            result.setMessage("查无此手机号和此姓名，请确保手机号为："+registerMobile+"已经完成绑定手机号和实名认证");
+            result.setMessage("查无此手机号和此姓名，请确保手机号为："+registerMobile+"已经完成绑定手机号");
+//            result.setMessage("查无此手机号和此姓名，请确保手机号为："+registerMobile+"已经完成绑定手机号和实名认证");
             return result;
         }
-        //更新用户会员等级
+        //更新用户会员等级 和 姓名
         User userParams = new User();
         userParams.setUserId(user.getUserId());
         userParams.setMemberLevel(memberLevel);
+        userParams.setLevelName(levelName);
+        userParams.setRealName(realName);
         //用户购买会员渠道，2-线下渠道
         userParams.setRegisterFrom(2);
         userService.updateUserById(userParams);
@@ -103,10 +111,14 @@ public class UserController {
             userVo.setLevelName(user.getLevelName());
             userVo.setRegisterMobile(user.getRegisterMobile());
             userVo.setModifyTime(user.getModifyTime());
+            userVo.setRegisterFrom(user.getRegisterFrom());
 
             User userTemp=userService.getByUserId(user.getReferrer());
             userVo.setReferrerRealName(userTemp.getRealName());
-
+            //下线人数
+            List<XiaXianVo> list = maidInfoService.getXiaXianList(user.getUserId());
+            Integer xiaxianCount=StringUtils.isEmpty(list)?0:list.size();
+            userVo.setXiaxianCount(xiaxianCount);
             listVo.add(userVo);
         }
 
@@ -128,11 +140,13 @@ public class UserController {
         String merchantId = jsonObject.getString("merchantId");
         Integer memberLevel = jsonObject.getInteger("memberLevel");
         String operator= jsonObject.getString("operator");
+        String levelName = jsonObject.getString("levelName");
 
         //更新用户会员等级
         User userParams = new User();
         userParams.setUserId(userId);
         userParams.setMemberLevel(memberLevel);
+        userParams.setLevelName(levelName);
         //用户购买会员渠道，2-线下渠道
         userParams.setRegisterFrom(2);
         userService.updateUserById(userParams);
