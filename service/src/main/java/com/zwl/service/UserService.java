@@ -3,6 +3,8 @@ package com.zwl.service;
 
 import com.zwl.model.po.User;
 
+import java.util.List;
+
 /**
  * 微信小程序用户service
  */
@@ -25,4 +27,26 @@ public interface UserService {
      * @return
      */
     User getOneByParams(User user);
+
+    /**
+     * 根据主键userId更新
+     * @param user
+     * @return
+     */
+    int updateUserById(User user);
+
+    /**
+     * 根据用户参数获取用户list
+     * @param user
+     * @return
+     */
+    List<User> getListByParams(User user);
+    /**
+     * 根据会员等级获取用户列表
+     * @param merchantId
+     * @param lowLevel:最低会员等级
+     * @param topLevel:最高会员等级
+     * @return
+     */
+    List<User> getListByLevel(String merchantId,Integer lowLevel,Integer topLevel);
 }

@@ -28,7 +28,7 @@ public class CertificationController {
     @ApiComment("审核实名信息")
     @RequestMapping(name = "审核实名信息",
             value = "/modifyById", method = RequestMethod.POST)
-    public Result modifyById(@ApiComment("实名认证id") Long id,@ApiComment("审核状态") Integer status,@ApiComment("审核人员id") String operator) {
+    public Result modifyById(@ApiComment("实名认证id") String userId,@ApiComment("审核状态") Integer status,@ApiComment("审核人员id") String operator) {
         Result result = new Result();
         return result;
     }

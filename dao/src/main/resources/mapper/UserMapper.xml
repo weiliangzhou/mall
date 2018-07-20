@@ -53,9 +53,18 @@
       <if test="merchantId != null">
         AND merchant_id=#{merchantId,jdbcType=VARCHAR}
       </if>
-     <!-- <if test="available != null">
+      <if test="realName != null">
+        AND  real_name = #{realName,jdbcType=VARCHAR}
+      </if>
+      <if test="levelName != null">
+        AND  level_name = #{levelName,jdbcType=VARCHAR}
+      </if>
+      <if test="registerMobile != null">
+        AND  register_mobile = #{registerMobile,jdbcType=VARCHAR}
+      </if>
+      <if test="available != null">
         AND available=#{available,jdbcType=INTEGER}
-      </if>-->
+      </if>
     </where>
   </select>
 
@@ -94,6 +103,9 @@
             <if test="merchantId != null">
                 merchant_id = #{merchantId,jdbcType=VARCHAR},
             </if>
+            <if test="registerFrom != null">
+                register_from = #{registerFrom,jdbcType=VARCHAR},
+            </if>
             <if test="referrer != null">
                 referrer = #{referrer,jdbcType=VARCHAR},
             </if>
@@ -126,5 +138,52 @@
         where available=1
         and user_id=#{userId}
 
+    </select>
+    <!--根据用户参数获取list-->
+    <select id="selectListByParams" parameterType="com.zwl.model.po.User" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        ss_user
+        <where>
+            <if test="merchantId != null">
+                AND merchant_id=#{merchantId,jdbcType=VARCHAR}
+            </if>
+            <if test="wechatUnionId != null">
+                AND wechat_union_id = #{wechatUnionId,jdbcType=VARCHAR}
+            </if>
+            <if test="referrer != null">
+                AND referrer = #{referrer,jdbcType=VARCHAR}
+            </if>
+            <if test="memberLevel != null">
+                AND  member_level = #{memberLevel,jdbcType=SMALLINT}
+            </if>
+            <if test="levelName != null">
+                AND  level_name = #{levelName,jdbcType=VARCHAR}
+            </if>
+            <if test="expiresTime != null">
+                AND  expires_time = #{expiresTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="registerTime != null">
+                AND  register_time = #{registerTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="modifyTime != null">
+                AND modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="available != null">
+                AND available = #{available,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+    <!--根据会员等级获取用户列表AND merchant_id=#{merchantId,jdbcType=VARCHAR}AND  member_level &gt;= #{lowLevel}
+        AND  member_level &lt;=  #{topLevel}-->
+    <select id="selectListByLevel" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ss_user
+        where available=1
+        AND merchant_id=#{merchantId,jdbcType=VARCHAR}
+        AND  member_level &gt;= #{lowLevel}
+        AND  member_level &lt;=  #{topLevel}
     </select>
 </mapper>

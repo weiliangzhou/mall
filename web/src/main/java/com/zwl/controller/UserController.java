@@ -70,6 +70,9 @@ public class UserController {
         userQuery.setWechatOpenid(openid);
         userQuery.setMerchantId(userLoginInfoVo.getMerchantId());
         userQuery=userService.getOneByParams(userQuery);
+        //先查询用户之前是否线下导入过
+
+
 
         String userId = null;
         //用户信息（头像、昵称等）
