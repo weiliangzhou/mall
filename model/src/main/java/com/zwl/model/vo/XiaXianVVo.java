@@ -19,6 +19,7 @@ public class XiaXianVVo {
     @ApiComment("账户余额")
     private Integer balance;
     private Long totalPage;
+    private String userId;
     @ApiComment(seeClass = XiaXianVo.class)
     private List<XiaXianVo> xiaXianVoList;
 

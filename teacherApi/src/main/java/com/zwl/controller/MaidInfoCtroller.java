@@ -44,6 +44,7 @@ public class MaidInfoCtroller {
         xiaXianVVo.setBalance(null==balance?0:balance/100);
         xiaXianVVo.setXiaXianVoList(xiaXianVoList);
         xiaXianVVo.setTotalPage(page.getTotal());
+        xiaXianVVo.setUserId(userId);
         result.setData(xiaXianVVo);
         return xiaXianVVo;
     }
