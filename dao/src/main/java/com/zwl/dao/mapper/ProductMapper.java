@@ -18,4 +18,6 @@ public interface ProductMapper {
     int updateByPrimaryKey(Product record);
 
     List<Product> getProductList(String merchantId);
+
+    List<Product> getAdminProductList();
 }

@@ -17,6 +17,8 @@ import java.util.List;
 @Data
 public class WithdrawVo {
     @ApiComment("总记录数")
+    private Long total;
+    @ApiComment("总页数")
     private Long totalPage;
     @ApiComment("当前页")
     private Integer pageNum;

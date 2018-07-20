@@ -125,4 +125,9 @@ public class ProductServiceImpl implements ProductService {
         buyResult.setOpenId(user.getWechatOpenid());
         return buyResult;
     }
+
+    @Override
+    public List<Product> getAdminProductList() {
+        return productMapper.getAdminProductList();
+    }
 }

@@ -51,7 +51,7 @@ public class WithdrawController {
     public String approveWithdraw(HttpServletRequest request, @RequestBody JSONObject jsonObject) {
         Integer status = jsonObject.getInteger("status");
         String operator = jsonObject.getString("operator");
-        String id = jsonObject.getString("id");
+        String id = jsonObject.getString("withdrawId");
         String realIp = IpKit.getRealIp(request);
         if (StrKit.isBlank(realIp)) {
             realIp = "127.0.0.1";

@@ -52,7 +52,7 @@ public class WxPayServiceImpl implements WxPayService {
         payMap.put("attach", "测试，二师兄");
         payMap.put("out_trade_no", orderNo);
         payMap.put("total_fee", totalFee);
-        payMap.put("spbill_create_ip", realIp);
+        payMap.put("spbill_create_ip", "127.0.0.1");
         payMap.put("time_start", timeStart);
         payMap.put("time_expire", timeExpire);
         payMap.put("notify_url", WxConstans.USER_NOTIFY_URL);
@@ -95,7 +95,7 @@ public class WxPayServiceImpl implements WxPayService {
 //        paySign	String	是	签名,具体签名方案参见微信公众号支付帮助文档;
         WxPayVo wxPayVo=new WxPayVo();
         wxPayVo.setTimeStamp(sdf_yMdHms.format(new Date()));
-        wxPayVo.setNonceStr(payMap.get("nonceStr").toString());
+        wxPayVo.setNonceStr(payMap.get("nonce_str").toString());
         wxPayVo.setPackageStr(prepay_id);
         wxPayVo.setPaySign( payMap.get("sign").toString());
         return wxPayVo;
