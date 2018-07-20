@@ -9,6 +9,7 @@ import com.zwl.model.vo.BuyResult;
 import com.zwl.service.ProductService;
 import com.zwl.service.UserInfoService;
 import com.zwl.service.WxUserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,7 @@ import java.util.List;
  * @date 2018/7/515:15
  */
 @Service
+@Slf4j
 public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductMapper productMapper;
@@ -106,6 +108,7 @@ public class ProductServiceImpl implements ProductService {
         order.setMerchantId(merchantId);
         order.setRealName(user.getRealName());
         order.setPhone(user.getRegisterMobile());
+        log.info("订单数据"+order);
         try {
             orderMapper.insertSelective(order);
         } catch (Exception e) {
@@ -117,12 +120,14 @@ public class ProductServiceImpl implements ProductService {
         orderFlow.setOrderStatus(0);
         orderFlow.setActualMoney(price);
         orderFlow.setMoney(price);
+        log.info("订单流水数据"+order);
         orderFlowMapper.insertSelective(orderFlow);
         BuyResult buyResult=new BuyResult();
         buyResult.setOrderNo(orderNo);
         buyResult.setTotalFee(price);
         buyResult.setTotalFeeDesc(price/100+"");
         buyResult.setOpenId(user.getWechatOpenid());
+        log.info("订单完成返回结果"+buyResult);
         return buyResult;
     }
 
