@@ -51,7 +51,7 @@ public class InformationController {
 
     @ApiComment("资讯编辑上传图片")
     @RequestMapping(name = "资讯编辑上传图片",
-            value = "/teacher/information/upload", method = RequestMethod.POST)
+            value = "/teacher/image/upload", method = RequestMethod.POST)
     public String imageUpload(@ApiComment("文件") MultipartFile file) {
         Result result = new Result();
         return JSON.toJSONString(result);

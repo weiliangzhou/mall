@@ -23,5 +23,5 @@ public interface UserAccountMapper {
     int addBanlanceByUserId(@Param("userId") String userId, @Param("money") Integer money);
 
     @Update("update ss_user_account set balance= balance-#{money} where user_id=#{userId}")
-    int subBanlanceByUserId(@Param("userId") String userId, @Param("currentAmount") Integer money);
+    int subBanlanceByUserId(@Param("userId") String userId, @Param("money") Integer money);
 }

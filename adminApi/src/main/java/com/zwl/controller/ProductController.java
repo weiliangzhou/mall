@@ -1,11 +1,15 @@
 package com.zwl.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.po.Product;
 import com.zwl.service.ProductService;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,19 +28,24 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+
+
     @PostMapping("/getProductList")
-    public String getProductList(String merchantId) {
+    public String getProductList(@RequestBody JSONObject jsonObject) {
         Result result = new Result();
-        List<Product> productList = productService.getProductList(merchantId);
+        List<Product> productList = productService.getAdminProductList();
         result.setData(productList);
         return JSON.toJSONString(result);
     }
 
-    @PostMapping("/updateProduct")
-    public Result updateProduct(Product product) {
+    @PostMapping(value = "/updateProduct")
+    public String updateProduct(@Validated(Update.class) @RequestBody Product product) {
+        //前端页面编辑传入的是元单位 ，需要转换成分
+        Integer price=product.getPrice()*100;
+        product.setPrice(price);
         Result result = new Result();
         productService.updateProduct(product);
-        return result;
+        return JSON.toJSONString(result);
     }
 
 }

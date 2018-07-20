@@ -19,4 +19,6 @@ public interface ProductService {
     void updateProduct(Product product);
 
     BuyResult buy(Product product);
+
+    List<Product> getAdminProductList();
 }

@@ -31,7 +31,7 @@ public class OrderController {
     }
     @ApiComment("个人消费列表")
     @RequestMapping(name = "个人消费列表",
-            value = "/teacher/order/getOrderList", method = RequestMethod.POST)
+            value = "/teacher/order/getOrderList1", method = RequestMethod.POST)
     public List<Order> getOrderListByUserId(@ApiComment("商户号") String merchantId,@ApiComment("userId") String userId, @ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize) {
         List<Order> orderList = new ArrayList<>();
         return orderList;
