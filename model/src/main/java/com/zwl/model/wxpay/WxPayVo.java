@@ -12,11 +12,9 @@ import lombok.Data;
  */
 @Data
 public class WxPayVo {
-    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private String timeStamp;
     private String nonceStr;
     private String packageStr;
     private String paySign;
-
-
+    private String signType;
 }

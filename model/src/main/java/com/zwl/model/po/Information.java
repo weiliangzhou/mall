@@ -33,8 +33,8 @@ public class Information {
     @NotBlank(message = "内容不能为空", groups = {Update.class})
     @ApiComment(value = "内容", sample = "内容")
     private String content;
-    @JSONField(serialize = false)
-    @RestPackIgnore
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    @ApiComment(value = "创建时间", sample = "2018-07-05 18:00:00")
     private Date createTime = new Date();
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     @ApiComment(value = "更新时间", sample = "2018-07-05 18:00:00")

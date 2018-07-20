@@ -93,11 +93,20 @@ public class WxPayServiceImpl implements WxPayService {
 //        package	String	是	统一下单接口返回的 prepay_id 参数值，提交格式如：prepay_id=*
 //        signType	String	是	签名类型，默认为MD5，支持HMAC-SHA256和MD5。注意此处需与统一下单的签名类型一致
 //        paySign	String	是	签名,具体签名方案参见微信公众号支付帮助文档;
+        String date=sdf_yMdHms.format(new Date());
+        Map payResult=new HashMap();
+        payResult.put("appId",WxConstans.XCX_APPID);
+        payResult.put("timeStamp",date);
+        payResult.put("nonceStr",payMap.get("nonce_str").toString());
+        payResult.put("package","prepay_id="+prepay_id);
+        payResult.put("signType","MD5");
+        payResult.put("paySign",PaymentKit.createSign(payResult, WxConstans.PARTNERKEY));
         WxPayVo wxPayVo=new WxPayVo();
-        wxPayVo.setTimeStamp(sdf_yMdHms.format(new Date()));
+        wxPayVo.setTimeStamp(date);
         wxPayVo.setNonceStr(payMap.get("nonce_str").toString());
-        wxPayVo.setPackageStr(prepay_id);
-        wxPayVo.setPaySign( payMap.get("sign").toString());
+        wxPayVo.setPackageStr("prepay_id="+prepay_id);
+        wxPayVo.setSignType("MD5");
+        wxPayVo.setPaySign(payResult.get("paySign").toString());
         return wxPayVo;
     }
 

@@ -14,9 +14,6 @@
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="available" property="available" jdbcType="INTEGER" />
   </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.zwl.model.po.Information" extends="BaseResultMap" >
-    <result column="content" property="content" jdbcType="LONGVARBINARY" />
-  </resultMap>
   <sql id="Base_Column_List" >
     id, merchant_id, url, is_show, title, logo_url, audio_url,content, create_time, modify_time,
     available

@@ -203,7 +203,8 @@
         usr.real_name as realName,
         so.actual_money as money,
         so.payment_time as buyTime,
-        so.actual_money*sp.maid_percent/100 as maidMoney
+        so.actual_money*sp.maid_percent/100 as maidMoney,
+        usr.register_mobile as mobile
     FROM
         ss_user usr,
         ss_order so,
