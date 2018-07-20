@@ -34,7 +34,7 @@ public class UserController {
      */
     @ApiComment("根据会员等级获取用户列表")
     @RequestMapping(name = "根据会员等级获取用户列表",
-            value = "/getPageListByMerchantId", method = RequestMethod.POST)
+            value = "/getPageListByLevel", method = RequestMethod.POST)
     public PageUserVo getPageList(@ApiComment("商户号") String merchantId, @ApiComment("当前页码") Integer pageNum,
                               @ApiComment("每页条数") Integer pageSize,@ApiComment("最低会员等级") Integer loweLevel,@ApiComment("最高会员等级") Integer topLevel
     ) {
