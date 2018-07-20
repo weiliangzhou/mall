@@ -5,7 +5,7 @@ import java.util.Date;
 public class ClassSetStatistics {
     private Long id;
 
-    private Integer classSetId;
+    private Long classSetId;
 
     private Integer browseCount;
 
@@ -25,11 +25,11 @@ public class ClassSetStatistics {
         this.id = id;
     }
 
-    public Integer getClassSetId() {
+    public Long getClassSetId() {
         return classSetId;
     }
 
-    public void setClassSetId(Integer classSetId) {
+    public void setClassSetId(Long classSetId) {
         this.classSetId = classSetId;
     }
 

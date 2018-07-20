@@ -1,13 +1,15 @@
-package com.zwl.model.po;
+package com.zwl.model;
 
 import java.util.Date;
 
-public class ClassInfoStatistics {
+public class ClassSetStatistics {
     private Long id;
 
-    private Long classInfoId;
+    private Long classSetId;
 
-    private Long listenCount;
+    private Integer browseCount;
+
+    private Integer shareCount;
 
     private Date createTime;
 
@@ -23,20 +25,28 @@ public class ClassInfoStatistics {
         this.id = id;
     }
 
-    public Long getClassInfoId() {
-        return classInfoId;
+    public Long getClassSetId() {
+        return classSetId;
     }
 
-    public void setClassInfoId(Long classInfoId) {
-        this.classInfoId = classInfoId;
+    public void setClassSetId(Long classSetId) {
+        this.classSetId = classSetId;
     }
 
-    public Long getListenCount() {
-        return listenCount;
+    public Integer getBrowseCount() {
+        return browseCount;
     }
 
-    public void setListenCount(Long listenCount) {
-        this.listenCount = listenCount;
+    public void setBrowseCount(Integer browseCount) {
+        this.browseCount = browseCount;
+    }
+
+    public Integer getShareCount() {
+        return shareCount;
+    }
+
+    public void setShareCount(Integer shareCount) {
+        this.shareCount = shareCount;
     }
 
     public Date getCreateTime() {

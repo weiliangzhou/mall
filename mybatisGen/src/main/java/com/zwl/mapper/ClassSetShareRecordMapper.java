@@ -1,7 +1,6 @@
-package com.zwl.dao.mapper;
+package com.zwl.mapper;
 
-
-import com.zwl.model.po.ClassSetShareRecord;
+import com.zwl.model.ClassSetShareRecord;
 
 public interface ClassSetShareRecordMapper {
     int deleteByPrimaryKey(Long id);

@@ -1,7 +1,6 @@
-package com.zwl.dao.mapper;
+package com.zwl.mapper;
 
-
-import com.zwl.model.po.ClassSetStatistics;
+import com.zwl.model.ClassSetStatistics;
 
 public interface ClassSetStatisticsMapper {
     int deleteByPrimaryKey(Long id);

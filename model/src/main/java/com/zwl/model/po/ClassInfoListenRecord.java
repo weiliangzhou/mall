@@ -2,12 +2,12 @@ package com.zwl.model.po;
 
 import java.util.Date;
 
-public class ClassInfoStatistics {
+public class ClassInfoListenRecord {
     private Long id;
 
     private Long classInfoId;
 
-    private Long listenCount;
+    private String listenUserId;
 
     private Date createTime;
 
@@ -31,12 +31,12 @@ public class ClassInfoStatistics {
         this.classInfoId = classInfoId;
     }
 
-    public Long getListenCount() {
-        return listenCount;
+    public String getListenUserId() {
+        return listenUserId;
     }
 
-    public void setListenCount(Long listenCount) {
-        this.listenCount = listenCount;
+    public void setListenUserId(String listenUserId) {
+        this.listenUserId = listenUserId == null ? null : listenUserId.trim();
     }
 
     public Date getCreateTime() {

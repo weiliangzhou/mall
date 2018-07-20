@@ -1,4 +1,4 @@
-package com.zwl.model.po;
+package com.zwl.model;
 
 import java.util.Date;
 

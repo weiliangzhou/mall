@@ -23,7 +23,7 @@ public class UserController {
             value = "/add", method = RequestMethod.POST)
     public Result add(@ApiComment("registerMobile") String registerMobile,@ApiComment("商户号") String merchantId,
                       @ApiComment("当前操作人员id") String operator,@ApiComment("真实姓名") String realName,
-                      @ApiComment("会员等级") String memberLevel) {
+                      @ApiComment("会员等级") String memberLevel, @ApiComment("会员等级名称") String levelName) {
         Result result = new Result();
         return result;
     }
@@ -49,7 +49,8 @@ public class UserController {
     @RequestMapping(name = "修改用户等级",
             value = "/modify", method = RequestMethod.POST)
     public Result modify(@ApiComment("用户id") String userId,@ApiComment("商户号") String merchantId,
-                         @ApiComment("当前操作人员id") String operator, @ApiComment("会员等级") String memberLevel) {
+                         @ApiComment("当前操作人员id") String operator, @ApiComment("会员等级") String memberLevel,
+                         @ApiComment("会员等级名称") String levelName) {
         Result result = new Result();
         return result;
     }
