@@ -7,5 +7,5 @@ package com.zwl.model.groups;
  * @Description: TODO
  * @date 2018/7/1011:46
  */
-public interface QueryMaidInfo {
+public interface QueryInfo {
 }

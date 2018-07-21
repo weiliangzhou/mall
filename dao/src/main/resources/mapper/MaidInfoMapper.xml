@@ -217,5 +217,20 @@
         and usr.member_level=sp.`level`
     </select>
 
+    <select id="getXiaXianCountByUserId" resultType="int" parameterType="string">
+    SELECT
+      count(*)
+    FROM
+        ss_user usr,
+        ss_order so,
+        ss_product sp
+    WHERE
+        usr.available = 1
+        AND usr.referrer = #{userId}
+        AND so.available = 1
+        AND usr.user_id = so.user_id
+        and usr.member_level=sp.`level`
+    </select>
+
 
 </mapper>

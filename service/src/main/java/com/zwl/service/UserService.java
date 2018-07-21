@@ -2,6 +2,7 @@ package com.zwl.service;
 
 
 import com.zwl.model.po.User;
+import com.zwl.model.vo.UserQueryVo;
 
 import java.util.List;
 
@@ -42,11 +43,11 @@ public interface UserService {
      */
     List<User> getListByParams(User user);
     /**
-     * 根据会员等级获取用户列表
+     * 获取用户列表
      * @param merchantId
-     * @param lowLevel:最低会员等级
-     * @param topLevel:最高会员等级
+     * @param queryType:普通会员列表  0
+     * @param queryType:付费会员列表  1
      * @return
      */
-    List<User> getListByLevel(String merchantId,Integer lowLevel,Integer topLevel);
+    List<User> getUserListByMerchantId( UserQueryVo userQueryVo);
 }

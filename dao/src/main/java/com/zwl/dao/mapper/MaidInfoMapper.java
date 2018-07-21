@@ -27,4 +27,6 @@ public interface MaidInfoMapper {
 
     @Select("SELECT sum(so.actual_money*sp.maid_percent/100) FROM ss_user usr,ss_order so,ss_product sp WHERE usr.available=1 AND usr.referrer=#{userId} AND so.available=1 AND usr.user_id=so.user_id AND usr.member_level=sp.`level`")
     Integer getTotalMaidMoneyByUserId(@Param("userId") String userId);
+
+    Integer getXiaXianCountByUserId(String userId);
 }

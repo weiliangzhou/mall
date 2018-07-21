@@ -38,6 +38,11 @@ public class MaidInfoServiceImpl implements MaidInfoService {
     }
 
     @Override
+    public Integer getXiaXianCountByUserId(String userId) {
+        return maidInfoMapper.getXiaXianCountByUserId(userId);
+    }
+
+    @Override
     public Integer getTotalMaidMoneyByUserId(String userId) {
         return maidInfoMapper.getTotalMaidMoneyByUserId(userId);
     }

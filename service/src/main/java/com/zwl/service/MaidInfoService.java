@@ -20,5 +20,8 @@ public interface MaidInfoService {
 
     List<XiaXianVo> getXiaXianList(String userId);
 
+    Integer getXiaXianCountByUserId(String userId);
+
+
     Integer getTotalMaidMoneyByUserId(String userId);
 }

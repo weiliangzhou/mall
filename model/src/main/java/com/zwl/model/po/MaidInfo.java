@@ -3,7 +3,7 @@ package com.zwl.model.po;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.terran4j.commons.api2doc.annotations.ApiComment;
 import com.terran4j.commons.restpack.RestPackIgnore;
-import com.zwl.model.groups.QueryMaidInfo;
+import com.zwl.model.groups.QueryInfo;
 import lombok.Data;
 import org.apache.ibatis.annotations.Update;
 
@@ -19,7 +19,7 @@ public class MaidInfo {
     @NotBlank(message = "订单号不能为空", groups = {Update.class})
     @ApiComment(value = "订单号", sample = "201807101142dy1")
     private String orderNo;
-    @NotBlank(message = "userid不能为空", groups = {Update.class, QueryMaidInfo.class})
+    @NotBlank(message = "userid不能为空", groups = {Update.class, QueryInfo.class})
     @ApiComment(value = "userid", sample = "asfsdfdsf5615")
     private String userId;
     @NotNull(message = "分佣金额不能为空", groups = {Update.class})
@@ -44,7 +44,7 @@ public class MaidInfo {
     @NotNull(message = "等级不能为空", groups = {Update.class})
     @ApiComment(value = "等级", sample = "1")
     private Integer level;
-    @NotBlank(message = "等级名称不能为空", groups = {QueryMaidInfo.class})
+    @NotBlank(message = "等级名称不能为空", groups = {QueryInfo.class})
     @ApiComment(value = "等级名称", sample = "院长")
     private String levelName;
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")

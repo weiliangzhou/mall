@@ -8,6 +8,7 @@ import com.zwl.model.po.User;
 import com.zwl.model.po.Withdraw;
 import com.zwl.model.po.WithdrawFlow;
 import com.zwl.model.wxpay.AdminPayVo;
+import com.zwl.service.UserCertificationService;
 import com.zwl.service.WithdrawService;
 import com.zwl.service.WxPayService;
 import com.zwl.service.WxUserService;
@@ -34,13 +35,8 @@ public class WithdrawServiceImpl implements WithdrawService {
     private UserAccountMapper userAccountMapper;
     @Autowired
     private WithdrawFlowMapper withdrawFlowMapper;
-
-    @Autowired
-    private WxPayService wxPayService;
-
     @Autowired
     private WxUserService wxUserService;
-
     @Override
     public List<Withdraw> getWithdrawList() {
         return withdrawMapper.getWithdrawList();

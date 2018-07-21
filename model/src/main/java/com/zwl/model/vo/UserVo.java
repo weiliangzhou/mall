@@ -1,5 +1,6 @@
 package com.zwl.model.vo;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.terran4j.commons.api2doc.annotations.ApiComment;
 import lombok.Data;
 
@@ -17,8 +18,12 @@ public class UserVo {
     private String levelName;
     @ApiComment(value = "用户真实姓名", sample = "张三")
     private String realName;
-    @ApiComment(value = "注册时间", sample = "2018-7-20 14:12:42")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    @ApiComment(value = "更新时间", sample = "2018-7-20 14:12:42")
     private Date modifyTime;
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    @ApiComment(value = "注册时间", sample = "2018-7-20 14:12:42")
+    private Date registerTime;
     @ApiComment(value = "用户购买渠道1-微信，2-线下", sample = "2")
     private Integer registerFrom;
     @ApiComment(value = "推荐人真实姓名", sample = "游东方")
