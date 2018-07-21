@@ -24,4 +24,6 @@ public class ClassVo {
     private String merchantId;
     @ApiComment(value = "1-套，2-节", sample = "1")
     private Integer classType;
+    @ApiComment(value = "浏览人数", sample = "858")
+    private Integer browseCount;
 }

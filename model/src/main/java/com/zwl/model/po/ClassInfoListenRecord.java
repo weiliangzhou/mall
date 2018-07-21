@@ -1,7 +1,9 @@
 package com.zwl.model.po;
 
-import java.util.Date;
+import lombok.Data;
 
+import java.util.Date;
+@Data
 public class ClassInfoListenRecord {
     private Long id;
 

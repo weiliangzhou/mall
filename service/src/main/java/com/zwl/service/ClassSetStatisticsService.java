@@ -1,17 +1,13 @@
-package com.zwl.dao.mapper;
-
+package com.zwl.service;
 
 import com.zwl.model.po.ClassSetStatistics;
 
-/**
- * 套课程mapper
- */
-public interface ClassSetStatisticsMapper {
+public interface ClassSetStatisticsService {
     /**
      * 新增
      * @return
      */
-    int insert(ClassSetStatistics classSetStatistics);
+    int add(ClassSetStatistics classSetStatistics);
 
     /**
      * 浏览人数+1
@@ -24,6 +20,5 @@ public interface ClassSetStatisticsMapper {
      * @param classSetId
      * @return
      */
-    ClassSetStatistics selectByClassSetId(Long classSetId);
-
+    ClassSetStatistics getByClassSetId(Long classSetId);
 }

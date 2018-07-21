@@ -1,12 +1,8 @@
-package com.zwl.dao.mapper;
-
+package com.zwl.service;
 
 import com.zwl.model.po.ClassInfoStatistics;
 
-/**
- * 节课程mapper
- */
-public interface ClassInfoStatisticsMapper {
+public interface ClassInfoStatisticsService {
     /**
      * 新增
      * @param classInfoStatistics
@@ -24,6 +20,5 @@ public interface ClassInfoStatisticsMapper {
      * @param classInfoId
      * @return
      */
-    ClassInfoStatistics selectByClassInfoId(Long classInfoId);
-
+    ClassInfoStatistics getByClassInfoId(Long classInfoId);
 }

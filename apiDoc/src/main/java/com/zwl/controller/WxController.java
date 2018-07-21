@@ -181,4 +181,20 @@ public class WxController {
         ClassInfo classInfo=new ClassInfo();
         return classInfo;
     }
+
+    @ApiComment("套课程收听人数+1")
+    @RequestMapping(name = "套课程收听人数+1",
+            value = "//wx/classset/setpAddBrowseCount", method = RequestMethod.POST)
+    public Result setpAddClasssetBrowseCount(@ApiComment("套课程id") Long classSetId){
+        Result result = new Result();
+        return result;
+    }
+    @ApiComment("节课程收听人数+1")
+    @RequestMapping(name = "节课程收听人数+1",
+            value = "//wx/classinfo/setpAddBrowseCount", method = RequestMethod.POST)
+    public Result setpAddClassinfoBrowseCount(@ApiComment("节课程id") Long classInfoId){
+        Result result = new Result();
+        return result;
+    }
+
 }
