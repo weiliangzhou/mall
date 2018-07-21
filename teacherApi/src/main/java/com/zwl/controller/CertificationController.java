@@ -41,6 +41,10 @@ public class CertificationController {
     public Result modifyById(@RequestBody UserCertification userCertification) {
         Result result = new Result();
         certificationService.modifyById(userCertification);
+        //如果实名认证通过，则更新用户表 真实姓名
+        if(userCertification.getStatus()==1){
+
+        }
         return result;
     }
 
