@@ -6,10 +6,14 @@ import com.github.pagehelper.PageHelper;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.baseresult.ResultCodeEnum;
 import com.zwl.model.po.ClassInfo;
+import com.zwl.model.po.ClassInfoStatistics;
+import com.zwl.model.po.ClassSetStatistics;
 import com.zwl.model.vo.PageClassInfoVo;
 import com.zwl.service.ClassCategoryService;
 import com.zwl.service.ClassInfoService;
+import com.zwl.service.ClassInfoStatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +29,8 @@ import java.util.List;
 public class ClassInfoController {
     @Autowired
     private ClassInfoService classInfoService;
+    @Autowired
+    private ClassInfoStatisticsService classInfoStatisticsService;
     /**
      * 根据ClassSetId获取所属的节课程列表
      * @return
@@ -58,4 +64,23 @@ public class ClassInfoController {
         return result;
     }
 
+    /**
+     * 浏览人数+1
+     * @return
+     */
+    @PostMapping("/setpAddBrowseCount")
+    public Result setpAddBrowseCount(@RequestBody JSONObject jsonObject) {
+        Result result = new Result();
+        Long classInfoId = jsonObject.getLong("classInfoId");
+        ClassInfoStatistics classInfoStatistics= classInfoStatisticsService.getByClassInfoId(classInfoId);
+        if(StringUtils.isEmpty(classInfoStatistics)) {
+            ClassInfoStatistics temp = new ClassInfoStatistics();
+            temp.setClassInfoId(classInfoId);
+            temp.setListenCount(1L);
+            classInfoStatisticsService.insert(temp);
+        }else {
+            classInfoStatisticsService.setpAddBrowseCount(classInfoId);
+        }
+        return result;
+    }
 }

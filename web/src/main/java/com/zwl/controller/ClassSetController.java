@@ -6,10 +6,13 @@ import com.github.pagehelper.PageHelper;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.baseresult.ResultCodeEnum;
 import com.zwl.model.po.ClassSet;
+import com.zwl.model.po.ClassSetStatistics;
 import com.zwl.model.vo.ClassVo;
 import com.zwl.model.vo.PageClassVo;
 import com.zwl.service.ClassSetService;
+import com.zwl.service.ClassSetStatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +28,8 @@ import java.util.List;
 public class ClassSetController {
     @Autowired
     private ClassSetService classSetService;
+    @Autowired
+    private ClassSetStatisticsService classSetStatisticsService;
 
     @PostMapping("/getPageAllClass")
     public Result getPageAllClass(@RequestBody JSONObject jsonObject) {
@@ -34,6 +39,14 @@ public class ClassSetController {
         Integer pageSize = jsonObject.getInteger("pageSize");
         Page page=PageHelper.startPage(pageNum, pageSize);
         List<ClassVo> list=classSetService.getAllClass(merchantId);
+        for (ClassVo classVo:list
+             ) {
+            if(classVo.getClassType()==1){
+                ClassSetStatistics css= classSetStatisticsService.getByClassSetId(classVo.getId());
+                classVo.setBrowseCount(css.getBrowseCount());
+            }
+        }
+
         PageClassVo pageClassVo=new PageClassVo();
         pageClassVo.setPageNum(pageNum);
         pageClassVo.setTotalPage(page.getTotal());
@@ -42,4 +55,23 @@ public class ClassSetController {
         return result;
     }
 
+    /**
+     * 浏览人数+1
+     * @return
+     */
+    @PostMapping("/setpAddBrowseCount")
+    public Result setpAddBrowseCount(@RequestBody JSONObject jsonObject) {
+        Result result = new Result();
+        Long classSetId = jsonObject.getLong("classSetId");
+        ClassSetStatistics classSetStatistics = classSetStatisticsService.getByClassSetId(classSetId);
+        if(StringUtils.isEmpty(classSetStatistics)) {
+            ClassSetStatistics temp = new ClassSetStatistics();
+            temp.setClassSetId(classSetId);
+            temp.setBrowseCount(1);
+            classSetStatisticsService.add(temp);
+        }else {
+            classSetStatisticsService.setpAddBrowseCount(classSetId);
+        }
+        return result;
+    }
 }
