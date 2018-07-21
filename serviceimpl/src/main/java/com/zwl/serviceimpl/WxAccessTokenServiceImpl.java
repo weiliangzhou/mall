@@ -28,12 +28,12 @@ public class WxAccessTokenServiceImpl implements WxAccessTokenService {
         //如果存在则直接返回
         //否则调用api接口获取
 //        access_token的有效期目前为2个小时
-        String accessToken = stringRedisTemplate.boundValueOps("accessToken"+merchantId).get();
+        String accessToken = stringRedisTemplate.boundValueOps("accessToken_"+merchantId).get();
         if (accessToken == null) {
             String result = HttpsUtils.sendGet(WxConstans.ACCESS_TOKEN,null);
             JSONObject jsonObject=JSONObject.parseObject(result);
             accessToken=jsonObject.getString("access_token");
-            stringRedisTemplate.boundValueOps("accessToken"+merchantId).set(accessToken, 2, TimeUnit.HOURS);
+            stringRedisTemplate.boundValueOps("accessToken_"+merchantId).set(accessToken, 2, TimeUnit.HOURS);
         }
         return accessToken;
     }
