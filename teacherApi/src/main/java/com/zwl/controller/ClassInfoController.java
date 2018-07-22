@@ -5,6 +5,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.baseresult.ResultCodeEnum;
+import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.ClassInfo;
 import com.zwl.model.vo.PageClassInfoVo;
 import com.zwl.service.ClassCategoryService;
@@ -29,26 +30,26 @@ public class ClassInfoController {
     private ClassCategoryService classCategoryService;
 
     @PostMapping("/add")
-    public Result add(@RequestBody ClassInfo classInfo){
+    public Result add(@RequestBody ClassInfo classInfo) {
         Result result = new Result();
         classInfo.setAvailable(1);
-        int addFlag=classInfoService.add(classInfo);
-        if(addFlag==-1){
-            result.setCode(ResultCodeEnum.FAIL);
-            result.setMessage("已经存在相同的名称");
-        }else if(addFlag==0){
+        int addFlag = classInfoService.add(classInfo);
+        if (addFlag == -1)
+            BSUtil.isTrue(false, "已经存在相同的名称");
+        else if (addFlag == 0) {
             result.setCode(ResultCodeEnum.FAIL);
         }
         return result;
     }
+
     @PostMapping("/modify")
-    public Result modify(@RequestBody ClassInfo classInfo){
+    public Result modify(@RequestBody ClassInfo classInfo) {
         Result result = new Result();
-        int modifyFlag=classInfoService.modifyByParams(classInfo);
-        if(modifyFlag==-1){
+        int modifyFlag = classInfoService.modifyByParams(classInfo);
+        if (modifyFlag == -1) {
             result.setCode(ResultCodeEnum.FAIL);
             result.setMessage("已经存在相同的名称");
-        }else if(modifyFlag==0){
+        } else if (modifyFlag == 0) {
             result.setCode(ResultCodeEnum.FAIL);
         }
         return result;
@@ -56,32 +57,35 @@ public class ClassInfoController {
 
     /**
      * 根据ClassSetId获取所属的节课程列表
+     *
      * @return
      */
     @PostMapping("/getPageByClassSetId")
-    public Result getPageByClassSetId(@RequestBody JSONObject jsonObject){
+    public Result getPageByClassSetId(@RequestBody JSONObject jsonObject) {
         Result result = new Result();
         Long classSetId = jsonObject.getLong("classSetId");
         Integer pageNum = jsonObject.getInteger("pageNum");
         Integer pageSize = jsonObject.getInteger("pageSize");
-        Page page=PageHelper.startPage(pageNum, pageSize);
+        Page page = PageHelper.startPage(pageNum, pageSize);
         List<ClassInfo> list = classInfoService.getByClassSetId(classSetId);
-        PageClassInfoVo pageVo=new PageClassInfoVo();
+        PageClassInfoVo pageVo = new PageClassInfoVo();
         pageVo.setPageNum(pageNum);
         pageVo.setTotalPage(page.getTotal());
         pageVo.setList(list);
         result.setData(pageVo);
         return result;
     }
+
     /**
      * 根据Id获取节课程
+     *
      * @return
      */
     @PostMapping("/getById")
-    public Result getById(@RequestBody JSONObject jsonObject){
+    public Result getById(@RequestBody JSONObject jsonObject) {
         Result result = new Result();
         Long id = jsonObject.getLong("id");
-        ClassInfo classInfo=classInfoService.getById(id);
+        ClassInfo classInfo = classInfoService.getById(id);
         result.setData(classInfo);
         return result;
     }

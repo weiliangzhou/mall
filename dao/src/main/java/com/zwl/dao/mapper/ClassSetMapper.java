@@ -57,6 +57,6 @@ public interface ClassSetMapper {
      * @return
      */
     List<ClassVo> selectAllClass(String merchantId);
-    @Select("select id ,title from ss_class_set where merchant_id=#{merchantId} and category_id= #{categoryId}")
+    @Select("select id ,title from ss_class_set where merchant_id=#{merchantId} and category_id= #{categoryId} and available=1")
     List<ClassSetItemVo> getClassSetItemsList(@Param("categoryId")Integer categoryId, @Param("merchantId")String merchantId);
 }

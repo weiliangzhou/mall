@@ -42,18 +42,7 @@ public class WxPayController {
     private UserQuotaCountService userQuotaCountService;
     @Autowired
     private MerchantService merchantService;
-
-
     private SimpleDateFormat sdf_yMdHms = new SimpleDateFormat("yyyyMMddHHmmss");
-//    private SimpleDateFormat sdf_yMdHms_1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-//    public static WxPayH5 getApiConfig() {
-//        return WxPayH5.New()
-//                .setAppId(WxConstans.APPID)
-//                .setMchId(WxConstans.MCHID)
-//                .setPaternerKey(WxConstans.PARTNERKEY);
-//    }
-
     /**
      * 微信H5 支付
      * 注意：必须再web页面中发起支付且域名已添加到开发配置中
@@ -73,6 +62,31 @@ public class WxPayController {
         String appid = merchant.getAppId();
         String wxPayKey = merchant.getWxPayKey();
         WxPayVo wxPayVo = wxPayService.pay(realIp, openId, orderNo, totalFee, appid, merchantId, wxPayKey);
+        Result result_return = new Result();
+        result_return.setData(wxPayVo);
+        return JSON.toJSONString(result_return);
+    }
+
+
+    /**
+     * android支付
+     * 注意：必须再web页面中发起支付且域名已添加到开发配置中
+     */
+    @PostMapping("/auth/androidPay.do")
+    public String androidPay(HttpServletRequest request, @RequestBody JSONObject jsonObject) {
+        String realIp = IpKit.getRealIp(request);
+        if (StrKit.isBlank(realIp)) {
+            realIp = "127.0.0.1";
+        }
+        String openId = jsonObject.getString("openId");
+        String orderNo = jsonObject.getString("orderNo");
+        String totalFee = jsonObject.getString("totalFee");
+        String merchantId = jsonObject.getString("merchantId");
+//        merchantId 查询 mch_id appid wxPayKey
+        Merchant merchant = merchantService.getMerchantByMerchantId(merchantId);
+        String appid = merchant.getAppId();
+        String wxPayKey = merchant.getWxPayKey();
+        WxPayVo wxPayVo = wxPayService.androidPay(realIp, openId, orderNo, totalFee, appid, merchantId, wxPayKey);
         Result result_return = new Result();
         result_return.setData(wxPayVo);
         return JSON.toJSONString(result_return);
@@ -177,6 +191,7 @@ public class WxPayController {
                     log.info("回调支付成功开始更新用户等级" + user);
                     wxUserService.updateUserById(user);
                     //订单支付成功，返佣给推荐人
+                    //后期加入MQ
                     log.info("回调支付成功，开始分佣");
                     String merchantId = order.getMerchantId();
                     String orderNo = order.getOrderNo();

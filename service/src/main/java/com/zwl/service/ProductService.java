@@ -2,6 +2,7 @@ package com.zwl.service;
 
 import com.zwl.model.po.Product;
 import com.zwl.model.vo.BuyResult;
+import com.zwl.model.vo.ProductItemVo;
 
 import java.util.List;
 
@@ -21,4 +22,6 @@ public interface ProductService {
     BuyResult buy(Product product);
 
     List<Product> getAdminProductList();
+
+    List<ProductItemVo> getUserLevelItemsList(String merchantId);
 }

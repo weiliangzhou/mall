@@ -94,15 +94,7 @@ public class ClassSetController {
         return result;
     }
 
-    @PostMapping("/getClassSetItemsList")
-    public Result getClassSetItemsList(@RequestBody JSONObject jsonObject) {
-        Result result = new Result();
-        String merchantId = jsonObject.getString("merchantId");
-        Integer categoryId = jsonObject.getInteger("categoryId");
-        List<ClassSetItemVo> list = classSetService.getClassSetItemsList(categoryId, merchantId);
-        result.setData(list);
-        return result;
-    }
+
 
 
 }

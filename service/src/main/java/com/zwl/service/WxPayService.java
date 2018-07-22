@@ -15,5 +15,7 @@ import java.util.Map;
 public interface WxPayService {
     WxPayVo pay(String realIp, String openId, String orderNo, String totalFee,String appid,String mch_id,String wxPayKey);
 
+    WxPayVo androidPay(String realIp, String openId, String orderNo, String totalFee, String appid, String merchantId, String wxPayKey);
+
 //    void adminPay(AdminPayVo adminPayVo);
 }

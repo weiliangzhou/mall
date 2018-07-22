@@ -99,8 +99,10 @@ public class PaymentKit {
 
     public static boolean isWechatSign(Map<String, String> params, String wxPayKey) {
         String sign = params.get("sign").toUpperCase();
+        log.info("微信回调签名------------->"+sign);
         params.remove("sign");
         String localSign = createSign(params, wxPayKey);
+        log.info("本地签名------------->"+localSign);
         return localSign.equals(sign);
     }
 

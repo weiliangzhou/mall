@@ -6,6 +6,7 @@ import com.zwl.dao.mapper.ProductMapper;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.*;
 import com.zwl.model.vo.BuyResult;
+import com.zwl.model.vo.ProductItemVo;
 import com.zwl.service.ProductService;
 import com.zwl.service.UserInfoService;
 import com.zwl.service.WxUserService;
@@ -134,5 +135,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> getAdminProductList() {
         return productMapper.getAdminProductList();
+    }
+
+    @Override
+    public List<ProductItemVo> getUserLevelItemsList(String merchantId) {
+        return productMapper.getUserLevelItemsList(merchantId);
     }
 }
