@@ -32,5 +32,5 @@ public class UserInfo {
 
     private Date registerTime;
 
-    private Integer available;
+    private Integer available = 1;
 }

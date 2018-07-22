@@ -35,6 +35,6 @@ public class ClassInfo {
     @ApiComment(value = "修改时间", sample = "2018-7-19 14:30:50")
     private Date modifyTime;
     @ApiComment(value = "逻辑删除位", sample = "1")
-    private Integer available;
+    private Integer available = 1;
 
 }

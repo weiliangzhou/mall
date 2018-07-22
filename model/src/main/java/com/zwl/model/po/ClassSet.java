@@ -27,7 +27,7 @@ public class ClassSet {
 
     private Date modifyTime;
 
-    private Integer available;
+    private Integer available = 1;
 
     private String content;
 

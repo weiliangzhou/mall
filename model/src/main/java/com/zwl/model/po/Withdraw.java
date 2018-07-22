@@ -56,7 +56,7 @@ public class Withdraw {
     private Date modifyTime;
     @RestPackIgnore
     @JSONField(serialize = false)
-    private Integer available;
+    private Integer available = 1;
     @NotBlank(message = "商户号不能为空", groups = {ApplyWithdraw.class})
     @ApiComment(value = "商户号", sample = "dy")
     private String merchantId;

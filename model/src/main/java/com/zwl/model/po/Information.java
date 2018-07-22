@@ -41,7 +41,7 @@ public class Information {
     private Date modifyTime;
     @JSONField(serialize = false)
     @RestPackIgnore
-    private Integer available;
+    private Integer available = 1;
 
 
 }

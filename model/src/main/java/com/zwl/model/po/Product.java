@@ -5,8 +5,6 @@ import com.terran4j.commons.api2doc.annotations.ApiComment;
 import com.terran4j.commons.restpack.RestPackIgnore;
 import com.zwl.model.groups.Buy;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.apache.ibatis.annotations.Update;
 
 import javax.validation.constraints.NotBlank;
@@ -48,7 +46,7 @@ public class Product {
     private Date modifyTime;
     @RestPackIgnore
     @JSONField(serialize = false)
-    private Integer available;
+    private Integer available = 1;
     @RestPackIgnore
     @JSONField(serialize = false)
     @NotBlank(message = "userID不能为空", groups = {Buy.class})
@@ -58,8 +56,9 @@ public class Product {
     @JSONField(serialize = false)
     @NotBlank(message = "微信H5支付终端ip不能为空")
     private String spbillCreateIp;
+
     public String getPriceDesc() {
-        return this.price/100+"";
+        return this.price / 100 + "";
     }
 
 }

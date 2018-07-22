@@ -1,7 +1,9 @@
 package com.zwl.model.po;
 
-import java.util.Date;
+import lombok.Data;
 
+import java.util.Date;
+@Data
 public class ClassSetShareRecord {
     private Long id;
 
@@ -13,6 +15,6 @@ public class ClassSetShareRecord {
 
     private Date modifyTime;
 
-    private Integer available;
+    private Integer available = 1;
 
 }

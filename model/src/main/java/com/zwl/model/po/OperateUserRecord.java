@@ -25,5 +25,5 @@ public class OperateUserRecord {
 
     private Date modifyTime;
 
-    private Integer available;
+    private Integer available = 1;
 }

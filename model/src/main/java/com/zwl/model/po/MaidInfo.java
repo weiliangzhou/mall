@@ -31,7 +31,7 @@ public class MaidInfo {
     @NotNull(message = "实付订单金额不能为空", groups = {Update.class})
     @ApiComment(value = "实付订单金额", sample = "500000")
     private Integer orderActualMoney;
-//    @NotBlank(message = "渠道ID不能为空", groups = {QueryMaidInfo.class})
+    //    @NotBlank(message = "渠道ID不能为空", groups = {QueryMaidInfo.class})
     @JSONField(serialize = false)
     @RestPackIgnore
     private String merchantId;
@@ -52,7 +52,7 @@ public class MaidInfo {
     private Date createTime;
     @RestPackIgnore
     @JSONField(serialize = false)
-    private Integer available;
+    private Integer available = 1;
 
 
 }

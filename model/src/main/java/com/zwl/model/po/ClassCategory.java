@@ -23,6 +23,6 @@ public class ClassCategory {
     @ApiComment(value = "修改时间", sample = "2018-7-17 15:09:38")
     private Date modifyTime;
     @ApiComment(value = "逻辑删除位", sample = "0")
-    private Integer available;
+    private Integer available = 1;
 
 }

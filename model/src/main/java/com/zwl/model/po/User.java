@@ -1,4 +1,5 @@
 package com.zwl.model.po;
+
 import lombok.Data;
 
 import java.util.Date;
@@ -10,7 +11,7 @@ public class User {
     private String wechatOpenid;
     private String wechatUnionId;
     private String merchantId;
-//    从什么渠道注册。1、wechat 微信注册 2、线下导入
+    //    从什么渠道注册。1、wechat 微信注册 2、线下导入
     private Integer registerFrom;
     private String realName;
     private String logoUrl;
@@ -21,5 +22,5 @@ public class User {
     private Date expiresTime;
     private Date registerTime;
     private Date modifyTime;
-    private Integer available;
+    private Integer available = 1;
 }

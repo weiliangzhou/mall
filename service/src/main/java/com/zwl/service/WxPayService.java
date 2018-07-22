@@ -13,7 +13,7 @@ import java.util.Map;
  * @date 2018/7/1014:23
  */
 public interface WxPayService {
-    WxPayVo pay(String realIp, String openId, String orderNo, String totalFee);
+    WxPayVo pay(String realIp, String openId, String orderNo, String totalFee,String appid,String mch_id,String wxPayKey);
 
-    void adminPay(AdminPayVo adminPayVo);
+//    void adminPay(AdminPayVo adminPayVo);
 }

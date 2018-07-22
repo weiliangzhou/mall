@@ -8,5 +8,5 @@ package com.zwl.service;
  * @date 2018/7/1117:08
  */
 public interface WxSenderService {
-    public void sendBuyMsg(String openid, String productName, Integer price,String merchantId);
+    public void sendBuyMsg(String formId, String productName, Integer price, String merchantId, String gzAppId, String gzAppKey, String buyTemplateId);
 }

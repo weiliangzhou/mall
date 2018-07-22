@@ -1,15 +1,16 @@
 package com.zwl.serviceimpl;
 
-import com.zwl.model.groups.AdminPay;
 import com.zwl.model.exception.BSUtil;
-import com.zwl.model.wxpay.*;
+import com.zwl.model.wxpay.PaymentKit;
+import com.zwl.model.wxpay.WxConstans;
+import com.zwl.model.wxpay.WxPayVo;
+import com.zwl.service.OrderService;
 import com.zwl.service.WithdrawService;
 import com.zwl.service.WxPayService;
 import com.zwl.util.HttpsUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -30,10 +31,12 @@ public class WxPayServiceImpl implements WxPayService {
 
     @Autowired
     private WithdrawService withdrawService;
+    @Autowired
+    private OrderService orderService;
     private SimpleDateFormat sdf_yMdHms = new SimpleDateFormat("yyyyMMddHHmmss");
 
     @Override
-    public WxPayVo pay(String realIp, String openId, String orderNo, String totalFee) {
+    public WxPayVo pay(String realIp, String openId, String orderNo, String totalFee, String appid, String mch_id, String wxPayKey) {
         log.info("开始微信支付");
 
         //此域名必须在商户平台--"产品中心"--"开发配置"中添加
@@ -44,9 +47,9 @@ public class WxPayServiceImpl implements WxPayService {
         String timeStart = sdf_yMdHms.format(cal.getTime());
         cal.add(Calendar.DAY_OF_MONTH, +5);
         String timeExpire = sdf_yMdHms.format(cal.getTime());
-        Map payMap=new HashMap();
-        payMap.put("appid",WxConstans.XCX_APPID);
-        payMap.put("mch_id",WxConstans.MCHID);
+        Map payMap = new HashMap();
+        payMap.put("appid", appid);
+        payMap.put("mch_id", mch_id);
         payMap.put("nonce_str", String.valueOf(System.currentTimeMillis()));
         payMap.put("body", "测试，二师兄");
         payMap.put("attach", "测试，二师兄");
@@ -58,7 +61,8 @@ public class WxPayServiceImpl implements WxPayService {
         payMap.put("notify_url", WxConstans.USER_NOTIFY_URL);
         payMap.put("trade_type", "JSAPI");
         payMap.put("openid", openId);
-        payMap.put("sign", PaymentKit.createSign(payMap, WxConstans.PARTNERKEY));
+        String sign = PaymentKit.createSign(payMap, wxPayKey);
+        payMap.put("sign", sign);
         //获取微信返回的结果
         log.info("开始发送微信支付xml--->" + PaymentKit.toXml(payMap));
         String xmlResult = HttpsUtils.sendPost(WxConstans.PAY_URL, PaymentKit.toXml(payMap)).toString();
@@ -75,6 +79,11 @@ public class WxPayServiceImpl implements WxPayService {
             log.error("result_code>" + result_code + " return_msg>" + return_msg);
             throw new RuntimeException(return_msg);
         }
+        int updateWxSign = orderService.updateWxSign(sign,orderNo);
+        if (updateWxSign != 1)
+            BSUtil.isTrue(false, "系统异常，请稍后重试");
+
+
         // 以下字段在return_code 和result_code都为SUCCESS的时候有返回
         String trade_type = result.get("trade_type");//交易类型  H5支付固定传MWEB
         String prepay_id = result.get("prepay_id");//预支付交易会话标识
@@ -93,71 +102,71 @@ public class WxPayServiceImpl implements WxPayService {
 //        package	String	是	统一下单接口返回的 prepay_id 参数值，提交格式如：prepay_id=*
 //        signType	String	是	签名类型，默认为MD5，支持HMAC-SHA256和MD5。注意此处需与统一下单的签名类型一致
 //        paySign	String	是	签名,具体签名方案参见微信公众号支付帮助文档;
-        String date=sdf_yMdHms.format(new Date());
-        Map payResult=new HashMap();
-        payResult.put("appId",WxConstans.XCX_APPID);
-        payResult.put("timeStamp",date);
-        payResult.put("nonceStr",payMap.get("nonce_str").toString());
-        payResult.put("package","prepay_id="+prepay_id);
-        payResult.put("signType","MD5");
-        payResult.put("paySign",PaymentKit.createSign(payResult, WxConstans.PARTNERKEY));
-        WxPayVo wxPayVo=new WxPayVo();
+        String date = sdf_yMdHms.format(new Date());
+        Map payResult = new HashMap();
+        payResult.put("appId", appid);
+        payResult.put("timeStamp", date);
+        payResult.put("nonceStr", payMap.get("nonce_str").toString());
+        payResult.put("package", "prepay_id=" + prepay_id);
+        payResult.put("signType", "MD5");
+        payResult.put("paySign", PaymentKit.createSign(payResult, wxPayKey));
+        WxPayVo wxPayVo = new WxPayVo();
         wxPayVo.setTimeStamp(date);
         wxPayVo.setNonceStr(payMap.get("nonce_str").toString());
-        wxPayVo.setPackageStr("prepay_id="+prepay_id);
+        wxPayVo.setPackageStr("prepay_id=" + prepay_id);
         wxPayVo.setSignType("MD5");
         wxPayVo.setPaySign(payResult.get("paySign").toString());
         return wxPayVo;
     }
 
-    @Override
-    public void adminPay(@Validated(AdminPay.class) AdminPayVo adminPayVo) {
-        log.info("开始企业付款");
-        String openId = adminPayVo.getOpenId();
-        String realName = adminPayVo.getRealName();
-        Integer amount = adminPayVo.getAmount();
-        String desc = adminPayVo.getDesc();
-        String realIp = adminPayVo.getRealIp();
-        Map<String, String> params = WxAdminPay.New()
-                .setMch_appid(WxConstans.APPID)
-                .setMchid(WxConstans.MCHID)
-                .setPartner_trade_no("提现号")
-                .setOpenid(openId)
-                .setRe_user_name(realName)
-                .setAmount(amount)//企业付款金额，单位为分
-                .setDesc(desc)
-                .setSpbill_create_ip(realIp)
-                .setPaternerKey(WxConstans.PARTNERKEY)
-                .build();
-
-        //获取微信返回的结果
-        log.info("开始发送企业付款xml--->" + PaymentKit.toXml(params));
-        String xmlResult = HttpsUtils.sendPost(WxConstans.ADMIN_PAY_URL, PaymentKit.toXml(params)).toString();
-        Map<String, String> result = PaymentKit.xmlToMap(xmlResult);
-        log.info("结束发送企业付款xml--->" + result);
-        String return_code = result.get("return_code");
-        String return_msg = result.get("return_msg");
-        if (!PaymentKit.codeIsOK(return_code)) {
-            log.error("return_code>" + return_code + " return_msg>" + return_msg);
-            throw new RuntimeException(return_msg);
-        }
-        String result_code = result.get("result_code");
-        if (!PaymentKit.codeIsOK(result_code)) {
-            log.error("result_code>" + result_code + " return_msg>" + return_msg);
-            throw new RuntimeException(return_msg);
-        }
-        // 以下字段在return_code 和result_code都为SUCCESS的时候有返回
-//        商户订单号	partner_trade_no	是	1217752501201407033233368018	String(32)	商户订单号，需保持历史全局唯一性(只能是字母或者数字，不能包含有符号)
-//        微信订单号	payment_no	是	1007752501201407033233368018	String	企业付款成功，返回的微信订单号
-//        微信支付成功时间	payment_time	是	2015-05-19 15：26：59	String	企业付款成功时间
-        String partner_trade_no = result.get("partner_trade_no");
-        String payment_no = result.get("payment_no");
-        String payment_time = result.get("payment_time");
-        log.info("商户订单号:" + partner_trade_no + " 企业付款成功，返回的微信订单号:" + payment_no + "企业付款成功时间" + payment_time);
-        //更新提现信息
-        int updateCount = withdrawService.updateByWithdrawId(partner_trade_no, partner_trade_no, payment_no);
-        if (0 == updateCount)
-            BSUtil.isTrue(false, "微信付款成功，更新数据库异常");
-    }
+//    @Override
+//    public void adminPay(@Validated(AdminPay.class) AdminPayVo adminPayVo) {
+//        log.info("开始企业付款");
+//        String openId = adminPayVo.getOpenId();
+//        String realName = adminPayVo.getRealName();
+//        Integer amount = adminPayVo.getAmount();
+//        String desc = adminPayVo.getDesc();
+//        String realIp = adminPayVo.getRealIp();
+//        Map<String, String> params = WxAdminPay.New()
+//                .setMch_appid(WxConstans.APPID)
+//                .setMchid(WxConstans.MCHID)
+//                .setPartner_trade_no("提现号")
+//                .setOpenid(openId)
+//                .setRe_user_name(realName)
+//                .setAmount(amount)//企业付款金额，单位为分
+//                .setDesc(desc)
+//                .setSpbill_create_ip(realIp)
+//                .setPaternerKey(WxConstans.PARTNERKEY)
+//                .build();
+//
+//        //获取微信返回的结果
+//        log.info("开始发送企业付款xml--->" + PaymentKit.toXml(params));
+//        String xmlResult = HttpsUtils.sendPost(WxConstans.ADMIN_PAY_URL, PaymentKit.toXml(params)).toString();
+//        Map<String, String> result = PaymentKit.xmlToMap(xmlResult);
+//        log.info("结束发送企业付款xml--->" + result);
+//        String return_code = result.get("return_code");
+//        String return_msg = result.get("return_msg");
+//        if (!PaymentKit.codeIsOK(return_code)) {
+//            log.error("return_code>" + return_code + " return_msg>" + return_msg);
+//            throw new RuntimeException(return_msg);
+//        }
+//        String result_code = result.get("result_code");
+//        if (!PaymentKit.codeIsOK(result_code)) {
+//            log.error("result_code>" + result_code + " return_msg>" + return_msg);
+//            throw new RuntimeException(return_msg);
+//        }
+//        // 以下字段在return_code 和result_code都为SUCCESS的时候有返回
+////        商户订单号	partner_trade_no	是	1217752501201407033233368018	String(32)	商户订单号，需保持历史全局唯一性(只能是字母或者数字，不能包含有符号)
+////        微信订单号	payment_no	是	1007752501201407033233368018	String	企业付款成功，返回的微信订单号
+////        微信支付成功时间	payment_time	是	2015-05-19 15：26：59	String	企业付款成功时间
+//        String partner_trade_no = result.get("partner_trade_no");
+//        String payment_no = result.get("payment_no");
+//        String payment_time = result.get("payment_time");
+//        log.info("商户订单号:" + partner_trade_no + " 企业付款成功，返回的微信订单号:" + payment_no + "企业付款成功时间" + payment_time);
+//        //更新提现信息
+//        int updateCount = withdrawService.updateByWithdrawId(partner_trade_no, partner_trade_no, payment_no);
+//        if (0 == updateCount)
+//            BSUtil.isTrue(false, "微信付款成功，更新数据库异常");
+//    }
 
 }

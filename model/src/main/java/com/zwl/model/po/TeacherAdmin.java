@@ -3,6 +3,7 @@ package com.zwl.model.po;
 import lombok.Data;
 
 import java.util.Date;
+
 @Data
 public class TeacherAdmin {
     private String id;
@@ -17,7 +18,7 @@ public class TeacherAdmin {
 
     private Date modifyTime;
 
-    private Integer available;
+    private Integer available = 1;
 
 
 }

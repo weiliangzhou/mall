@@ -16,7 +16,7 @@ public class WithdrawFlow {
     private String operator;
     private String merchantId;
     private Date createTime;
-    private Integer available;
+    private Integer available = 1;
 
 
 }

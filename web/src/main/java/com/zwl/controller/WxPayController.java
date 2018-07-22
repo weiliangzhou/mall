@@ -4,20 +4,14 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.exception.BSUtil;
-import com.zwl.model.po.MaidInfo;
-import com.zwl.model.po.Order;
-import com.zwl.model.po.OrderFlow;
-import com.zwl.model.po.User;
+import com.zwl.model.po.*;
 import com.zwl.model.wxpay.*;
 import com.zwl.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
@@ -46,23 +40,25 @@ public class WxPayController {
     private OrderFlowService orderFlowService;
     @Autowired
     private UserQuotaCountService userQuotaCountService;
+    @Autowired
+    private MerchantService merchantService;
 
 
     private SimpleDateFormat sdf_yMdHms = new SimpleDateFormat("yyyyMMddHHmmss");
-    private SimpleDateFormat sdf_yMdHms_1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//    private SimpleDateFormat sdf_yMdHms_1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    public static WxPayH5 getApiConfig() {
-        return WxPayH5.New()
-                .setAppId(WxConstans.APPID)
-                .setMchId(WxConstans.MCHID)
-                .setPaternerKey(WxConstans.PARTNERKEY);
-    }
+//    public static WxPayH5 getApiConfig() {
+//        return WxPayH5.New()
+//                .setAppId(WxConstans.APPID)
+//                .setMchId(WxConstans.MCHID)
+//                .setPaternerKey(WxConstans.PARTNERKEY);
+//    }
 
     /**
      * 微信H5 支付
      * 注意：必须再web页面中发起支付且域名已添加到开发配置中
      */
-    @RequestMapping(value = "/auth/pay.do", method = {RequestMethod.POST, RequestMethod.GET})
+    @PostMapping("/auth/pay.do")
     public String wapPay(HttpServletRequest request, @RequestBody JSONObject jsonObject) {
         String realIp = IpKit.getRealIp(request);
         if (StrKit.isBlank(realIp)) {
@@ -71,7 +67,12 @@ public class WxPayController {
         String openId = jsonObject.getString("openId");
         String orderNo = jsonObject.getString("orderNo");
         String totalFee = jsonObject.getString("totalFee");
-        WxPayVo wxPayVo = wxPayService.pay(realIp, openId, orderNo, totalFee);
+        String merchantId = jsonObject.getString("merchantId");
+//        merchantId 查询 mch_id appid wxPayKey
+        Merchant merchant = merchantService.getMerchantByMerchantId(merchantId);
+        String appid = merchant.getAppId();
+        String wxPayKey = merchant.getWxPayKey();
+        WxPayVo wxPayVo = wxPayService.pay(realIp, openId, orderNo, totalFee, appid, merchantId, wxPayKey);
         Result result_return = new Result();
         result_return.setData(wxPayVo);
         return JSON.toJSONString(result_return);
@@ -122,6 +123,11 @@ public class WxPayController {
                 //如果order状态为支付成功，则不更新
                 Integer status = order.getOrderStatus();
                 //判断支付金额是否与订单实际支付金额一致，不一致则返回错误，防止被恶意刷单攻击
+                //判断支付回调签名是否跟发送的签名一致，不一致则返回错误，防止被恶意刷单攻击
+                String orderSgin = order.getWxSign();
+                log.info("原订单签名--------->" + orderSgin);
+                log.info("回调订单签名--------->" + sign);
+
                 Integer orderActualMoney_temp = order.getActualMoney();
                 if (Integer.parseInt(total_fee) < orderActualMoney_temp)
                     BSUtil.isTrue(false, "支付失败");
@@ -242,15 +248,21 @@ public class WxPayController {
 
                         }
                     }
+//                    根据商户号 获取购买模版 formId ,appSecret
+                    Merchant merchant = merchantService.getMerchantByMerchantId(merchantId);
+                    String formId = "";
+                    String appSecret = merchant.getAppSecret();
+                    String buyTemplateId = merchant.getBuyTemplateId();
                     //发送订单购买公众号提醒
-//                    wxSenderService.sendBuyMsg(openid, productName, orderActualMoney, merchantId);
+                    wxSenderService.sendBuyMsg(formId, productName, Integer.parseInt(total_fee), merchantId, appid, appSecret, buyTemplateId);
                     //发送通知等
                     Map<String, String> xml = new HashMap<String, String>();
                     xml.put("return_code", "SUCCESS");
                     xml.put("return_msg", "OK");
                     return PaymentKit.toXml(xml);
                 }
-            }}catch (Exception e){
+            }
+        } catch (Exception e) {
             e.printStackTrace();
             //发送通知等
             Map<String, String> xml = new HashMap<String, String>();
@@ -260,14 +272,12 @@ public class WxPayController {
         }
 
 
-
-
-            //发送通知等
-            Map<String, String> xml = new HashMap<String, String>();
-            xml.put("return_code", "SUCCESS");
-            xml.put("return_msg", "OK");
-            return PaymentKit.toXml(xml);
-        }
+        //发送通知等
+        Map<String, String> xml = new HashMap<String, String>();
+        xml.put("return_code", "SUCCESS");
+        xml.put("return_msg", "OK");
+        return PaymentKit.toXml(xml);
+    }
 
 
 }

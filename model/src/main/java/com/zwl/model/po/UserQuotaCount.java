@@ -16,7 +16,7 @@ public class UserQuotaCount {
 
     private Date modifyTime;
 
-    private Integer available;
+    private Integer available = 1;
 
 
 }

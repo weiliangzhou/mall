@@ -14,7 +14,7 @@ public class UserAccount {
 
     private Date createTime;
 
-    private Integer available;
+    private Integer available = 1;
 
     private Date modifyTime;
 

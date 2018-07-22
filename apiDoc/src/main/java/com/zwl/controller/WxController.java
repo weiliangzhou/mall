@@ -36,7 +36,7 @@ public class WxController {
     @ApiComment("支付")
     @RequestMapping(name = "支付",
             value = "/wx/pay/auth/pay.do", method = RequestMethod.POST)
-    public String pay(@ApiComment("openId") String openId, @ApiComment("订单号") String orderNo, @ApiComment("totalFee") String totalFee) {
+    public String pay(@ApiComment("openId") String openId, @ApiComment("订单号") String orderNo, @ApiComment("totalFee") String totalFee ,@ApiComment("merchantId") String merchantId ) {
         Result result = new Result();
         result.setData(0);
         return JSON.toJSONString(result);

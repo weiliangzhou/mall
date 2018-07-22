@@ -28,7 +28,7 @@ public class WxSenderServiceImpl implements WxSenderService {
     private WxAccessTokenService wxAccessTokenService;
 
     @Override
-    public void sendBuyMsg(String openid, String productName, Integer price,String merchantId) {
+    public void sendBuyMsg(String formId, String productName, Integer price, String merchantId, String gzAppId, String gzAppKey, String buyTemplateId) {
 //        openid="oOkIC0Yx_LCl5KgqENsBChuHH200";
 //        merchantId="1509688041";
 //        touser	是	接收者openid
@@ -39,22 +39,22 @@ public class WxSenderServiceImpl implements WxSenderService {
 //        pagepath	否	所需跳转到小程序的具体页面路径，支持带参数,（示例index?foo=bar），暂不支持小游戏
 //        data	是	模板数据
 //        color	否	模板内容字体颜色，不填默认为黑色
-        String accessToken = wxAccessTokenService.getAccessToken(merchantId);
+        String accessToken = wxAccessTokenService.getAccessToken(merchantId, gzAppId, gzAppKey);
         String bugmsgurl = WxConstans.SEND_BUG_MSG + accessToken;
         SimpleDateFormat sdf_yMdHms = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Map miniprogramMap = new HashMap<>();
-        miniprogramMap.put("appid", WxConstans.APPID);
+        miniprogramMap.put("appid", gzAppId);
         miniprogramMap.put("pagepath", WxConstans.PAGEPATH);
         String miniprogram = JSON.toJSONString(miniprogramMap);
-        String data = "\"first\":{\"value\":\"恭喜你购买成功！\",\"color\":\"#173177\"},\"keyword1\":{\"value\":" + productName + ",\"color\":\"#173177\"},\"keyword2\":{\"value\":" + price/100 + ",\"color\":\"#173177\"},\"keyword3\":{\"value\":" + sdf_yMdHms.format(new Date()) + ",\"color\":\"#173177\"},\"remark\":{\"value\":\"欢迎再次购买！\",\"color\":\"#173177\"}";
+        String data = "\"first\":{\"value\":\"恭喜你购买成功！\",\"color\":\"#173177\"},\"keyword1\":{\"value\":" + productName + ",\"color\":\"#173177\"},\"keyword2\":{\"value\":" + price / 100 + ",\"color\":\"#173177\"},\"keyword3\":{\"value\":" + sdf_yMdHms.format(new Date()) + ",\"color\":\"#173177\"},\"remark\":{\"value\":\"欢迎再次购买！\",\"color\":\"#173177\"}";
         Map requestMap = new HashMap();
-        requestMap.put("touser", openid);
-        requestMap.put("template_id", WxConstans.BUG_TEMPLATE_ID);
+        requestMap.put("touser", formId);
+        requestMap.put("template_id", buyTemplateId);
         requestMap.put("miniprogram", miniprogramMap);
         requestMap.put("data", data);
-        log.info("发送微信模板"+JSON.toJSONString(requestMap));
+        log.info("发送微信模板" + JSON.toJSONString(requestMap));
         String result = HttpsUtils.sendPost(bugmsgurl, JSON.toJSONString(requestMap));
-        log.info("发送微信模板结果"+result);
+        log.info("发送微信模板结果" + result);
 //        {
 //            "errcode":0,
 //                "errmsg":"ok",

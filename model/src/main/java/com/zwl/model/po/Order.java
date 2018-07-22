@@ -66,7 +66,11 @@ public class Order {
     private Date modifyTime;
     @RestPackIgnore
     @JSONField(serialize = false)
-    private Integer available;
+    private String wxSign;
+
+    @RestPackIgnore
+    @JSONField(serialize = false)
+    private Integer available = 1;
 
 
     public Integer getActualMoneyDesc() {

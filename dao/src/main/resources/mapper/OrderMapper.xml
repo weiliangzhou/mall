@@ -18,6 +18,7 @@
         <result column="real_name" property="realName" jdbcType="VARCHAR"/>
         <result column="phone" property="phone" jdbcType="VARCHAR"/>
         <result column="payment_no" property="paymentNo" jdbcType="VARCHAR"/>
+        <result column="wx_sign" property="wxSign" jdbcType="VARCHAR"/>
         <result column="payment_time" property="paymentTime" jdbcType="TIMESTAMP"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>

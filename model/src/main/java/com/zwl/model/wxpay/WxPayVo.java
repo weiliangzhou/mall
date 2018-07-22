@@ -1,6 +1,5 @@
 package com.zwl.model.wxpay;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 
 /**

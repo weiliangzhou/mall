@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.baseresult.ResultCodeEnum;
+import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.Merchant;
 import com.zwl.model.po.TokenModel;
 import com.zwl.model.po.User;
@@ -47,17 +48,12 @@ public class UserController {
         Result result = new Result();
         //根据merchantid获取appid和secret
         Merchant merchant = merchantService.getMerchantByMerchantId(userLoginInfoVo.getMerchantId());
-        if (merchant == null) {
-            result.setCode("205");
-            result.setMessage("商户不存在");
-            return result;
-        }
+        if (merchant == null)
+            BSUtil.isTrue(false, "商户不存在");
         //根据code获取openid 去掉数据库appid和appsecret的空格和换行等
         String resultStr = miniAppWeChatService.authorizationCode(userLoginInfoVo.getCode(), merchant.getAppId(), merchant.getAppSecret());
-        if (StringUtils.isEmpty(resultStr)) {
-            result.setCode("205");
-            result.setMessage("获取不到微信用户信息");
-        }
+        if (StringUtils.isEmpty(resultStr))
+            BSUtil.isTrue(false, "获取不到微信用户信息");
         Map map = JSON.parseObject(resultStr, Map.class);
         if (!StringUtils.isEmpty(map.get("errcode"))) {
             result.setCode(map.get("errcode").toString());
@@ -69,9 +65,8 @@ public class UserController {
         User userQuery = new User();
         userQuery.setWechatOpenid(openid);
         userQuery.setMerchantId(userLoginInfoVo.getMerchantId());
-        userQuery=userService.getOneByParams(userQuery);
+        userQuery = userService.getOneByParams(userQuery);
         //先查询用户之前是否线下导入过
-
 
 
         String userId = null;
@@ -100,7 +95,7 @@ public class UserController {
             userInfo.setUserId(userId);
 //            userInfo.setAvailable(1);
             //插入用户详情表
-           userInfoService.add(userInfo);
+            userInfoService.add(userInfo);
 
         } else {
             userId = userQuery.getUserId();
@@ -111,8 +106,8 @@ public class UserController {
         //返回用户登录态
         TokenModel model = tokenManager.createToken(userId);
         String token = model.getSignToken();
-        Map resultMap=new HashMap<String,Object>();
-        resultMap.put("token",token);
+        Map resultMap = new HashMap<String, Object>();
+        resultMap.put("token", token);
         resultMap.put("userId",userId);
         result.setData(resultMap);
         return result;
@@ -131,7 +126,7 @@ public class UserController {
      */
     @RequestMapping("/getUserInfoByUserId")
     public Result getUserInfoByUserId(@RequestBody JSONObject jsonObject) {
-        String userId=jsonObject.getString("userId");
+        String userId = jsonObject.getString("userId");
         Result result = new Result();
         //根据UserId查找用户详情表
         UserInfo userInfo = userInfoService.getByUserId(userId);

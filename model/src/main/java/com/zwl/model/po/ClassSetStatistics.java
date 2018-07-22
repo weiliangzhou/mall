@@ -17,6 +17,6 @@ public class ClassSetStatistics {
 
     private Date modifyTime;
 
-    private Integer available;
+    private Integer available = 1;
 
 }

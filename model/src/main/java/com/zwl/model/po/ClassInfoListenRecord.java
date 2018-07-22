@@ -15,6 +15,6 @@ public class ClassInfoListenRecord {
 
     private Date modifyTime;
 
-    private Integer available;
+    private Integer available = 1;
 
 }

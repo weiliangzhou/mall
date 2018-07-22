@@ -35,6 +35,6 @@ public class UserCertification {
     @ApiComment(value = "修改时间", sample = "2018-7-11 16:41:55")
     private Date modifyTime;
     @ApiComment(value = "可用与否", sample = "1")
-    private Integer available;
+    private Integer available = 1;
 
 }

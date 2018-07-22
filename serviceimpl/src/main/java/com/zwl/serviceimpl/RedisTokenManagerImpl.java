@@ -30,6 +30,8 @@ public class RedisTokenManagerImpl implements TokenManager {
         TokenModel model = new TokenModel(userId, token);
         // 存储到redis并设置过期时间
         stringRedisTemplate.boundValueOps(userId).set(token, 30, TimeUnit.MINUTES);
+        //使用token作为key 存放User对象
+
         return model;
     }
 
