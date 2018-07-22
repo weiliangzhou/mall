@@ -16,8 +16,6 @@ public interface OrderMapper {
     Order findOrderByOrderNo(String orderNo);
     @Update("update ss_order set order_status =1 ,  payment_time =#{time_end}, payment_no=#{transaction_id} ,pay_way =1 where order_no=#{out_trade_no}")
     int updateOrder(@Param("out_trade_no") String out_trade_no, @Param("time_end") String time_end, @Param("transaction_id") String transaction_id);
-    @Update("update ss_order set wx_sign =#{wxSign} where order_no =#{orderNo}")
-    int updateWxSign(@Param("wxSign") String wxSign,@Param("orderNo") String orderNo);
     Order getOrderById(@Param("merchantId") String merchantId, @Param("orderNo") String orderNo);
     List<Order> getOrderListByUserId(String userId);
 }

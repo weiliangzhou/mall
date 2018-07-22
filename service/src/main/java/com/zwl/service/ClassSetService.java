@@ -1,6 +1,7 @@
 package com.zwl.service;
 
 import com.zwl.model.po.ClassSet;
+import com.zwl.model.vo.ClassSetItemVo;
 import com.zwl.model.vo.ClassVo;
 
 import java.util.List;
@@ -40,4 +41,12 @@ public interface ClassSetService {
      * @return
      */
     List<ClassVo> getAllClass(String merchantId);
+
+    /**
+     * 获取分类下面的套课下拉值
+     * @param categoryId
+     * @param merchantId
+     * @return
+     */
+    List<ClassSetItemVo> getClassSetItemsList(Integer categoryId, String merchantId);
 }

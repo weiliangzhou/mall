@@ -36,11 +36,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public int updateWxSign(String wxSign,String orderNo) {
-        return orderMapper.updateWxSign(wxSign,orderNo);
-    }
-
-    @Override
     public Order getOrderById(String merchantId, String orderNo) {
         return orderMapper.getOrderById(merchantId,orderNo);
     }
