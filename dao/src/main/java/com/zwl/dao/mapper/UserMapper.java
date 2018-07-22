@@ -46,4 +46,10 @@ public interface UserMapper {
      * @return
      */
     List<User> getUserListByMerchantId(UserQueryVo userQueryVo);
+
+    /**
+     * 搜索
+     * @return
+     */
+    List<User> search(@Param("merchantId") String merchantId,@Param("registerMobile")String registerMobile,@Param("registerFrom")Integer registerFrom);
  }

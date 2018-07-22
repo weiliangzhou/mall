@@ -203,4 +203,22 @@
         </if>
 
     </select>
+    <!--会员管理列表搜索-->
+    <select id="search" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ss_user
+        where available=1
+        <if test="merchantId !=null">
+            AND merchant_id =#{merchantId}
+        </if>
+        <if test="registerMobile !=null">
+            AND register_mobile =#{registerMobile}
+        </if>
+        <if test="registerFrom !=null">
+            AND register_from =#{registerFrom}
+        </if>
+
+    </select>
+
 </mapper>

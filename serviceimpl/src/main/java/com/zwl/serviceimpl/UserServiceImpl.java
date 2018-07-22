@@ -45,5 +45,10 @@ public class UserServiceImpl implements UserService {
         return userMapper.getUserListByMerchantId(userQueryVo);
     }
 
+    @Override
+    public List<User> search(String merchantId, String registerMobile, Integer registerFrom) {
+        return userMapper.search(merchantId, registerMobile, registerFrom);
+    }
+
 
 }
