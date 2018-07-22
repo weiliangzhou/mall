@@ -72,6 +72,7 @@ public class UserController {
         userParams.setUserId(user.getUserId());
         userParams.setMemberLevel(memberLevel);
         userParams.setLevelName(levelName);
+        userParams.setLevelName(levelName);
         userParams.setRealName(realName);
         //用户购买会员渠道，2-线下渠道
         userParams.setRegisterFrom(2);

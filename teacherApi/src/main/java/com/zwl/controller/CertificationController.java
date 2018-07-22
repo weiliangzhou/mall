@@ -43,7 +43,11 @@ public class CertificationController {
         certificationService.modifyById(userCertification);
         //如果实名认证通过，则更新用户表 真实姓名
         if(userCertification.getStatus()==1){
-
+            UserCertification temp = certificationService.getOneByUserId(userCertification.getUserId());
+            User user = new User();
+            user.setUserId(userCertification.getUserId());
+            user.setRealName(temp.getRealname());
+            userService.updateUserById(user);
         }
         return result;
     }
