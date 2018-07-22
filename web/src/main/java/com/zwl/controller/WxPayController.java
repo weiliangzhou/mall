@@ -125,11 +125,17 @@ public class WxPayController {
                 //判断支付金额是否与订单实际支付金额一致，不一致则返回错误，防止被恶意刷单攻击
                 //判断支付回调签名是否跟发送的签名一致，不一致则返回错误，防止被恶意刷单攻击
                 log.info("回调订单签名--------->" + sign);
-
-
-
-
-
+//                根据商户号获取支付key
+                Merchant merchant = merchantService.getMerchantByMerchantId(mch_id);
+                boolean checkSign = PaymentKit.isWechatSign(params, merchant.getWxPayKey());
+                if (!checkSign) {
+                    BSUtil.isTrue(false, "签名错误!");
+                    //发送通知等
+                    Map<String, String> xml = new HashMap<String, String>();
+                    xml.put("return_code", "ERROR");
+                    xml.put("return_msg", "ERROR");
+                    return PaymentKit.toXml(xml);
+                }
                 Integer orderActualMoney_temp = order.getActualMoney();
                 if (Integer.parseInt(total_fee) < orderActualMoney_temp)
                     BSUtil.isTrue(false, "支付失败");
@@ -251,10 +257,10 @@ public class WxPayController {
                         }
                     }
 //                    根据商户号 获取购买模版 formId ,appSecret
-                    Merchant merchant = merchantService.getMerchantByMerchantId(merchantId);
-                    String formId = "";
-                    String appSecret = merchant.getAppSecret();
-                    String buyTemplateId = merchant.getBuyTemplateId();
+//                    Merchant merchant = merchantService.getMerchantByMerchantId(merchantId);
+//                    String formId = "";
+//                    String appSecret = merchant.getAppSecret();
+//                    String buyTemplateId = merchant.getBuyTemplateId();
                     //发送订单购买公众号提醒
 //                    wxSenderService.sendBuyMsg(formId, productName, Integer.parseInt(total_fee), merchantId, appid, appSecret, buyTemplateId);
                     //发送通知等

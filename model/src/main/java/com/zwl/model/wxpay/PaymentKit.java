@@ -1,7 +1,10 @@
 package com.zwl.model.wxpay;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
@@ -13,6 +16,7 @@ import java.util.TreeMap;
  * @Description: TODO
  * @date 2018/7/917:58
  */
+@Slf4j
 public class PaymentKit {
     public static String toXml(Map<String, String> params) {
         StringBuilder xml = new StringBuilder();
@@ -93,4 +97,18 @@ public class PaymentKit {
     }
 
 
+    public static boolean isWechatSign(Map<String, String> params, String wxPayKey) {
+        String sign = params.get("sign").toUpperCase();
+        params.remove("sign");
+        String localSign = createSign(params, wxPayKey);
+        return localSign.equals(sign);
+    }
+
+    public static void main(String[] args) {
+        Map map = new HashMap();
+        map.put("1", "111");
+        map.put("2", "222");
+        map.remove("1");
+        System.out.println(map);
+    }
 }
