@@ -37,7 +37,7 @@ public class WxPayServiceImpl implements WxPayService {
     private SimpleDateFormat sdf_yMdHms = new SimpleDateFormat("yyyyMMddHHmmss");
 
     @Override
-    public WxPayVo pay(String realIp, String openId, String orderNo, String totalFee, String appid, String mch_id, String wxPayKey) {
+    public WxPayVo androidPay(String realIp, String openId, String orderNo, String totalFee, String appid, String mch_id, String wxPayKey) {
         log.info("开始微信支付realIp-->" + realIp + "openId-->" + openId + "orderNo-->" + orderNo + "totalFee-->" + totalFee + "appid-->" + appid + "mch_id-->" + mch_id + "wxPayKey->" + wxPayKey);
 
         //此域名必须在商户平台--"产品中心"--"开发配置"中添加
@@ -118,7 +118,7 @@ public class WxPayServiceImpl implements WxPayService {
     }
 
     @Override
-    public WxPayVo androidPay(String realIp, String openId, String orderNo, String totalFee, String appid, String mch_id, String wxPayKey) {
+    public WxPayVo pay(String realIp, String openId, String orderNo, String totalFee, String appid, String mch_id, String wxPayKey) {
         log.info("开始微信支付realIp-->" + realIp + "openId-->" + openId + "orderNo-->" + orderNo + "totalFee-->" + totalFee + "appid-->" + appid + "mch_id-->" + mch_id + "wxPayKey->" + wxPayKey);
 
         //此域名必须在商户平台--"产品中心"--"开发配置"中添加
