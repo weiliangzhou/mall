@@ -24,7 +24,7 @@ public class ItemsListController {
     @ApiComment("根据分类ID获取套课下拉值")
     @RequestMapping(name = "根据分类ID获取套课下拉值",
             value = "/teacher/items/getClassSetItemsList", method = RequestMethod.POST)
-    public List<ClassSetItemVo> addInformation(@ApiComment("商户号") String merchantId, @ApiComment("分类id") String categoryId) {
+    public List<ClassSetItemVo> getClassSetItemsList(@ApiComment("商户号") String merchantId, @ApiComment("分类id") String categoryId) {
         List<ClassSetItemVo> classSetItemVoList = new ArrayList<>();
         return classSetItemVoList;
     }
@@ -32,7 +32,7 @@ public class ItemsListController {
     @ApiComment("根据merchantId获取会员等级下拉")
     @RequestMapping(name = "根据merchantId获取会员等级下拉",
             value = "/teacher/items/getUserLevelItemsList", method = RequestMethod.POST)
-    public List<ProductItemVo> addInformation(@ApiComment("商户号") String merchantId) {
+    public List<ProductItemVo> getUserLevelItemsList(@ApiComment("商户号") String merchantId) {
         List<ProductItemVo> productItemVoList = new ArrayList<>();
         return productItemVoList;
     }
