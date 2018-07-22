@@ -26,4 +26,9 @@ public class ClassVo {
     private Integer classType;
     @ApiComment(value = "浏览人数", sample = "858")
     private Integer browseCount;
+    @ApiComment(value = "图片", sample = "858")
+//    如果是堂，logo是节的可配置优先级），
+//    按照发布时间倒序
+    private String logoUrl;
+
 }

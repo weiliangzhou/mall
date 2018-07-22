@@ -37,4 +37,10 @@ public interface ClassInfoService {
      */
     List<ClassInfo> getByClassSetId(Long classSetId);
 
+    /**
+     * 根据套课Id获取列表的展示图片，安排时间倒序
+     * @param id
+     * @return
+     */
+    String getLogoUrlByClassSetId(Long id);
 }

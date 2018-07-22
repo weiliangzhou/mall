@@ -137,12 +137,13 @@
       SELECT *
        from (
 ( SELECT
-  scs.id 	AS id,
+    scs.id 	AS id,
 	scs.title AS title,
 	scc.title AS category_title,
 	scs.create_time AS create_time,
 	scs.modify_time AS modify_time,
     scs.merchant_id AS merchantId,
+    '' as logoUrl,
 	1 AS class_type
   FROM
     ss_class_category scc,
@@ -161,6 +162,7 @@
 	scc.create_time AS create_time,
 	sci.modify_time AS modify_time,
     sci.merchant_id AS merchantId,
+    sci.logo_url as  logoUrl,
 	2 AS class_type
   FROM
     ss_class_category scc,

@@ -28,7 +28,9 @@
     order_no, product_id, product_name, actual_money, money, maid_percent, pay_way, level, 
     level_name, validity_time, order_status, user_id, merchant_id,
     phone,real_name,
-    payment_no, payment_time,
+    payment_no,
+    wx_sign,
+    payment_time,
     create_time, modify_time, available
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">

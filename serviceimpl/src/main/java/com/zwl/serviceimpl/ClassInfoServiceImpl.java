@@ -89,4 +89,9 @@ public class ClassInfoServiceImpl implements ClassInfoService {
         return classInfoMapper.selectByClassSetId(classSetId);
     }
 
+    @Override
+    public String getLogoUrlByClassSetId(Long id) {
+        return  classInfoMapper.getLogoUrlByClassSetId(id);
+    }
+
 }
