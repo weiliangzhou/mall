@@ -25,4 +25,6 @@ public class UserLoginInfoVo {
     private String logoUrl;
     @ApiComment(value = "推荐人userID", sample = "admin")
     private String referrer;
+    @ApiComment(value = "会员等级", sample = "1")
+    private Integer memberLevel;
 }

@@ -134,9 +134,12 @@ public class UserController {
             result.setCode(ResultCodeEnum.FAIL);
             return result;
         }
+
         UserLoginInfoVo userLoginInfoVo = new UserLoginInfoVo();
         userLoginInfoVo.setNickName(userInfo.getNickName());
         userLoginInfoVo.setLogoUrl(userInfo.getLogoUrl());
+        User user = userService.getByUserId(userId);
+        userLoginInfoVo.setMemberLevel(user.getMemberLevel());
         result.setData(userLoginInfoVo);
         return result;
     }
