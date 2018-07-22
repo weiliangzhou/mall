@@ -5,15 +5,14 @@ import com.zwl.dao.mapper.WithdrawFlowMapper;
 import com.zwl.dao.mapper.WithdrawMapper;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.User;
+import com.zwl.model.po.UserCertification;
 import com.zwl.model.po.Withdraw;
 import com.zwl.model.po.WithdrawFlow;
 import com.zwl.model.wxpay.AdminPayVo;
 import com.zwl.service.UserCertificationService;
 import com.zwl.service.WithdrawService;
-import com.zwl.service.WxPayService;
 import com.zwl.service.WxUserService;
 import com.zwl.util.UUIDUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +36,9 @@ public class WithdrawServiceImpl implements WithdrawService {
     private WithdrawFlowMapper withdrawFlowMapper;
     @Autowired
     private WxUserService wxUserService;
+    @Autowired
+    private UserCertificationService userCertificationService;
+
     @Override
     public List<Withdraw> getWithdrawList() {
         return withdrawMapper.getWithdrawList();
@@ -89,10 +91,12 @@ public class WithdrawServiceImpl implements WithdrawService {
         Integer balance = userAccountMapper.getBalanceByUserId(userId);
         if (money >= balance)
             BSUtil.isTrue(false, "可用余额不足");
-//        需校验该用户是否实名，未实名则返回norealname
         User user = wxUserService.getUserByUserId(userId);
-        String realName = user.getRealName();
-        if (StringUtils.isBlank(realName))
+        //        需校验该用户是否实名，未实名则返回
+        UserCertification userCertification = userCertificationService.getOneByUserId(userId);
+//        0未提交1审核中 2审核通过 3未通过
+        Integer status = userCertification == null ? 0 : userCertification.getStatus();
+        if (status != 2)
             BSUtil.isTrue(false, "未实名");
 //        默认写死微信，后期可配置，申请提现金额，可提现金额，点击确认，
 //调用微信支付    记录发送参数日志
