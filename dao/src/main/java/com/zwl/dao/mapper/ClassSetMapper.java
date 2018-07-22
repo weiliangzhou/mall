@@ -1,6 +1,7 @@
 package com.zwl.dao.mapper;
 
 import com.zwl.model.po.ClassSet;
+import com.zwl.model.vo.ClassSetItemVo;
 import com.zwl.model.vo.ClassVo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -56,4 +57,6 @@ public interface ClassSetMapper {
      * @return
      */
     List<ClassVo> selectAllClass(String merchantId);
+    @Select("select id ,title from ss_class_set where merchant_id=#{merchantId} and category_id= #{categoryId}")
+    List<ClassSetItemVo> getClassSetItemsList(@Param("categoryId")Integer categoryId, @Param("merchantId")String merchantId);
 }

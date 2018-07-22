@@ -7,6 +7,7 @@ import com.zwl.model.baseresult.PageResult;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.baseresult.ResultCodeEnum;
 import com.zwl.model.po.ClassSet;
+import com.zwl.model.vo.ClassSetItemVo;
 import com.zwl.model.vo.ClassVo;
 import com.zwl.model.vo.PageClassVo;
 import com.zwl.service.ClassSetService;
@@ -90,6 +91,16 @@ public class ClassSetController {
         Long id = jsonObject.getLong("id");
         ClassSet classSet=classSetService.getById(id);
         result.setData(classSet);
+        return result;
+    }
+
+    @PostMapping("/getClassSetItemsList")
+    public Result getClassSetItemsList(@RequestBody JSONObject jsonObject) {
+        Result result = new Result();
+        String merchantId = jsonObject.getString("merchantId");
+        Integer categoryId = jsonObject.getInteger("categoryId");
+        List<ClassSetItemVo> list = classSetService.getClassSetItemsList(categoryId, merchantId);
+        result.setData(list);
         return result;
     }
 

@@ -37,7 +37,7 @@ public class WxPayServiceImpl implements WxPayService {
 
     @Override
     public WxPayVo pay(String realIp, String openId, String orderNo, String totalFee, String appid, String mch_id, String wxPayKey) {
-        log.info("开始微信支付");
+        log.info("开始微信支付realIp-->" + realIp + "openId-->" + openId + "orderNo-->" + orderNo + "totalFee-->" + totalFee + "appid-->" + appid + "mch_id-->" + mch_id + "wxPayKey->" + wxPayKey);
 
         //此域名必须在商户平台--"产品中心"--"开发配置"中添加
 //        h5_info.setWap_url("https://www.zzw777.com");
@@ -79,11 +79,6 @@ public class WxPayServiceImpl implements WxPayService {
             log.error("result_code>" + result_code + " return_msg>" + return_msg);
             throw new RuntimeException(return_msg);
         }
-        int updateWxSign = orderService.updateWxSign(sign,orderNo);
-        if (updateWxSign != 1)
-            BSUtil.isTrue(false, "系统异常，请稍后重试");
-
-
         // 以下字段在return_code 和result_code都为SUCCESS的时候有返回
         String trade_type = result.get("trade_type");//交易类型  H5支付固定传MWEB
         String prepay_id = result.get("prepay_id");//预支付交易会话标识
@@ -109,7 +104,9 @@ public class WxPayServiceImpl implements WxPayService {
         payResult.put("nonceStr", payMap.get("nonce_str").toString());
         payResult.put("package", "prepay_id=" + prepay_id);
         payResult.put("signType", "MD5");
-        payResult.put("paySign", PaymentKit.createSign(payResult, wxPayKey));
+        String paySign = PaymentKit.createSign(payResult, wxPayKey);
+        payResult.put("paySign", paySign);
+        log.info("支付原订单签名--------->" + paySign);
         WxPayVo wxPayVo = new WxPayVo();
         wxPayVo.setTimeStamp(date);
         wxPayVo.setNonceStr(payMap.get("nonce_str").toString());

@@ -124,9 +124,11 @@ public class WxPayController {
                 Integer status = order.getOrderStatus();
                 //判断支付金额是否与订单实际支付金额一致，不一致则返回错误，防止被恶意刷单攻击
                 //判断支付回调签名是否跟发送的签名一致，不一致则返回错误，防止被恶意刷单攻击
-                String orderSgin = order.getWxSign();
-                log.info("原订单签名--------->" + orderSgin);
                 log.info("回调订单签名--------->" + sign);
+
+
+
+
 
                 Integer orderActualMoney_temp = order.getActualMoney();
                 if (Integer.parseInt(total_fee) < orderActualMoney_temp)
@@ -254,7 +256,7 @@ public class WxPayController {
                     String appSecret = merchant.getAppSecret();
                     String buyTemplateId = merchant.getBuyTemplateId();
                     //发送订单购买公众号提醒
-                    wxSenderService.sendBuyMsg(formId, productName, Integer.parseInt(total_fee), merchantId, appid, appSecret, buyTemplateId);
+//                    wxSenderService.sendBuyMsg(formId, productName, Integer.parseInt(total_fee), merchantId, appid, appSecret, buyTemplateId);
                     //发送通知等
                     Map<String, String> xml = new HashMap<String, String>();
                     xml.put("return_code", "SUCCESS");
