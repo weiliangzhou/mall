@@ -1,5 +1,6 @@
 package com.zwl.dao.mapper;
 
+import com.zwl.model.po.ClassInfo;
 import com.zwl.model.po.ClassSet;
 import com.zwl.model.vo.ClassSetItemVo;
 import com.zwl.model.vo.ClassVo;
@@ -59,4 +60,10 @@ public interface ClassSetMapper {
     List<ClassVo> selectAllClass(String merchantId);
     @Select("select id ,title from ss_class_set where merchant_id=#{merchantId} and category_id= #{categoryId} and available=1")
     List<ClassSetItemVo> getClassSetItemsList(@Param("categoryId")Integer categoryId, @Param("merchantId")String merchantId);
+
+    /**
+     * 搜索
+     * @return
+     */
+    List<ClassVo> search(@Param("merchantId") String merchantId, @Param("title") String title);
 }

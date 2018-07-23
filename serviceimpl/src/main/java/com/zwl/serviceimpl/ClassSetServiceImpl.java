@@ -1,6 +1,7 @@
 package com.zwl.serviceimpl;
 
 import com.zwl.dao.mapper.ClassSetMapper;
+import com.zwl.model.po.ClassInfo;
 import com.zwl.model.po.ClassSet;
 import com.zwl.model.vo.ClassSetItemVo;
 import com.zwl.model.vo.ClassVo;
@@ -57,5 +58,10 @@ public class ClassSetServiceImpl implements ClassSetService {
     @Override
     public List<ClassSetItemVo> getClassSetItemsList(Integer categoryId, String merchantId) {
         return classSetMapper.getClassSetItemsList( categoryId,  merchantId);
+    }
+
+    @Override
+    public List<ClassVo> search(String merchantId, String title) {
+        return classSetMapper.search(merchantId,title);
     }
 }

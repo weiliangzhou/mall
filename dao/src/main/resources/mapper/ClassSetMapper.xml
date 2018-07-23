@@ -176,4 +176,50 @@
   ) ) t
 ORDER BY t.modify_time DESC
   </select>
+
+  <!--搜索-->
+  <select id="search" resultMap="AllClassResultMap">
+      SELECT *
+       from (
+( SELECT
+    scs.id 	AS id,
+	scs.title AS title,
+	scc.title AS category_title,
+	scs.create_time AS create_time,
+	scs.modify_time AS modify_time,
+    scs.merchant_id AS merchantId,
+    '' as logoUrl,
+	1 AS class_type
+  FROM
+    ss_class_category scc,
+    ss_class_set scs
+  WHERE
+    scc.id = scs.category_id
+    AND scc.available = 1
+    AND scs.available = 1
+    AND scs.merchant_id =#{merchantId}
+  ) UNION ALL
+  (
+  SELECT
+	sci.id AS id,
+    sci.title AS title,
+	scc.title AS category_title,
+	scc.create_time AS create_time,
+	sci.modify_time AS modify_time,
+    sci.merchant_id AS merchantId,
+    sci.logo_url as  logoUrl,
+	2 AS class_type
+  FROM
+    ss_class_category scc,
+    ss_class_info sci
+  WHERE
+    scc.id = sci.category_id
+    AND sci.class_set_id IS NULL
+    AND sci.merchant_id = #{merchantId}
+    AND scc.available = 1
+    AND sci.available = 1
+  ) ) t
+where t.title like CONCAT('%',#{title},'%')
+ORDER BY t.modify_time DESC
+  </select>
 </mapper>

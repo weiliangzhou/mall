@@ -10,6 +10,7 @@ import com.zwl.model.vo.CertificationVo;
 import com.zwl.model.vo.PageCertificationVo;
 import com.zwl.service.CertificationService;
 import com.zwl.service.UserService;
+import com.zwl.util.CheckUtil;
 import com.zwl.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -124,4 +125,68 @@ public class CertificationController {
         result.setData(certificationVo);
         return result;
     }
+    /**
+     * 根据手机号搜索
+     * @return
+     */
+    @PostMapping("/searchByRegisterMobile")
+    Result searchByRegisterMobile(@RequestBody JSONObject jsonObject) {
+        Result result = new Result();
+        String merchantId = jsonObject.getString("merchantId");
+        String registerMobile = jsonObject.getString("registerMobile");
+        User query = new User();
+        query.setRegisterMobile(registerMobile);
+        User user = userService.getOneByParams(query);
+        UserCertification userCertification = certificationService.getOneByUserId(user.getUserId());
+        CertificationVo certificationVo = new CertificationVo();
+        certificationVo.setRegisterMobile(user.getRegisterMobile());
+        certificationVo.setRealname(userCertification.getRealname());
+        String modifyDateStr = DateUtil.getFormatString("yyyy-MM-dd HH:mm:ss", userCertification.getModifyTime());
+        certificationVo.setModifyTime(modifyDateStr);
+        certificationVo.setStatus(userCertification.getStatus());
+        certificationVo.setId(userCertification.getId());
+        result.setData(certificationVo);
+        return  result;
+    }
+
+
+    /**
+     * 根据审核状态搜索
+     * @return
+     */
+    @PostMapping("/searchByStatus")
+    Result searchByStatus(@RequestBody JSONObject jsonObject) {
+        Result result = new Result();
+        String merchantId = jsonObject.getString("merchantId");
+        Integer status = jsonObject.getInteger("status");
+        Integer pageNum = jsonObject.getInteger("pageNum");
+        Integer pageSize = jsonObject.getInteger("pageSize");
+
+        Page page = PageHelper.startPage(pageNum, pageSize);
+        List<UserCertification> list = certificationService.getListByStatus(merchantId, status);
+        List<CertificationVo> listVo = new ArrayList<>();
+        for (UserCertification uc : list
+                ) {
+            CertificationVo certificationVo = new CertificationVo();
+            User user = userService.getByUserId(uc.getUserId());
+            certificationVo.setRegisterMobile(user.getRegisterMobile());
+            UserCertification userCertification = certificationService.getOneByUserId(uc.getUserId());
+            certificationVo.setRealname(userCertification.getRealname());
+            String modifyDateStr = DateUtil.getFormatString("yyyy-MM-dd HH:mm:ss", userCertification.getModifyTime());
+            certificationVo.setModifyTime(modifyDateStr);
+            certificationVo.setStatus(userCertification.getStatus());
+            certificationVo.setId(userCertification.getId());
+            listVo.add(certificationVo);
+        }
+        PageCertificationVo pageVo = new PageCertificationVo();
+        pageVo.setPageNum(pageNum);
+        pageVo.setTotalPage(page.getTotal());
+        pageVo.setList(listVo);
+        result.setData(pageVo);
+        return result;
+
+
+
+    }
+
 }

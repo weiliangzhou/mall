@@ -49,4 +49,9 @@ public interface ClassSetService {
      * @return
      */
     List<ClassSetItemVo> getClassSetItemsList(Integer categoryId, String merchantId);
+    /**
+     * 搜索
+     * @return
+     */
+    List<ClassVo> search(String merchantId, String title);
 }

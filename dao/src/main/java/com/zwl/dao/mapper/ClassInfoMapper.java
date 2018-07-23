@@ -70,11 +70,11 @@ public interface ClassInfoMapper {
 
     /**
      * 根据ClassSetId获取节课程详情
-     *
      * @return
      */
     List<ClassInfo> selectByClassSetId(Long classSetId);
 
     @Select("select logo_url from ss_class_info where class_set_id=#{id} order by modify_time desc limit 1")
     String getLogoUrlByClassSetId(@Param("id") Long id);
+
 }
