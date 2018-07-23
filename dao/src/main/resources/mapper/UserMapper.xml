@@ -131,7 +131,7 @@
                 available = #{available,jdbcType=INTEGER},
             </if>
             <if test="bindingMobile != null">
-                binding_mobile = #{bindingMobile,jdbcType=VARCHAR},
+                register_mobile = #{bindingMobile,jdbcType=VARCHAR},
             </if>
 
         </set>
