@@ -1,5 +1,6 @@
 package com.zwl.model.po;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.terran4j.commons.api2doc.annotations.ApiComment;
 import lombok.Data;
 
@@ -30,8 +31,10 @@ public class ClassInfo {
     private String content;
     @ApiComment(value = "节课程收听人数", sample = "563")
     private Long listenCount;
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     @ApiComment(value = "创建时间", sample = "2018-7-19 14:30:41")
     private Date createTime;
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     @ApiComment(value = "修改时间", sample = "2018-7-19 14:30:50")
     private Date modifyTime;
     @ApiComment(value = "逻辑删除位", sample = "1")

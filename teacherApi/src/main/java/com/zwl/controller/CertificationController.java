@@ -136,8 +136,11 @@ public class CertificationController {
         String registerMobile = jsonObject.getString("registerMobile");
         User query = new User();
         query.setRegisterMobile(registerMobile);
+        query.setMerchantId(merchantId);
         User user = userService.getOneByParams(query);
         UserCertification userCertification = certificationService.getOneByUserId(user.getUserId());
+        List<CertificationVo> listVo = new ArrayList<>();
+
         CertificationVo certificationVo = new CertificationVo();
         certificationVo.setRegisterMobile(user.getRegisterMobile());
         certificationVo.setRealname(userCertification.getRealname());
@@ -145,7 +148,8 @@ public class CertificationController {
         certificationVo.setModifyTime(modifyDateStr);
         certificationVo.setStatus(userCertification.getStatus());
         certificationVo.setId(userCertification.getId());
-        result.setData(certificationVo);
+        listVo.add(certificationVo);
+        result.setData(listVo);
         return  result;
     }
 

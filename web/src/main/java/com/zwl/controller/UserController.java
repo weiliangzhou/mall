@@ -42,8 +42,6 @@ public class UserController {
     @Autowired
     private MsgSenderService msgSenderService;
 
-    @Autowired
-    private WxUserService wxUserService;
 
     /**
      * 用户小程序微信授权登录
@@ -135,7 +133,7 @@ public class UserController {
         User user=new User();
         user.setUserId(userId);
         user.setBindingMobile(phone);
-        int count=wxUserService.updateUserById(user);
+        int count=userService.updateUserByUserId(user);
         if (count == 0)
             BSUtil.isTrue(false,"绑定失败");
         return result;
