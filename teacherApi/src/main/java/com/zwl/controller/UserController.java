@@ -76,7 +76,7 @@ public class UserController {
         userParams.setRealName(realName);
         //用户购买会员渠道，2-线下渠道
         userParams.setRegisterFrom(2);
-        userService.updateUserById(userParams);
+        userService.updateUserByUserId(userParams);
 
         //记录操作表
         OperateUserRecord operateUserRecord = new OperateUserRecord();
@@ -150,7 +150,7 @@ public class UserController {
         userParams.setLevelName(levelName);
         //用户购买会员渠道，2-线下渠道
         userParams.setRegisterFrom(2);
-        userService.updateUserById(userParams);
+        userService.updateUserByUserId(userParams);
 
         //根据userId查找
         User user = userService.getByUserId(userId);
