@@ -10,6 +10,7 @@ import com.zwl.model.vo.CertificationVo;
 import com.zwl.model.vo.PageCertificationVo;
 import com.zwl.service.CertificationService;
 import com.zwl.service.UserService;
+import com.zwl.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -69,7 +71,8 @@ public class CertificationController {
             certificationVo.setRegisterMobile(user.getRegisterMobile());
             UserCertification userCertification = certificationService.getOneByUserId(uc.getUserId());
             certificationVo.setRealname(userCertification.getRealname());
-            certificationVo.setModifyTime(userCertification.getModifyTime());
+            String modifyDateStr = DateUtil.getFormatString("yyyy-MM-dd HH:mm:ss", userCertification.getModifyTime());
+            certificationVo.setModifyTime(modifyDateStr);
             certificationVo.setStatus(userCertification.getStatus());
             certificationVo.setId(userCertification.getId());
             listVo.add(certificationVo);
@@ -107,8 +110,9 @@ public class CertificationController {
         certificationVo.setRegisterMobile(user.getRegisterMobile());
         certificationVo.setId(userCertification.getId());
         certificationVo.setStatus(userCertification.getStatus());
-        certificationVo.setModifyTime(userCertification.getModifyTime());
-        certificationVo.setAuditTime(userCertification.getAuditTime());
+        String modifyDateStr = DateUtil.getFormatString("yyyy-MM-dd HH:mm:ss", userCertification.getModifyTime());
+        certificationVo.setModifyTime(modifyDateStr);
+        certificationVo.setAuditTime(DateUtil.getFormatString("yyyy-MM-dd HH:mm:ss", userCertification.getAuditTime()));
         certificationVo.setRejectReason(userCertification.getRejectReason());
         certificationVo.setRealname(userCertification.getRealname());
         certificationVo.setIdCard(userCertification.getIdCard());
