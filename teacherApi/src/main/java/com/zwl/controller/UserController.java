@@ -72,7 +72,15 @@ public class UserController {
         User userParams = new User();
         userParams.setUserId(user.getUserId());
         userParams.setMemberLevel(memberLevel);
-        userParams.setLevelName(levelName);
+        if(memberLevel==1){
+            levelName="小班";
+        } else if(memberLevel==4){
+            levelName="学员";
+        }else if(memberLevel==5){
+            levelName="班长";
+        }else if(memberLevel==6){
+            levelName="院长";
+        }
         userParams.setLevelName(levelName);
         userParams.setRealName(realName);
         //用户购买会员渠道，2-线下渠道
