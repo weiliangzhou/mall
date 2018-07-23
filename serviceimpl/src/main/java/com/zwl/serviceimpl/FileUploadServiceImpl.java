@@ -34,13 +34,13 @@ public class FileUploadServiceImpl implements FileUploadService {
 
 
         //TODO:文件大小、名称、类型检查的业务处理
-        if (1 == type) {
-            if (file.getSize() > 3145728)
-                BSUtil.isTrue(false, "上传图片大小不能超过3M");
-
-            if (!FileCheckUtil.isImageType(file.getContentType()))
-                BSUtil.isTrue(false, "请上传正确的图片类型");
-        }
+//        if (1 == type) {
+//            if (file.getSize() > 3145728)
+//                BSUtil.isTrue(false, "上传图片大小不能超过3M");
+//
+//            if (!FileCheckUtil.isImageType(file.getContentType()))
+//                BSUtil.isTrue(false, "请上传正确的图片类型");
+//        }
 
 
         try {

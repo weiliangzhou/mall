@@ -18,11 +18,13 @@ public class Result {
 
     public Result() {
         this.setCode(ResultCodeEnum.SUCCESS);
+        this.setData("");
         this.setMessage("成功！");
     }
 
     public Result(ResultCodeEnum code) {
         this.setCode(code);
+        this.setData("");
         this.setMessage(code.msg());
     }
 
