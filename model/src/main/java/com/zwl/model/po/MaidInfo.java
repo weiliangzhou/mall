@@ -22,6 +22,9 @@ public class MaidInfo {
     @NotBlank(message = "userid不能为空", groups = {Update.class, QueryInfo.class})
     @ApiComment(value = "userid", sample = "asfsdfdsf5615")
     private String userId;
+    @NotBlank(message = "maidUserId不能为空", groups = {Update.class})
+    @ApiComment(value = "maidUserId", sample = "asfsdfdsf5615")
+    private String maidUserId;
     @NotNull(message = "分佣金额不能为空", groups = {Update.class})
     @ApiComment(value = "分佣金额", sample = "250000")
     private Integer maidMoney;

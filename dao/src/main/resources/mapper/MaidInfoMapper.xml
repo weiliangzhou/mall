@@ -5,6 +5,7 @@
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="order_no" property="orderNo" jdbcType="VARCHAR"/>
         <result column="user_id" property="userId" jdbcType="VARCHAR"/>
+        <result column="maid_user_id" property="maidUserId" jdbcType="VARCHAR"/>
         <result column="maid_money" property="maidMoney" jdbcType="INTEGER"/>
         <result column="maid_percent" property="maidPercent" jdbcType="INTEGER"/>
         <result column="order_actual_money" property="orderActualMoney" jdbcType="INTEGER"/>
@@ -17,7 +18,7 @@
         <result column="available" property="available" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, order_no, user_id, maid_money, maid_percent, order_actual_money, merchant_id, 
+    id, order_no, user_id,  maid_user_id, maid_money, maid_percent, order_actual_money, merchant_id,
     product_id, product_name, level, level_name, create_time, available
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
@@ -30,18 +31,7 @@
     delete from ss_maid_info
     where id = #{id,jdbcType=BIGINT}
   </delete>
-    <insert id="insert" parameterType="com.zwl.model.po.MaidInfo">
-    insert into ss_maid_info (id, order_no, user_id, 
-      maid_money, maid_percent, order_actual_money, 
-      merchant_id, product_id, product_name, 
-      level, level_name, create_time, 
-      available)
-    values (#{id,jdbcType=BIGINT}, #{orderNo,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, 
-      #{maidMoney,jdbcType=INTEGER}, #{maidPercent,jdbcType=INTEGER}, #{orderActualMoney,jdbcType=INTEGER}, 
-      #{merchantId,jdbcType=VARCHAR}, #{productId,jdbcType=BIGINT}, #{productName,jdbcType=VARCHAR},
-      #{level,jdbcType=SMALLINT}, #{levelName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{available,jdbcType=INTEGER})
-  </insert>
+
     <insert id="insertSelective" parameterType="com.zwl.model.po.MaidInfo">
         insert into ss_maid_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -53,6 +43,9 @@
             </if>
             <if test="userId != null">
                 user_id,
+            </if>
+            <if test="maidUserId != null">
+                maid_user_id,
             </if>
             <if test="maidMoney != null">
                 maid_money,
@@ -95,6 +88,10 @@
             <if test="userId != null">
                 #{userId,jdbcType=VARCHAR},
             </if>
+            <if test="maidUserId != null">
+                #{maidUserId,jdbcType=VARCHAR},
+            </if>
+
             <if test="maidMoney != null">
                 #{maidMoney,jdbcType=INTEGER},
             </if>
@@ -169,35 +166,19 @@
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.zwl.model.po.MaidInfo">
-    update ss_maid_info
-    set order_no = #{orderNo,jdbcType=VARCHAR},
-      user_id = #{userId,jdbcType=VARCHAR},
-      maid_money = #{maidMoney,jdbcType=INTEGER},
-      maid_percent = #{maidPercent,jdbcType=INTEGER},
-      order_actual_money = #{orderActualMoney,jdbcType=INTEGER},
-      merchant_id = #{merchantId,jdbcType=VARCHAR},
-      product_id = #{productId,jdbcType=BIGINT},
-      product_name = #{productName,jdbcType=VARCHAR},
-      level = #{level,jdbcType=SMALLINT},
-      level_name = #{levelName,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      available = #{available,jdbcType=INTEGER}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-    <select id="getMaidInfoList" resultType="com.zwl.model.vo.MaidInfoVo" parameterType="string">
-      SELECT
-      usr.logo_url as logoUrl,
-      usr.real_name as realName,
-      usr.register_mobile as phone,
-      usr.member_level as level,
-      smi.maid_money as maidMoney,
-      smi.create_time as createTime
-      FROM ss_maid_info smi,ss_user usr WHERE usr.available=1
-      AND smi.available=1 AND smi.user_id=usr.user_id
-      and smi.user_id=#{userId}
-    </select>
 
+    <select id="getMaidInfoList" resultType="com.zwl.model.vo.MaidInfoVo" parameterType="string">
+    SELECT
+    usr.logo_url as logoUrl,
+    usr.real_name as realName,
+    usr.register_mobile as phone,
+    usr.member_level as level,
+    smi.maid_money as maidMoney,
+    smi.create_time as createTime
+    FROM ss_maid_info smi,ss_user usr WHERE usr.available=1
+    AND smi.available=1 AND smi.maid_user_id=usr.user_id
+    and smi.user_id=#{userId}
+    </select>
     <select id="getXiaXianList" resultType="com.zwl.model.vo.XiaXianVo" parameterType="string">
     SELECT
         usr.real_name as realName,

@@ -250,6 +250,7 @@ public class WxPayController {
                             maidInfo.setOrderNo(orderNo);
                             //分佣发送给推荐人
                             maidInfo.setUserId(referrerUser.getUserId());
+                            maidInfo.setMaidUserId(userId);
                             Integer maidMoney = orderActualMoney * maidPercent / 100;
                             maidInfo.setMaidMoney(maidMoney);
                             maidInfo.setMaidPercent(maidPercent);

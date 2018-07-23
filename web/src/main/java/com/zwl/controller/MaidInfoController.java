@@ -31,7 +31,6 @@ public class MaidInfoController {
     private MaidInfoService maidInfoService;
     @Autowired
     private UserQuotaCountService userQuotaCountService;
-
     @PostMapping("/auth/getMaidInfoList")
     public String getMaidInfoList(@RequestBody JSONObject jsonObject) {
         String userId=jsonObject.getString("userId");

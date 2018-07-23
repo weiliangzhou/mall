@@ -28,7 +28,7 @@ public class MaidInfoVo {
     @ApiComment(value = "手机号", sample = "13900000001")
     private String phone;
     @ApiComment(value = "等级", sample = "院长")
-    private String level;
+    private Integer level;
     @ApiComment(value = "返佣金额", sample = "9900")
     private Integer maidMoney;
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
