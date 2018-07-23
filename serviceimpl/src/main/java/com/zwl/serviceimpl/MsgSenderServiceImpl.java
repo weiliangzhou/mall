@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -29,7 +30,7 @@ public class MsgSenderServiceImpl implements MsgSenderService {
 
 
     @Override
-    public void sendMsg(String phone) {
+    public void sendCode(String phone) {
         try {
             StringBuffer sb = new StringBuffer(MsgSenderConstants.URL);
             sb.append("un=" + MsgSenderConstants.UN);
@@ -56,6 +57,21 @@ public class MsgSenderServiceImpl implements MsgSenderService {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public boolean checkCode(String phone, String code) {
+        String redisCode = stringRedisTemplate.boundValueOps(phone).get();
+
+        if (StringUtils.isEmpty(redisCode))
+            return false;
+        else if (redisCode.equals(code)) {
+//            删除redis
+            stringRedisTemplate.delete(phone);
+            return true;
+        }
+
+        return false;
     }
 
     public static void main(String[] args) throws UnsupportedEncodingException {

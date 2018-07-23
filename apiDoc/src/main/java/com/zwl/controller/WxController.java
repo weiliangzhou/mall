@@ -191,10 +191,27 @@ public class WxController {
     }
     @ApiComment("节课程收听人数+1")
     @RequestMapping(name = "节课程收听人数+1",
-            value = "//wx/classinfo/setpAddBrowseCount", method = RequestMethod.POST)
+            value = "/wx/classinfo/setpAddBrowseCount", method = RequestMethod.POST)
     public Result setpAddClassinfoBrowseCount(@ApiComment("节课程id") Long classInfoId){
         Result result = new Result();
         return result;
     }
+
+    @ApiComment("发送验证码")
+    @RequestMapping(name = "发送验证码",
+            value = "/wx/user/sendRegisterCode", method = RequestMethod.POST)
+    public Result sendRegisterCode(@ApiComment("phone") String phone){
+        Result result = new Result();
+        return result;
+    }
+    @ApiComment("绑定手机")
+    @RequestMapping(name = "绑定手机",
+            value = "/wx/user/bindingMobile", method = RequestMethod.POST)
+    public Result sendCode(@ApiComment("phone") String phone,@ApiComment("userId") String userId,@ApiComment("msgCode") String msgCode){
+        Result result = new Result();
+        return result;
+    }
+
+
 
 }
