@@ -10,15 +10,15 @@ import com.zwl.model.po.TokenModel;
 import com.zwl.model.po.User;
 import com.zwl.model.po.UserInfo;
 import com.zwl.model.vo.UserLoginInfoVo;
-import com.zwl.service.MerchantService;
-import com.zwl.service.MiniAppWeChatService;
-import com.zwl.service.UserInfoService;
-import com.zwl.service.UserService;
+import com.zwl.service.*;
 import com.zwl.serviceimpl.RedisTokenManagerImpl;
 import com.zwl.util.UUIDUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,6 +39,11 @@ public class UserController {
     private MiniAppWeChatService miniAppWeChatService;
     @Autowired
     private RedisTokenManagerImpl tokenManager;
+    @Autowired
+    private MsgSenderService msgSenderService;
+
+    @Autowired
+    private WxUserService wxUserService;
 
     /**
      * 用户小程序微信授权登录
@@ -110,18 +115,40 @@ public class UserController {
         String token = model.getSignToken();
         Map resultMap = new HashMap<String, Object>();
         resultMap.put("token", token);
-        resultMap.put("userId",userId);
+        resultMap.put("userId", userId);
         result.setData(resultMap);
         return result;
     }
 
     //购买前绑定手机号
-    public Result Register(@RequestParam("registerMobile") String registerMobile) {
+    @PostMapping("/bindingMobile")
+    public Result bindMobile(@RequestBody JSONObject jsonObject) {
+        String phone = jsonObject.getString("phone");
+        String msgCode = jsonObject.getString("msgCode");
+        String userId = jsonObject.getString("userId");
+        //  校验验证码
+        boolean isValidate = msgSenderService.checkCode(phone, msgCode);
+        if (!isValidate)
+            BSUtil.isTrue(false, "验证码错误");
         Result result = new Result();
-        //插入用户详情表
-
+        //更新用户表
+        User user=new User();
+        user.setUserId(userId);
+        user.setBindingMobile(phone);
+        int count=wxUserService.updateUserById(user);
+        if (count == 0)
+            BSUtil.isTrue(false,"绑定失败");
         return result;
     }
+
+    @PostMapping("/sendRegisterCode")
+    public Result sendRegisterCode(@RequestBody JSONObject jsonObject) {
+        String phone = jsonObject.getString("phone");
+        msgSenderService.sendCode(phone);
+        Result result = new Result();
+        return result;
+    }
+
 
     /**
      * 用户信息展示

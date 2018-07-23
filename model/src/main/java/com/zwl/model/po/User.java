@@ -16,6 +16,7 @@ public class User {
     private String realName;
     private String logoUrl;
     private String registerMobile;
+    private String bindingMobile;
     private String referrer;
     private Integer memberLevel;
     private String levelName;
