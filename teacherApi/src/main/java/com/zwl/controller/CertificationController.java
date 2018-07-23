@@ -3,14 +3,11 @@ package com.zwl.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.google.common.collect.Lists;
-import com.zwl.model.baseresult.PageResult;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.po.User;
 import com.zwl.model.po.UserCertification;
 import com.zwl.model.vo.CertificationVo;
 import com.zwl.model.vo.PageCertificationVo;
-import com.zwl.model.vo.PageClassInfoVo;
 import com.zwl.service.CertificationService;
 import com.zwl.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +44,7 @@ public class CertificationController {
             User user = new User();
             user.setUserId(userCertification.getUserId());
             user.setRealName(temp.getRealname());
-            userService.updateUserById(user);
+            userService.updateUserByUserId(user);
         }
         return result;
     }

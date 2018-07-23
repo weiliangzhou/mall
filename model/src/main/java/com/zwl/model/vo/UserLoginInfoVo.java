@@ -27,4 +27,6 @@ public class UserLoginInfoVo {
     private String referrer;
     @ApiComment(value = "会员等级", sample = "1")
     private Integer memberLevel;
+    @ApiComment(value = "公众号对应的openid", sample = "1kkjhe321")
+    private String formId;
 }

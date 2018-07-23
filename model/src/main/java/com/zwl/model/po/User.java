@@ -24,4 +24,6 @@ public class User {
     private Date registerTime;
     private Date modifyTime;
     private Integer available = 1;
+    //微信formId
+    private String formId;
 }

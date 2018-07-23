@@ -27,7 +27,7 @@ public class WxPayController {
     @Autowired
     private OrderService orderService;
     @Autowired
-    private WxUserService wxUserService;
+    private UserService userService;
     @Autowired
     private MaidInfoService maidInfoService;
     @Autowired
@@ -178,7 +178,7 @@ public class WxPayController {
                     //购买成功之后，更新用户会员等级，等级名称，会员到期时间
                     String userId = order.getUserId();
                     Integer validityTime = order.getValidityTime();
-                    User user = wxUserService.getUserByUserId(userId);
+                    User user = userService.getByUserId(userId);
                     try {
                         String memberValidityTime = sdf_yMdHms.format(paymentTime.getTime() + (long) validityTime * 24 * 60 * 60 * 1000);
                         user.setExpiresTime(sdf_yMdHms.parse(memberValidityTime));
@@ -189,7 +189,7 @@ public class WxPayController {
                     user.setMemberLevel(memberLevel);
                     user.setLevelName(order.getLevelName());
                     log.info("回调支付成功开始更新用户等级" + user);
-                    wxUserService.updateUserById(user);
+                    userService.updateUserByUserId(user);
                     //订单支付成功，返佣给推荐人
                     //后期加入MQ
                     log.info("回调支付成功，开始分佣");
@@ -203,7 +203,7 @@ public class WxPayController {
                     String levelName = order.getLevelName();
                     String referrerId = user.getReferrer();
                     if (StringUtils.isNotBlank(referrerId)) {
-                        User referrerUser = wxUserService.getUserByUserId(referrerId);
+                        User referrerUser = userService.getByUserId(referrerId);
                         if (null != referrerUser) {
                             //返佣规则：同级或者下级，高于当前级别是不返佣
 //                如果产品的等级是1，分佣比列按照产品的分佣百分比计算
@@ -226,11 +226,11 @@ public class WxPayController {
                             }
 
                             //在不是试听课的时候，查询当前用户有效会员等级并且小于等于推荐人的有效会员等级才可以返佣
-//                            Integer memberLevel=wxUserService.getMemberLevel(userId);
-                            Integer referrerLevel = wxUserService.getMemberLevel(referrerId);
+//                            Integer memberLevel=userService.getMemberLevel(userId);
+                            Integer referrerLevel = userService.getMemberLevel(referrerId);
                             if (null != referrerLevel & referrerLevel >= memberLevel & memberLevel >= 4) {
 //                            //通过userId获取推荐人对应的分佣比例
-                                maidPercent = wxUserService.getMaidPercentByUserId(userId);
+                                maidPercent = userService.getMaidPercentByUserId(userId);
 //                             增加小班次数,可能是第一次购买需要insert，也可能是update
                                 switch (memberLevel) {
                                     case 4:

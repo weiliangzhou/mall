@@ -9,7 +9,7 @@ import com.zwl.model.vo.BuyResult;
 import com.zwl.model.vo.ProductItemVo;
 import com.zwl.service.ProductService;
 import com.zwl.service.UserInfoService;
-import com.zwl.service.WxUserService;
+import com.zwl.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +26,7 @@ import java.util.List;
  * @Description: TODO
  * @date 2018/7/515:15
  */
+@SuppressWarnings("all")
 @Service
 @Slf4j
 public class ProductServiceImpl implements ProductService {
@@ -36,7 +37,7 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private OrderFlowMapper orderFlowMapper;
     @Autowired
-    private WxUserService wxUserService;
+    private UserService userService;
     @Autowired
     private UserInfoService userInfoService;
 
@@ -77,7 +78,7 @@ public class ProductServiceImpl implements ProductService {
         String merchantId = product.getMerchantId();
         String userId = product.getUserId();
         //获取userId的自增Id
-        User user = wxUserService.getUserByUserId(userId);
+        User user = userService.getByUserId(userId);
         Long userLongId = user.getId();
         Long productId = product.getId();
         Product localProduct = productMapper.selectByPrimaryKey(productId);
@@ -90,7 +91,7 @@ public class ProductServiceImpl implements ProductService {
         //不能购买同类产品，先查询当前购买的未到期的产品，如果存在判断
         //如果过期时间小于当前时间，则可以购买任何产品
         //否则判断等级如果等级一致则不可购买
-        Integer alreadyLevel = wxUserService.getMemberLevel(userId);
+        Integer alreadyLevel = userService.getMemberLevel(userId);
 
         if (null != alreadyLevel && alreadyLevel >= level)
             BSUtil.isTrue(false, "不能重复购买此商品！");

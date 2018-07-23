@@ -2,7 +2,7 @@ package com.zwl.serviceimpl.cache;
 
 import com.zwl.model.po.User;
 import com.zwl.service.TokenManager;
-import com.zwl.serviceimpl.WxUserServiceImpl;
+import com.zwl.serviceimpl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -12,12 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @Description: TODO
  * @date 2018/7/2210:21
  */
-public class WxUserServiceImplCache extends WxUserServiceImpl {
+public class WxUserServiceImplCache extends UserServiceImpl {
     @Autowired
     private TokenManager tokenManager;
 
     @Override
-    public User getUserByUserId(String token) {
+    public User getByUserId(String token) {
         User user=new User();
         //先查询redis信息
         //通过userid查询登录用户的基本信息

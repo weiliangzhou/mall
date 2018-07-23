@@ -26,7 +26,7 @@ public interface UserMapper {
 
     User getUserByUserId(String userId);
 //    User getUserById(String userId);
-    int updateUserById(User user);
+    int updateUserByUserId(User user);
     Integer getMemberLevel(String userId);
 
     Integer getMaidPercentByUserId(String userId);

@@ -34,7 +34,7 @@ public interface UserService {
      * @param user
      * @return
      */
-    int updateUserById(User user);
+    int updateUserByUserId(User user);
 
     /**
      * 根据用户参数获取用户list
@@ -57,4 +57,8 @@ public interface UserService {
      * @return
      */
     List<User> search(String merchantId,String registerMobile,Integer registerFrom);
+
+    Integer getMemberLevel(String userId);
+
+    Integer getMaidPercentByUserId(String userId);
 }
