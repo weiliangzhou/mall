@@ -90,6 +90,8 @@ public class UserController {
                 user.setReferrer("admin");*/
             user.setReferrer(userLoginInfoVo.getReferrer());
 //        user.setMemberLevel("0");
+            //公众号对应的openid
+            user.setFormId(userLoginInfoVo.getFormId());
             //插入用户表
             userService.addUser(user);
             userInfo.setUserId(userId);

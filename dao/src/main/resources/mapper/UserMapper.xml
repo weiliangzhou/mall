@@ -17,14 +17,15 @@
         <result column="register_time" property="registerTime" jdbcType="TIMESTAMP"/>
         <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
         <result column="available" property="available" jdbcType="INTEGER"/>
+        <result column="form_id" property="formId" />
     </resultMap>
     <sql id="Base_Column_List">
     id, user_id, wechat_openid, wechat_union_id, merchant_id, register_from, register_mobile,real_name, referrer, member_level,
-    level_name, expires_time, register_time, modify_time, available
+    level_name, expires_time, register_time, modify_time, available,form_id
   </sql>
     <sql id="Insert_Column_List">
     user_id, wechat_openid, wechat_union_id, merchant_id, register_from, register_mobile,real_name, referrer, member_level,
-    level_name, expires_time, register_time, modify_time, available
+    level_name, expires_time, register_time, modify_time, available,form_id
   </sql>
     <!--新增用户-->
     <insert id="insert" parameterType="com.zwl.model.po.User">
@@ -37,7 +38,7 @@
         #{registerMobile,jdbcType=VARCHAR},#{realName,jdbcType=VARCHAR}, #{referrer,jdbcType=VARCHAR},
         #{memberLevel,jdbcType=SMALLINT},
         #{levelName,jdbcType=VARCHAR}, #{expiresTime,jdbcType=TIMESTAMP}, now(),
-        #{modifyTime,jdbcType=TIMESTAMP}, #{available,jdbcType=INTEGER})
+        #{modifyTime,jdbcType=TIMESTAMP}, #{available,jdbcType=INTEGER}),#{formId}
     </insert>
     <!--根据参数查找一个用户-->
     <select id="selectOneByParams" parameterType="com.zwl.model.po.User" resultMap="BaseResultMap">
