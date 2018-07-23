@@ -35,22 +35,22 @@ public class ClassSetController {
     @ApiComment("修改套课程")
     @RequestMapping(name = "修改套课程",
             value = "/teacher/classset/modify", method = RequestMethod.POST)
-    public Result modify(@ApiComment("id") Long id,@ApiComment("title") String title, @ApiComment("bannerUrl") String bannerUrl, @ApiComment("categoryId") Long categoryId
-            ,  @ApiComment("requiredMemberLevel") Integer requiredMemberLevel, @ApiComment("content") String content,@ApiComment("available") String available) {
+    public Result modify(@ApiComment("删除和修改都要传id") Long id,@ApiComment("title") String title, @ApiComment("bannerUrl") String bannerUrl, @ApiComment("categoryId") Long categoryId
+            ,  @ApiComment("requiredMemberLevel") Integer requiredMemberLevel, @ApiComment("content") String content,@ApiComment("删除时传available") String available) {
         Result result = new Result();
 
         return result;
     }
 
-    @ApiComment("删除套课程")
+ /*   @ApiComment("删除套课程")
     @RequestMapping(name = "修改套课程",
             value = "/teacher/classset/modify", method = RequestMethod.POST)
-    public Result modify(@ApiComment("id") Long id,@ApiComment("available") String available) {
+    public Result modify2(@ApiComment("id") Long id,@ApiComment("available") String available) {
         Result result = new Result();
 
         return result;
     }
-
+*/
 
     @ApiComment("课程列表")
     @RequestMapping(name = "课程列表",
