@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@SuppressWarnings("all")
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
@@ -30,8 +30,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int updateUserById(User user) {
-        return userMapper.updateUserById(user);
+    public int updateUserByUserId(User user) {
+        return userMapper.updateUserByUserId(user);
     }
 
     @Override
@@ -47,6 +47,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> search(String merchantId, String registerMobile, Integer registerFrom) {
         return userMapper.search(merchantId, registerMobile, registerFrom);
+    }
+
+    @Override
+    public Integer getMemberLevel(String userId) {
+        return userMapper.getMemberLevel(userId);
+    }
+
+    @Override
+    public Integer getMaidPercentByUserId(String userId) {
+        return userMapper.getMaidPercentByUserId(userId);
     }
 
 

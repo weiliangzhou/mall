@@ -94,7 +94,7 @@
         and usr.available=1
     </select>
 
-    <update id="updateUserById" parameterType="com.zwl.model.po.User">
+    <update id="updateUserByUserId" parameterType="com.zwl.model.po.User">
         update ss_user
         <set>
             <if test="wechatOpenid != null">

@@ -10,8 +10,8 @@ import com.zwl.model.po.Withdraw;
 import com.zwl.model.po.WithdrawFlow;
 import com.zwl.model.wxpay.AdminPayVo;
 import com.zwl.service.UserCertificationService;
+import com.zwl.service.UserService;
 import com.zwl.service.WithdrawService;
-import com.zwl.service.WxUserService;
 import com.zwl.util.UUIDUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +26,7 @@ import java.util.List;
  * @Description: TODO
  * @date 2018/7/520:51
  */
+@SuppressWarnings("all")
 @Service
 public class WithdrawServiceImpl implements WithdrawService {
     @Autowired
@@ -35,7 +36,7 @@ public class WithdrawServiceImpl implements WithdrawService {
     @Autowired
     private WithdrawFlowMapper withdrawFlowMapper;
     @Autowired
-    private WxUserService wxUserService;
+    private UserService userService;
     @Autowired
     private UserCertificationService userCertificationService;
 
@@ -91,7 +92,7 @@ public class WithdrawServiceImpl implements WithdrawService {
         Integer balance = userAccountMapper.getBalanceByUserId(userId);
         if (money >= balance)
             BSUtil.isTrue(false, "可用余额不足");
-        User user = wxUserService.getUserByUserId(userId);
+        User user = userService.getByUserId(userId);
         //        需校验该用户是否实名，未实名则返回
         UserCertification userCertification = userCertificationService.getOneByUserId(userId);
 //        0未提交1审核中 2审核通过 3未通过
