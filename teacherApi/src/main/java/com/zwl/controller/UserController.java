@@ -15,6 +15,7 @@ import com.zwl.model.vo.UserVo;
 import com.zwl.service.MaidInfoService;
 import com.zwl.service.OperateUserRecordService;
 import com.zwl.service.UserService;
+import com.zwl.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
@@ -111,9 +112,9 @@ public class UserController {
             userVo.setMemberLevel(user.getMemberLevel());
             userVo.setLevelName(user.getLevelName());
             userVo.setRegisterMobile(user.getRegisterMobile());
-            userVo.setModifyTime(user.getModifyTime());
+            userVo.setModifyTime(DateUtil.getFormatString("yyyy-MM-dd HH:mm:ss", user.getModifyTime()));
             userVo.setRegisterFrom(user.getRegisterFrom());
-            userVo.setRegisterTime(user.getRegisterTime());
+            userVo.setRegisterTime(DateUtil.getFormatString("yyyy-MM-dd HH:mm:ss", user.getRegisterTime()));
             //存在推荐人为null
             User userTemp = userService.getByUserId(user.getReferrer());
             userVo.setReferrerRealName(userTemp == null ? "" : userTemp.getRealName());
@@ -188,9 +189,9 @@ public class UserController {
             userVo.setMemberLevel(user.getMemberLevel());
             userVo.setLevelName(user.getLevelName());
             userVo.setRegisterMobile(user.getRegisterMobile());
-            userVo.setModifyTime(user.getModifyTime());
+            userVo.setModifyTime(DateUtil.getFormatString("yyyy-MM-dd HH:mm:ss", user.getModifyTime()));
             userVo.setRegisterFrom(user.getRegisterFrom());
-            userVo.setRegisterTime(user.getRegisterTime());
+            userVo.setRegisterTime(DateUtil.getFormatString("yyyy-MM-dd HH:mm:ss", user.getRegisterTime()));
             //存在推荐人为null
             User userTemp = userService.getByUserId(user.getReferrer());
             userVo.setReferrerRealName(userTemp == null ? "" : userTemp.getRealName());

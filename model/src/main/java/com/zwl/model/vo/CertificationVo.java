@@ -14,7 +14,7 @@ public class CertificationVo {
     @ApiComment(value = "用户手机号", sample = "13825146633")
     private String registerMobile;
     @ApiComment(value = "提交时间", sample = "2018-7-17 16:23:12")
-    private Date modifyTime;
+    private String modifyTime;
     @ApiComment(value = "真实姓名", sample = "张三")
     private String realname;
     @ApiComment(value = "身份证", sample = "311588199410122531")
@@ -28,5 +28,5 @@ public class CertificationVo {
     @ApiComment(value = "驳回原因", sample = "身份证号有误")
     private String rejectReason;
     @ApiComment(value = "审核时间", sample = "2018-7-17 16:23:12")
-    private Date auditTime;
+    private String auditTime;
 }

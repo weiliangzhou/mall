@@ -20,10 +20,10 @@ public class UserVo {
     private String realName;
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     @ApiComment(value = "更新时间", sample = "2018-7-20 14:12:42")
-    private Date modifyTime;
+    private String modifyTime;
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     @ApiComment(value = "注册时间", sample = "2018-7-20 14:12:42")
-    private Date registerTime;
+    private String registerTime;
     @ApiComment(value = "用户购买渠道1-微信，2-线下", sample = "2")
     private Integer registerFrom;
     @ApiComment(value = "推荐人真实姓名", sample = "游东方")

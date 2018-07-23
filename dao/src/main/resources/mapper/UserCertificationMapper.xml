@@ -104,4 +104,14 @@
     from ss_user_certification
     where id = #{id,jdbcType=BIGINT}
   </select>
+  <!--根据审核状态查找merchantId下的所有用户实名申请信息-->
+  <select id="selectListByStatus" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from ss_user_certification
+    where merchant_id = #{merchantId}
+    and status=#{status}
+  </select>
+
+
 </mapper>

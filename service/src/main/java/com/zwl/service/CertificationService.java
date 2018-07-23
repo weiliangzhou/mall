@@ -43,4 +43,11 @@ public interface CertificationService {
      * @return
      */
     UserCertification getById(Long id);
+
+    /**
+     * 根据审核状态查找merchantId下的所有用户实名申请信息
+     *
+     * @return
+     */
+    List<UserCertification> getListByStatus(String merchantId,Integer status);
 }

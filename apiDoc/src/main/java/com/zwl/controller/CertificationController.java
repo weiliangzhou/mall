@@ -58,4 +58,27 @@ public class CertificationController {
         CertificationVo certificationVo = new CertificationVo();
         return certificationVo;
     }
+    /**
+     * 根据手机号搜索
+     */
+    @ApiComment("根据手机号搜索")
+    @RequestMapping(name = "根据手机号搜索",
+            value = "/searchByRegisterMobile", method = RequestMethod.POST)
+    public CertificationVo searchByRegisterMobile(@ApiComment("商户号") String merchantId,@ApiComment("注册手机号") String registerMobile){
+        CertificationVo certificationVo = new CertificationVo();
+
+        return certificationVo;
+    }
+
+    /**
+     * 根据审核状态搜索
+     */
+    @ApiComment("根据审核状态搜索")
+    @RequestMapping(name = "根据审核状态搜索",
+            value = "/searchByStatus", method = RequestMethod.POST)
+    public PageCertificationVo searchByStatus(@ApiComment("商户号") String merchantId, @ApiComment("当前页码") Integer pageNum,
+                                              @ApiComment("每页条数") Integer pageSize,@ApiComment("审核状态") Integer status){
+        PageCertificationVo pageCertificationVo=new PageCertificationVo();
+        return pageCertificationVo;
+    }
 }

@@ -1,6 +1,7 @@
 package com.zwl.dao.mapper;
 
 import com.zwl.model.po.UserCertification;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -35,5 +36,11 @@ public interface UserCertificationMapper {
      * @return
      */
     UserCertification selectById(Long id);
+    /**
+     * 根据审核状态查找merchantId下的所有用户实名申请信息
+     * @param merchantId
+     * @return
+     */
+    List<UserCertification> selectListByStatus(@Param("merchantId") String merchantId, @Param("status") Integer status);
 
 }

@@ -43,4 +43,6 @@ public interface ClassInfoService {
      * @return
      */
     String getLogoUrlByClassSetId(Long id);
+
+
 }

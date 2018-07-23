@@ -1,6 +1,5 @@
 package com.zwl.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.terran4j.commons.api2doc.annotations.Api2Doc;
 import com.terran4j.commons.api2doc.annotations.ApiComment;
 import com.zwl.model.baseresult.Result;
@@ -37,11 +36,21 @@ public class ClassSetController {
     @RequestMapping(name = "修改套课程",
             value = "/teacher/classset/modify", method = RequestMethod.POST)
     public Result modify(@ApiComment("id") Long id,@ApiComment("title") String title, @ApiComment("bannerUrl") String bannerUrl, @ApiComment("categoryId") Long categoryId
-            ,  @ApiComment("requiredMemberLevel") Integer requiredMemberLevel, @ApiComment("content") String content) {
+            ,  @ApiComment("requiredMemberLevel") Integer requiredMemberLevel, @ApiComment("content") String content,@ApiComment("available") String available) {
         Result result = new Result();
 
         return result;
     }
+
+    @ApiComment("删除套课程")
+    @RequestMapping(name = "修改套课程",
+            value = "/teacher/classset/modify", method = RequestMethod.POST)
+    public Result modify(@ApiComment("id") Long id,@ApiComment("available") String available) {
+        Result result = new Result();
+
+        return result;
+    }
+
 
     @ApiComment("课程列表")
     @RequestMapping(name = "课程列表",
@@ -50,6 +59,15 @@ public class ClassSetController {
         PageClassVo pageClassVo=new PageClassVo();
         return pageClassVo;
     }
+
+    @ApiComment("搜索")
+    @RequestMapping(name = "搜索",
+            value = "/teacher/classset/search", method = RequestMethod.POST)
+    public PageClassVo search(@ApiComment("merchantId") String merchantId, @ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize,@ApiComment("title") String title) {
+        PageClassVo pageClassVo=new PageClassVo();
+        return pageClassVo;
+    }
+
     @ApiComment("根据id查询套课程")
     @RequestMapping(name = "根据id查询套课程",
             value = "/teacher/classset/getById", method = RequestMethod.POST)

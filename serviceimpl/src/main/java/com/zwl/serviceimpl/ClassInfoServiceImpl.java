@@ -94,4 +94,5 @@ public class ClassInfoServiceImpl implements ClassInfoService {
         return  classInfoMapper.getLogoUrlByClassSetId(id);
     }
 
+
 }
