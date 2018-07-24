@@ -92,13 +92,13 @@ public class UserController {
            /* if (StringUtils.isEmpty(userLoginInfoVo.getReferrer()))
                 user.setReferrer("admin");*/
             user.setReferrer(userLoginInfoVo.getReferrer());
-//        user.setMemberLevel("0");
+            user.setMemberLevel(0);
             //公众号对应的openid
             user.setFormId(userLoginInfoVo.getFormId());
             //插入用户表
             userService.addUser(user);
             userInfo.setUserId(userId);
-//            userInfo.setAvailable(1);
+            userInfo.setAvailable(1);
             //插入用户详情表
             userInfoService.add(userInfo);
 
@@ -170,17 +170,5 @@ public class UserController {
         result.setData(userLoginInfoVo);
         return result;
     }
-
-    /**
-     * 用户信息
-     */
-    public Result getUserInfoById() {
-        Result result = new Result();
-        //根据id查找用户信息
-
-
-        return result;
-    }
-
 
 }
