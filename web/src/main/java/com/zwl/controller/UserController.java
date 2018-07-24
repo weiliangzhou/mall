@@ -46,7 +46,7 @@ public class UserController {
     /**
      * 用户小程序微信授权登录
      */
-    @PostMapping("/authorization")
+    @PostMapping("/auth/authorization")
     public Result authorization(@RequestBody UserLoginInfoVo userLoginInfoVo) {
         Result result = new Result();
         //根据merchantid获取appid和secret
@@ -151,7 +151,7 @@ public class UserController {
     /**
      * 用户信息展示
      */
-    @RequestMapping("/getUserInfoByUserId")
+    @RequestMapping("/auth/getUserInfoByUserId")
     public Result getUserInfoByUserId(@RequestBody JSONObject jsonObject) {
         String userId = jsonObject.getString("userId");
         Result result = new Result();

@@ -77,7 +77,7 @@ public class WxController {
     }
 
     @ApiComment("小程序授权登录")
-    @RequestMapping(name = "授权登录", value = "/wx/user/authorization", method = RequestMethod.POST)
+    @RequestMapping(name = "授权登录", value = "/wx/user/auth/authorization", method = RequestMethod.POST)
     public UserLoginInfoVo wechatLogin(
             @ApiComment("小程序授权微信登录code") String code, @ApiComment("商户号") String merchantId,
             @ApiComment("用户的微信手机号") String wechatMobile, @ApiComment("微信昵称") String nickName,
@@ -100,7 +100,7 @@ public class WxController {
     }
 
     @ApiComment("小程序获取用户信息")
-    @RequestMapping(name = "获取用户信息", value = "/wx/user/getUserInfoByUserId", method = RequestMethod.GET)
+    @RequestMapping(name = "获取用户信息", value = "/wx/user/auth/getUserInfoByUserId", method = RequestMethod.GET)
     public UserLoginInfoVo getUserInfoByUserId(@RequestParam("userId") String userId) {
         UserLoginInfoVo userLoginInfoVo = new UserLoginInfoVo();
         userLoginInfoVo.setNickName("我是一只小小鸟");
