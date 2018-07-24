@@ -60,12 +60,13 @@ public class TokenFilter implements Filter {
             return;
         }
         //套课程
-        if (requestURL.contains("/classset/*")) {
+        if (requestURL.contains("/classset/getPageAllClass")||requestURL.contains("/classset/setpAddBrowseCount")) {
             chain.doFilter(request, response);
             return;
         }
         //节课程
-        if (requestURL.contains("/classinfo/*")) {
+        if (requestURL.contains("/classinfo/getPageByClassSetId")||requestURL.contains("/classinfo/getById")
+                ||requestURL.contains("/classinfo/setpAddBrowseCount")) {
             chain.doFilter(request, response);
             return;
         }
