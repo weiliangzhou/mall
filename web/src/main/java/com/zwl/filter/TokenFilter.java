@@ -23,7 +23,7 @@ import java.io.IOException;
  */
 @Order(1)
 // 重点
-//@WebFilter(filterName = "tokenFilter", urlPatterns = "/wx/*")
+@WebFilter(filterName = "tokenFilter", urlPatterns = "/wx/*")
 @Slf4j
 public class TokenFilter implements Filter {
 
@@ -56,6 +56,16 @@ public class TokenFilter implements Filter {
         }
         //测试图片上传
         if (requestURL.contains("/file/*")) {
+            chain.doFilter(request, response);
+            return;
+        }
+        //套课程
+        if (requestURL.contains("/classset/*")) {
+            chain.doFilter(request, response);
+            return;
+        }
+        //节课程
+        if (requestURL.contains("/classinfo/*")) {
             chain.doFilter(request, response);
             return;
         }
