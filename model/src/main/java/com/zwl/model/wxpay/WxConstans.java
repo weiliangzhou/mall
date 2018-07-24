@@ -31,6 +31,8 @@ public class WxConstans {
 //    public static final String BUG_TEMPLATE_ID = "0o8fvt0Z8IhZDLJnhkaMlvH6yixgl62TXGXkJpqIhaI";
     //    微信授权
     public static final String WX_AUTHORIZATION = "https://api.weixin.qq.com/sns/jscode2session";
+    //    查询订单
+    public static final String QUERY_WX_ORDER = "https://api.mch.weixin.qq.com/pay/orderquery";
 
 
 }
