@@ -3,6 +3,7 @@ package com.zwl.serviceimpl;
 import com.zwl.dao.mapper.UserCertificationMapper;
 import com.zwl.model.po.UserCertification;
 import com.zwl.service.CertificationService;
+import com.zwl.util.CheckUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,15 +15,17 @@ public class CertificationServiceImpl implements CertificationService {
     private UserCertificationMapper userCertificationMapper;
     @Override
     public int add(UserCertification userCertification) {
-        //新增之前 判断是否已经提交过
-
-
         return userCertificationMapper.insert(userCertification);
     }
 
     @Override
     public int modifyById(UserCertification userCertification) {
         return userCertificationMapper.updateById(userCertification);
+    }
+
+    @Override
+    public int modifyByUserId(UserCertification userCertification) {
+        return userCertificationMapper.updateByUserId(userCertification);
     }
 
     @Override
