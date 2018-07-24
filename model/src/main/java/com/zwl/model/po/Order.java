@@ -40,8 +40,8 @@ public class Order {
     private Integer validityTime;
     @RestPackIgnore
     @JSONField(serialize = false)
-    private Integer orderStatus;
-    @ApiComment(value = "订单状态", sample = "订单状态  待支付 成功  超时关闭")
+    private Integer orderStatus = 0;
+    @ApiComment(value = "订单状态", sample = "订单状态  0待支付 1成功  -1超时关闭")
     private String orderStatusDesc;
     @RestPackIgnore
     @JSONField(serialize = false)
