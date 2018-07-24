@@ -1,0 +1,46 @@
+package com.zwl.controller;
+
+import com.alibaba.fastjson.JSONObject;
+import com.zwl.model.baseresult.Result;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.concurrent.TimeUnit;
+
+/**
+ * @author 二师兄超级帅
+ * @Title: 获取公众号openid
+ * @ProjectName parent
+ * @Description: TODO
+ * @date 2018/7/2415:12
+ */
+@RestController
+@RequestMapping("/gzh/")
+public class GZController {
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
+    @PostMapping("/sendFormId")
+    public Result saveFormIdToRedis(@RequestBody JSONObject jsonObject) {
+        String formId = jsonObject.getString("formId");
+        String userId = jsonObject.getString("userId");
+        stringRedisTemplate.boundValueOps("formId_" + userId).set(formId, 7, TimeUnit.DAYS);
+        Result result = new Result();
+        return result;
+    }
+
+    @PostMapping("/getFormId")
+    public Result getFormIdFromRedis(@RequestBody JSONObject jsonObject) {
+        String userId = jsonObject.getString("userId");
+        String gzOpenId = stringRedisTemplate.boundValueOps("formId_" + userId).get();
+        Result result = new Result();
+        result.setData(StringUtils.isBlank(gzOpenId) ? "true" : "false");
+        return result;
+    }
+}
