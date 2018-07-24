@@ -30,9 +30,14 @@ public class CertificationController {
     @PostMapping("/add")
     public Result addCertification(@RequestBody UserCertification userCertification) {
         Result result = new Result();
-        //审核中
-        userCertification.setStatus(1);
-        certificationService.add(userCertification);
+        UserCertification uc = certificationService.getOneByUserId(userCertification.getUserId());
+        if (uc != null) {
+            certificationService.modifyByUserId(userCertification);
+        } else {
+            userCertification.setStatus(1);
+            certificationService.add(userCertification);
+        }
+
         return result;
     }
 

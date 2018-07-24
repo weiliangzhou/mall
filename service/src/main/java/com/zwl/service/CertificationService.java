@@ -20,6 +20,13 @@ public interface CertificationService {
      * @return
      */
     int modifyById(UserCertification userCertification);
+    /**
+     * 根据插入参数 修改用户实名信息
+     *
+     * @param userCertification
+     * @return
+     */
+    int modifyByUserId(UserCertification userCertification);
 
     /**
      * 根据userId查询用户提交的实名认证信息
