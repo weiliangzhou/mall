@@ -36,7 +36,7 @@ public class WxController {
     @ApiComment("支付")
     @RequestMapping(name = "支付",
             value = "/wx/pay/auth/pay.do", method = RequestMethod.POST)
-    public String pay(@ApiComment("openId") String openId, @ApiComment("订单号") String orderNo, @ApiComment("totalFee") String totalFee ,@ApiComment("merchantId") String merchantId ) {
+    public String pay(@ApiComment("openId") String openId, @ApiComment("订单号") String orderNo, @ApiComment("totalFee") String totalFee, @ApiComment("merchantId") String merchantId) {
         Result result = new Result();
         result.setData(0);
         return JSON.toJSONString(result);
@@ -81,7 +81,7 @@ public class WxController {
     public UserLoginInfoVo wechatLogin(
             @ApiComment("小程序授权微信登录code") String code, @ApiComment("商户号") String merchantId,
             @ApiComment("用户的微信手机号") String wechatMobile, @ApiComment("微信昵称") String nickName,
-            @ApiComment("微信头像url") String logoUrl,@ApiComment("推荐人userId") String referrer
+            @ApiComment("微信头像url") String logoUrl, @ApiComment("推荐人userId") String referrer
     ) {
         Result result = new Result();
         //插入用户表
@@ -152,23 +152,24 @@ public class WxController {
     @RequestMapping(name = "课程列表",
             value = "/wx/classset/getPageAllClass", method = RequestMethod.POST)
     public PageClassVo getPageAllClass(@ApiComment("merchantId") String merchantId, @ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize) {
-        PageClassVo pageClassVo=new PageClassVo();
+        PageClassVo pageClassVo = new PageClassVo();
         return pageClassVo;
     }
+
     @ApiComment("根据id查询套课程")
     @RequestMapping(name = "根据id查询套课程",
             value = "/wx/classset/getById", method = RequestMethod.POST)
     public ClassSet getById(@ApiComment("id") Long id) {
-        ClassSet classSet=new ClassSet();
+        ClassSet classSet = new ClassSet();
         return classSet;
     }
 
     @ApiComment("获取套课程下的节课程列表")
     @RequestMapping(name = "获取套课程下的节课程列表",
             value = "/wx/classinfo/getPageByClassSetId", method = RequestMethod.POST)
-    public PageClassInfoVo getPageByClassSetId(@ApiComment("classSetId") Long classSetId, @ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize){
+    public PageClassInfoVo getPageByClassSetId(@ApiComment("classSetId") Long classSetId, @ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize) {
         Result result = new Result();
-        PageClassInfoVo pageVo=new PageClassInfoVo();
+        PageClassInfoVo pageVo = new PageClassInfoVo();
 
         return pageVo;
     }
@@ -176,23 +177,24 @@ public class WxController {
     @ApiComment("根据Id获取节课程")
     @RequestMapping(name = "根据Id获取节课程",
             value = "/wx/classinfo/getById", method = RequestMethod.POST)
-    public ClassInfo getClassinfoById(@ApiComment("id") Long id){
+    public ClassInfo getClassinfoById(@ApiComment("id") Long id) {
 
-        ClassInfo classInfo=new ClassInfo();
+        ClassInfo classInfo = new ClassInfo();
         return classInfo;
     }
 
     @ApiComment("套课程收听人数+1")
     @RequestMapping(name = "套课程收听人数+1",
             value = "//wx/classset/setpAddBrowseCount", method = RequestMethod.POST)
-    public Result setpAddClasssetBrowseCount(@ApiComment("套课程id") Long classSetId){
+    public Result setpAddClasssetBrowseCount(@ApiComment("套课程id") Long classSetId) {
         Result result = new Result();
         return result;
     }
+
     @ApiComment("节课程收听人数+1")
     @RequestMapping(name = "节课程收听人数+1",
             value = "/wx/classinfo/setpAddBrowseCount", method = RequestMethod.POST)
-    public Result setpAddClassinfoBrowseCount(@ApiComment("节课程id") Long classInfoId){
+    public Result setpAddClassinfoBrowseCount(@ApiComment("节课程id") Long classInfoId) {
         Result result = new Result();
         return result;
     }
@@ -200,15 +202,34 @@ public class WxController {
     @ApiComment("发送验证码")
     @RequestMapping(name = "发送验证码",
             value = "/wx/user/sendRegisterCode", method = RequestMethod.POST)
-    public Result sendRegisterCode(@ApiComment("phone") String phone){
+    public Result sendRegisterCode(@ApiComment("phone") String phone) {
         Result result = new Result();
         return result;
     }
+
     @ApiComment("绑定手机")
     @RequestMapping(name = "绑定手机",
             value = "/wx/user/bindingMobile", method = RequestMethod.POST)
-    public Result sendCode(@ApiComment("phone") String phone,@ApiComment("userId") String userId,@ApiComment("msgCode") String msgCode){
+    public Result sendCode(@ApiComment("phone") String phone, @ApiComment("userId") String userId, @ApiComment("msgCode") String msgCode) {
         Result result = new Result();
         return result;
     }
+
+    @ApiComment("发送公众号openid")
+    @RequestMapping(name = "发送公众号openid",
+            value = "/gzh/sendFormId", method = RequestMethod.POST)
+    public Result sendFormId(@ApiComment("formId") String formId, @ApiComment("userId") String userId) {
+        Result result = new Result();
+        return result;
+    }
+
+    @ApiComment("获取公众号openid")
+    @RequestMapping(name = "获取公众号openid",
+            value = "/gzh/getFormId", method = RequestMethod.POST)
+    public Result sendFormId(@ApiComment("userId") String userId) {
+        Result result = new Result();
+        return result;
+    }
+
+
 }
