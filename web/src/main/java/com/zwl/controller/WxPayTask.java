@@ -34,7 +34,7 @@ public class WxPayTask {
     private MerchantService merchantService;
 
 //    每天凌晨2点
-    @Scheduled(cron = "0 0 2 * * ?")
+    @Scheduled(cron = "0 10 0 * * ?")
     public void queryOrderStatus() {
 //        小程序ID	appid	是	String(32)	wxd678efh567hg6787	微信分配的小程序ID
 //        商户号	mch_id	是	String(32)	1230000109	微信支付分配的商户号

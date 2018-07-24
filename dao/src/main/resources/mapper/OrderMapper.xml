@@ -204,11 +204,4 @@
         and order_no=#{orderNo}
         and merchant_id=#{merchantId}
     </select>
-    <select id="getOrderListByUserId" resultMap="BaseResultMap" parameterType="string">
-        select
-        <include refid="Base_Column_List"/>
-        from ss_order
-        where available=1
-        and user_id=#{userId}
-    </select>
 </mapper>
