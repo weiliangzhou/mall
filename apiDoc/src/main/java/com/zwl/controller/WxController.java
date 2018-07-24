@@ -69,7 +69,7 @@ public class WxController {
 
     @ApiComment("邀请列表")
     @RequestMapping(name = "邀请列表",
-            value = "/wx/miadInfo/auth/getMaidInfoList", method = RequestMethod.POST)
+            value = "/wx/maidInfo/auth/getMaidInfoList", method = RequestMethod.POST)
     public MaidInfoVVo getMaidInfoList(@ApiComment("userId") String userId, @ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize) {
         MaidInfoVVo maidInfoVVo = new MaidInfoVVo();
         return maidInfoVVo;
@@ -211,7 +211,4 @@ public class WxController {
         Result result = new Result();
         return result;
     }
-
-
-
 }

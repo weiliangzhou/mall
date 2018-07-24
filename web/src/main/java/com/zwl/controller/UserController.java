@@ -130,12 +130,12 @@ public class UserController {
             BSUtil.isTrue(false, "验证码错误");
         Result result = new Result();
         //更新用户表
-        User user=new User();
+        User user = new User();
         user.setUserId(userId);
         user.setBindingMobile(phone);
-        int count=userService.updateUserByUserId(user);
+        int count = userService.updateUserByUserId(user);
         if (count == 0)
-            BSUtil.isTrue(false,"绑定失败");
+            BSUtil.isTrue(false, "绑定失败");
         return result;
     }
 

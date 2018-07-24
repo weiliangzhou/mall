@@ -1,6 +1,10 @@
 server:
   port: 8080
 spring:
+  servlet:
+       multipart:
+         max-file-size: 3Mb
+         max-request-size: 3Mb
   http:
     encoding:
       enabled: true
