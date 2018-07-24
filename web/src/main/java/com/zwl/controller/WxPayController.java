@@ -145,7 +145,7 @@ public class WxPayController {
                 if (!checkSign) {
                     BSUtil.isTrue(false, "签名错误!");
                     //发送通知等
-                    Map<String, String> xml = new HashMap<String, String>();
+                    Map<String, String> xml = new HashMap<>();
                     xml.put("return_code", "ERROR");
                     xml.put("return_msg", "ERROR");
                     return PaymentKit.toXml(xml);
@@ -154,8 +154,12 @@ public class WxPayController {
                 if (Integer.parseInt(total_fee) < orderActualMoney_temp)
                     BSUtil.isTrue(false, "支付失败");
                 if (null == status || 1 != status) {
+                    Order order_t=new Order();
+                    order_t.setOrderNo(out_trade_no);
+                    order_t.setPaymentTime(sdf_yMdHms.parse(time_end));
+                    order_t.setPaymentNo(transaction_id);
                     //更新订单信息
-                    int count = orderService.updateOrder(out_trade_no, time_end, transaction_id);
+                    int count = orderService.updateOrder(order_t);
                     if (count != 1)
                         BSUtil.isTrue(false, "异步支付更新失败");
                     //                    支付完成时间，格式为yyyyMMddHHmmss
@@ -302,7 +306,5 @@ public class WxPayController {
         xml.put("return_msg", "OK");
         return PaymentKit.toXml(xml);
     }
-
-
 }
 

@@ -13,8 +13,6 @@ import java.util.List;
  */
 public interface OrderService {
     List<Order> getOrderList(Order order);
+    int updateOrder(Order order);
     Order findOrderByOrderNo(String OrderNo);
-    int updateOrder(String out_trade_no, String time_end, String transaction_id);
-    Order getOrderById(String merchantId, String orderNo);
-    List<Order> getOrderListByUserId(String userId);
 }
