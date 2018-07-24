@@ -140,7 +140,7 @@ public class ClassSetController {
                     classVo.setId(classInfo.getId());
                     classVo.setTitle(classInfo.getTitle());
                     classVo.setCreateTime(classInfo.getCreateTime());
-                    classVo.setModifyTime(classInfo.getCreateTime());
+                    classVo.setModifyTime(classInfo.getModifyTime());
                     classVo.setCategoryTitle(c.getCategoryTitle());
                     children.add(classVo);
                 }

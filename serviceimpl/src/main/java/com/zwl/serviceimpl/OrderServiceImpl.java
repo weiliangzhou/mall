@@ -26,22 +26,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public int updateOrder(Order order) {
+        return orderMapper.updateByPrimaryKeySelective(order);
+    }
+
+    @Override
     public Order findOrderByOrderNo(String OrderNo) {
         return orderMapper.findOrderByOrderNo(OrderNo);
     }
 
-    @Override
-    public int updateOrder(String out_trade_no, String time_end, String transaction_id) {
-        return orderMapper.updateOrder(out_trade_no, time_end, transaction_id);
-    }
-
-    @Override
-    public Order getOrderById(String merchantId, String orderNo) {
-        return orderMapper.getOrderById(merchantId,orderNo);
-    }
-
-    @Override
-    public List<Order> getOrderListByUserId(String userId) {
-        return orderMapper.getOrderListByUserId(userId);
-    }
 }
