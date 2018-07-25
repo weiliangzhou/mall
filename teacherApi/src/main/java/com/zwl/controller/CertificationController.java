@@ -136,6 +136,7 @@ public class CertificationController {
         String registerMobile = jsonObject.getString("registerMobile");
         User query = new User();
         query.setRegisterMobile(registerMobile);
+        query.setMerchantId(merchantId);
         User user = userService.getOneByParams(query);
         UserCertification userCertification = certificationService.getOneByUserId(user.getUserId());
         CertificationVo certificationVo = new CertificationVo();
