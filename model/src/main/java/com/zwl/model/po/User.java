@@ -26,4 +26,6 @@ public class User {
     private Integer available = 1;
     //微信formId
     private String formId;
+    //是否购买
+    private Integer isBuy;
 }

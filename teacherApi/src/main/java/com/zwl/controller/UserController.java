@@ -85,6 +85,7 @@ public class UserController {
         userParams.setRealName(realName);
         //用户购买会员渠道，2-线下渠道
         userParams.setRegisterFrom(2);
+        userParams.setIsBuy(1);
         userService.updateUserByUserId(userParams);
 
         //记录操作表

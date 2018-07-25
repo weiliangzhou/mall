@@ -92,6 +92,7 @@ public class UserController {
            /* if (StringUtils.isEmpty(userLoginInfoVo.getReferrer()))
                 user.setReferrer("admin");*/
             user.setReferrer(userLoginInfoVo.getReferrer());
+            user.setIsBuy(0);
             user.setMemberLevel(0);
             //公众号对应的openid
             user.setFormId(userLoginInfoVo.getFormId());
@@ -103,6 +104,15 @@ public class UserController {
             userInfoService.add(userInfo);
 
         } else {
+            //如果用户还未购买，则可以更新推荐人
+            if(userQuery.getIsBuy()==0){
+                User user = new User();
+                user.setUserId(userQuery.getUserId());
+                //推荐人userId
+                user.setReferrer(userLoginInfoVo.getReferrer());
+                userService.updateUserByUserId(user);
+            }
+
             userId = userQuery.getUserId();
             userInfo.setUserId(userId);
             userInfoService.modifyByParams(userInfo);

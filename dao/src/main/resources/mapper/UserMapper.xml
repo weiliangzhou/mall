@@ -13,6 +13,7 @@
         <result column="referrer" property="referrer" jdbcType="VARCHAR"/>
         <result column="member_level" property="memberLevel" jdbcType="SMALLINT"/>
         <result column="level_name" property="levelName" jdbcType="VARCHAR"/>
+        <result column="is_buy" property="isBuy" />
         <result column="expires_time" property="expiresTime" jdbcType="TIMESTAMP"/>
         <result column="register_time" property="registerTime" jdbcType="TIMESTAMP"/>
         <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
@@ -20,11 +21,11 @@
     </resultMap>
     <sql id="Base_Column_List">
     id, user_id, wechat_openid, wechat_union_id, merchant_id, register_from, register_mobile,real_name, referrer, member_level,
-    level_name, expires_time, register_time, modify_time, available
+    level_name, is_buy,expires_time, register_time, modify_time, available
   </sql>
     <sql id="Insert_Column_List">
     user_id, wechat_openid, wechat_union_id, merchant_id, register_from, register_mobile,real_name, referrer, member_level,
-    level_name, expires_time, register_time, modify_time, available
+    level_name,is_buy, expires_time, register_time, modify_time, available
   </sql>
     <!--新增用户-->
     <insert id="insert" parameterType="com.zwl.model.po.User">
@@ -36,7 +37,7 @@
         #{merchantId,jdbcType=VARCHAR}, #{registerFrom,jdbcType=SMALLINT},
         #{registerMobile,jdbcType=VARCHAR},#{realName,jdbcType=VARCHAR}, #{referrer,jdbcType=VARCHAR},
         #{memberLevel,jdbcType=SMALLINT},
-        #{levelName,jdbcType=VARCHAR}, #{expiresTime,jdbcType=TIMESTAMP}, now(),
+        #{levelName,jdbcType=VARCHAR}, #{isBuy}, #{expiresTime,jdbcType=TIMESTAMP}, now(),
         #{modifyTime,jdbcType=TIMESTAMP}, #{available,jdbcType=INTEGER})
     </insert>
     <!--根据参数查找一个用户-->
@@ -60,6 +61,9 @@
             </if>
             <if test="levelName != null">
                 AND level_name = #{levelName,jdbcType=VARCHAR}
+            </if>
+            <if test="isBuy != null">
+                AND is_buy = #{isBuy}
             </if>
             <if test="registerMobile != null">
                 AND register_mobile = #{registerMobile,jdbcType=VARCHAR}
@@ -117,6 +121,9 @@
             <if test="levelName != null">
                 level_name = #{levelName,jdbcType=VARCHAR},
             </if>
+            <if test="isBuy != null">
+                is_buy = #{isBuy},
+            </if>
             <if test="expiresTime != null">
                 expires_time = #{expiresTime,jdbcType=TIMESTAMP},
             </if>
@@ -163,6 +170,9 @@
             </if>
             <if test="memberLevel != null">
                 AND member_level = #{memberLevel,jdbcType=SMALLINT}
+            </if>
+            <if test="isBuy != null">
+                AND is_buy = #{isBuy}
             </if>
             <if test="levelName != null">
                 AND level_name = #{levelName,jdbcType=VARCHAR}
