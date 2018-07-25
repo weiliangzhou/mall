@@ -10,7 +10,6 @@ import com.zwl.model.vo.CertificationVo;
 import com.zwl.model.vo.PageCertificationVo;
 import com.zwl.service.CertificationService;
 import com.zwl.service.UserService;
-import com.zwl.util.CheckUtil;
 import com.zwl.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -139,6 +138,8 @@ public class CertificationController {
         query.setMerchantId(merchantId);
         User user = userService.getOneByParams(query);
         UserCertification userCertification = certificationService.getOneByUserId(user.getUserId());
+        List<CertificationVo> listVo = new ArrayList<>();
+
         CertificationVo certificationVo = new CertificationVo();
         certificationVo.setRegisterMobile(user.getRegisterMobile());
         certificationVo.setRealname(userCertification.getRealname());
@@ -146,7 +147,8 @@ public class CertificationController {
         certificationVo.setModifyTime(modifyDateStr);
         certificationVo.setStatus(userCertification.getStatus());
         certificationVo.setId(userCertification.getId());
-        result.setData(certificationVo);
+        listVo.add(certificationVo);
+        result.setData(listVo);
         return  result;
     }
 
