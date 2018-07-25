@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.zwl.model.baseresult.Result;
+import com.zwl.model.po.ClassSet;
 import com.zwl.model.po.ClassSetStatistics;
 import com.zwl.model.vo.ClassSetItemVo;
 import com.zwl.model.vo.ClassVo;
@@ -81,6 +82,17 @@ public class ClassSetController {
         }
         return result;
     }
-
+    /**
+     * @param jsonObject
+     * @return
+     */
+    @PostMapping("/getById")
+    public Result getById(@RequestBody JSONObject jsonObject) {
+        Result result = new Result();
+        Long id = jsonObject.getLong("id");
+        ClassSet classSet=classSetService.getById(id);
+        result.setData(classSet);
+        return result;
+    }
 
 }

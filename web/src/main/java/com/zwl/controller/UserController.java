@@ -106,7 +106,7 @@ public class UserController {
 
         } else {
             //如果用户还未购买，则可以更新推荐人
-            if(userQuery.getIsBuy()==0 && CheckUtil.isNotEmpty(userLoginInfoVo.getReferrer())){
+            if((userQuery.getIsBuy()==null ||userQuery.getIsBuy()==0) && CheckUtil.isNotEmpty(userLoginInfoVo.getReferrer())){
                 User user = new User();
                 user.setUserId(userQuery.getUserId());
                 //推荐人userId
