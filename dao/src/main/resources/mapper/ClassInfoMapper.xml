@@ -141,6 +141,7 @@
       ss_class_info
     where
       class_set_id = #{classSetId,jdbcType=BIGINT}
+    and available = 1
   </select>
 
 </mapper>
