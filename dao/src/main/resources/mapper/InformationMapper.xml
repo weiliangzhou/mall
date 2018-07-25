@@ -145,7 +145,6 @@
     <include refid="Base_Column_List" />
     from ss_information
     where available =1
---     and is_show=1
     <if test="title != null" >
       and title like  CONCAT('%',#{title},'%')
     </if>
