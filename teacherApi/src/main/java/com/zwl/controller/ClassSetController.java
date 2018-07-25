@@ -65,25 +65,28 @@ public class ClassSetController {
         return result;
     }
 
-    /**
+  /*  *//**
+     *
      * @param jsonObject
      * @return
-     */
+     *//*
     @PostMapping("/getPageAllClass")
     public Result getPageAllClass(@RequestBody JSONObject jsonObject) {
         Result result = new Result();
         String merchantId = jsonObject.getString("merchantId");
         Integer pageNum = jsonObject.getInteger("pageNum");
         Integer pageSize = jsonObject.getInteger("pageSize");
+        //title 可空
+        String title = jsonObject.getString("title");
         Page page=PageHelper.startPage(pageNum, pageSize);
-        List<ClassVo> list=classSetService.getAllClass(merchantId);
+        List<ClassVo> list=classSetService.getAllClass(merchantId,title);
         PageClassVo pageClassVo=new PageClassVo();
         pageClassVo.setPageNum(pageNum);
         pageClassVo.setTotalPage(page.getTotal());
         pageClassVo.setList(list);
         result.setData(pageClassVo);
         return result;
-    }
+    }*/
     /**
      * @param jsonObject
      * @return
@@ -96,26 +99,7 @@ public class ClassSetController {
         result.setData(classSet);
         return result;
     }
-    /**
-     * @param jsonObject
-     * @return
-     */
-    @PostMapping("/search")
-    public Result search(@RequestBody JSONObject jsonObject) {
-        Result result = new Result();
-        String merchantId = jsonObject.getString("merchantId");
-        String title = jsonObject.getString("title");
-        Integer pageNum = jsonObject.getInteger("pageNum");
-        Integer pageSize = jsonObject.getInteger("pageSize");
-        Page page=PageHelper.startPage(pageNum, pageSize);
-        List<ClassVo> list=classSetService.search(merchantId,title);
-        PageClassVo pageClassVo=new PageClassVo();
-        pageClassVo.setPageNum(pageNum);
-        pageClassVo.setTotalPage(page.getTotal());
-        pageClassVo.setList(list);
-        result.setData(pageClassVo);
-        return result;
-    }
+
     /**
      * 获取所有课程列表（套课下节课程也返回）
      * @param jsonObject
@@ -127,8 +111,10 @@ public class ClassSetController {
         String merchantId = jsonObject.getString("merchantId");
         Integer pageNum = jsonObject.getInteger("pageNum");
         Integer pageSize = jsonObject.getInteger("pageSize");
+        //title 可空
+        String title = jsonObject.getString("title");
         Page page=PageHelper.startPage(pageNum, pageSize);
-        List<ClassVo> list=classSetService.getAllClass(merchantId);
+        List<ClassVo> list=classSetService.getAllClass(merchantId,title);
         for (ClassVo c:list
                 ) {
             if(c.getClassType()==1){

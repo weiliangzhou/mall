@@ -54,19 +54,12 @@ public class ClassSetController {
 
     @ApiComment("课程列表")
     @RequestMapping(name = "课程列表",
-            value = "/teacher/classset/getPageAllClass", method = RequestMethod.POST)
-    public PageClassVo getPageAllClass(@ApiComment("merchantId") String merchantId, @ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize) {
+            value = "/teacher/classset/getPageClassList", method = RequestMethod.POST)
+    public PageClassVo getPageAllClass(@ApiComment("merchantId") String merchantId, @ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize,@ApiComment("标题模糊搜索时传") String title) {
         PageClassVo pageClassVo=new PageClassVo();
         return pageClassVo;
     }
 
-    @ApiComment("搜索")
-    @RequestMapping(name = "搜索",
-            value = "/teacher/classset/search", method = RequestMethod.POST)
-    public PageClassVo search(@ApiComment("merchantId") String merchantId, @ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize,@ApiComment("title") String title) {
-        PageClassVo pageClassVo=new PageClassVo();
-        return pageClassVo;
-    }
 
     @ApiComment("根据id查询套课程")
     @RequestMapping(name = "根据id查询套课程",

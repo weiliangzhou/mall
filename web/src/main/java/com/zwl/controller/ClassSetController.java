@@ -40,7 +40,7 @@ public class ClassSetController {
         Integer pageNum = jsonObject.getInteger("pageNum");
         Integer pageSize = jsonObject.getInteger("pageSize");
         Page page = PageHelper.startPage(pageNum, pageSize);
-        List<ClassVo> list = classSetService.getAllClass(merchantId);
+        List<ClassVo> list = classSetService.getAllClass(merchantId,null);
         for (ClassVo classVo : list
                 ) {
             if (classVo.getClassType() == 1) {

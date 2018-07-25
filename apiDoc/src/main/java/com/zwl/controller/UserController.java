@@ -62,17 +62,5 @@ public class UserController {
         return result;
     }
 
-    /**
-     * 搜索用户
-     *
-     * @return
-     */
-    @ApiComment("搜索用户")
-    @RequestMapping(name = "搜索用户",
-            value = "/search", method = RequestMethod.POST)
-    public UserVo search(@ApiComment("商户号") String merchantId, @ApiComment("手机号") String phone, @ApiComment("渠道注册 1 微信注册 2线下导入") Integer registerFrom
-    ) {
-        UserVo userVo= new UserVo();
-        return userVo;
-    }
+
 }

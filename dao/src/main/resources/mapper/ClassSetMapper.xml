@@ -187,7 +187,12 @@
     AND scc.available = 1
     AND sci.available = 1
   ) ) t
-ORDER BY t.modify_time DESC
+  <where>
+    <if test="title!=null">
+      t.title like CONCAT('%',#{title},'%')
+    </if>
+  </where>
+ORDER BY t.required_member_level DESC,t.modify_time DESC
   </select>
 
   <!--搜索-->

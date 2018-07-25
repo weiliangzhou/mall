@@ -174,42 +174,4 @@ public class UserController {
         return result;
     }
 
-    /**
-     * 搜索会员列表
-     * @param merchantId
-     * @param registerFrom
-     * @param registerMobile"
-     */
-    @PostMapping("search")
-    public Result  search(@RequestBody JSONObject jsonObject){
-        Result result = new Result();
-        String merchantId = jsonObject.getString("merchantId");
-        Integer registerFrom = jsonObject.getInteger("registerFrom");
-        String registerMobile = jsonObject.getString("registerMobile");
-        List<User> userList=userService.search(merchantId,registerMobile,registerFrom);
-        if (StringUtils.isEmpty(userList))
-            return result;
-        List<UserVo> listVo = new ArrayList<>();
-        for (User user : userList) {
-            UserVo userVo = new UserVo();
-            userVo.setUserId(user.getUserId());
-            userVo.setRealName(user.getRealName());
-            userVo.setMemberLevel(user.getMemberLevel());
-            userVo.setLevelName(user.getLevelName());
-            userVo.setRegisterMobile(user.getRegisterMobile());
-            userVo.setModifyTime(DateUtil.getFormatString("yyyy-MM-dd HH:mm:ss", user.getModifyTime()));
-            userVo.setRegisterFrom(user.getRegisterFrom());
-            userVo.setRegisterTime(DateUtil.getFormatString("yyyy-MM-dd HH:mm:ss", user.getRegisterTime()));
-            //存在推荐人为null
-            User userTemp = userService.getByUserId(user.getReferrer());
-            userVo.setReferrerRealName(userTemp == null ? "" : userTemp.getRealName());
-            //下线人数
-            Integer xiaxianCount = maidInfoService.getXiaXianCountByUserId(user.getUserId());
-            userVo.setXiaxianCount(StringUtils.isEmpty(xiaxianCount) ? 0 : xiaxianCount);
-            listVo.add(userVo);
-        }
-        result.setData(listVo);
-        return result;
-    }
-
 }
