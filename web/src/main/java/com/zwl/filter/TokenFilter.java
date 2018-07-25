@@ -59,6 +59,12 @@ public class TokenFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
+        //H5支付
+        if (requestURL.contains("/wx/product/H5Buy")||requestURL.contains("/wx/pay/auth/pay.do")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
         //套课程
         if (requestURL.contains("/classset/getPageAllClass")||requestURL.contains("/classset/setpAddBrowseCount")) {
             chain.doFilter(request, response);

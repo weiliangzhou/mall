@@ -4,13 +4,17 @@ import com.zwl.dao.mapper.OrderFlowMapper;
 import com.zwl.dao.mapper.OrderMapper;
 import com.zwl.dao.mapper.ProductMapper;
 import com.zwl.model.exception.BSUtil;
-import com.zwl.model.po.*;
+import com.zwl.model.po.Order;
+import com.zwl.model.po.OrderFlow;
+import com.zwl.model.po.Product;
+import com.zwl.model.po.User;
 import com.zwl.model.vo.BuyResult;
 import com.zwl.model.vo.ProductItemVo;
 import com.zwl.service.ProductService;
 import com.zwl.service.UserInfoService;
 import com.zwl.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,17 +72,29 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public BuyResult  buy(Product product) {
-//        String productId, String merchantId, String userId
+    public BuyResult buy(Product product) {
+        String phone = product.getPhone();
+        String userId = "";
+        User user = null;
+        //根据phone查询userId
+        if (!StringUtils.isBlank(phone)) {
+            User queryUser = new User();
+            queryUser.setRegisterMobile(phone);
+            user = userService.getOneByParams(queryUser);
+            if (user == null)
+                BSUtil.isTrue(false,"请先进入微信小程序授权并绑定手机号");
+
+            userId = user.getUserId();
+        } else {
+            userId = product.getUserId();
+            user = userService.getByUserId(userId);
+        }
         //查询产品信息
         //生成订单(订单号使用 年月日时分秒+mch_no+userId（自增的Id）)
         //生成订单操作日志流水表
-
         SimpleDateFormat sdf_yMdHm = new SimpleDateFormat("yyyyMMddHHmm");
         String merchantId = product.getMerchantId();
-        String userId = product.getUserId();
         //获取userId的自增Id
-        User user = userService.getByUserId(userId);
         Long userLongId = user.getId();
         Long productId = product.getId();
         Product localProduct = productMapper.selectByPrimaryKey(productId);
@@ -110,7 +126,7 @@ public class ProductServiceImpl implements ProductService {
         order.setMerchantId(merchantId);
         order.setRealName(user.getRealName());
         order.setPhone(user.getRegisterMobile());
-        log.info("订单数据"+order);
+        log.info("订单数据" + order);
         try {
             orderMapper.insertSelective(order);
         } catch (Exception e) {
@@ -122,14 +138,14 @@ public class ProductServiceImpl implements ProductService {
         orderFlow.setOrderStatus(0);
         orderFlow.setActualMoney(price);
         orderFlow.setMoney(price);
-        log.info("订单流水数据"+order);
+        log.info("订单流水数据" + order);
         orderFlowMapper.insertSelective(orderFlow);
-        BuyResult buyResult=new BuyResult();
+        BuyResult buyResult = new BuyResult();
         buyResult.setOrderNo(orderNo);
         buyResult.setTotalFee(price);
-        buyResult.setTotalFeeDesc(price/100+"");
+        buyResult.setTotalFeeDesc(price / 100 + "");
         buyResult.setOpenId(user.getWechatOpenid());
-        log.info("订单完成返回结果"+buyResult);
+        log.info("订单完成返回结果" + buyResult);
         return buyResult;
     }
 

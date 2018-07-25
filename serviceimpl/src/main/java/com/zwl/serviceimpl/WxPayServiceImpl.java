@@ -122,7 +122,7 @@ public class WxPayServiceImpl implements WxPayService {
         log.info("开始微信支付realIp-->" + realIp + "openId-->" + openId + "orderNo-->" + orderNo + "totalFee-->" + totalFee + "appid-->" + appid + "mch_id-->" + mch_id + "wxPayKey->" + wxPayKey);
 
         //此域名必须在商户平台--"产品中心"--"开发配置"中添加
-//        h5_info.setWap_url("https://www.zzw777.com");
+//        h5_info.setWap_url("https://xcx.wegoo.cn");
 //        h5_info.setWap_name("腾讯充值");
 //        sceneInfo.setH5_info(h5_info);
         Calendar cal = Calendar.getInstance();
@@ -141,7 +141,7 @@ public class WxPayServiceImpl implements WxPayService {
                 .setSpbillCreateIp(realIp)
                 .setTradeType("JSAPI")
                 .setOpenId(openId)
-                .setSceneInfo("{\"h5_info\": {\"type\":\"Wap\",\"wap_url\": \"admin.com\",\"wap_name\": \"二师兄超级帅\"}}")
+                .setSceneInfo("{\"h5_info\": {\"type\":\"Wap\",\"wap_url\": \"https://xcx.wegoo.cn\",\"wap_name\": \"二师兄超级帅\"}}")
                 .setAttach("东遥学堂 -By 二师兄超级帅")
                 .setPaternerKey(wxPayKey)
                 .build();
@@ -191,9 +191,10 @@ public class WxPayServiceImpl implements WxPayService {
         WxPayVo wxPayVo = new WxPayVo();
         wxPayVo.setTimeStamp(date);
         wxPayVo.setNonceStr(params.get("nonce_str"));
-        wxPayVo.setPackageStr("prepay_id=" + prepay_id);
+        wxPayVo.setPackageStr(prepay_id);
         wxPayVo.setSignType("MD5");
         wxPayVo.setPaySign(payResult.get("paySign").toString());
+        wxPayVo.setMweb_url(mweb_url);
         return wxPayVo;
     }
 
