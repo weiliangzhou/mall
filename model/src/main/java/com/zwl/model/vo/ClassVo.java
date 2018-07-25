@@ -39,4 +39,9 @@ public class ClassVo {
     private List<ClassVo> children;
     @ApiComment(value = "套课观看要求最低会员等级", sample = "1")
     private Integer requiredMemberLevel;
+    @ApiComment(value = "套课或者节课简介", sample = "<P>反正就是带标签哈哈哈哈")
+    private String content;
+    @ApiComment(value = "套课或者节课不带格式简介", sample = "不该格式哈哈哈哈")
+    private String contentText;
+
 }

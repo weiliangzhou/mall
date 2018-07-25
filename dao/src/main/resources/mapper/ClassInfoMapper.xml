@@ -15,22 +15,23 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="available" property="available" jdbcType="INTEGER" />
+    <result column="content_text" property="contentText" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, class_set_id, category_id, merchant_id, audio_url, logo_url, title, content, is_show,
-    listen_count, create_time, modify_time, available
+    listen_count, create_time, modify_time, available,content_text
   </sql>
   <!--新增-->
   <insert id="insert" parameterType="com.zwl.model.po.ClassInfo" >
     insert into ss_class_info (id, class_set_id, category_id,
       merchant_id, audio_url, logo_url,
       title, content,is_show, listen_count,
-      create_time, modify_time, available
+      create_time, modify_time, available,content_text
       )
     values (#{id,jdbcType=BIGINT}, #{classSetId,jdbcType=INTEGER}, #{categoryId,jdbcType=VARCHAR},
       #{merchantId,jdbcType=VARCHAR}, #{audioUrl,jdbcType=VARCHAR}, #{logoUrl,jdbcType=VARCHAR},
       #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{isShow},#{listenCount,jdbcType=BIGINT},
-      now(), now(), #{available,jdbcType=INTEGER}
+      now(), now(), #{available,jdbcType=INTEGER},#{contentText}
       )
   </insert>
 
@@ -75,6 +76,9 @@
       <if test="available != null" >
         available = #{available,jdbcType=INTEGER}
       </if>
+      <if test="contentText != null" >
+        content_text = #{contentText}
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -116,6 +120,9 @@
       </if>
       <if test="available != null" >
         AND  available = #{available,jdbcType=INTEGER}
+      </if>
+      <if test="contentText != null" >
+        AND content_text = #{contentText}
       </if>
     </where>
   </select>

@@ -13,21 +13,22 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="available" property="available" jdbcType="INTEGER" />
+    <result column="content_text" property="contentText" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, title, banner_url,content, category_id, merchant_id, is_show, required_member_level,
-    create_time, modify_time, available
+    create_time, modify_time, available,content_text
   </sql>
   <!--新增套课程-->
   <insert id="insert" parameterType="com.zwl.model.po.ClassSet" >
     insert into ss_class_set (id, title, banner_url,content,
       category_id, merchant_id, is_show,
       required_member_level, create_time, modify_time,
-      available)
+      available,content_text)
     values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{bannerUrl,jdbcType=VARCHAR},#{content,jdbcType=LONGVARCHAR},
       #{categoryId,jdbcType=INTEGER}, #{merchantId,jdbcType=VARCHAR}, #{isShow,jdbcType=BIT},
       #{requiredMemberLevel,jdbcType=INTEGER}, now(), now(),
-      #{available,jdbcType=INTEGER})
+      #{available,jdbcType=INTEGER}),#{contentText}
   </insert>
   <!--修改指定id的套课程参数-->
   <update id="updateByParams" parameterType="com.zwl.model.po.ClassSet" >
@@ -55,7 +56,10 @@
         available = #{available,jdbcType=INTEGER},
       </if>
       <if test="content != null" >
-        content = #{content,jdbcType=LONGVARCHAR}
+        content = #{content},
+      </if>
+      <if test="contentText != null" >
+        content_text = #{contentText}
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -110,6 +114,9 @@
       <if test="content != null" >
         AND content = #{content,jdbcType=LONGVARCHAR}
       </if>
+      <if test="contentText != null" >
+        AND content_text = #{contentText}
+      </if>
     </where>
   </select>
  <!--根据ClassSetId获取节课程详情-->
@@ -132,6 +139,7 @@
     <result column="merchant_id" property="merchantId" jdbcType="VARCHAR" />
     <result column="class_type" property="classType" />
     <result column="required_member_level" property="requiredMemberLevel" />
+    <result column="content_text" property="contentText" />
   </resultMap>
   <!--查询所有的套课 和单独的节课程lsit-->
   <select id="selectAllClass" parameterType="java.lang.String" resultMap="AllClassResultMap">
@@ -146,7 +154,8 @@
     scs.merchant_id AS merchantId,
     '' as logoUrl,
 	1 AS class_type,
-	scs.required_member_level AS required_member_level
+	scs.required_member_level AS required_member_level,
+	scs.content_text AS content_text
   FROM
     ss_class_category scc,
     ss_class_set scs
@@ -166,7 +175,8 @@
     sci.merchant_id AS merchantId,
     sci.logo_url as  logoUrl,
 	2 AS class_type,
-	null AS required_member_level
+	null AS required_member_level,
+	sci.content_text AS  content_text
   FROM
     ss_class_category scc,
     ss_class_info sci
