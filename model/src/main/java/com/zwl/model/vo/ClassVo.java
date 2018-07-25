@@ -37,4 +37,6 @@ public class ClassVo {
     private String logoUrl;
     //如果是套，返回下属的节课程
     private List<ClassVo> children;
+    @ApiComment(value = "套课观看要求最低会员等级", sample = "1")
+    private Integer requiredMemberLevel;
 }

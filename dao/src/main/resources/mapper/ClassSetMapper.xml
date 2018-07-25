@@ -131,6 +131,7 @@
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="merchant_id" property="merchantId" jdbcType="VARCHAR" />
     <result column="class_type" property="classType" />
+    <result column="required_member_level" property="requiredMemberLevel" />
   </resultMap>
   <!--查询所有的套课 和单独的节课程lsit-->
   <select id="selectAllClass" parameterType="java.lang.String" resultMap="AllClassResultMap">
@@ -144,7 +145,8 @@
 	scs.modify_time AS modify_time,
     scs.merchant_id AS merchantId,
     '' as logoUrl,
-	1 AS class_type
+	1 AS class_type,
+	scs.required_member_level AS required_member_level
   FROM
     ss_class_category scc,
     ss_class_set scs
@@ -163,7 +165,8 @@
 	sci.modify_time AS modify_time,
     sci.merchant_id AS merchantId,
     sci.logo_url as  logoUrl,
-	2 AS class_type
+	2 AS class_type,
+	null AS required_member_level
   FROM
     ss_class_category scc,
     ss_class_info sci
