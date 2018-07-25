@@ -86,7 +86,7 @@ public class WithdrawServiceImpl implements WithdrawService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public synchronized void apply(Withdraw withdraw) {
-        Integer money = withdraw.getMoney();
+        Integer money = withdraw.getMoney()*100;
         String userId = withdraw.getUserId();
         String merchantId = withdraw.getMerchantId();
         Integer balance = userAccountMapper.getBalanceByUserId(userId);
