@@ -42,6 +42,8 @@ public class Information {
     @JSONField(serialize = false)
     @RestPackIgnore
     private Integer available = 1;
+    @ApiComment(value = "套课或者节课不带格式简介", sample = "不该格式哈哈哈哈")
+    private String contentText;
 
 
 }
