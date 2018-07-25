@@ -16,7 +16,6 @@ public class User {
     private String realName;
     private String logoUrl;
     private String registerMobile;
-    private String bindingMobile;
     private String referrer;
     private Integer memberLevel;
     private String levelName;
@@ -24,8 +23,6 @@ public class User {
     private Date registerTime;
     private Date modifyTime;
     private Integer available = 1;
-    //微信formId
-    private String formId;
     //是否购买
     private Integer isBuy;
 }

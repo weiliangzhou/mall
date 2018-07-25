@@ -192,6 +192,8 @@ public class WxPayController {
                     Integer memberLevel = order.getLevel();
                     user.setMemberLevel(memberLevel);
                     user.setLevelName(order.getLevelName());
+                    user.setIsBuy(1);
+                    //更新是否购买
                     log.info("回调支付成功开始更新用户等级" + user);
                     userService.updateUserByUserId(user);
                     //订单支付成功，返佣给推荐人

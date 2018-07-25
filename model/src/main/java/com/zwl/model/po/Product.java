@@ -60,5 +60,8 @@ public class Product {
     public String getPriceDesc() {
         return this.price / 100 + "";
     }
+    @RestPackIgnore
+    @JSONField(serialize = false)
+    private String phone;
 
 }

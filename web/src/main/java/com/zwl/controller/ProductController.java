@@ -43,6 +43,23 @@ public class ProductController {
 //        result = callback + "(" + result +")";
         return JSON.toJSONString(result);
     }
+    @PostMapping("/H5Buy")
+    public String h5Buy(@RequestBody Product product) {
+        Result result = new Result();
+//        Long id = Long.parseLong(request.getParameter("id"));
+//        String userId = request.getParameter("userId");
+//        String merchantId = request.getParameter("merchantId");
+//        Product product = new Product();
+//        product.setId(id);
+//        product.setUserId(userId);
+//        product.setMerchantId(merchantId);
+        BuyResult buyResult = productService.buy(product);
+        result.setData(buyResult);
+//        String result = "{'ret':'true','data':"+JSON.toJSONString(buyResult)+"}";
+        //加上返回参数
+//        result = callback + "(" + result +")";
+        return JSON.toJSONString(result);
+    }
 
 
 }

@@ -96,7 +96,7 @@ public class UserController {
             user.setIsBuy(0);
             user.setMemberLevel(0);
             //公众号对应的openid
-            user.setFormId(userLoginInfoVo.getFormId());
+//            user.setFormId(userLoginInfoVo.getFormId());
             //插入用户表
             userService.addUser(user);
             userInfo.setUserId(userId);
@@ -143,7 +143,7 @@ public class UserController {
         //更新用户表
         User user = new User();
         user.setUserId(userId);
-        user.setBindingMobile(phone);
+        user.setRegisterMobile(phone);
         int count = userService.updateUserByUserId(user);
         if (count == 0)
             BSUtil.isTrue(false, "绑定失败");

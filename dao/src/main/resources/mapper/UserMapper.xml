@@ -136,8 +136,8 @@
             <if test="available != null">
                 available = #{available,jdbcType=INTEGER},
             </if>
-            <if test="bindingMobile != null">
-                register_mobile = #{bindingMobile,jdbcType=VARCHAR},
+            <if test="registerMobile != null">
+                register_mobile = #{registerMobile,jdbcType=VARCHAR},
             </if>
 
         </set>
