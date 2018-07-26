@@ -1,5 +1,6 @@
 package com.zwl.model.po;
 
+import com.terran4j.commons.api2doc.annotations.ApiComment;
 import lombok.Data;
 
 import java.util.Date;
@@ -30,5 +31,7 @@ public class ClassSet {
     private Integer available = 1;
 
     private String content;
+    @ApiComment(value = "不带格式介绍", sample = "不带格式介绍")
+    private String contentText;
 
 }

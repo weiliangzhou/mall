@@ -147,6 +147,13 @@ public class UserController {
         int count = userService.updateUserByUserId(user);
         if (count == 0)
             BSUtil.isTrue(false, "绑定失败");
+        //更新用户详情表
+        UserInfo userInfo=new UserInfo();
+        userInfo.setUserId(userId);
+        userInfo.setRegisterMobile(phone);
+        userInfo.setIsBindMobile(1);
+        userInfoService.modifyByParams(userInfo);
+
         return result;
     }
 
@@ -162,7 +169,7 @@ public class UserController {
     /**
      * 用户信息展示
      */
-    @RequestMapping("/getUserInfoByUserId")
+    @PostMapping("/getUserInfoByUserId")
     public Result getUserInfoByUserId(@RequestBody JSONObject jsonObject) {
         String userId = jsonObject.getString("userId");
         Result result = new Result();
@@ -178,6 +185,8 @@ public class UserController {
         userLoginInfoVo.setLogoUrl(userInfo.getLogoUrl());
         User user = userService.getByUserId(userId);
         userLoginInfoVo.setMemberLevel(user.getMemberLevel());
+        userLoginInfoVo.setIsBindMobile(userInfo.getIsBindMobile()==null?0:1);
+        userLoginInfoVo.setRegisterMobile(userInfo.getRegisterMobile());
         result.setData(userLoginInfoVo);
         return result;
     }

@@ -98,11 +98,11 @@ public class WxController {
     }
 
     @ApiComment("小程序获取用户信息")
-    @RequestMapping(name = "获取用户信息", value = "/wx/user/auth/getUserInfoByUserId", method = RequestMethod.GET)
+    @RequestMapping(name = "获取用户信息", value = "/wx/user/auth/getUserInfoByUserId", method = RequestMethod.POST)
     public UserLoginInfoVo getUserInfoByUserId(@RequestParam("userId") String userId) {
         UserLoginInfoVo userLoginInfoVo = new UserLoginInfoVo();
-        userLoginInfoVo.setNickName("我是一只小小鸟");
-        userLoginInfoVo.setLogoUrl("https://wx.qlogo.cn/mmopen/vi_32/pM9miba3MPibic2cxVdbSZlEneEOKPXTqqwVwGjOwDGLXkwj049fbgPLG4HfPMedjsiaekpITiagEw5P19jIVY0ZGxw/132");
+      /*  userLoginInfoVo.setNickName("我是一只小小鸟");
+        userLoginInfoVo.setLogoUrl("https://wx.qlogo.cn/mmopen/vi_32/pM9miba3MPibic2cxVdbSZlEneEOKPXTqqwVwGjOwDGLXkwj049fbgPLG4HfPMedjsiaekpITiagEw5P19jIVY0ZGxw/132");*/
         return userLoginInfoVo;
     }
 

@@ -36,5 +36,7 @@ public class ClassInfo {
     private Date modifyTime;
     @ApiComment(value = "逻辑删除位", sample = "1")
     private Integer available = 1;
+    @ApiComment(value = "不带格式介绍", sample = "不带格式介绍")
+    private String contentText;
 
 }
