@@ -187,7 +187,7 @@ public class UserController {
         userLoginInfoVo.setMemberLevel(user.getMemberLevel());
         userLoginInfoVo.setIsBindMobile(userInfo.getIsBindMobile()==null?0:1);
         userLoginInfoVo.setRegisterMobile(userInfo.getRegisterMobile());
-        userLoginInfoVo.setIsCertification(userInfo.getIsCertification());
+        userLoginInfoVo.setIsCertification(userInfo.getIsCertification()==null?0:1);
         result.setData(userLoginInfoVo);
         return result;
     }
