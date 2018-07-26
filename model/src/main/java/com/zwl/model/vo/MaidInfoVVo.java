@@ -19,6 +19,8 @@ public class MaidInfoVVo {
     //    剩余可邀请小班名额
     @ApiComment("剩余可邀请小班名额")
     private Integer count;
+    @ApiComment("总共可邀请小班名额")
+    private Integer totalCount;
     @ApiComment(seeClass = MaidInfoVo.class)
     private List<MaidInfoVo> maidInfoVoList;
 }

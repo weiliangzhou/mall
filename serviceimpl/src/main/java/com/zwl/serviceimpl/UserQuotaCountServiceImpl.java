@@ -1,6 +1,7 @@
 package com.zwl.serviceimpl;
 
 import com.zwl.dao.mapper.UserQuotaCountMapper;
+import com.zwl.model.po.UserQuotaCount;
 import com.zwl.service.UserQuotaCountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,11 +19,6 @@ public class UserQuotaCountServiceImpl implements UserQuotaCountService {
     private UserQuotaCountMapper userQuotaCountMapper;
 
     @Override
-    public Integer getCountByUserId(String userId) {
-        return userQuotaCountMapper.getCountByUserId(userId);
-    }
-
-    @Override
     public int updateCountByUserId(String userId) {
         return userQuotaCountMapper.updateCountByUserId(userId);
     }
@@ -30,5 +26,10 @@ public class UserQuotaCountServiceImpl implements UserQuotaCountService {
     @Override
     public int saveOrUpdate(String userId, int i) {
         return userQuotaCountMapper.saveOrUpdate(userId, i);
+    }
+
+    @Override
+    public UserQuotaCount getByUserId(String userId) {
+        return userQuotaCountMapper.getByUserId(userId);
     }
 }

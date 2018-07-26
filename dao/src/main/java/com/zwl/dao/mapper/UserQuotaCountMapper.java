@@ -1,5 +1,6 @@
 package com.zwl.dao.mapper;
 
+import com.zwl.model.po.UserQuotaCount;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -12,4 +13,6 @@ public interface UserQuotaCountMapper {
     int updateCountByUserId(@Param("userId") String userId);
 
     int saveOrUpdate(@Param("userId") String userId, @Param("i") int i);
+
+    UserQuotaCount getByUserId(String userId);
 }

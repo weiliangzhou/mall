@@ -4,21 +4,21 @@
     <resultMap id="BaseResultMap" type="com.zwl.model.po.UserQuotaCount">
         <id column="id" property="id" jdbcType="VARCHAR"/>
         <result column="count" property="count" jdbcType="INTEGER"/>
+        <result column="total_count" property="totalCount" jdbcType="INTEGER"/>
         <result column="type" property="type" jdbcType="INTEGER"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
         <result column="available" property="available" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, count, type, create_time, modify_time, available
+    id, count,total_count, type, create_time, modify_time, available
   </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+    <select id="getByUserId" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
         <include refid="Base_Column_List"/>
         from ss_user_quota_count
-        where id = #{id,jdbcType=VARCHAR}
+        where user_id = #{userId,jdbcType=VARCHAR}
     </select>
-
     <insert id="saveOrUpdate">
         <selectKey keyProperty="count" resultType="int" order="BEFORE">
             select count(*) from ss_user_quota_count where id = #{userId}
@@ -29,7 +29,7 @@
             where id = #{userId}
         </if>
         <if test="count==0">
-            insert into ss_user_quota_count(id,create_time,count,type) values(#{userId},now(),#{i},1)
+            insert into ss_user_quota_count(id,create_time,count,total_count,type) values(#{userId},now(),#{i},#{i},1)
         </if>
     </insert>
 
