@@ -60,10 +60,6 @@ public class ClassSetController {
             if (classVo.getClassType() == 2) {
                 ClassInfoStatistics csi = classInfoStatisticsService.getByClassInfoId(classVo.getId());
                 classVo.setBrowseCount(csi == null ? 0L : csi.getListenCount());
-                //    如果是堂，logo是节的可配置优先级），
-                //    按照发布时间倒序
-                String logoUrl = classInfoService.getLogoUrlByClassSetId(classVo.getId());
-                classVo.setLogoUrl(logoUrl);
             }
         }
 
