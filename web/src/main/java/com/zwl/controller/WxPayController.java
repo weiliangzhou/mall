@@ -42,6 +42,8 @@ public class WxPayController {
     private UserQuotaCountService userQuotaCountService;
     @Autowired
     private MerchantService merchantService;
+    @Autowired
+    private WxAccessTokenService wxAccessTokenService;
     private SimpleDateFormat sdf_yMdHms = new SimpleDateFormat("yyyyMMddHHmmss");
     /**
      * 微信H5 支付
@@ -53,13 +55,19 @@ public class WxPayController {
         if (StrKit.isBlank(realIp)) {
             realIp = "127.0.0.1";
         }
-        String openId = jsonObject.getString("openId");
         String orderNo = jsonObject.getString("orderNo");
         String totalFee = jsonObject.getString("totalFee");
         String merchantId = jsonObject.getString("merchantId");
-//        merchantId 查询 mch_id appid wxPayKey
+        String code = jsonObject.getString("code");
+        //merchantId 查询 mch_id appid wxPayKey
         Merchant merchant = merchantService.getMerchantByMerchantId(merchantId);
         String gzhAppId = merchant.getGzAppId();
+        String gzhKey = merchant.getGzAppKey();
+        String openId = wxAccessTokenService.getGzhOpenId(merchantId, gzhAppId, gzhKey, code);
+        if (StringUtils.isBlank(openId)) {
+            log.error("获取公众号openId错误");
+            BSUtil.isTrue(false, "系统异常，请稍后重试！");
+        }
         String wxPayKey = merchant.getWxPayKey();
         WxPayVo wxPayVo = wxPayService.pay(realIp, openId, orderNo, totalFee, gzhAppId, merchantId, wxPayKey);
         Result result_return = new Result();

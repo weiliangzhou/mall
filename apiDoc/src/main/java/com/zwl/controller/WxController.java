@@ -236,13 +236,7 @@ public class WxController {
         Result result = new Result();
         return result;
     }
-    @ApiComment("H5购买获取公众号openid")
-    @RequestMapping(name = "H5购买获取公众openid",
-            value = "/gzh/getGzhOpenId", method = RequestMethod.POST)
-    public Result getGzhOpenId(@ApiComment("userId") String userId) {
-        Result result = new Result();
-        return result;
-    }
+
 
 
     @ApiComment("获取可用余额")
