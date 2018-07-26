@@ -244,7 +244,6 @@ public class WxPayController {
                                     log.info("邀请小班名额成功-1,成功分佣");
                                 }
                             }
-
                             //在不是试听课的时候，查询当前用户有效会员等级并且小于等于推荐人的有效会员等级才可以返佣
 //                            Integer memberLevel=userService.getMemberLevel(userId);
                             Integer referrerLevel = userService.getMemberLevel(referrerId);
@@ -306,10 +305,11 @@ public class WxPayController {
 //                    存在gzOpenId为null 7天失效
                     if (!StringUtils.isBlank(gzOpenId) ) {
                         log.info("开始发送购买模版gzOpenId"+gzOpenId);
-                        String appSecret = merchant.getAppSecret();
+                        String gzhAppId=merchant.getGzAppId();
+                        String gzhKey = merchant.getGzAppKey();
                         String buyTemplateId = merchant.getBuyTemplateId();
                         //发送订单购买公众号提醒
-                        wxSenderService.sendBuyMsg(gzOpenId, productName, Integer.parseInt(total_fee), merchantId, appid, appSecret, buyTemplateId);
+                        wxSenderService.sendBuyMsg(gzOpenId, productName, Integer.parseInt(total_fee), merchantId, gzhAppId, gzhKey, buyTemplateId);
                     }
 
                     //发送通知等
