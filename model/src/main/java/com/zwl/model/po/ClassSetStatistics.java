@@ -9,7 +9,7 @@ public class ClassSetStatistics {
 
     private Long classSetId;
 
-    private Integer browseCount;
+    private Long browseCount;
 
     private Integer shareCount;
 

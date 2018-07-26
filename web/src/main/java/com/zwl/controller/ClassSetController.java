@@ -5,12 +5,13 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.po.ClassInfo;
+import com.zwl.model.po.ClassInfoStatistics;
 import com.zwl.model.po.ClassSet;
 import com.zwl.model.po.ClassSetStatistics;
-import com.zwl.model.vo.ClassSetItemVo;
 import com.zwl.model.vo.ClassVo;
 import com.zwl.model.vo.PageClassVo;
 import com.zwl.service.ClassInfoService;
+import com.zwl.service.ClassInfoStatisticsService;
 import com.zwl.service.ClassSetService;
 import com.zwl.service.ClassSetStatisticsService;
 import com.zwl.util.CheckUtil;
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,6 +34,8 @@ public class ClassSetController {
     private ClassSetService classSetService;
     @Autowired
     private ClassSetStatisticsService classSetStatisticsService;
+    @Autowired
+    private ClassInfoStatisticsService classInfoStatisticsService;
     @Autowired
     private ClassInfoService classInfoService;
 
@@ -49,7 +51,15 @@ public class ClassSetController {
                 ) {
             if (classVo.getClassType() == 1) {
                 ClassSetStatistics css = classSetStatisticsService.getByClassSetId(classVo.getId());
-                classVo.setBrowseCount(css == null ? 0 : css.getBrowseCount());
+                classVo.setBrowseCount(css == null ? 0L : css.getBrowseCount());
+                //    如果是堂，logo是节的可配置优先级），
+                //    按照发布时间倒序
+                String logoUrl = classInfoService.getLogoUrlByClassSetId(classVo.getId());
+                classVo.setLogoUrl(logoUrl);
+            }
+            if (classVo.getClassType() == 2) {
+                ClassInfoStatistics csi = classInfoStatisticsService.getByClassInfoId(classVo.getId());
+                classVo.setBrowseCount(csi == null ? 0L : csi.getListenCount());
                 //    如果是堂，logo是节的可配置优先级），
                 //    按照发布时间倒序
                 String logoUrl = classInfoService.getLogoUrlByClassSetId(classVo.getId());
@@ -78,7 +88,7 @@ public class ClassSetController {
         if (StringUtils.isEmpty(classSetStatistics)) {
             ClassSetStatistics temp = new ClassSetStatistics();
             temp.setClassSetId(classSetId);
-            temp.setBrowseCount(1);
+            temp.setBrowseCount(1L);
             classSetStatisticsService.add(temp);
         } else {
             classSetStatisticsService.setpAddBrowseCount(classSetId);
