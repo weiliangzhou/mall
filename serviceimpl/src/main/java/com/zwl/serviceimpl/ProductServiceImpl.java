@@ -73,6 +73,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public BuyResult buy(Product product) {
+        log.info("开始生成订单================================>"+product);
         String phone = product.getPhone();
         String userId = "";
         User user = null;
@@ -128,6 +129,7 @@ public class ProductServiceImpl implements ProductService {
         order.setMerchantId(merchantId);
         order.setRealName(user.getRealName());
         order.setPhone(user.getRegisterMobile());
+        order.setOrderStatus(0);
         log.info("订单数据" + order);
         try {
             orderMapper.insertSelective(order);

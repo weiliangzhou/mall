@@ -75,24 +75,30 @@ public class MsgSenderServiceImpl implements MsgSenderService {
     }
 
     public static void main(String[] args) throws UnsupportedEncodingException {
-        StringBuffer sb = new StringBuffer(MsgSenderConstants.URL);
-        sb.append("un=" + MsgSenderConstants.UN);
-        sb.append("&pw=" + MsgSenderConstants.PW);
+//        StringBuffer sb = new StringBuffer(MsgSenderConstants.URL);
+//        sb.append("un=" + MsgSenderConstants.UN);
+//        sb.append("&pw=" + MsgSenderConstants.PW);
+//        Random random = new Random();
+//        int msgCode = random.nextInt(999999);
+//        String msg = MsgSenderConstants.TEMPLATE + msgCode;
+//        sb.append("&phone=" + "17682333183");
+//        sb.append("&msg=" + URLEncoder.encode(msg + "", "UTF-8"));
+//        sb.append("&rd=0");
+//        log.info("开始发送短信" + sb.toString());
+//        String result = HttpsUtils.sendGet(sb.toString(), null);
+//        log.info("结束发送短信" + result);
+//        String[] ss = result.split(",");
+//        if ("0".equals(ss[1].substring(0, 1)))
+//            log.info("发送成功");
+//        else
+//            log.error("短信发送失败" + sb.toString() + "错误原因" + ss[1]);
+
         Random random = new Random();
         int msgCode = random.nextInt(999999);
         String msg = MsgSenderConstants.TEMPLATE + msgCode;
-        sb.append("&phone=" + "17682333183");
-        sb.append("&msg=" + URLEncoder.encode(msg + "", "UTF-8"));
-        sb.append("&rd=0");
-        log.info("开始发送短信" + sb.toString());
-        String result = HttpsUtils.sendGet(sb.toString(), null);
-        log.info("结束发送短信" + result);
-        String[] ss = result.split(",");
-        if ("0".equals(ss[1].substring(0, 1)))
-            log.info("发送成功");
-        else
-            log.error("短信发送失败" + sb.toString() + "错误原因" + ss[1]);
+        System.out.println(URLEncoder.encode(msg + "", "UTF-8"));
 
     }
+
 
 }

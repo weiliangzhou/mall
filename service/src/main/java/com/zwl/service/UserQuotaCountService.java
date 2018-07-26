@@ -1,5 +1,7 @@
 package com.zwl.service;
 
+import com.zwl.model.po.UserQuotaCount;
+
 /**
  * @author 二师兄超级帅
  * @Title: UserQuotaCountService
@@ -8,9 +10,7 @@ package com.zwl.service;
  * @date 2018/7/1415:41
  */
 public interface UserQuotaCountService {
-    Integer getCountByUserId(String referrerId);
-
     int updateCountByUserId(String referrerId);
-
     int saveOrUpdate(String userId, int i);
+    UserQuotaCount getByUserId(String userId);
 }
