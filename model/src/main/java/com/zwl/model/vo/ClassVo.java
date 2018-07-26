@@ -43,5 +43,7 @@ public class ClassVo {
     private String content;
     @ApiComment(value = "套课或者节课不带格式简介", sample = "不该格式哈哈哈哈")
     private String contentText;
+    @ApiComment(value = "套课下属节课程数", sample = "3")
+    private Integer childrenSize;
 
 }

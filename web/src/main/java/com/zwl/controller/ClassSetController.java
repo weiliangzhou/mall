@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.zwl.model.baseresult.Result;
+import com.zwl.model.po.ClassInfo;
 import com.zwl.model.po.ClassSet;
 import com.zwl.model.po.ClassSetStatistics;
 import com.zwl.model.vo.ClassSetItemVo;
@@ -12,6 +13,7 @@ import com.zwl.model.vo.PageClassVo;
 import com.zwl.service.ClassInfoService;
 import com.zwl.service.ClassSetService;
 import com.zwl.service.ClassSetStatisticsService;
+import com.zwl.util.CheckUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -91,6 +94,32 @@ public class ClassSetController {
         Result result = new Result();
         Long id = jsonObject.getLong("id");
         ClassSet classSet=classSetService.getById(id);
+        ClassVo classVo=new ClassVo();
+        classVo.setId(classSet.getId());
+        classVo.setTitle(classSet.getTitle());
+        classVo.setContent(classSet.getContent());
+        //浏览人数
+        ClassSetStatistics css = classSetStatisticsService.getByClassSetId(id);
+        classVo.setBrowseCount(css.getBrowseCount()==null?0:css.getBrowseCount());
+        List<ClassInfo> classInfoList = classInfoService.getByClassSetId(id);
+        classVo.setChildrenSize(CheckUtil.isEmpty(classInfoList)?0:classInfoList.size());
+
+        //下属的节课程
+       /* List<ClassInfo> classInfoList = classInfoService.getByClassSetId(id);
+        List<ClassVo> children =new ArrayList<>();
+        for (ClassInfo classInfo: classInfoList
+                ) {
+            ClassVo classVoTemp = new ClassVo();
+            classVoTemp.setId(classInfo.getId());
+            classVoTemp.setTitle(classInfo.getTitle());
+            classVoTemp.setCreateTime(classInfo.getCreateTime());
+            classVoTemp.setModifyTime(classInfo.getModifyTime());
+            classVoTemp.setCategoryTitle(c.getCategoryTitle());
+            children.add(classVoTemp);
+        }
+        classVo.setChildren(children);
+*/
+
         result.setData(classSet);
         return result;
     }
