@@ -24,4 +24,6 @@ public interface UserAccountMapper {
 
     @Update("update ss_user_account set balance= balance-#{money} where user_id=#{userId}")
     int subBanlanceByUserId(@Param("userId") String userId, @Param("money") Integer money);
+
+    UserAccount getUserAccountByUserId(String userId);
 }

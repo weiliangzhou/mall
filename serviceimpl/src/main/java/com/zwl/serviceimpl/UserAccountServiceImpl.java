@@ -1,6 +1,7 @@
 package com.zwl.serviceimpl;
 
 import com.zwl.dao.mapper.UserAccountMapper;
+import com.zwl.model.po.UserAccount;
 import com.zwl.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,5 +26,15 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Override
     public Integer getBalanceByUserId(String userId) {
         return userAccountMapper.getBalanceByUserId(userId);
+    }
+
+    @Override
+    public UserAccount getUserAccountByUserId(String userId) {
+        return userAccountMapper.getUserAccountByUserId(userId);
+    }
+
+    @Override
+    public int save(UserAccount userAccount) {
+        return userAccountMapper.insertSelective(userAccount);
     }
 }

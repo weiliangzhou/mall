@@ -10,7 +10,7 @@ public class UserAccount {
 
     private String userId;
 
-    private Double balance;
+    private Integer balance;
 
     private Date createTime;
 

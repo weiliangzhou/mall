@@ -1,110 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zwl.dao.mapper.UserAccountMapper" >
-  <resultMap id="BaseResultMap" type="com.zwl.model.po.UserAccount" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="user_id" property="userId" jdbcType="VARCHAR" />
-    <result column="balance" property="balance" jdbcType="INTEGER" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="available" property="available" jdbcType="INTEGER" />
-    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
-  </resultMap>
-  <sql id="Base_Column_List" >
+<mapper namespace="com.zwl.dao.mapper.UserAccountMapper">
+    <resultMap id="BaseResultMap" type="com.zwl.model.po.UserAccount">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="user_id" property="userId" jdbcType="VARCHAR"/>
+        <result column="balance" property="balance" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="available" property="available" jdbcType="INTEGER"/>
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
     id, user_id, balance, create_time, available, modify_time
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    from ss_user_account
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from ss_user_account
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.zwl.model.po.UserAccount" >
-    insert into ss_user_account (id, user_id, balance, 
-      create_time, available, modify_time
-      )
-    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=VARCHAR}, #{balance,jdbcType=INTEGER},
-      #{createTime,jdbcType=TIMESTAMP}, #{available,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="com.zwl.model.po.UserAccount" >
-    insert into ss_user_account
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="userId != null" >
-        user_id,
-      </if>
-      <if test="balance != null" >
-        balance,
-      </if>
-      <if test="createTime != null" >
-        create_time,
-      </if>
-      <if test="available != null" >
-        available,
-      </if>
-      <if test="modifyTime != null" >
-        modify_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="userId != null" >
-        #{userId,jdbcType=VARCHAR},
-      </if>
-      <if test="balance != null" >
-        #{balance,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null" >
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="available != null" >
-        #{available,jdbcType=INTEGER},
-      </if>
-      <if test="modifyTime != null" >
-        #{modifyTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zwl.model.po.UserAccount" >
-    update ss_user_account
-    <set >
-      <if test="userId != null" >
-        user_id = #{userId,jdbcType=VARCHAR},
-      </if>
-      <if test="balance != null" >
-        balance = #{balance,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null" >
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="available != null" >
-        available = #{available,jdbcType=INTEGER},
-      </if>
-      <if test="modifyTime != null" >
-        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.zwl.model.po.UserAccount" >
-    update ss_user_account
-    set user_id = #{userId,jdbcType=VARCHAR},
-      balance = #{balance,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      available = #{available,jdbcType=INTEGER},
-      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-
-  <select id="getBalanceByUserId" parameterType="java.lang.String" resultType="int">
+    <select id="getUserAccountByUserId" resultMap="BaseResultMap" parameterType="string">
+        select
+        <include refid="Base_Column_List"/>
+        from ss_user_account
+        where user_id = #{userId,jdbcType=BIGINT}
+    </select>
+    <select id="getBalanceByUserId" parameterType="java.lang.String" resultType="int">
     select balance from ss_user_account where available=1 and user_id =#{userId}
   </select>
 

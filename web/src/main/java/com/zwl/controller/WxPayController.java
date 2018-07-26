@@ -286,7 +286,15 @@ public class WxPayController {
                                 BSUtil.isTrue(false, "分佣失败");
                             log.info("回调支付成功，结束分佣");
                             //分佣完成之后，更新用户账户表ss_user_account
+                            //存在未开户 直接开户
                             log.info("回调支付成功，更新用户余额userId" + userId + "--->" + "maidMoney--->" + maidMoney);
+                            UserAccount userAccount=userAccountService.getUserAccountByUserId(referrerId);
+                            if (userAccount == null) {
+                                UserAccount userAccount_t=new UserAccount();
+                                userAccount_t.setUserId(referrerId);
+                                userAccount_t.setBalance(maidMoney);
+                                userAccountService.save(userAccount_t);
+                            }else
                             userAccountService.addBanlanceByUserId(referrerId, maidMoney);
                             log.info("回调支付成功，更新用户余额成功");
 

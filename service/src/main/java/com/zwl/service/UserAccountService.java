@@ -1,5 +1,7 @@
 package com.zwl.service;
 
+import com.zwl.model.po.UserAccount;
+
 /**
  * @author 二师兄超级帅
  * @Title: UserAccount
@@ -11,4 +13,8 @@ public interface UserAccountService {
     void addBanlanceByUserId(String userId, Integer newMaidMoney);
 
     Integer getBalanceByUserId(String userId);
+
+    UserAccount getUserAccountByUserId(String referrerId);
+
+    int save(UserAccount userAccount_t);
 }
