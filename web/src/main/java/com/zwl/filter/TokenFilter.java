@@ -64,7 +64,12 @@ public class TokenFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
+        //发送验证码
 
+        if (requestURL.contains("/wx/user/sendRegisterCode")) {
+            chain.doFilter(request, response);
+            return;
+        }
         //套课程
         if (requestURL.contains("/classset/getPageAllClass")||requestURL.contains("/classset/setpAddBrowseCount")) {
             chain.doFilter(request, response);

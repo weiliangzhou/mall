@@ -4,6 +4,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.terran4j.commons.api2doc.annotations.ApiComment;
 import com.terran4j.commons.restpack.RestPackIgnore;
 import com.zwl.model.groups.Buy;
+import com.zwl.model.groups.H5Buy;
 import lombok.Data;
 import org.apache.ibatis.annotations.Update;
 
@@ -13,7 +14,7 @@ import java.util.Date;
 
 @Data
 public class Product {
-    @NotNull(message = "产品ID不能为空", groups = {Update.class, Buy.class})
+    @NotNull(message = "产品ID不能为空", groups = {Update.class, Buy.class,H5Buy.class})
     @ApiComment(value = "产品ID", sample = "1")
     private Long id;
     @ApiComment(value = "会员等级", sample = "1")
@@ -34,7 +35,7 @@ public class Product {
     @ApiComment(value = "产品价格", sample = "99元为单位")
     private Integer price;
     private String priceDesc;
-    @NotBlank(message = "商户号不能为空", groups = {Buy.class})
+    @NotBlank(message = "商户号不能为空", groups = {Buy.class,H5Buy.class})
     @JSONField(serialize = false)
     @RestPackIgnore
     private String merchantId;
@@ -62,6 +63,12 @@ public class Product {
     }
     @RestPackIgnore
     @JSONField(serialize = false)
+    @NotBlank(message = "微信H5支付终端ip不能为空",groups = {H5Buy.class})
     private String phone;
+//    验证码
+    @RestPackIgnore
+    @JSONField(serialize = false)
+    @NotBlank(message = "微信H5支付终端ip不能为空",groups = {H5Buy.class})
+    private String code;
 
 }
