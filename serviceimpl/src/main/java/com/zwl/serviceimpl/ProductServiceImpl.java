@@ -4,12 +4,10 @@ import com.zwl.dao.mapper.OrderFlowMapper;
 import com.zwl.dao.mapper.OrderMapper;
 import com.zwl.dao.mapper.ProductMapper;
 import com.zwl.model.exception.BSUtil;
-import com.zwl.model.po.Order;
-import com.zwl.model.po.OrderFlow;
-import com.zwl.model.po.Product;
-import com.zwl.model.po.User;
+import com.zwl.model.po.*;
 import com.zwl.model.vo.BuyResult;
 import com.zwl.model.vo.ProductItemVo;
+import com.zwl.service.MerchantService;
 import com.zwl.service.ProductService;
 import com.zwl.service.UserInfoService;
 import com.zwl.service.UserService;
@@ -44,6 +42,8 @@ public class ProductServiceImpl implements ProductService {
     private UserService userService;
     @Autowired
     private UserInfoService userInfoService;
+    @Autowired
+    private MerchantService merchantService;
 
     @Override
     public List getProductList(String merchantId) {
@@ -89,6 +89,8 @@ public class ProductServiceImpl implements ProductService {
             userId = product.getUserId();
             user = userService.getByUserId(userId);
         }
+        Merchant merchant=merchantService.getMerchantByMerchantId(user.getMerchantId());
+        String appid=merchant.getAppId();
         //查询产品信息
         //生成订单(订单号使用 年月日时分秒+mch_no+userId（自增的Id）)
         //生成订单操作日志流水表
@@ -145,6 +147,7 @@ public class ProductServiceImpl implements ProductService {
         buyResult.setTotalFee(price);
         buyResult.setTotalFeeDesc(price / 100 + "");
         buyResult.setOpenId(user.getWechatOpenid());
+        buyResult.setMerchantId(merchantId);
         log.info("订单完成返回结果" + buyResult);
         return buyResult;
     }

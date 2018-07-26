@@ -59,9 +59,9 @@ public class WxPayController {
         String merchantId = jsonObject.getString("merchantId");
 //        merchantId 查询 mch_id appid wxPayKey
         Merchant merchant = merchantService.getMerchantByMerchantId(merchantId);
-        String appid = merchant.getAppId();
+        String gzhAppId = merchant.getGzAppId();
         String wxPayKey = merchant.getWxPayKey();
-        WxPayVo wxPayVo = wxPayService.pay(realIp, openId, orderNo, totalFee, appid, merchantId, wxPayKey);
+        WxPayVo wxPayVo = wxPayService.pay(realIp, openId, orderNo, totalFee, gzhAppId, merchantId, wxPayKey);
         Result result_return = new Result();
         result_return.setData(wxPayVo);
         return JSON.toJSONString(result_return);

@@ -17,4 +17,5 @@ public class WxPayVo {
     private String paySign;
     private String signType;
     private String mweb_url;
+    private String appid;
 }

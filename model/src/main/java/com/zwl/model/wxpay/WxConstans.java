@@ -25,6 +25,7 @@ public class WxConstans {
 //    public static final String PARTNERKEY = "612aa0e07599468997974318e654509f";
     //获取公众号全局授权，有效期为2小时，存入redis，如果redis未找到则重新发起请求
     public static final String ACCESS_TOKEN = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential";
+    public static final String GET_GZH_OPENID = "https://api.weixin.qq.com/sns/oauth2/access_token?grant_type=authorization_code";
     //发送消息模版
     public static final String SEND_BUG_MSG = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=";
     //模版ID
