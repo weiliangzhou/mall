@@ -120,7 +120,7 @@ public class ClassSetController {
         classVo.setChildren(children);
 */
 
-        result.setData(classSet);
+        result.setData(classVo);
         return result;
     }
 
