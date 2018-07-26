@@ -31,6 +31,14 @@ public class WxController {
         return buyResult;
     }
 
+    @ApiComment("H5购买")
+    @RequestMapping(name = "H5购买",
+            value = "/wx/product/H5buy", method = RequestMethod.POST)
+    public BuyResult H5buy(@ApiComment("产品id") String id, @ApiComment("微信商户号") String merchantId, @ApiComment("phone") String phone, @ApiComment("code") String code) {
+        BuyResult buyResult = new BuyResult();
+        return buyResult;
+    }
+
     @ApiComment("支付")
     @RequestMapping(name = "支付",
             value = "/wx/pay/auth/pay.do", method = RequestMethod.POST)
@@ -236,13 +244,7 @@ public class WxController {
         Result result = new Result();
         return result;
     }
-    @ApiComment("H5购买获取公众号openid")
-    @RequestMapping(name = "H5购买获取公众openid",
-            value = "/gzh/getGzhOpenId", method = RequestMethod.POST)
-    public Result getGzhOpenId(@ApiComment("userId") String userId) {
-        Result result = new Result();
-        return result;
-    }
+
 
 
     @ApiComment("获取可用余额")
@@ -252,6 +254,8 @@ public class WxController {
         Result result = new Result();
         return result;
     }
+
+
 
 
 }
