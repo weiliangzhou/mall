@@ -57,6 +57,13 @@ public interface ClassSetMapper {
      * @return
      */
     List<ClassVo> selectAllClass(@Param("merchantId") String merchantId,@Param("title") String title);
+    /**
+     * 获取所有的课程列表
+     * 包括套课程 和 单独的节课程
+     * @param merchantId
+     * @return
+     */
+    List<ClassVo> selectAllClassOrderById(@Param("merchantId") String merchantId);
     @Select("select id ,title from ss_class_set where merchant_id=#{merchantId} and category_id= #{categoryId} and available=1")
     List<ClassSetItemVo> getClassSetItemsList(@Param("categoryId")Integer categoryId, @Param("merchantId")String merchantId);
 
