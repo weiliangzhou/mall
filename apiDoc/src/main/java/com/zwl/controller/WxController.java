@@ -106,6 +106,14 @@ public class WxController {
         return userLoginInfoVo;
     }
 
+    @ApiComment("分享绑定上下级关系")
+    @RequestMapping(name = "分享绑定上下级关系",
+            value = "/wx/user/shareRelation", method = RequestMethod.POST)
+    public Result shareRelation(@ApiComment("推荐人userid") String referrer,  @ApiComment("userId") String userId) {
+        Result result = new Result();
+        return result;
+    }
+
     @ApiComment(value = "获取资讯列表", seeClass = Information.class)
     @RequestMapping(name = "获取资讯列表",
             value = "/wx/information/getInformationList", method = RequestMethod.POST)

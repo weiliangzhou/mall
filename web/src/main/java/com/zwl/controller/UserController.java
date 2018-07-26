@@ -181,5 +181,26 @@ public class UserController {
         result.setData(userLoginInfoVo);
         return result;
     }
+    /**
+     * 分享绑定上下级关系
+     */
+    @PostMapping("/shareRelation")
+    public Result shareRelation(@RequestBody JSONObject jsonObject){
+        String referrer= jsonObject.getString("referrer");
+        String userId = jsonObject.getString("userId");
+        String merchantId= jsonObject.getString("merchantId");
+        Result result = new Result();
+        User userQuery = userService.getByUserId(userId);
 
+        //如果用户还未购买，则可以更新推荐人
+        if((userQuery.getIsBuy()==null ||userQuery.getIsBuy()==0) && CheckUtil.isNotEmpty(referrer)){
+            User user = new User();
+            user.setUserId(userQuery.getUserId());
+            //推荐人userId
+            user.setReferrer(referrer);
+            userService.updateUserByUserId(user);
+        }
+
+        return result;
+    }
 }

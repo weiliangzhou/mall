@@ -30,7 +30,7 @@
     values ( #{userId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR},
       #{nickName,jdbcType=VARCHAR}, #{wechatMobile,jdbcType=VARCHAR}, #{referrer,jdbcType=VARCHAR}, 
       #{logoUrl,jdbcType=VARCHAR}, #{memberLevel,jdbcType=INTEGER}, #{isCertification,jdbcType=INTEGER}, 
-      #{isBindMobile,jdbcType=INTEGER}, now(), #{modifyTime,jdbcType=TIMESTAMP},
+      #{isBindMobile,jdbcType=INTEGER}, #{registerMobile,jdbcType=INTEGER}, now(),
       now(), #{available,jdbcType=INTEGER})
   </insert>
   <!--根据参数来更新-->
