@@ -173,9 +173,9 @@ public class WxController {
     @ApiComment("根据id查询套课程")
     @RequestMapping(name = "根据id查询套课程",
             value = "/wx/classset/getById", method = RequestMethod.POST)
-    public ClassSet getById(@ApiComment("id") Long id) {
-        ClassSet classSet = new ClassSet();
-        return classSet;
+    public ClassVo getById(@ApiComment("id") Long id) {
+        ClassVo classVo = new ClassVo();
+        return classVo;
     }
 
     @ApiComment("获取套课程下的节课程列表")

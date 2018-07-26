@@ -104,6 +104,7 @@ public class ClassSetController {
         classVo.setId(classSet.getId());
         classVo.setTitle(classSet.getTitle());
         classVo.setContent(classSet.getContent());
+        classVo.setLogoUrl(classSet.getBannerUrl());
         //浏览人数
         ClassSetStatistics css = classSetStatisticsService.getByClassSetId(id);
         classVo.setBrowseCount(css.getBrowseCount()==null?0:css.getBrowseCount());
