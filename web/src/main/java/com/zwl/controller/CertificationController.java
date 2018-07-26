@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.baseresult.ResultCodeEnum;
 import com.zwl.model.po.UserCertification;
+import com.zwl.model.po.UserInfo;
 import com.zwl.service.CertificationService;
+import com.zwl.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class CertificationController {
     @Autowired
     private CertificationService certificationService;
+    @Autowired
+    private UserInfoService userInfoService;
 
     /**
      * 用户提交实名认证
@@ -70,6 +74,13 @@ public class CertificationController {
     public Result modifyById(@RequestBody UserCertification userCertification) {
         Result result = new Result();
         certificationService.modifyById(userCertification);
+        //如果实名认证通过，则更新用户详情表
+        if(userCertification.getStatus()==2){
+            UserInfo userInfo = new UserInfo();
+            userInfo.setUserId(userCertification.getUserId());
+            userInfo.setIsCertification(1);
+            userInfoService.modifyByParams(userInfo);
+        }
         return result;
     }
 

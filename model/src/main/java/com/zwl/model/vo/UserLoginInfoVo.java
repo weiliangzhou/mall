@@ -33,4 +33,6 @@ public class UserLoginInfoVo {
     private Integer isBindMobile;
     @ApiComment(value = "用户绑定的手机号", sample = "13618452996")
     private String registerMobile;
+    @ApiComment(value = "是否实名认证过", sample = "1")
+    private Integer isCertification;
 }
