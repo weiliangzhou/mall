@@ -29,4 +29,8 @@ public class UserLoginInfoVo {
     private Integer memberLevel;
     @ApiComment(value = "公众号对应的openid", sample = "1kkjhe321")
     private String formId;
+    @ApiComment(value = "是否绑定手机号", sample = "1")
+    private Integer isBindMobile;
+    @ApiComment(value = "用户绑定的手机号", sample = "13618452996")
+    private String registerMobile;
 }
