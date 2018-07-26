@@ -10,6 +10,7 @@ import com.zwl.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,7 +45,10 @@ public class WxPayController {
     private MerchantService merchantService;
     @Autowired
     private WxAccessTokenService wxAccessTokenService;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
     private SimpleDateFormat sdf_yMdHms = new SimpleDateFormat("yyyyMMddHHmmss");
+
     /**
      * 微信H5 支付
      * 注意：必须再web页面中发起支付且域名已添加到开发配置中
@@ -68,6 +72,8 @@ public class WxPayController {
             log.error("获取公众号openId错误");
             BSUtil.isTrue(false, "系统异常，请稍后重试！");
         }
+
+        log.info(openId);
         String wxPayKey = merchant.getWxPayKey();
         WxPayVo wxPayVo = wxPayService.pay(realIp, openId, orderNo, totalFee, gzhAppId, merchantId, wxPayKey);
         Result result_return = new Result();
@@ -162,7 +168,7 @@ public class WxPayController {
                 if (Integer.parseInt(total_fee) < orderActualMoney_temp)
                     BSUtil.isTrue(false, "支付失败");
                 if (null == status || 1 != status) {
-                    Order order_t=new Order();
+                    Order order_t = new Order();
                     order_t.setOrderNo(out_trade_no);
                     order_t.setPaymentTime(sdf_yMdHms.parse(time_end));
                     order_t.setPaymentNo(transaction_id);
@@ -287,12 +293,17 @@ public class WxPayController {
                         }
                     }
 //                    根据商户号 获取购买模版 formId ,appSecret
-//                    Merchant merchant = merchantService.getMerchantByMerchantId(merchantId);
-//                    String formId = "";
-//                    String appSecret = merchant.getAppSecret();
-//                    String buyTemplateId = merchant.getBuyTemplateId();
-                    //发送订单购买公众号提醒
-//                    wxSenderService.sendBuyMsg(formId, productName, Integer.parseInt(total_fee), merchantId, appid, appSecret, buyTemplateId);
+                    log.info("开始发送购买模版");
+                    String gzOpenId = stringRedisTemplate.boundValueOps("formId_" + userId).get();
+//                    存在gzOpenId为null 7天失效
+                    if (!StringUtils.isBlank(gzOpenId) ) {
+                        log.info("开始发送购买模版gzOpenId"+gzOpenId);
+                        String appSecret = merchant.getAppSecret();
+                        String buyTemplateId = merchant.getBuyTemplateId();
+                        //发送订单购买公众号提醒
+                        wxSenderService.sendBuyMsg(gzOpenId, productName, Integer.parseInt(total_fee), merchantId, appid, appSecret, buyTemplateId);
+                    }
+
                     //发送通知等
                     Map<String, String> xml = new HashMap<String, String>();
                     xml.put("return_code", "SUCCESS");

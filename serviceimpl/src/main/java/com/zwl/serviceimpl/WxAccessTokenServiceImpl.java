@@ -5,6 +5,7 @@ import com.zwl.model.wxpay.WxConstans;
 import com.zwl.service.WxAccessTokenService;
 import com.zwl.util.HttpsUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -23,28 +24,33 @@ import java.util.concurrent.TimeUnit;
 public class WxAccessTokenServiceImpl implements WxAccessTokenService {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+
     @Override
-    public String getAccessToken(String merchantId,String gzAppId,String gzAppKey) {
+    public String getAccessToken(String merchantId, String gzAppId, String gzAppKey) {
         //先查询redis是否存在accessToken
         //如果存在则直接返回
         //否则调用api接口获取
-//        access_token的有效期目前为2个小时
-        String accessToken = stringRedisTemplate.boundValueOps("accessToken_"+merchantId).get();
-        if (accessToken == null) {
-            String result = HttpsUtils.sendGet(WxConstans.ACCESS_TOKEN+"&appid="+gzAppId+"&secret="+gzAppKey,null);
-            JSONObject jsonObject=JSONObject.parseObject(result);
-            accessToken=jsonObject.getString("access_token");
-            stringRedisTemplate.boundValueOps("accessToken_"+merchantId).set(accessToken, 2, TimeUnit.HOURS);
+        //access_token的有效期目前为2个小时
+        String accessToken = stringRedisTemplate.boundValueOps("accessToken_" + merchantId).get();
+        if (StringUtils.isBlank(accessToken)) {
+            String result = HttpsUtils.sendGet(WxConstans.ACCESS_TOKEN + "&appid=" + gzAppId + "&secret=" + gzAppKey, null);
+            JSONObject jsonObject = JSONObject.parseObject(result);
+            accessToken = jsonObject.getString("access_token");
+            stringRedisTemplate.boundValueOps("accessToken_" + merchantId).set(accessToken, 2, TimeUnit.HOURS);
         }
         return accessToken;
     }
 
     @Override
     public String getGzhOpenId(String merchantId, String gzAppId, String gzAppKey, String code) {
-        String result = HttpsUtils.sendGet(WxConstans.ACCESS_TOKEN+"&appid="+gzAppId+"&secret="+gzAppKey+"&code="+code,null);
-        log.info(result);
-        JSONObject jsonObject=JSONObject.parseObject(result);
-        String openid=jsonObject.getString("openid");
-        return openid;
+//        String gzhOpenId = stringRedisTemplate.boundValueOps("gzhOpenId_"+code).get();
+//        if (StringUtils.isBlank(gzhOpenId)) {
+        String result = HttpsUtils.sendGet(WxConstans.GET_GZH_OPENID + "&appid=" + gzAppId + "&secret=" + gzAppKey + "&code=" + code, null);
+        log.info("获取公众号OpenId"+result);
+        JSONObject jsonObject = JSONObject.parseObject(result);
+        String gzhOpenId = jsonObject.getString("openid");
+//            stringRedisTemplate.boundValueOps("gzhOpenId_"+code).set(gzhOpenId, 5, TimeUnit.MINUTES);
+//        }
+        return gzhOpenId;
     }
 }
