@@ -19,7 +19,7 @@ import java.util.Map;
 
 /**
  * @author 二师兄超级帅
- * @Title: WxPayTask
+ * @Title: 订单超时查询并更新数据库状态
  * @ProjectName parent
  * @Description: TODO
  * @date 2018/7/2414:02
@@ -34,7 +34,8 @@ public class WxPayTask {
     private MerchantService merchantService;
 
 //    每天凌晨2点
-    @Scheduled(cron = "0 10 0 * * ?")
+//    10分钟一次，测试数据
+    @Scheduled(cron = "0 2 0 * * ?")
     public void queryOrderStatus() {
 //        小程序ID	appid	是	String(32)	wxd678efh567hg6787	微信分配的小程序ID
 //        商户号	mch_id	是	String(32)	1230000109	微信支付分配的商户号

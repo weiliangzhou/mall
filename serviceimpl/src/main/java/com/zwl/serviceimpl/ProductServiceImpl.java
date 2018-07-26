@@ -129,6 +129,7 @@ public class ProductServiceImpl implements ProductService {
         order.setMerchantId(merchantId);
         order.setRealName(user.getRealName());
         order.setPhone(user.getRegisterMobile());
+        order.setOrderStatus(0);
         log.info("订单数据" + order);
         try {
             orderMapper.insertSelective(order);
