@@ -118,8 +118,8 @@ public class WxPayServiceImpl implements WxPayService {
     }
 
     @Override
-    public WxPayVo pay(String realIp, String openId, String orderNo, String totalFee, String appid, String mch_id, String wxPayKey) {
-        log.info("开始微信支付realIp-->" + realIp + "openId-->" + openId + "orderNo-->" + orderNo + "totalFee-->" + totalFee + "appid-->" + appid + "mch_id-->" + mch_id + "wxPayKey->" + wxPayKey);
+    public WxPayVo pay(String realIp, String openId, String orderNo, String totalFee, String gzhAppId, String mch_id, String wxPayKey) {
+        log.info("开始微信支付realIp-->" + realIp + "openId-->" + openId + "orderNo-->" + orderNo + "totalFee-->" + totalFee + "gzhAppId-->" + gzhAppId + "mch_id-->" + mch_id + "wxPayKey->" + wxPayKey);
 
         //此域名必须在商户平台--"产品中心"--"开发配置"中添加
 //        h5_info.setWap_url("https://xcx.wegoo.cn");
@@ -130,7 +130,7 @@ public class WxPayServiceImpl implements WxPayService {
         cal.add(Calendar.DAY_OF_MONTH, +5);
         String timeExpire = sdf_yMdHms.format(cal.getTime());
         Map<String, String> params = WxPayH5.New()
-                .setAppId(appid)
+                .setAppId(gzhAppId)
                 .setMchId(mch_id)
                 .setBody("IJPay H5支付测试  -By 二师兄超级帅")
                 .setOutTradeNo(orderNo)
@@ -139,7 +139,7 @@ public class WxPayServiceImpl implements WxPayService {
                 .setTimeExpire(timeExpire)
                 .setNotifyUrl(WxConstans.USER_NOTIFY_URL)
                 .setSpbillCreateIp(realIp)
-                .setTradeType("JSAPI")
+                .setTradeType("MWEB")
                 .setOpenId(openId)
                 .setSceneInfo("{\"h5_info\": {\"type\":\"Wap\",\"wap_url\": \"https://xcx.wegoo.cn\",\"wap_name\": \"二师兄超级帅\"}}")
                 .setAttach("东遥学堂 -By 二师兄超级帅")
@@ -181,7 +181,7 @@ public class WxPayServiceImpl implements WxPayService {
 //        paySign	String	是	签名,具体签名方案参见微信公众号支付帮助文档;
         String date = sdf_yMdHms.format(new Date());
         Map payResult = new HashMap();
-        payResult.put("appId", appid);
+        payResult.put("appId", gzhAppId);
         payResult.put("timeStamp", date);
         payResult.put("nonceStr", params.get("nonce_str"));
         payResult.put("package", "prepay_id=" + prepay_id);
@@ -191,10 +191,11 @@ public class WxPayServiceImpl implements WxPayService {
         WxPayVo wxPayVo = new WxPayVo();
         wxPayVo.setTimeStamp(date);
         wxPayVo.setNonceStr(params.get("nonce_str"));
-        wxPayVo.setPackageStr(prepay_id);
+        wxPayVo.setPackageStr("prepay_id="+prepay_id);
         wxPayVo.setSignType("MD5");
         wxPayVo.setPaySign(payResult.get("paySign").toString());
         wxPayVo.setMweb_url(mweb_url);
+        wxPayVo.setAppid(gzhAppId);
         return wxPayVo;
     }
 

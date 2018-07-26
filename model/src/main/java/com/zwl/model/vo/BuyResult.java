@@ -16,4 +16,5 @@ public class BuyResult {
     private Integer totalFee;
     private String totalFeeDesc;
     private String merchantId;
+    private String appid;
 }
