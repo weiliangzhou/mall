@@ -220,6 +220,10 @@ public class UserController {
             user.setUserId(userQuery.getUserId());
             //推荐人userId 推荐人必须购买过 是学员以上级别
             User userIsBuy = userService.getByUserId(referrer);
+            if(userIsBuy==null){
+                result.setCode(ResultCodeEnum.EXCEPTION);
+                result.setMessage("推荐人不存在，请检查referrer");
+            }
             if (userIsBuy.getIsBuy() != null && userIsBuy.getMemberLevel()>1) {
                 user.setReferrer(referrer);
                 userService.updateUserByUserId(user);
