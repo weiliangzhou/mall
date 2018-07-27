@@ -121,9 +121,9 @@ public class UserController {
                     User userIsBuy = userService.getByUserId(referrer);
                     if(userIsBuy.getIsBuy()!=null && userIsBuy.getMemberLevel()>1){
                         user.setReferrer(userLoginInfoVo.getReferrer());
+                        userService.updateUserByUserId(user);
                     }
                 }
-                userService.updateUserByUserId(user);
             }
 
             userId = userQuery.getUserId();
@@ -222,8 +222,8 @@ public class UserController {
             User userIsBuy = userService.getByUserId(referrer);
             if (userIsBuy.getIsBuy() != null && userIsBuy.getMemberLevel()>1) {
                 user.setReferrer(referrer);
+                userService.updateUserByUserId(user);
             }
-            userService.updateUserByUserId(user);
         }
 
         return result;
