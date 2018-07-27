@@ -223,6 +223,7 @@ public class UserController {
             if(userIsBuy==null){
                 result.setCode(ResultCodeEnum.EXCEPTION);
                 result.setMessage("推荐人不存在，请检查referrer");
+                return result;
             }
             if (userIsBuy.getIsBuy() != null && userIsBuy.getMemberLevel()>1) {
                 user.setReferrer(referrer);
