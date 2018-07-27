@@ -74,7 +74,7 @@
         modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       </if>
       <if test="available != null" >
-        available = #{available,jdbcType=INTEGER}
+        available = #{available,jdbcType=INTEGER},
       </if>
       <if test="contentText != null" >
         content_text = #{contentText}

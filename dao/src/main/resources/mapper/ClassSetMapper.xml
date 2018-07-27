@@ -28,7 +28,7 @@
     values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{bannerUrl,jdbcType=VARCHAR},#{content,jdbcType=LONGVARCHAR},
       #{categoryId,jdbcType=INTEGER}, #{merchantId,jdbcType=VARCHAR}, #{isShow,jdbcType=BIT},
       #{requiredMemberLevel,jdbcType=INTEGER}, now(), now(),
-      #{available,jdbcType=INTEGER}),#{contentText}
+      #{available,jdbcType=INTEGER},#{contentText})
   </insert>
   <!--修改指定id的套课程参数-->
   <update id="updateByParams" parameterType="com.zwl.model.po.ClassSet" >

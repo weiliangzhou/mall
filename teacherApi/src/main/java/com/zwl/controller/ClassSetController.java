@@ -111,7 +111,6 @@ public class ClassSetController {
         String merchantId = jsonObject.getString("merchantId");
         Integer pageNum = jsonObject.getInteger("pageNum");
         Integer pageSize = jsonObject.getInteger("pageSize");
-        String answer=jsonObject.getJSONObject("ds").getString("answer");
         //title 可空
         String title = jsonObject.getString("title");
         Page page=PageHelper.startPage(pageNum, pageSize);

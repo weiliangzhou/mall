@@ -73,7 +73,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public BuyResult buy(Product product) {
-        log.info("开始生成订单================================>"+product);
+//        log.info("开始生成订单================================>"+product);
+        log.info("开始生成订单================================>");
         String phone = product.getPhone();
         String userId = "";
         User user = null;
