@@ -89,10 +89,16 @@ public class UserController {
             user.setUserId(userId);
             user.setMerchantId(userLoginInfoVo.getMerchantId());
             user.setRegisterFrom(1);
-            //推荐人userId
+            //推荐人userId 推荐人必须购买过
            /* if (StringUtils.isEmpty(userLoginInfoVo.getReferrer()))
                 user.setReferrer("admin");*/
-            user.setReferrer(userLoginInfoVo.getReferrer());
+            String referrer = userLoginInfoVo.getReferrer();
+            if(CheckUtil.isNotEmpty(referrer)){
+                User userIsBuy = userService.getByUserId(referrer);
+                if(userIsBuy.getIsBuy()!=null && userIsBuy.getIsBuy()==1){
+                    user.setReferrer(userLoginInfoVo.getReferrer());
+                }
+            }
             user.setIsBuy(0);
             user.setMemberLevel(0);
             //公众号对应的openid
@@ -109,8 +115,14 @@ public class UserController {
             if((userQuery.getIsBuy()==null ||userQuery.getIsBuy()==0) && CheckUtil.isNotEmpty(userLoginInfoVo.getReferrer())){
                 User user = new User();
                 user.setUserId(userQuery.getUserId());
-                //推荐人userId
-                user.setReferrer(userLoginInfoVo.getReferrer());
+                //推荐人userId 推荐人必须购买过
+                String referrer = userLoginInfoVo.getReferrer();
+                if(CheckUtil.isNotEmpty(referrer)){
+                    User userIsBuy = userService.getByUserId(referrer);
+                    if(userIsBuy.getIsBuy()!=null && userIsBuy.getIsBuy()==1){
+                        user.setReferrer(userLoginInfoVo.getReferrer());
+                    }
+                }
                 userService.updateUserByUserId(user);
             }
 
@@ -203,11 +215,14 @@ public class UserController {
         User userQuery = userService.getByUserId(userId);
 
         //如果用户还未购买，则可以更新推荐人
-        if((userQuery.getIsBuy()==null ||userQuery.getIsBuy()==0) && CheckUtil.isNotEmpty(referrer)){
+        if ((userQuery.getIsBuy() == null || userQuery.getIsBuy() == 0) && CheckUtil.isNotEmpty(referrer)) {
             User user = new User();
             user.setUserId(userQuery.getUserId());
-            //推荐人userId
-            user.setReferrer(referrer);
+            //推荐人userId 推荐人必须购买过
+            User userIsBuy = userService.getByUserId(referrer);
+            if (userIsBuy.getIsBuy() != null && userIsBuy.getIsBuy() == 1) {
+                user.setReferrer(referrer);
+            }
             userService.updateUserByUserId(user);
         }
 
