@@ -95,7 +95,7 @@ public class UserController {
             String referrer = userLoginInfoVo.getReferrer();
             if(CheckUtil.isNotEmpty(referrer)){
                 User userIsBuy = userService.getByUserId(referrer);
-                if(userIsBuy.getIsBuy()!=null && userIsBuy.getIsBuy()==1){
+                if(userIsBuy.getIsBuy()!=null && userIsBuy.getMemberLevel()>1){
                     user.setReferrer(userLoginInfoVo.getReferrer());
                 }
             }
@@ -119,7 +119,7 @@ public class UserController {
                 String referrer = userLoginInfoVo.getReferrer();
                 if(CheckUtil.isNotEmpty(referrer)){
                     User userIsBuy = userService.getByUserId(referrer);
-                    if(userIsBuy.getIsBuy()!=null && userIsBuy.getIsBuy()==1){
+                    if(userIsBuy.getIsBuy()!=null && userIsBuy.getMemberLevel()>1){
                         user.setReferrer(userLoginInfoVo.getReferrer());
                     }
                 }
@@ -218,9 +218,9 @@ public class UserController {
         if ((userQuery.getIsBuy() == null || userQuery.getIsBuy() == 0) && CheckUtil.isNotEmpty(referrer)) {
             User user = new User();
             user.setUserId(userQuery.getUserId());
-            //推荐人userId 推荐人必须购买过
+            //推荐人userId 推荐人必须购买过 是学员以上级别
             User userIsBuy = userService.getByUserId(referrer);
-            if (userIsBuy.getIsBuy() != null && userIsBuy.getIsBuy() == 1) {
+            if (userIsBuy.getIsBuy() != null && userIsBuy.getMemberLevel()>1) {
                 user.setReferrer(referrer);
             }
             userService.updateUserByUserId(user);
