@@ -55,9 +55,13 @@ public class CertificationController {
         Result result = new Result();
         String userId = jsonObject.getString("userId");
         UserCertification userCertification = certificationService.getOneByUserId(userId);
-        if(StringUtils.isEmpty(userCertification)){
-            result.setCode(ResultCodeEnum.EXCEPTION);
+        if(userCertification==null){
+            /*result.setCode(ResultCodeEnum.EXCEPTION);
             result.setMessage("查无用户");
+            return result;*/
+            UserCertification uc=new UserCertification();
+            uc.setStatus(0);
+            result.setData(uc);
             return result;
         }
         result.setData(userCertification);
