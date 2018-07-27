@@ -213,6 +213,11 @@ public class UserController {
         String merchantId= jsonObject.getString("merchantId");
         Result result = new Result();
         User userQuery = userService.getByUserId(userId);
+        if(userQuery==null){
+            result.setCode(ResultCodeEnum.EXCEPTION);
+            result.setMessage("查无用户，请检查userId");
+            return result;
+        }
 
         //如果用户还未购买，则可以更新推荐人
         if ((userQuery.getIsBuy() == null || userQuery.getIsBuy() == 0) && CheckUtil.isNotEmpty(referrer)) {
