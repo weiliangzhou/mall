@@ -104,6 +104,7 @@ public class UserController {
             //公众号对应的openid
 //            user.setFormId(userLoginInfoVo.getFormId());
             //插入用户表
+            user.setLogoUrl(userLoginInfoVo.getLogoUrl());
             userService.addUser(user);
             userInfo.setUserId(userId);
             userInfo.setAvailable(1);
