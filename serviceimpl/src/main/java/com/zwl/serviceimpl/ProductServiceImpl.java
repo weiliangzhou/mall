@@ -164,4 +164,9 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductItemVo> getUserLevelItemsList(String merchantId) {
         return productMapper.getUserLevelItemsList(merchantId);
     }
+
+    @Override
+    public Integer getMaidPercentByLevel(Integer referrerLevel) {
+        return productMapper.getMaidPercentByLevel(referrerLevel);
+    }
 }
