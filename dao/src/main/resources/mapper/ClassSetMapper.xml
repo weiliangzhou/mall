@@ -34,6 +34,7 @@
   <update id="updateByParams" parameterType="com.zwl.model.po.ClassSet" >
     update ss_class_set
     <set >
+      modify_time=now(),
       <if test="title != null" >
         title = #{title,jdbcType=VARCHAR},
       </if>
