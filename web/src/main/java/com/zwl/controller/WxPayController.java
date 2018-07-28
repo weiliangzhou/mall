@@ -181,11 +181,8 @@ public class WxPayController {
                         BSUtil.isTrue(false, "异步支付更新失败");
                     //                    支付完成时间，格式为yyyyMMddHHmmss
                     Date paymentTime = null;
-                    try {
-                        paymentTime = sdf_yMdHms.parse(time_end);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                    paymentTime = sdf_yMdHms.parse(time_end);
+
                     log.info("回调支付成功，开始插入订单流水表");
                     OrderFlow orderFlow = new OrderFlow();
                     orderFlow.setOrderNo(out_trade_no);
@@ -229,32 +226,33 @@ public class WxPayController {
                         User referrerUser = userService.getByUserId(referrerId);
                         if (null != referrerUser) {
                             //返佣规则：同级或者下级，高于当前级别是不返佣
-                            //在不是试听课的时候，查询当前用户有效会员等级并且小于等于推荐人的有效会员等级才可以返佣
+                            //查询当前用户有效会员等级并且小于等于推荐人的有效会员等级才可以返佣
 //                            Integer memberLevel=userService.getMemberLevel(userId);
                             Integer referrerLevel = userService.getMemberLevel(referrerId);
-                            Integer maidPercent_referrer = productService.getMaidPercentByLevel(referrerLevel);
-                            MaidInfo maidInfo = new MaidInfo();
-                            maidInfo.setOrderNo(orderNo);
-                            //分佣发送给推荐人
-                            maidInfo.setUserId(referrerUser.getUserId());
-                            maidInfo.setMaidUserId(userId);
-                            //根据推荐的的分佣百分比返佣
-                            //如果产品的等级是1，分佣比列按照产品的分佣百分比计算
-                            Integer maidMoney = 0;
-                            if (level == 1)
-                                maidMoney = orderActualMoney * maidPercent / 100;
-                            else
-                                maidMoney = orderActualMoney * maidPercent_referrer / 100;
-                            maidInfo.setMaidMoney(maidMoney);
-                            maidInfo.setMaidPercent(maidPercent);
-                            maidInfo.setOrderActualMoney(orderActualMoney);
-                            maidInfo.setMerchantId(merchantId);
-                            maidInfo.setProductId(productId);
-                            maidInfo.setProductName(productName);
-                            maidInfo.setLevel(level);
-                            maidInfo.setLevelName(levelName);
-                            log.info("回调支付成功，分佣信息" + maidInfo);
-                            try {
+                            if (null != referrerLevel && level <= referrerLevel) {
+                                Integer maidPercent_referrer = productService.getMaidPercentByLevel(referrerLevel);
+                                MaidInfo maidInfo = new MaidInfo();
+                                maidInfo.setOrderNo(orderNo);
+                                //分佣发送给推荐人
+                                maidInfo.setUserId(referrerUser.getUserId());
+                                maidInfo.setMaidUserId(userId);
+                                //根据推荐的的分佣百分比返佣
+                                //如果产品的等级是1，分佣比列按照产品的分佣百分比计算
+                                Integer maidMoney = 0;
+                                if (level == 1)
+                                    maidMoney = orderActualMoney * maidPercent / 100;
+                                else
+                                    maidMoney = orderActualMoney * maidPercent_referrer / 100;
+                                maidInfo.setMaidMoney(maidMoney);
+                                maidInfo.setMaidPercent(maidPercent);
+                                maidInfo.setOrderActualMoney(orderActualMoney);
+                                maidInfo.setMerchantId(merchantId);
+                                maidInfo.setProductId(productId);
+                                maidInfo.setProductName(productName);
+                                maidInfo.setLevel(level);
+                                maidInfo.setLevelName(levelName);
+                                log.info("回调支付成功，分佣信息" + maidInfo);
+
                                 int madiInfoCount = maidInfoService.save(maidInfo);
                                 if (madiInfoCount == 0)
                                     BSUtil.isTrue(false, "分佣失败");
@@ -272,9 +270,9 @@ public class WxPayController {
                                 } else
                                     userAccountService.addBanlanceByUserId(referrerId, maidMoney);
                                 log.info("回调支付成功，更新用户余额成功");
-                            } catch (Exception e) {
-                                e.printStackTrace();
+
                             }
+
 
                         }
                     }
