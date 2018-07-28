@@ -10,6 +10,7 @@
         <result column="register_from" property="registerFrom"/>
         <result column="register_mobile" property="registerMobile"/>
         <result column="real_name" property="realName" jdbcType="VARCHAR"/>
+        <result column="logo_url" property="logoUrl" jdbcType="VARCHAR"/>
         <result column="referrer" property="referrer" jdbcType="VARCHAR"/>
         <result column="member_level" property="memberLevel" jdbcType="SMALLINT"/>
         <result column="level_name" property="levelName" jdbcType="VARCHAR"/>
@@ -20,11 +21,11 @@
         <result column="available" property="available" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, user_id, wechat_openid, wechat_union_id, merchant_id, register_from, register_mobile,real_name, referrer, member_level,
+    id, user_id, wechat_openid, wechat_union_id, merchant_id, register_from, register_mobile,real_name,logo_url, referrer, member_level,
     level_name, is_buy,expires_time, register_time, modify_time, available
   </sql>
     <sql id="Insert_Column_List">
-    user_id, wechat_openid, wechat_union_id, merchant_id, register_from, register_mobile,real_name, referrer, member_level,
+    user_id, wechat_openid, wechat_union_id, merchant_id, register_from, register_mobile,real_name, logo_url,referrer, member_level,
     level_name,is_buy, expires_time, register_time, modify_time, available
   </sql>
     <!--新增用户-->
@@ -35,7 +36,7 @@
         insert into ss_user (<include refid="Insert_Column_List"/>)
         values ( #{userId,jdbcType=VARCHAR}, #{wechatOpenid,jdbcType=VARCHAR}, #{wechatUnionId,jdbcType=VARCHAR},
         #{merchantId,jdbcType=VARCHAR}, #{registerFrom,jdbcType=SMALLINT},
-        #{registerMobile,jdbcType=VARCHAR},#{realName,jdbcType=VARCHAR}, #{referrer,jdbcType=VARCHAR},
+        #{registerMobile,jdbcType=VARCHAR},#{realName,jdbcType=VARCHAR}, #{logoUrl},#{referrer,jdbcType=VARCHAR},
         #{memberLevel,jdbcType=SMALLINT},
         #{levelName,jdbcType=VARCHAR}, #{isBuy}, #{expiresTime,jdbcType=TIMESTAMP}, now(),
         #{modifyTime,jdbcType=TIMESTAMP}, #{available,jdbcType=INTEGER})
@@ -111,6 +112,12 @@
             </if>
             <if test="registerFrom != null">
                 register_from = #{registerFrom,jdbcType=VARCHAR},
+            </if>
+            <if test="realName != null">
+                real_name = #{realName,jdbcType=VARCHAR},
+            </if>
+            <if test="logoUrl != null">
+                logo_url = #{logoUrl,jdbcType=VARCHAR},
             </if>
             <if test="referrer != null">
                 referrer = #{referrer,jdbcType=VARCHAR},

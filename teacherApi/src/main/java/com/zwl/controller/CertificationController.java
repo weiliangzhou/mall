@@ -73,6 +73,8 @@ public class CertificationController {
             certificationVo.setRealname(userCertification.getRealname());
             String modifyDateStr = DateUtil.getFormatString("yyyy-MM-dd HH:mm:ss", userCertification.getModifyTime());
             certificationVo.setModifyTime(modifyDateStr);
+            String auditDateStr = DateUtil.getFormatString("yyyy-MM-dd HH:mm:ss", userCertification.getAuditTime());
+            certificationVo.setModifyTime(auditDateStr);
             certificationVo.setStatus(userCertification.getStatus());
             certificationVo.setId(userCertification.getId());
             listVo.add(certificationVo);
