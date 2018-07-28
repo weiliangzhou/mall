@@ -141,8 +141,15 @@ public class CertificationController {
         User user = userService.getOneByParams(query);
         UserCertification userCertification = certificationService.getOneByUserId(user.getUserId());
         List<CertificationVo> listVo = new ArrayList<>();
-
         CertificationVo certificationVo = new CertificationVo();
+        if(userCertification==null){
+            certificationVo.setStatus(0);
+            certificationVo.setRegisterMobile(user.getRegisterMobile());
+            certificationVo.setRealname(user.getRealName());
+            listVo.add(certificationVo);
+            result.setData(listVo);
+            return result;
+        }
         certificationVo.setRegisterMobile(user.getRegisterMobile());
         certificationVo.setRealname(userCertification.getRealname());
         String modifyDateStr = DateUtil.getFormatString("yyyy-MM-dd HH:mm:ss", userCertification.getModifyTime());
