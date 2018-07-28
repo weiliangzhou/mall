@@ -14,6 +14,7 @@ import com.zwl.service.*;
 import com.zwl.serviceimpl.RedisTokenManagerImpl;
 import com.zwl.util.CheckUtil;
 import com.zwl.util.UUIDUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,7 @@ import java.util.Map;
 /**
  * 用户controller
  */
+@Slf4j
 @RestController
 @RequestMapping("/wx/user")
 public class UserController {
@@ -223,6 +225,7 @@ public class UserController {
         String referrer = jsonObject.getString("referrer");
         String userId = jsonObject.getString("userId");
         String merchantId = jsonObject.getString("merchantId");
+        log.info("用户"+userId+"推荐人referrer:"+referrer);
         Result result = new Result();
         User userQuery = userService.getByUserId(userId);
         if (userQuery == null) {
