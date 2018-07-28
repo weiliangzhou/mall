@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,21 +41,18 @@ public class MaidInfoController {
         PageHelper.startPage(pageNum, pageSize);
         List<MaidInfoVo> maidInfoList = maidInfoService.getMaidInfoList(userId);
         UserQuotaCount userQuotaCount = userQuotaCountService.getByUserId(userId);
+        Integer totalAmount = maidInfoService.getTotalMaidMoneyByUserId(userId);
         MaidInfoVVo maidInfoVVo = new MaidInfoVVo();
+        Integer count = 0;
+        Integer totalCount = 0;
         if (userQuotaCount != null) {
-            Integer totalAmount = maidInfoService.getTotalMaidMoneyByUserId(userId);
-            Integer count = userQuotaCount.getCount();
-            Integer totalCount = userQuotaCount.getTotalCount();
-            maidInfoVVo.setCount(count == null ? 0 : count);
-            maidInfoVVo.setTotalAmount(totalAmount == null ? 0 : totalAmount);
-            maidInfoVVo.setMaidInfoVoList(maidInfoList);
-            maidInfoVVo.setTotalCount(totalCount == null ? 0 : totalCount);
-        } else {
-            maidInfoVVo.setCount(0);
-            maidInfoVVo.setTotalAmount(0);
-            maidInfoVVo.setMaidInfoVoList(new ArrayList<>());
-            maidInfoVVo.setTotalCount(0);
+            count = userQuotaCount.getCount();
+            totalCount = userQuotaCount.getTotalCount();
         }
+        maidInfoVVo.setCount(count);
+        maidInfoVVo.setTotalAmount(totalAmount == null ? 0 : totalAmount);
+        maidInfoVVo.setMaidInfoVoList(maidInfoList);
+        maidInfoVVo.setTotalCount(totalCount);
         result.setData(maidInfoVVo);
         return JSON.toJSONString(result);
     }
