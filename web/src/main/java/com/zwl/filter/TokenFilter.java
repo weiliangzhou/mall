@@ -71,7 +71,8 @@ public class TokenFilter implements Filter {
             return;
         }
         //套课程
-        if (requestURL.contains("/classset/getPageAllClass")||requestURL.contains("/classset/setpAddBrowseCount")) {
+        if (requestURL.contains("/classset/getPageAllClass")||requestURL.contains("/classset/setpAddBrowseCount")||
+                requestURL.contains("/classset/getById")) {
             chain.doFilter(request, response);
             return;
         }

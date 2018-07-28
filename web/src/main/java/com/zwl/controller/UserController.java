@@ -204,9 +204,12 @@ public class UserController {
         userLoginInfoVo.setLogoUrl(userInfo.getLogoUrl());
         User user = userService.getByUserId(userId);
         userLoginInfoVo.setMemberLevel(user.getMemberLevel());
-        userLoginInfoVo.setIsBindMobile(userInfo.getIsBindMobile() == null ? 0 : 1);
-        userLoginInfoVo.setRegisterMobile(userInfo.getRegisterMobile());
-        userLoginInfoVo.setIsCertification(userInfo.getIsCertification() == null ? 0 : 1);
+//        userLoginInfoVo.setIsBindMobile(userInfo.getIsBindMobile()==null?0:1);
+        //通过主表获取绑定手机号
+        userLoginInfoVo.setIsBindMobile(user.getRegisterMobile()==null?0:1);
+        userLoginInfoVo.setRegisterMobile(user.getRegisterMobile());
+        userLoginInfoVo.setIsCertification(userInfo.getIsCertification()==null?0:1);
+
         result.setData(userLoginInfoVo);
         return result;
     }
