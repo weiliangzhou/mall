@@ -93,9 +93,9 @@ public class UserController {
            /* if (StringUtils.isEmpty(userLoginInfoVo.getReferrer()))
                 user.setReferrer("admin");*/
             String referrer = userLoginInfoVo.getReferrer();
-            if(CheckUtil.isNotEmpty(referrer)){
+            if (CheckUtil.isNotEmpty(referrer)) {
                 User userIsBuy = userService.getByUserId(referrer);
-                if(userIsBuy.getIsBuy()!=null && userIsBuy.getMemberLevel()>1){
+                if (userIsBuy.getIsBuy() != null && userIsBuy.getMemberLevel() > 1) {
                     user.setReferrer(userLoginInfoVo.getReferrer());
                 }
             }
@@ -113,14 +113,14 @@ public class UserController {
 
         } else {
             //如果用户还未购买，则可以更新推荐人
-            if((userQuery.getIsBuy()==null ||userQuery.getIsBuy()==0) && CheckUtil.isNotEmpty(userLoginInfoVo.getReferrer())){
+            if ((userQuery.getIsBuy() == null || userQuery.getIsBuy() == 0) && CheckUtil.isNotEmpty(userLoginInfoVo.getReferrer())) {
                 User user = new User();
                 user.setUserId(userQuery.getUserId());
                 //推荐人userId 推荐人必须购买过
                 String referrer = userLoginInfoVo.getReferrer();
-                if(CheckUtil.isNotEmpty(referrer)){
+                if (CheckUtil.isNotEmpty(referrer)) {
                     User userIsBuy = userService.getByUserId(referrer);
-                    if(userIsBuy.getIsBuy()!=null && userIsBuy.getMemberLevel()>1){
+                    if (userIsBuy.getIsBuy() != null && userIsBuy.getMemberLevel() > 1) {
                         user.setReferrer(userLoginInfoVo.getReferrer());
                         userService.updateUserByUserId(user);
                     }
@@ -148,6 +148,12 @@ public class UserController {
         String phone = jsonObject.getString("phone");
         String msgCode = jsonObject.getString("msgCode");
         String userId = jsonObject.getString("userId");
+//        需要手机号码防重
+        User queryUser = new User();
+        User validate_user = userService.getOneByParams(queryUser);
+        if (validate_user != null)
+            BSUtil.isTrue(false, "已存在该手机号码");
+
         //  校验验证码
         boolean isValidate = msgSenderService.checkCode(phone, msgCode);
         if (!isValidate)
@@ -161,7 +167,7 @@ public class UserController {
         if (count == 0)
             BSUtil.isTrue(false, "绑定失败");
         //更新用户详情表
-        UserInfo userInfo=new UserInfo();
+        UserInfo userInfo = new UserInfo();
         userInfo.setUserId(userId);
         userInfo.setRegisterMobile(phone);
         userInfo.setIsBindMobile(1);
@@ -199,23 +205,26 @@ public class UserController {
         User user = userService.getByUserId(userId);
         userLoginInfoVo.setMemberLevel(user.getMemberLevel());
 //        userLoginInfoVo.setIsBindMobile(userInfo.getIsBindMobile()==null?0:1);
+        //通过主表获取绑定手机号
         userLoginInfoVo.setIsBindMobile(user.getRegisterMobile()==null?0:1);
         userLoginInfoVo.setRegisterMobile(user.getRegisterMobile());
         userLoginInfoVo.setIsCertification(userInfo.getIsCertification()==null?0:1);
+
         result.setData(userLoginInfoVo);
         return result;
     }
+
     /**
      * 分享绑定上下级关系
      */
     @PostMapping("/shareRelation")
-    public Result shareRelation(@RequestBody JSONObject jsonObject){
-        String referrer= jsonObject.getString("referrer");
+    public Result shareRelation(@RequestBody JSONObject jsonObject) {
+        String referrer = jsonObject.getString("referrer");
         String userId = jsonObject.getString("userId");
-        String merchantId= jsonObject.getString("merchantId");
+        String merchantId = jsonObject.getString("merchantId");
         Result result = new Result();
         User userQuery = userService.getByUserId(userId);
-        if(userQuery==null){
+        if (userQuery == null) {
             result.setCode(ResultCodeEnum.EXCEPTION);
             result.setMessage("查无用户，请检查userId");
             return result;
@@ -227,12 +236,12 @@ public class UserController {
             user.setUserId(userQuery.getUserId());
             //推荐人userId 推荐人必须购买过 是学员以上级别
             User userIsBuy = userService.getByUserId(referrer);
-            if(userIsBuy==null){
+            if (userIsBuy == null) {
                 result.setCode(ResultCodeEnum.EXCEPTION);
                 result.setMessage("推荐人不存在，请检查referrer");
                 return result;
             }
-            if (userIsBuy.getIsBuy() != null && userIsBuy.getMemberLevel()>1) {
+            if (userIsBuy.getIsBuy() != null && userIsBuy.getMemberLevel() > 1) {
                 user.setReferrer(referrer);
                 userService.updateUserByUserId(user);
             }
