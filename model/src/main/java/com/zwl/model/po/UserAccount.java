@@ -12,7 +12,7 @@ public class UserAccount {
 
     private Integer balance;
 
-    private Date createTime;
+    private Date createTime=new Date();
 
     private Integer available = 1;
 
