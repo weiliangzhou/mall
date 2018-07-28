@@ -41,6 +41,7 @@ public class MsgSenderServiceImpl implements MsgSenderService {
             sb.append("&phone=" + phone);
             sb.append("&msg=" + URLEncoder.encode(msg + "", "UTF-8"));
             sb.append("&rd=0");
+            log.info("短信验证码"+msgCode);
             log.info("开始发送短信" + sb.toString());
             String result = HttpsUtils.sendGet(sb.toString(), null);
             log.info("结束发送短信" + result);
