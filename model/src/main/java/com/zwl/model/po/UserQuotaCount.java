@@ -11,7 +11,7 @@ public class UserQuotaCount {
     //总共可邀请小班名额
     private Integer totalCount;
     private Integer type;
-    private Date createTime;
+    private Date createTime=new Date();
     private Date modifyTime;
     private Integer available = 1;
 

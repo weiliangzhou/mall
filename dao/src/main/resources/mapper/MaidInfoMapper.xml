@@ -157,7 +157,7 @@
     usr.logo_url as logoUrl,
     usr.real_name as realName,
     usr.register_mobile as phone,
-    smi.product_name as level,
+    smi.level as level,
     smi.maid_money as maidMoney,
     smi.create_time as createTime
     FROM ss_maid_info smi,ss_user usr WHERE usr.available=1
