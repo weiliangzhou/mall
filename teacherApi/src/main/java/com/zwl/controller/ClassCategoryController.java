@@ -1,5 +1,6 @@
 package com.zwl.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.zwl.model.baseresult.PageResult;
@@ -48,7 +49,7 @@ public class ClassCategoryController {
         return result;
     }
     @PostMapping("/getPageList")
-    public Result getPageListByMerchantId(@RequestBody JSONObject jsonObject){
+    public String getPageListByMerchantId(@RequestBody JSONObject jsonObject){
         Result result = new Result();
         String merchantId=jsonObject.getString("merchantId");
         Integer pageNum=jsonObject.getInteger("pageNum");
@@ -59,6 +60,6 @@ public class ClassCategoryController {
         List<ClassCategory> list = classCategoryService.getListByParams(query);
         PageResult p=new PageResult(list);
         result.setData(p);
-        return result;
+        return JSON.toJSONString(result);
     }
 }

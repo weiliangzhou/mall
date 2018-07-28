@@ -96,6 +96,10 @@ public class ClassSetController {
         Result result = new Result();
         Long id = jsonObject.getLong("id");
         ClassSet classSet=classSetService.getById(id);
+        if(classSet==null){
+            result.setCode(ResultCodeEnum.EXCEPTION);
+            result.setMessage("查无此套课，请确认套课id传入正确");
+        }
         result.setData(classSet);
         return result;
     }

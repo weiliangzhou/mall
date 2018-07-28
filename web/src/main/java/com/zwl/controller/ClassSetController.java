@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.zwl.model.baseresult.Result;
+import com.zwl.model.baseresult.ResultCodeEnum;
 import com.zwl.model.po.ClassInfo;
 import com.zwl.model.po.ClassInfoStatistics;
 import com.zwl.model.po.ClassSet;
@@ -100,6 +101,10 @@ public class ClassSetController {
         Result result = new Result();
         Long id = jsonObject.getLong("id");
         ClassSet classSet=classSetService.getById(id);
+        if(classSet==null){
+            result.setCode(ResultCodeEnum.EXCEPTION);
+            result.setMessage("查无此套课，请确认套课id传入正确");
+        }
         ClassVo classVo=new ClassVo();
         classVo.setId(classSet.getId());
         classVo.setTitle(classSet.getTitle());
