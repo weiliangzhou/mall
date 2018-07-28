@@ -280,10 +280,14 @@ public class WxPayController {
                             maidInfo.setLevel(level);
                             maidInfo.setLevelName(levelName);
                             log.info("回调支付成功，分佣信息" + maidInfo);
-                            int madiInfoCount = maidInfoService.save(maidInfo);
-                            if (madiInfoCount == 0)
-                                BSUtil.isTrue(false, "分佣失败");
-                            log.info("回调支付成功，结束分佣");
+                            try {
+                                int madiInfoCount = maidInfoService.save(maidInfo);
+                                if (madiInfoCount == 0)
+                                    BSUtil.isTrue(false, "分佣失败");
+                                log.info("回调支付成功，结束分佣");
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
                             //分佣完成之后，更新用户账户表ss_user_account
                             //存在未开户 直接开户
                             log.info("回调支付成功，更新用户余额userId" + userId + "--->" + "maidMoney--->" + maidMoney);
