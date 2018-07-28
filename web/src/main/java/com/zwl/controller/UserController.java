@@ -150,6 +150,7 @@ public class UserController {
         String userId = jsonObject.getString("userId");
 //        需要手机号码防重
         User queryUser = new User();
+        queryUser.setRegisterMobile(phone);
         User validate_user = userService.getOneByParams(queryUser);
         if (validate_user != null)
             BSUtil.isTrue(false, "已存在该手机号码");
