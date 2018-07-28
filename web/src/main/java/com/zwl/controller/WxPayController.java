@@ -175,6 +175,7 @@ public class WxPayController {
                     order_t.setPaymentTime(sdf_yMdHms.parse(time_end));
                     order_t.setPaymentNo(transaction_id);
                     order_t.setOrderStatus(1);
+                    order_t.setPayWay(1);
                     //更新订单信息
                     int count = orderService.updateOrder(order_t);
                     if (count != 1)
@@ -235,8 +236,9 @@ public class WxPayController {
 //                如果产品等级为1，则先判断推荐人的邀请名额是否满足，如果不满足则直接跳过
 //                如果产品等级为 456 则相应添加邀请名额
                             if (1 == memberLevel) {
-                                int userQuotaCount = userQuotaCountService.updateCountByUserId(referrerId);
-                                if (userQuotaCount == 0) {
+                                Integer userQuotaCount = userQuotaCountService.updateCountByUserId(referrerId);
+                                //存在数据异常  userQuotaCount null
+                                if (userQuotaCount==0||userQuotaCount==null) {
                                     log.info("邀请小班名额已满，不返分佣");
                                     //发送通知等
                                     Map<String, String> xml = new HashMap<String, String>();

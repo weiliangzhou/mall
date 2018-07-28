@@ -25,11 +25,11 @@
         </selectKey>
         <if test="count > 0">
             update ss_user_quota_count
-            set count =count+#{i}
+            set `count` =`count`+#{i}
             where id = #{userId}
         </if>
         <if test="count==0">
-            insert into ss_user_quota_count(id,create_time,count,total_count,type) values(#{userId},now(),#{i},#{i},1)
+            insert into ss_user_quota_count(id,create_time,`count`,total_count,`type`) values(#{userId},now(),#{i},#{i},1)
         </if>
     </insert>
 
