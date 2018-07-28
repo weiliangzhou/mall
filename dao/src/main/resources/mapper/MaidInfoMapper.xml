@@ -158,7 +158,7 @@
     usr.real_name as realName,
     usr.register_mobile as phone,
     smi.level as level,
-    smi.maid_money as maidMoney,
+    smi.maid_money/100 as maidMoney,
     smi.create_time as createTime
     FROM ss_maid_info smi,ss_user usr WHERE usr.available=1
     AND smi.available=1 AND smi.maid_user_id=usr.user_id
