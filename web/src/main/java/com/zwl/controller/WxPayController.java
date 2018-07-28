@@ -174,6 +174,7 @@ public class WxPayController {
                     order_t.setOrderNo(out_trade_no);
                     order_t.setPaymentTime(sdf_yMdHms.parse(time_end));
                     order_t.setPaymentNo(transaction_id);
+                    order_t.setOrderStatus(1);
                     //更新订单信息
                     int count = orderService.updateOrder(order_t);
                     if (count != 1)
