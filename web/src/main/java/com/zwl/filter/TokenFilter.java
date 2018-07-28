@@ -86,11 +86,11 @@ public class TokenFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-        //用户信息展示
+       /* //用户信息展示
         if (requestURL.contains("/user/getUserInfoByUserId")) {
             chain.doFilter(request, response);
             return;
-        }
+        }*/
         // 验证token
         // token="nprI2s/ITAaGaLJfL+QkZZYKhMAH3C3PkQEbpv+qQwOFG7hECEPeR4lKz5NTpQ177Sk1MdBj1GEjyNM2V0G2Nbj3FfKz6X+C";
         // 这里token如果接收有空格的地方，，那就是+号没有处理好。。可以考虑变成%2B

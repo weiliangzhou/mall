@@ -136,7 +136,7 @@ public class ProductServiceImpl implements ProductService {
             orderMapper.insertSelective(order);
         } catch (Exception e) {
             e.printStackTrace();
-            BSUtil.isTrue(false, "系统繁忙,请稍后重试！");
+            BSUtil.isTrue(false, "系统繁忙,请稍后重试！",e);
         }
         OrderFlow orderFlow = new OrderFlow();
         orderFlow.setOrderNo(orderNo);

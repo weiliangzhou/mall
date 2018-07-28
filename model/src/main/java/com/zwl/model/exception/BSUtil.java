@@ -9,4 +9,11 @@ public class BSUtil {
             throw new BusinessException(error);
         }
     }
+
+    public static void isTrue(boolean expression, String error,Throwable cause) {
+        if (!expression) {
+            throw new BusinessException(error,cause);
+        }
+    }
+
 }
