@@ -61,4 +61,5 @@ public interface UserService {
     Integer getMemberLevel(String userId);
 
     Integer getMaidPercentByUserId(String userId);
+
 }
