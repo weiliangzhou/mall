@@ -198,8 +198,9 @@ public class UserController {
         userLoginInfoVo.setLogoUrl(userInfo.getLogoUrl());
         User user = userService.getByUserId(userId);
         userLoginInfoVo.setMemberLevel(user.getMemberLevel());
-        userLoginInfoVo.setIsBindMobile(userInfo.getIsBindMobile()==null?0:1);
-        userLoginInfoVo.setRegisterMobile(userInfo.getRegisterMobile());
+//        userLoginInfoVo.setIsBindMobile(userInfo.getIsBindMobile()==null?0:1);
+        userLoginInfoVo.setIsBindMobile(user.getRegisterMobile()==null?0:1);
+        userLoginInfoVo.setRegisterMobile(user.getRegisterMobile());
         userLoginInfoVo.setIsCertification(userInfo.getIsCertification()==null?0:1);
         result.setData(userLoginInfoVo);
         return result;
