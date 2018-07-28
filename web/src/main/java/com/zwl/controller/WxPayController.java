@@ -174,6 +174,7 @@ public class WxPayController {
                     order_t.setPaymentTime(sdf_yMdHms.parse(time_end));
                     order_t.setPaymentNo(transaction_id);
                     order_t.setOrderStatus(1);
+                    order_t.setPayWay(1);
                     //更新订单信息
                     int count = orderService.updateOrder(order_t);
                     if (count != 1)
@@ -232,7 +233,6 @@ public class WxPayController {
 //                            Integer memberLevel=userService.getMemberLevel(userId);
                             Integer referrerLevel = userService.getMemberLevel(referrerId);
                             Integer maidPercent_referrer = productService.getMaidPercentByLevel(referrerLevel);
-
                             MaidInfo maidInfo = new MaidInfo();
                             maidInfo.setOrderNo(orderNo);
                             //分佣发送给推荐人
@@ -259,21 +259,22 @@ public class WxPayController {
                                 if (madiInfoCount == 0)
                                     BSUtil.isTrue(false, "分佣失败");
                                 log.info("回调支付成功，结束分佣");
+
+                                //分佣完成之后，更新用户账户表ss_user_account
+                                //存在未开户 直接开户
+                                log.info("回调支付成功，更新用户余额userId" + userId + "--->" + "maidMoney--->" + maidMoney);
+                                UserAccount userAccount = userAccountService.getUserAccountByUserId(referrerId);
+                                if (userAccount == null) {
+                                    UserAccount userAccount_t = new UserAccount();
+                                    userAccount_t.setUserId(referrerId);
+                                    userAccount_t.setBalance(maidMoney);
+                                    userAccountService.save(userAccount_t);
+                                } else
+                                    userAccountService.addBanlanceByUserId(referrerId, maidMoney);
+                                log.info("回调支付成功，更新用户余额成功");
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            //分佣完成之后，更新用户账户表ss_user_account
-                            //存在未开户 直接开户
-                            log.info("回调支付成功，更新用户余额userId" + userId + "--->" + "maidMoney--->" + maidMoney);
-                            UserAccount userAccount = userAccountService.getUserAccountByUserId(referrerId);
-                            if (userAccount == null) {
-                                UserAccount userAccount_t = new UserAccount();
-                                userAccount_t.setUserId(referrerId);
-                                userAccount_t.setBalance(maidMoney);
-                                userAccountService.save(userAccount_t);
-                            } else
-                                userAccountService.addBanlanceByUserId(referrerId, maidMoney);
-                            log.info("回调支付成功，更新用户余额成功");
 
                         }
                     }
