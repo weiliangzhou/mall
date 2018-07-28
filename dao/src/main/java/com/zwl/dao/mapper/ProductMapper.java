@@ -2,6 +2,7 @@ package com.zwl.dao.mapper;
 
 import com.zwl.model.po.Product;
 import com.zwl.model.vo.ProductItemVo;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -22,5 +23,8 @@ public interface ProductMapper {
     List<Product> getAdminProductList();
 
     @Select("select level ,level_name as levelName from ss_product  where merchant_id=#{merchantId} and available =1")
-    List<ProductItemVo> getUserLevelItemsList(String merchantId);
+    List<ProductItemVo> getUserLevelItemsList(@Param("merchantId") String merchantId);
+
+    @Select("select maid_percent from ss_product  where level=#{referrerLevel} and available =1")
+    Integer getMaidPercentByLevel(@Param("referrerLevel") Integer referrerLevel);
 }

@@ -52,7 +52,7 @@ public class MaidInfo {
     private String levelName;
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     @ApiComment(value = "创建时间", sample = "2018-07-05 18:00:00")
-    private Date createTime;
+    private Date createTime=new Date();
     @RestPackIgnore
     @JSONField(serialize = false)
     private Integer available = 1;
