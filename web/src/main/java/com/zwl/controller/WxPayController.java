@@ -130,7 +130,7 @@ public class WxPayController {
             // 避免已经成功、关闭、退款的订单被再次更新
             //  WxPayApiConfigKit.setThreadLocalWxPayApiConfig(getApiConfig());
             // if (PaymentKit.verifyNotify(params, WxPayApiConfigKit.getWxPayApiConfig().getPaternerKey())) {
-            System.out.println(("SUCCESS").equals(result_code));
+//            System.out.println(("SUCCESS").equals(result_code));
             if (("SUCCESS").equals(result_code)) {
                 //更新订单信息
                 log.info("原订单信息:" + attach);
