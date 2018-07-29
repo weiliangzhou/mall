@@ -98,13 +98,13 @@ public class WithdrawServiceImpl implements WithdrawService {
             BSUtil.isTrue(false, "可用余额不足");
         User user = userService.getByUserId(userId);
         //        需校验该用户是否实名，未实名则返回
-        UserCertification userCertification = userCertificationService.getOneByUserId(userId);
+//        UserCertification userCertification = userCertificationService.getOneByUserId(userId);
 //        0未提交1审核中 2审核通过 3未通过
-        Integer status = userCertification == null ? 0 : userCertification.getStatus();
-        if (status != 2)
-            BSUtil.isTrue(false, "未实名");
-//        if (StringUtils.isBlank(user.getRealName()))
+//        Integer status = userCertification == null ? 0 : userCertification.getStatus();
+//        if (status != 2)
 //            BSUtil.isTrue(false, "未实名");
+        if (StringUtils.isBlank(user.getRealName()))
+            BSUtil.isTrue(false, "未实名");
 //        默认写死微信，后期可配置，申请提现金额，可提现金额，点击确认，
 //调用微信支付    记录发送参数日志
 //        发送支付信息成功
