@@ -37,7 +37,7 @@
       #{operator,jdbcType=VARCHAR}, #{merchantId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{available,jdbcType=SMALLINT})
   </insert>
-  <insert id="insertSelective" parameterType="com.zwl.model.po.WithdrawFlow" >
+  <insert id="insertSelective" parameterType="com.zwl.model.po.WithdrawFlow" useGeneratedKeys="true" keyProperty="id">
     insert into ss_withdraw_flow
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
