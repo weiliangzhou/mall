@@ -5,7 +5,6 @@ import com.zwl.dao.mapper.WithdrawFlowMapper;
 import com.zwl.dao.mapper.WithdrawMapper;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.User;
-import com.zwl.model.po.UserCertification;
 import com.zwl.model.po.Withdraw;
 import com.zwl.model.po.WithdrawFlow;
 import com.zwl.model.wxpay.AdminPayVo;
@@ -87,13 +86,16 @@ public class WithdrawServiceImpl implements WithdrawService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public synchronized void apply(Withdraw withdraw) {
-        Integer money = withdraw.getMoney()*100;
+        Integer money = withdraw.getMoney() * 100;
+        if (money == 0)
+            BSUtil.isTrue(false, "提现金额不能为0");
+
         String userId = withdraw.getUserId();
         String merchantId = withdraw.getMerchantId();
         Integer balance = userAccountMapper.getBalanceByUserId(userId);
-        if (balance == null) {
+        if (balance == null)
             BSUtil.isTrue(false, "可用余额不足");
-        }
+
         if (money >= balance)
             BSUtil.isTrue(false, "可用余额不足");
         User user = userService.getByUserId(userId);
@@ -122,11 +124,11 @@ public class WithdrawServiceImpl implements WithdrawService {
 //            BSUtil.isTrue(false, "操作异常,请重新操作");
         Withdraw withdrawId = withdrawMapper.selectByPrimaryKey(id);
         if (withdrawId != null) {
-        WithdrawFlow withdrawFlow = new WithdrawFlow();
-        withdrawFlow.setWithdrawId(withdrawId.getWithdrawId());
-        withdrawFlow.setStatus(0);
-        withdrawFlow.setMerchantId(merchantId);
-        withdrawFlowMapper.insertSelective(withdrawFlow);
+            WithdrawFlow withdrawFlow = new WithdrawFlow();
+            withdrawFlow.setWithdrawId(withdrawId.getWithdrawId());
+            withdrawFlow.setStatus(0);
+            withdrawFlow.setMerchantId(merchantId);
+            withdrawFlowMapper.insertSelective(withdrawFlow);
         }
     }
 }
