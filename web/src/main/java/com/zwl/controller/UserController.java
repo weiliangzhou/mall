@@ -207,6 +207,11 @@ public class UserController {
         userLoginInfoVo.setNickName(userInfo.getNickName());
         userLoginInfoVo.setLogoUrl(userInfo.getLogoUrl());
         User user = userService.getByUserId(userId);
+        if(user==null){
+            result.setCode(ResultCodeEnum.EXCEPTION);
+            result.setMessage("查无用户，请校验userId");
+            return result;
+        }
         userLoginInfoVo.setMemberLevel(user.getMemberLevel());
 //        userLoginInfoVo.setIsBindMobile(userInfo.getIsBindMobile()==null?0:1);
         //通过主表获取绑定手机号
