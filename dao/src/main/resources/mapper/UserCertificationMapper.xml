@@ -24,7 +24,7 @@
   </sql>
     <sql id="Insert_Column_List">
     status, operator, realname, id_card, img_1_url, img_2_url, img_3_url, user_id,merchant_id,
-    reject_reason,audit_time, create_time, modify_time, available
+    reject_reason, create_time, available
   </sql>
     <!--新增-->
     <insert id="insert" parameterType="com.zwl.model.po.UserCertification">
@@ -34,7 +34,7 @@
         values ( #{status,jdbcType=INTEGER}, #{operator,jdbcType=VARCHAR},
         #{realname,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, #{img1Url,jdbcType=VARCHAR},
         #{img2Url,jdbcType=VARCHAR}, #{img3Url,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR},
-        #{merchantId,jdbcType=VARCHAR},#{rejectReason,jdbcType=VARCHAR},#{auditTime,jdbcType=TIMESTAMP}, now(), now(),
+        #{merchantId,jdbcType=VARCHAR},#{rejectReason,jdbcType=VARCHAR}, now(),
         #{available,jdbcType=INTEGER})
     </insert>
     <!--根据插入参数 修改用户实名信息-->
