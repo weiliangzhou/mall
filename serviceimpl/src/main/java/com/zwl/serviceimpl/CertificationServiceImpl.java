@@ -47,4 +47,9 @@ public class CertificationServiceImpl implements CertificationService {
     public List<UserCertification> getListByStatus(String merchantId, Integer status) {
         return userCertificationMapper.selectListByStatus(merchantId, status);
     }
+
+    @Override
+    public UserCertification getOneByParams(UserCertification userCertification) {
+        return userCertificationMapper.getOneByParams(userCertification);
+    }
 }

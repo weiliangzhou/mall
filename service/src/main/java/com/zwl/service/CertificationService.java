@@ -57,4 +57,6 @@ public interface CertificationService {
      * @return
      */
     List<UserCertification> getListByStatus(String merchantId,Integer status);
+
+    UserCertification getOneByParams(UserCertification userCertification);
 }

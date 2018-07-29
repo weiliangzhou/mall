@@ -49,4 +49,5 @@ public interface UserCertificationMapper {
      */
     List<UserCertification> selectListByStatus(@Param("merchantId") String merchantId, @Param("status") Integer status);
 
+    UserCertification getOneByParams(UserCertification userCertification);
 }
