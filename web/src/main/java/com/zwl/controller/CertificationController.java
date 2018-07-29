@@ -71,9 +71,19 @@ public class CertificationController {
             /*result.setCode(ResultCodeEnum.EXCEPTION);
             result.setMessage("查无用户");
             return result;*/
-            UserCertification uc = new UserCertification();
-            uc.setStatus(0);
-            result.setData(uc);
+
+            UserCertification queryUC = new UserCertification();
+            queryUC.setUserId(userId);
+            queryUC.setStatus(3);
+            UserCertification userCertification_nopass = certificationService.getOneByParams(queryUC);
+            if (userCertification_nopass != null)
+                result.setData(userCertification_nopass);
+            else {
+                UserCertification userCertification_temp = new UserCertification();
+                userCertification_temp.setStatus(0);
+                result.setData(userCertification_temp);
+            }
+
             return result;
         }
         result.setData(userCertification);
