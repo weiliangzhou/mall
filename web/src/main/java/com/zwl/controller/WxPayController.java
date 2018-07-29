@@ -262,7 +262,7 @@ public class WxPayController {
 //                                }
                             }
 
-                            //在不是试听课的时候，查询当前用户有效会员等级并且小于等于推荐人的有效会员等级才可以返佣
+                            //在不是试听课的时候，查询当前用户有效会员等级并且小于等于推荐人的有效会员等级才可以返佣(小班不返佣！！！！！)
 //                            Integer memberLevel=userService.getMemberLevel(userId);
                             Integer referrerLevel = userService.getMemberLevel(referrerId);
                             if (null != referrerLevel && referrerLevel >= memberLevel && referrerLevel >= 4) {
