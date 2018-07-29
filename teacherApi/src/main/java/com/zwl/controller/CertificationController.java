@@ -79,8 +79,9 @@ public class CertificationController {
         Page page = PageHelper.startPage(pageNum, pageSize);
         List<UserCertification> list = certificationService.getListByMerchantId(merchantId);
         List<CertificationVo> listVo = new ArrayList<>();
-        for (UserCertification uc : list
-                ) {
+        for (UserCertification uc : list) {
+            if (uc == null)
+                continue;
             CertificationVo certificationVo = new CertificationVo();
             User user = userService.getByUserId(uc.getUserId());
             certificationVo.setRegisterMobile(user.getRegisterMobile());

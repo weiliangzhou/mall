@@ -185,7 +185,7 @@
         <if test="userId != null">
             and user_id = #{userId,jdbcType=VARCHAR}
         </if>
-        and available = 1
+
 
     </select>
 
