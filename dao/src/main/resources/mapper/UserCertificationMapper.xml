@@ -165,6 +165,9 @@
         <include refid="Base_Column_List"/>
         from ss_user_certification
         where 1=1
+        <if test="id != null">
+            and  id = #{id,jdbcType=INTEGER}
+        </if>
         <if test="merchantId != null">
             and  merchant_id = #{merchantId,jdbcType=INTEGER}
         </if>

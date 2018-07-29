@@ -69,7 +69,10 @@ public class CertificationController {
             CertificationVo certificationVo = new CertificationVo();
             User user =userService.getByUserId(uc.getUserId());
             certificationVo.setRegisterMobile(user.getRegisterMobile());
-            UserCertification userCertification = certificationService.getOneByUserId(uc.getUserId());
+            UserCertification ucQuery=new UserCertification();
+            ucQuery.setId(uc.getId());
+//            UserCertification userCertification = certificationService.getOneByUserId(uc.getUserId());
+            UserCertification userCertification = certificationService.getOneByParams(ucQuery);
             certificationVo.setRealname(userCertification.getRealname());
             String modifyDateStr = DateUtil.getFormatString("yyyy-MM-dd HH:mm:ss", userCertification.getModifyTime());
             certificationVo.setModifyTime(modifyDateStr);

@@ -64,6 +64,7 @@ public class CertificationController {
         String userId = jsonObject.getString("userId");
         UserCertification queryUserCertification = new UserCertification();
         queryUserCertification.setUserId(userId);
+        queryUserCertification.setStatus(2);
         UserCertification userCertification = certificationService.getOneByParams(queryUserCertification);
 //        UserCertification userCertification = certificationService.getOneByUserId(userId);
         if (userCertification == null) {
