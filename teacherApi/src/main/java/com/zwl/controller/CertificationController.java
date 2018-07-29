@@ -105,6 +105,8 @@ public class CertificationController {
             certificationVo.setCreateTime(createDateStr);
             certificationVo.setStatus(userCertification.getStatus());
             certificationVo.setId(userCertification.getId());
+            certificationVo.setUserId(userCertification.getUserId());
+
             listVo.add(certificationVo);
         }
        /* CertificationVo certificationVo = new CertificationVo();
