@@ -150,6 +150,7 @@ public class UserController {
         String phone = jsonObject.getString("phone");
         String msgCode = jsonObject.getString("msgCode");
         String userId = jsonObject.getString("userId");
+        String busCode = jsonObject.getString("busCode");
 //        需要手机号码防重
         User queryUser = new User();
         queryUser.setRegisterMobile(phone);
@@ -158,7 +159,7 @@ public class UserController {
             BSUtil.isTrue(false, "已存在该手机号码");
 
         //  校验验证码
-        boolean isValidate = msgSenderService.checkCode(phone, msgCode);
+        boolean isValidate = msgSenderService.checkCode(phone, msgCode, busCode);
         if (!isValidate)
             BSUtil.isTrue(false, "验证码错误");
         Result result = new Result();
@@ -179,10 +180,11 @@ public class UserController {
         return result;
     }
 
-    @PostMapping("/sendRegisterCode")
+    @PostMapping("/sendMsgCode")
     public Result sendRegisterCode(@RequestBody JSONObject jsonObject) {
         String phone = jsonObject.getString("phone");
-        msgSenderService.sendCode(phone);
+        String busCode = jsonObject.getString("busCode");
+        msgSenderService.sendCode(phone, busCode);
         Result result = new Result();
         return result;
     }
@@ -209,9 +211,9 @@ public class UserController {
         userLoginInfoVo.setMemberLevel(user.getMemberLevel());
 //        userLoginInfoVo.setIsBindMobile(userInfo.getIsBindMobile()==null?0:1);
         //通过主表获取绑定手机号
-        userLoginInfoVo.setIsBindMobile(user.getRegisterMobile()==null?0:1);
+        userLoginInfoVo.setIsBindMobile(user.getRegisterMobile() == null ? 0 : 1);
         userLoginInfoVo.setRegisterMobile(user.getRegisterMobile());
-        userLoginInfoVo.setIsCertification(userInfo.getIsCertification()==null?0:1);
+        userLoginInfoVo.setIsCertification(userInfo.getIsCertification() == null ? 0 : 1);
 
         result.setData(userLoginInfoVo);
         return result;
@@ -225,7 +227,7 @@ public class UserController {
         String referrer = jsonObject.getString("referrer");
         String userId = jsonObject.getString("userId");
         String merchantId = jsonObject.getString("merchantId");
-        log.info("用户"+userId+"推荐人referrer:"+referrer);
+        log.info("用户" + userId + "推荐人referrer:" + referrer);
         Result result = new Result();
         User userQuery = userService.getByUserId(userId);
         if (userQuery == null) {

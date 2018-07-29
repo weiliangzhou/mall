@@ -215,8 +215,8 @@ public class WxController {
 
     @ApiComment("发送验证码")
     @RequestMapping(name = "发送验证码",
-            value = "/wx/user/sendRegisterCode", method = RequestMethod.POST)
-    public Result sendRegisterCode(@ApiComment("phone") String phone) {
+            value = "/wx/user/sendMsgCode", method = RequestMethod.POST)
+    public Result sendRegisterCode(@ApiComment("phone") String phone,@ApiComment("busCode 1注册  2购买") String busCode) {
         Result result = new Result();
         return result;
     }

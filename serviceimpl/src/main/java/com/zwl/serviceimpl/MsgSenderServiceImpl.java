@@ -30,7 +30,7 @@ public class MsgSenderServiceImpl implements MsgSenderService {
 
 
     @Override
-    public void sendCode(String phone) {
+    public void sendCode(String phone,String busCode) {
         try {
             StringBuffer sb = new StringBuffer(MsgSenderConstants.URL);
             sb.append("un=" + MsgSenderConstants.UN);
@@ -49,8 +49,9 @@ public class MsgSenderServiceImpl implements MsgSenderService {
             if ("0".equals(ss[1].substring(0, 1))) {
                 log.info("发送成功");
                 //存入redis
-                // 存储到redis并设置过期时间
-                stringRedisTemplate.boundValueOps(phone).set(msgCode + "", 5, TimeUnit.MINUTES);
+                //根据busCode 1绑定手机，2购买绑定手机，存储到redis并设置过期时间
+
+                stringRedisTemplate.boundValueOps(busCode+phone).set(msgCode + "", 5, TimeUnit.MINUTES);
 
             } else
                 log.error("短信发送失败" + sb.toString() + "错误原因" + ss[1].substring(0, 3));
@@ -61,14 +62,15 @@ public class MsgSenderServiceImpl implements MsgSenderService {
     }
 
     @Override
-    public boolean checkCode(String phone, String code) {
-        String redisCode = stringRedisTemplate.boundValueOps(phone).get();
+    public boolean checkCode(String phone, String code,String busCode) {
+        String redisCode = stringRedisTemplate.boundValueOps(busCode+phone).get();
+        //            删除redis
+        stringRedisTemplate.delete(phone);
 
         if (StringUtils.isEmpty(redisCode))
             return false;
         else if (redisCode.equals(code)) {
-//            删除redis
-            stringRedisTemplate.delete(phone);
+
             return true;
         }
 
