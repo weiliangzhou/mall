@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.zwl.model.baseresult.Result;
+import com.zwl.model.baseresult.ResultCodeEnum;
 import com.zwl.model.po.User;
 import com.zwl.model.po.UserCertification;
 import com.zwl.model.vo.CertificationVo;
@@ -11,6 +12,7 @@ import com.zwl.model.vo.PageCertificationVo;
 import com.zwl.service.CertificationService;
 import com.zwl.service.UserService;
 import com.zwl.util.DateUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +25,7 @@ import java.util.List;
 /**
  * 用户实名认证controller
  */
+@Slf4j
 @RequestMapping("/teacher/certification")
 @RestController
 public class CertificationController {
@@ -84,6 +87,12 @@ public class CertificationController {
                 continue;
             CertificationVo certificationVo = new CertificationVo();
             User user = userService.getByUserId(uc.getUserId());
+            if(user==null){
+                result.setCode(ResultCodeEnum.EXCEPTION);
+                result.setMessage("实名认证表的userid:"+uc.getUserId()+"在user表里不存在");
+                log.error("实名认证表的userid:"+uc.getUserId()+"在user表里不存在");
+                return result;
+            }
             certificationVo.setRegisterMobile(user.getRegisterMobile());
             UserCertification ucQuery = new UserCertification();
             ucQuery.setId(uc.getId());
