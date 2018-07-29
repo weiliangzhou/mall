@@ -32,7 +32,7 @@ public class MaidInfoVo {
     @ApiComment(value = "返佣金额", sample = "9900")
     private Integer maidMoney;
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
-    @ApiComment(value = "时间", sample = "2018-07-05 18:00:00")
+    @ApiComment(value = "时间", sample = "2018-07-05 18:00")
     private Date createTime;
 
 }
