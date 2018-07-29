@@ -150,7 +150,6 @@ public class UserController {
         String phone = jsonObject.getString("phone");
         String msgCode = jsonObject.getString("msgCode");
         String userId = jsonObject.getString("userId");
-        String busCode = jsonObject.getString("busCode");
 //        需要手机号码防重
         User queryUser = new User();
         queryUser.setRegisterMobile(phone);
@@ -159,7 +158,7 @@ public class UserController {
             BSUtil.isTrue(false, "已存在该手机号码");
 
         //  校验验证码
-        boolean isValidate = msgSenderService.checkCode(phone, msgCode, busCode);
+        boolean isValidate = msgSenderService.checkCode(phone, msgCode, "1");
         if (!isValidate)
             BSUtil.isTrue(false, "验证码错误");
         Result result = new Result();

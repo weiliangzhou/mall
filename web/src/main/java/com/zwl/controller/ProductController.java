@@ -62,7 +62,7 @@ public class ProductController {
         String phone =product.getPhone();
 //        校验验证码
         //  校验验证码
-        boolean isValidate = msgSenderService.checkCode(phone, code);
+        boolean isValidate = msgSenderService.checkCode(phone, code,"2");
         if (!isValidate)
             BSUtil.isTrue(false, "验证码错误");
         BuyResult buyResult = productService.buy(product);
