@@ -66,7 +66,7 @@ public class TokenFilter implements Filter {
         }
         //发送验证码
 
-        if (requestURL.contains("/wx/user/sendRegisterCode")) {
+        if (requestURL.contains("/wx/user/sendMsgCode")) {
             chain.doFilter(request, response);
             return;
         }
