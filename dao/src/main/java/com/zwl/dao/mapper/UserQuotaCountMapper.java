@@ -9,7 +9,7 @@ public interface UserQuotaCountMapper {
     @Select("select count from ss_user_quota_count where id=#{userId} and available=1 ")
     Integer getCountByUserId(@Param("userId") String userId);
 
-    @Update("update ss_user_quota_count set  count =count-1 where type=1 and count-1>=0 and id=#{userId}")
+    @Update("update ss_user_quota_count set  count =count-1 where type=1  and id=#{userId}")  //and count-1>=0
     int updateCountByUserId(@Param("userId") String userId);
 
     int saveOrUpdate(@Param("userId") String userId, @Param("i") int i);

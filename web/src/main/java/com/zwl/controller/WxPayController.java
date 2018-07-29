@@ -245,26 +245,27 @@ public class WxPayController {
 //                如果产品的等级是1，分佣比列按照产品的分佣百分比计算
 //                并且还要满足推荐人的邀请名额限定 院长 100 班长 50 学员10
 //                新增一张名额限定表 ss_quota_count
-//                如果产品等级为1，则先判断推荐人的邀请名额是否满足，如果不满足则直接跳过
+//                如果产品等级为1，(则先判断推荐人的邀请名额是否满足，如果不满足则直接跳过 )
 //                如果产品等级为 456 则相应添加邀请名额
                             if (1 == memberLevel) {
                                 Integer userQuotaCount = userQuotaCountService.updateCountByUserId(referrerId);
                                 //存在数据异常  userQuotaCount null
-                                if (userQuotaCount == 0 || userQuotaCount == null) {
-                                    log.info("邀请小班名额已满，不返分佣");
-                                    //发送通知等
-                                    Map<String, String> xml = new HashMap<String, String>();
-                                    xml.put("return_code", "SUCCESS");
-                                    xml.put("return_msg", "OK");
-                                    return PaymentKit.toXml(xml);
-                                } else {
-                                    log.info("邀请小班名额成功-1,成功分佣");
-                                }
+//                                if (userQuotaCount == 0 || userQuotaCount == null) {
+//                                    log.info("邀请小班名额已满，不返分佣");
+//                                    //发送通知等
+//                                    Map<String, String> xml = new HashMap<String, String>();
+//                                    xml.put("return_code", "SUCCESS");
+//                                    xml.put("return_msg", "OK");
+//                                    return PaymentKit.toXml(xml);
+//                                } else {
+                                log.info("邀请小班名额成功-1");
+//                                }
                             }
+
                             //在不是试听课的时候，查询当前用户有效会员等级并且小于等于推荐人的有效会员等级才可以返佣
 //                            Integer memberLevel=userService.getMemberLevel(userId);
                             Integer referrerLevel = userService.getMemberLevel(referrerId);
-                            if (null != referrerLevel & referrerLevel >= memberLevel ) {
+                            if (null != referrerLevel && referrerLevel >= memberLevel && referrerLevel >= 4) {
 //                            //通过userId获取推荐人对应的分佣比例
                                 maidPercent = userService.getMaidPercentByUserId(userId);
                                 Integer maidPercent_referrer = productService.getMaidPercentByLevel(referrerLevel);
@@ -312,16 +313,16 @@ public class WxPayController {
                         }
                     }
 //                    根据商户号 获取购买模版 formId ,appSecret
-                    log.info("开始发送购买模版");
-                    String gzOpenId = stringRedisTemplate.boundValueOps("formId_" + userId).get();
-//                    存在gzOpenId为null 7天失效
-                    if (!StringUtils.isBlank(gzOpenId)) {
-                        log.info("开始发送购买模版gzOpenId" + gzOpenId);
-                        String appSecret = merchant.getAppSecret();
-                        String buyTemplateId = merchant.getBuyTemplateId();
-                        //发送订单购买公众号提醒
-                        wxSenderService.sendBuyMsg(gzOpenId, productName, Integer.parseInt(total_fee), merchantId, appid, appSecret, buyTemplateId);
-                    }
+//                    log.info("开始发送购买模版");
+//                    String gzOpenId = stringRedisTemplate.boundValueOps("formId_" + userId).get();
+////                    存在gzOpenId为null 7天失效
+//                    if (!StringUtils.isBlank(gzOpenId)) {
+//                        log.info("开始发送购买模版gzOpenId" + gzOpenId);
+//                        String appSecret = merchant.getAppSecret();
+//                        String buyTemplateId = merchant.getBuyTemplateId();
+//                        //发送订单购买公众号提醒
+//                        wxSenderService.sendBuyMsg(gzOpenId, productName, Integer.parseInt(total_fee), merchantId, appid, appSecret, buyTemplateId);
+//                    }
 
                     //发送通知等
                     Map<String, String> xml = new HashMap<String, String>();
