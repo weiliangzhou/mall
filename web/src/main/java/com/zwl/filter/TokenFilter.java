@@ -54,6 +54,11 @@ public class TokenFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
+        if (requestURL.contains(" /wx/gzh/sendFormId")||requestURL.contains(" /wx/gzh/getFormId")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
         //测试图片上传
         if (requestURL.contains("/file/*")) {
             chain.doFilter(request, response);

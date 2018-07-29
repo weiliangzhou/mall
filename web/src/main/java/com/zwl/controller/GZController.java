@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
  * @date 2018/7/2415:12
  */
 @RestController
-@RequestMapping("/gzh/")
+@RequestMapping("/wx/gzh/")
 @Slf4j
 public class GZController {
 
