@@ -99,6 +99,7 @@ public class UserController {
                 User userIsBuy = userService.getByUserId(referrer);
                 if (userIsBuy.getIsBuy() != null && userIsBuy.getMemberLevel() > 1) {
                     user.setReferrer(userLoginInfoVo.getReferrer());
+                    log.info("==============@@@@@@@@新增用户 开始 分享绑定上下级关系@@用户推荐人referrer："+"为"+referrer);
                 }
             }
             user.setIsBuy(0);
@@ -125,6 +126,7 @@ public class UserController {
 //                    if (userIsBuy.getIsBuy() != null && userIsBuy.getMemberLevel() > 1) {
                     if (userIsBuy.getIsBuy() != null && userIsBuy.getIsBuy()==1) {
                         user.setReferrer(userLoginInfoVo.getReferrer());
+                        log.info("==============@@@@@@@@ 更新 开始 分享绑定上下级关系@@用户推荐人referrer："+"为"+referrer);
                         userService.updateUserByUserId(user);
                     }
                 }
@@ -232,13 +234,13 @@ public class UserController {
         String referrer = jsonObject.getString("referrer");
         String userId = jsonObject.getString("userId");
         String merchantId = jsonObject.getString("merchantId");
-        log.info("用户" + userId + "推荐人referrer:" + referrer);
+        log.info("==============@@@@@@@@分享绑定上下级关系@@用户" + userId + "推荐人referrer:" + referrer);
         Result result = new Result();
         User userQuery = userService.getByUserId(userId);
         if (userQuery == null) {
             result.setCode(ResultCodeEnum.EXCEPTION);
             result.setMessage("查无用户，请检查userId");
-            log.error("推荐人referrer："+"为"+referrer+"的用户的userid不存在");
+            log.error("==============@@@@@@@@分享绑定上下级关系@@用户推荐人referrer："+"为"+referrer+"的用户的userid不存在");
             return result;
         }
 
