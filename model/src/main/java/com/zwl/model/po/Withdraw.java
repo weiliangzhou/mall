@@ -18,6 +18,7 @@ public class Withdraw {
     @NotNull(message = "提现金额不能为空", groups = {ApplyWithdraw.class})
     @ApiComment(value = "金额", sample = "1000")
     private Integer money;
+    private Integer moneyDesc;
     @NotBlank(message = "userId不能为空", groups = {ApplyWithdraw.class})
     @ApiComment(value = "userId", sample = "admin")
     private String userId;
@@ -60,6 +61,10 @@ public class Withdraw {
     @NotBlank(message = "商户号不能为空", groups = {ApplyWithdraw.class})
     @ApiComment(value = "商户号", sample = "dy")
     private String merchantId;
+
+    public String getMoneyDesc() {
+        return this.money / 100 + "";
+    }
 
 
 }
