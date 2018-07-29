@@ -189,5 +189,12 @@
 
     </select>
 
-
+    <!--查询用户的所提交的所有审核-->
+    <select id="selectListByUserId" resultMap="BaseResultMap"   parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from ss_user_certification
+        where
+        user_id=#{userId}
+    </select>
 </mapper>

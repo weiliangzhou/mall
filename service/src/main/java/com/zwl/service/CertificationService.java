@@ -59,4 +59,11 @@ public interface CertificationService {
     List<UserCertification> getListByStatus(String merchantId,Integer status);
 
     UserCertification getOneByParams(UserCertification userCertification);
+
+    /**
+     * 查询用户的所提交的所有审核
+     * @param userId
+     * @return
+     */
+    List<UserCertification>  getListByUserId(String userId);
 }

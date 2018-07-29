@@ -11,6 +11,7 @@ import com.zwl.model.vo.CertificationVo;
 import com.zwl.model.vo.PageCertificationVo;
 import com.zwl.service.CertificationService;
 import com.zwl.service.UserService;
+import com.zwl.util.CheckUtil;
 import com.zwl.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -173,10 +174,12 @@ public class CertificationController {
         query.setRegisterMobile(registerMobile);
         query.setMerchantId(merchantId);
         User user = userService.getOneByParams(query);
-        UserCertification userCertification = certificationService.getOneByUserId(user.getUserId());
+        // 同一个用户 实名认证表可能存在多条数据
+//        UserCertification userCertification = certificationService.getOneByUserId(user.getUserId());
+        List<UserCertification> list = certificationService.getListByUserId(user.getUserId());
         List<CertificationVo> listVo = new ArrayList<>();
-        CertificationVo certificationVo = new CertificationVo();
-        if (userCertification == null) {
+        if (CheckUtil.isEmpty(list)) {
+            CertificationVo certificationVo = new CertificationVo();
             certificationVo.setStatus(0);
             certificationVo.setRegisterMobile(user.getRegisterMobile());
             certificationVo.setRealname(user.getRealName());
@@ -184,13 +187,17 @@ public class CertificationController {
             result.setData(listVo);
             return result;
         }
-        certificationVo.setRegisterMobile(user.getRegisterMobile());
-        certificationVo.setRealname(userCertification.getRealname());
-        String modifyDateStr = DateUtil.getFormatString("yyyy-MM-dd HH:mm:ss", userCertification.getModifyTime());
-        certificationVo.setModifyTime(modifyDateStr);
-        certificationVo.setStatus(userCertification.getStatus());
-        certificationVo.setId(userCertification.getId());
-        listVo.add(certificationVo);
+        for (UserCertification uc:list
+             ) {
+            CertificationVo certificationVo = new CertificationVo();
+            certificationVo.setRegisterMobile(user.getRegisterMobile());
+            certificationVo.setRealname(uc.getRealname());
+            String modifyDateStr = DateUtil.getFormatString("yyyy-MM-dd HH:mm:ss", uc.getModifyTime());
+            certificationVo.setModifyTime(modifyDateStr);
+            certificationVo.setStatus(uc.getStatus());
+            certificationVo.setId(uc.getId());
+            listVo.add(certificationVo);
+        }
         result.setData(listVo);
         return result;
     }

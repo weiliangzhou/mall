@@ -50,4 +50,9 @@ public interface UserCertificationMapper {
     List<UserCertification> selectListByStatus(@Param("merchantId") String merchantId, @Param("status") Integer status);
 
     UserCertification getOneByParams(UserCertification userCertification);
+    /**
+     * 查询用户的所提交的所有审核
+     * @return
+     */
+    List<UserCertification> selectListByUserId(String userId);
 }

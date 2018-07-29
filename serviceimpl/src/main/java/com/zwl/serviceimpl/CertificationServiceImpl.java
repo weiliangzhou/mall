@@ -52,4 +52,9 @@ public class CertificationServiceImpl implements CertificationService {
     public UserCertification getOneByParams(UserCertification userCertification) {
         return userCertificationMapper.getOneByParams(userCertification);
     }
+
+    @Override
+    public List<UserCertification> getListByUserId(String userId) {
+        return userCertificationMapper.selectListByUserId(userId);
+    }
 }
