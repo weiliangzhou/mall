@@ -298,10 +298,12 @@ public class WxPayController {
                                 log.info("回调支付成功，更新用户余额userId" + userId + "--->" + "maidMoney--->" + maidMoney);
                                 UserAccount userAccount = userAccountService.getUserAccountByUserId(referrerId);
                                 if (userAccount == null) {
+                                    log.info("创建用户余额表开始");
                                     UserAccount userAccount_t = new UserAccount();
                                     userAccount_t.setUserId(referrerId);
                                     userAccount_t.setBalance(maidMoney);
                                     userAccountService.save(userAccount_t);
+                                    log.info("创建用户余额表结束");
                                 } else
                                     userAccountService.addBanlanceByUserId(referrerId, maidMoney);
                                 log.info("回调支付成功，更新用户余额成功");
