@@ -1,6 +1,8 @@
 package com.zwl.model.po;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.terran4j.commons.api2doc.annotations.ApiComment;
+import com.terran4j.commons.restpack.RestPackIgnore;
 import lombok.Data;
 
 import java.util.Date;
@@ -35,6 +37,8 @@ public class UserCertification {
     @ApiComment(value = "修改时间", sample = "2018-7-11 16:41:55")
     private Date modifyTime;
     @ApiComment(value = "可用与否", sample = "1")
+    @RestPackIgnore
+    @JSONField(serialize = false)
     private Integer available = 1;
 
 }
