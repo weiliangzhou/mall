@@ -99,7 +99,8 @@ public class UserController {
             String referrer = userLoginInfoVo.getReferrer();
             if (CheckUtil.isNotEmpty(referrer)) {
                 User userIsBuy = userService.getByUserId(referrer);
-                if (userIsBuy.getIsBuy() != null && userIsBuy.getMemberLevel() > 1) {
+//                if (userIsBuy.getIsBuy() != null && userIsBuy.getMemberLevel() > 1) {
+                if (userIsBuy.getIsBuy() != null && userIsBuy.getIsBuy()==1) {
                     user.setReferrer(userLoginInfoVo.getReferrer());
                     log.info("==============@@@@@@@@新增用户 开始 分享绑定上下级关系@@用户推荐人referrer："+"为"+referrer);
                 }
