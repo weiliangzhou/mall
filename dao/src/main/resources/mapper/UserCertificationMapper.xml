@@ -143,7 +143,6 @@
         <include refid="Base_Column_List"/>
         from ss_user_certification
         where merchant_id = #{merchantId}
-        and available = 1
     </select>
     <!--根据Id查询用户提交的实名认证信息-->
     <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long">
