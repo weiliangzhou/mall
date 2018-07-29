@@ -237,6 +237,7 @@ public class UserController {
         if (userQuery == null) {
             result.setCode(ResultCodeEnum.EXCEPTION);
             result.setMessage("查无用户，请检查userId");
+            log.error("推荐人referrer："+"为"+referrer+"的用户的userid不存在");
             return result;
         }
 
