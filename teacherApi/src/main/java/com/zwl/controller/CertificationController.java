@@ -217,7 +217,9 @@ public class CertificationController {
             CertificationVo certificationVo = new CertificationVo();
             User user = userService.getByUserId(uc.getUserId());
             certificationVo.setRegisterMobile(user.getRegisterMobile());
-            UserCertification userCertification = certificationService.getOneByUserId(uc.getUserId());
+//            UserCertification userCertification = certificationService.getOneByUserId(uc.getUserId());
+            //同一个用户 实名认证表可能存在多条数据
+            UserCertification userCertification = certificationService.getById(uc.getId());
             certificationVo.setRealname(userCertification.getRealname());
             String modifyDateStr = DateUtil.getFormatString("yyyy-MM-dd HH:mm:ss", userCertification.getModifyTime());
             certificationVo.setModifyTime(modifyDateStr);
