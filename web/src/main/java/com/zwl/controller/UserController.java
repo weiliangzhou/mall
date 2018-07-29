@@ -51,6 +51,8 @@ public class UserController {
      */
     @PostMapping("/authorization")
     public Result authorization(@RequestBody UserLoginInfoVo userLoginInfoVo) {
+        log.info("====@@@@进入用户授权@@@@@==========");
+        log.info("====@@@@推荐人传入参数为@@@@@==========："+userLoginInfoVo.getReferrer());
         Result result = new Result();
         //根据merchantid获取appid和secret
         Merchant merchant = merchantService.getMerchantByMerchantId(userLoginInfoVo.getMerchantId());
