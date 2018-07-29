@@ -25,7 +25,8 @@
         </selectKey>
         <if test="count > 0">
             update ss_user_quota_count
-            set `count` =`count`+#{i}
+            set `count` =`count`+#{i},
+            `total_count` =`total_count`+#{i}
             where id = #{userId}
         </if>
         <if test="count==0">
