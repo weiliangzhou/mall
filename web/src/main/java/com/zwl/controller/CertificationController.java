@@ -66,28 +66,22 @@ public class CertificationController {
         queryUserCertification.setUserId(userId);
         queryUserCertification.setStatus(2);
         UserCertification userCertification = certificationService.getOneByParams(queryUserCertification);
-        if (userCertification == null) {
-            /*result.setCode(ResultCodeEnum.EXCEPTION);
-            result.setMessage("查无用户");
-            return result;*/
-//              存在审核中1，驳回状态2
-//              如果存在审核中1，返回审核中1
-            UserCertification userCertification_temp = new UserCertification();
-            UserCertification qyc = new UserCertification();
-            qyc.setUserId(userId);
-            qyc.setStatus(1);
-            UserCertification ucf_1 = certificationService.getOneByParams(queryUserCertification);
-            if (ucf_1 != null) {
-                userCertification_temp.setStatus(1);
-                result.setData(userCertification_temp);
-            } else {
-                userCertification_temp.setStatus(0);
-                result.setData(userCertification_temp);
-            }
-
+        UserCertification userCertification_temp = new UserCertification();
+        UserCertification qyc = new UserCertification();
+        qyc.setUserId(userId);
+        qyc.setStatus(1);
+        UserCertification ucf_1 = certificationService.getOneByParams(queryUserCertification);
+        if (ucf_1 != null) {
+            userCertification_temp.setStatus(1);
+            result.setData(userCertification_temp);
             return result;
         }
-        result.setData(userCertification);
+        if (userCertification != null) {
+            result.setData(userCertification);
+            return result;
+        }
+        userCertification_temp.setStatus(0);
+        result.setData(userCertification_temp);
         return result;
     }
 
