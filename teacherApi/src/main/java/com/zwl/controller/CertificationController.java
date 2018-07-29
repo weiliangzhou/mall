@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,28 +30,44 @@ public class CertificationController {
     private CertificationService certificationService;
     @Autowired
     private UserService userService;
+
     /**
      * 审核用户提交的实名信息
+     *
      * @param userCertification
      * @return
      */
     @PostMapping("/modifyById")
     public Result modifyById(@RequestBody UserCertification userCertification) {
         Result result = new Result();
-        certificationService.modifyById(userCertification);
-        //如果实名认证通过，则更新用户表 真实姓名
-        if(userCertification.getStatus()==1){
-            UserCertification temp = certificationService.getOneByUserId(userCertification.getUserId());
-            User user = new User();
-            user.setUserId(userCertification.getUserId());
-            user.setRealName(temp.getRealname());
-            userService.updateUserByUserId(user);
+        Integer status = userCertification.getStatus();
+        String realName = userCertification.getRealname();
+        String userId = userCertification.getUserId();
+        switch (status) {
+            case 0:
+                break;
+            case 1:
+                break;
+            case 2:
+                //如果实名认证通过，则更新用户表 真实姓名
+                User user = new User();
+                user.setUserId(userId);
+                user.setRealName(realName);
+                userService.updateUserByUserId(user);
+                break;
+            case 3:
+                //驳回 则把available = 0
+                userCertification.setAvailable(0);
+                break;
         }
+
+        certificationService.modifyById(userCertification);
         return result;
     }
 
     /**
      * 查找merchantId下的所有用户实名申请信息
+     *
      * @return
      */
     @PostMapping("/getPageListByMerchantId")
@@ -61,15 +76,15 @@ public class CertificationController {
         String merchantId = jsonObject.getString("merchantId");
         Integer pageNum = jsonObject.getInteger("pageNum");
         Integer pageSize = jsonObject.getInteger("pageSize");
-        Page page =PageHelper.startPage(pageNum, pageSize);
+        Page page = PageHelper.startPage(pageNum, pageSize);
         List<UserCertification> list = certificationService.getListByMerchantId(merchantId);
-        List<CertificationVo> listVo=new ArrayList<>();
-        for (UserCertification uc:list
-             ) {
+        List<CertificationVo> listVo = new ArrayList<>();
+        for (UserCertification uc : list
+                ) {
             CertificationVo certificationVo = new CertificationVo();
-            User user =userService.getByUserId(uc.getUserId());
+            User user = userService.getByUserId(uc.getUserId());
             certificationVo.setRegisterMobile(user.getRegisterMobile());
-            UserCertification ucQuery=new UserCertification();
+            UserCertification ucQuery = new UserCertification();
             ucQuery.setId(uc.getId());
 //            UserCertification userCertification = certificationService.getOneByUserId(uc.getUserId());
             UserCertification userCertification = certificationService.getOneByParams(ucQuery);
@@ -92,7 +107,7 @@ public class CertificationController {
        /* PageResult p = new PageResult(listVo);
         result.setData(p);*/
 
-        PageCertificationVo pageVo=new PageCertificationVo();
+        PageCertificationVo pageVo = new PageCertificationVo();
         pageVo.setPageNum(pageNum);
         pageVo.setTotalPage(page.getTotal());
         pageVo.setList(listVo);
@@ -102,6 +117,7 @@ public class CertificationController {
 
     /**
      * 根据Id查询用户提交的实名认证信息
+     *
      * @return
      */
     @PostMapping("/getById")
@@ -110,8 +126,8 @@ public class CertificationController {
         Long id = Long.parseLong(jsonObject.getString("id"));
         UserCertification userCertification = certificationService.getById(id);
 
-        User user=userService.getByUserId(userCertification.getUserId());
-        CertificationVo certificationVo=new CertificationVo();
+        User user = userService.getByUserId(userCertification.getUserId());
+        CertificationVo certificationVo = new CertificationVo();
         certificationVo.setRegisterMobile(user.getRegisterMobile());
         certificationVo.setId(userCertification.getId());
         certificationVo.setStatus(userCertification.getStatus());
@@ -129,8 +145,10 @@ public class CertificationController {
         result.setData(certificationVo);
         return result;
     }
+
     /**
      * 根据手机号搜索
+     *
      * @return
      */
     @PostMapping("/searchByRegisterMobile")
@@ -145,7 +163,7 @@ public class CertificationController {
         UserCertification userCertification = certificationService.getOneByUserId(user.getUserId());
         List<CertificationVo> listVo = new ArrayList<>();
         CertificationVo certificationVo = new CertificationVo();
-        if(userCertification==null){
+        if (userCertification == null) {
             certificationVo.setStatus(0);
             certificationVo.setRegisterMobile(user.getRegisterMobile());
             certificationVo.setRealname(user.getRealName());
@@ -161,12 +179,13 @@ public class CertificationController {
         certificationVo.setId(userCertification.getId());
         listVo.add(certificationVo);
         result.setData(listVo);
-        return  result;
+        return result;
     }
 
 
     /**
      * 根据审核状态搜索
+     *
      * @return
      */
     @PostMapping("/searchByStatus")
@@ -199,7 +218,6 @@ public class CertificationController {
         pageVo.setList(listVo);
         result.setData(pageVo);
         return result;
-
 
 
     }
