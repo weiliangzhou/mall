@@ -29,7 +29,7 @@ public class RedisTokenManagerImpl implements TokenManager {
         String token = UUID.randomUUID().toString().replace("-", "");
         TokenModel model = new TokenModel(userId, token);
         // 存储到redis并设置过期时间
-        stringRedisTemplate.boundValueOps(userId).set(token, 30, TimeUnit.MINUTES);
+        stringRedisTemplate.boundValueOps(userId).set(token, 30, TimeUnit.DAYS);
         //使用token作为key 存放User对象
 
         return model;
