@@ -152,6 +152,7 @@ public class CertificationController {
         certificationVo.setImg1Url(userCertification.getImg1Url());
         certificationVo.setImg2Url(userCertification.getImg2Url());
         certificationVo.setImg3Url(userCertification.getImg3Url());
+        certificationVo.setUserId(userCertification.getUserId());
 
 
         result.setData(certificationVo);
