@@ -103,8 +103,8 @@ public class WithdrawServiceImpl implements WithdrawService {
 //        Integer status = userCertification == null ? 0 : userCertification.getStatus();
 //        if (status != 2)
 //            BSUtil.isTrue(false, "未实名");
-//        if (StringUtils.isBlank(user.getRealName()))
-//            BSUtil.isTrue(false, "未实名");
+        if (StringUtils.isBlank(user.getRealName()))
+            BSUtil.isTrue(false, "未实名");
 //        默认写死微信，后期可配置，申请提现金额，可提现金额，点击确认，
 //调用微信支付    记录发送参数日志
 //        发送支付信息成功
@@ -116,15 +116,17 @@ public class WithdrawServiceImpl implements WithdrawService {
             BSUtil.isTrue(false, "更新余额异常");
         withdraw.setWithdrawId(UUIDUtil.getUUID32());
         withdraw.setOpenId(user.getWechatOpenid());
-//        withdraw.setRealName(user.getRealName());
+        withdraw.setRealName(user.getRealName());
         long id = withdrawMapper.insertSelective(withdraw);
 //        if (0 == withdrawId)
 //            BSUtil.isTrue(false, "操作异常,请重新操作");
         Withdraw withdrawId = withdrawMapper.selectByPrimaryKey(id);
+        if (withdrawId != null) {
         WithdrawFlow withdrawFlow = new WithdrawFlow();
         withdrawFlow.setWithdrawId(withdrawId.getWithdrawId());
         withdrawFlow.setStatus(0);
         withdrawFlow.setMerchantId(merchantId);
         withdrawFlowMapper.insertSelective(withdrawFlow);
+        }
     }
 }
