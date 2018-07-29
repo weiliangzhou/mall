@@ -96,7 +96,7 @@ public class WithdrawServiceImpl implements WithdrawService {
         if (balance == null)
             BSUtil.isTrue(false, "可用余额不足");
 
-        if (money >= balance)
+        if (money > balance)
             BSUtil.isTrue(false, "可用余额不足");
         User user = userService.getByUserId(userId);
         //        需校验该用户是否实名，未实名则返回
