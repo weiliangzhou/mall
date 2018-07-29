@@ -70,7 +70,7 @@ public class CertificationController {
         UserCertification qyc = new UserCertification();
         qyc.setUserId(userId);
         qyc.setStatus(1);
-        UserCertification ucf_1 = certificationService.getOneByParams(queryUserCertification);
+        UserCertification ucf_1 = certificationService.getOneByParams(qyc);
         if (ucf_1 != null) {
             userCertification_temp.setStatus(1);
             result.setData(userCertification_temp);
