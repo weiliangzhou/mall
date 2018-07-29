@@ -116,7 +116,7 @@ public class WithdrawServiceImpl implements WithdrawService {
             BSUtil.isTrue(false, "更新余额异常");
         withdraw.setWithdrawId(UUIDUtil.getUUID32());
         withdraw.setOpenId(user.getWechatOpenid());
-        withdraw.setRealName(user.getRealName());
+//        withdraw.setRealName(user.getRealName());
         long id = withdrawMapper.insertSelective(withdraw);
 //        if (0 == withdrawId)
 //            BSUtil.isTrue(false, "操作异常,请重新操作");
