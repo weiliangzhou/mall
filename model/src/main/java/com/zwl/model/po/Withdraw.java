@@ -32,7 +32,8 @@ public class Withdraw {
     @NotBlank(message = "收款账号不能为空", groups = {ApplyWithdraw.class})
     @ApiComment(value = "收款账号", sample = "139****0001")
     private String account;
-    @ApiComment(value = "状态", sample = " 0审核中 1审核通过(前端显示到款中) 2未通过  3成功")
+//    @ApiComment(value = "状态", sample = " 0审核中 1审核通过(前端显示到款中) 2未通过  3成功")
+    @ApiComment(value = "状态", sample = " 0未提交 1 审核中 2审核通过(前端显示到款中) 3未通过 4成功（到账）")
     private Integer status;
     @NotNull(message = "收款方式不能为空", groups = {ApplyWithdraw.class})
     @ApiComment(value = "收款方式", sample = "微信1")

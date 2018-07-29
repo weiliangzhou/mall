@@ -64,7 +64,7 @@ public class WithdrawServiceImpl implements WithdrawService {
         //记录流水表
         WithdrawFlow withdrawFlow = new WithdrawFlow();
         withdrawFlow.setWithdrawId(withdrawId);
-//        0审核中 1审核通过(前端显示到款中) 2未通过  3成功
+//        0未提交 1 审核中 2审核通过(前端显示到款中) 3未通过 4成功
         withdrawFlow.setStatus(status);
         withdrawFlow.setOperator(operator);
         withdrawFlowMapper.insertSelective(withdrawFlow);
@@ -120,6 +120,8 @@ public class WithdrawServiceImpl implements WithdrawService {
         withdraw.setOpenId(user.getWechatOpenid());
         withdraw.setRealName(user.getRealName());
         withdraw.setMoney(money);
+        //status设置为1 审核中
+        withdraw.setStatus(1);
         long id = withdrawMapper.insertSelective(withdraw);
 //        if (0 == withdrawId)
 //            BSUtil.isTrue(false, "操作异常,请重新操作");
@@ -127,7 +129,8 @@ public class WithdrawServiceImpl implements WithdrawService {
         if (withdrawId != null) {
             WithdrawFlow withdrawFlow = new WithdrawFlow();
             withdrawFlow.setWithdrawId(withdrawId.getWithdrawId());
-            withdrawFlow.setStatus(0);
+//            withdrawFlow.setStatus(0);
+            withdrawFlow.setStatus(1);
             withdrawFlow.setMerchantId(merchantId);
             withdrawFlowMapper.insertSelective(withdrawFlow);
         }
