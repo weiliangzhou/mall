@@ -29,4 +29,6 @@ public class CertificationVo {
     private String modifyTime;
     @ApiComment(value = "提交时间", sample = "2018-7-17 16:23:12")
     private String createTime;
+    @ApiComment(value = "userId", sample = "sfag11233")
+    private String userId;
 }
