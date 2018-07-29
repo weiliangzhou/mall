@@ -92,8 +92,8 @@ public class CertificationController {
             certificationVo.setRealname(userCertification.getRealname());
             String modifyDateStr = DateUtil.getFormatString("yyyy-MM-dd HH:mm:ss", userCertification.getModifyTime());
             certificationVo.setModifyTime(modifyDateStr);
-            String auditDateStr = DateUtil.getFormatString("yyyy-MM-dd HH:mm:ss", userCertification.getAuditTime());
-            certificationVo.setModifyTime(auditDateStr);
+            String createDateStr = DateUtil.getFormatString("yyyy-MM-dd HH:mm:ss", userCertification.getCreateTime());
+            certificationVo.setCreateTime(createDateStr);
             certificationVo.setStatus(userCertification.getStatus());
             certificationVo.setId(userCertification.getId());
             listVo.add(certificationVo);
@@ -134,7 +134,7 @@ public class CertificationController {
         certificationVo.setStatus(userCertification.getStatus());
         String modifyDateStr = DateUtil.getFormatString("yyyy-MM-dd HH:mm:ss", userCertification.getModifyTime());
         certificationVo.setModifyTime(modifyDateStr);
-        certificationVo.setAuditTime(DateUtil.getFormatString("yyyy-MM-dd HH:mm:ss", userCertification.getAuditTime()));
+        certificationVo.setCreateTime(DateUtil.getFormatString("yyyy-MM-dd HH:mm:ss", userCertification.getCreateTime()));
         certificationVo.setRejectReason(userCertification.getRejectReason());
         certificationVo.setRealname(userCertification.getRealname());
         certificationVo.setIdCard(userCertification.getIdCard());
