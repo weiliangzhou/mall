@@ -22,7 +22,7 @@ public interface UserAccountMapper {
     @Update("update ss_user_account set balance= balance+#{money} where user_id=#{userId}")
     int addBanlanceByUserId(@Param("userId") String userId, @Param("money") Integer money);
 
-    @Update("update ss_user_account set balance= balance-#{money} where user_id=#{userId}")
+    @Update("update ss_user_account set balance= balance-#{money} where user_id=#{userId} and balance-#{money} >=0")
     int subBanlanceByUserId(@Param("userId") String userId, @Param("money") Integer money);
 
     UserAccount getUserAccountByUserId(String userId);

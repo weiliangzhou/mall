@@ -122,17 +122,11 @@ public class WithdrawServiceImpl implements WithdrawService {
         withdraw.setMoney(money);
         //status设置为1 审核中
         withdraw.setStatus(1);
-        long id = withdrawMapper.insertSelective(withdraw);
-//        if (0 == withdrawId)
-//            BSUtil.isTrue(false, "操作异常,请重新操作");
-        Withdraw withdrawId = withdrawMapper.selectByPrimaryKey(id);
-        if (withdrawId != null) {
-            WithdrawFlow withdrawFlow = new WithdrawFlow();
-            withdrawFlow.setWithdrawId(withdrawId.getWithdrawId());
-//            withdrawFlow.setStatus(0);
-            withdrawFlow.setStatus(1);
-            withdrawFlow.setMerchantId(merchantId);
-            withdrawFlowMapper.insertSelective(withdrawFlow);
-        }
+        withdrawMapper.insertSelective(withdraw);
+        WithdrawFlow withdrawFlow = new WithdrawFlow();
+        withdrawFlow.setWithdrawId(withdraw.getWithdrawId());
+        withdrawFlow.setStatus(1);
+        withdrawFlow.setMerchantId(merchantId);
+        withdrawFlowMapper.insertSelective(withdrawFlow);
     }
 }
