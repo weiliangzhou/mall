@@ -14,8 +14,8 @@ public class MsgSenderConstants {
     //    用户密码
     public static final String PW = "kGxcPErSAz87ce";
     //    短信模版
-    public static final String TEMPLATE = "验证码为";
+    public static final String TEMPLATE = "【东遥课堂】验证码为";
     //    短信地址
-    public static final String URL = "https://smssh1.253.com/msg/send?";
+    public static final String URL = "https://smssh1.253.com/msg/send/json";
 
 }

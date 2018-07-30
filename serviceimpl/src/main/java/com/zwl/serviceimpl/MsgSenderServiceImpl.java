@@ -1,5 +1,7 @@
 package com.zwl.serviceimpl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.zwl.model.msgsend.MsgSenderConstants;
 import com.zwl.service.MsgSenderService;
 import com.zwl.util.HttpsUtils;
@@ -11,6 +13,8 @@ import org.springframework.util.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -30,31 +34,29 @@ public class MsgSenderServiceImpl implements MsgSenderService {
 
 
     @Override
-    public void sendCode(String phone,String busCode) {
+    public void sendCode(String phone, String busCode) {
         try {
-            StringBuffer sb = new StringBuffer(MsgSenderConstants.URL);
-            sb.append("un=" + MsgSenderConstants.UN);
-            sb.append("&pw=" + MsgSenderConstants.PW);
+            Map map = new HashMap();
             Random random = new Random();
             int msgCode = random.nextInt(999999);
-            String msg = MsgSenderConstants.TEMPLATE + msgCode;
-            sb.append("&phone=" + phone);
-            sb.append("&msg=" + URLEncoder.encode(msg + "", "UTF-8"));
-            sb.append("&rd=0");
-            log.info("短信验证码"+msgCode);
-            log.info("开始发送短信" + sb.toString());
-            String result = HttpsUtils.sendGet(sb.toString(), null);
+            map.put("account", MsgSenderConstants.UN);
+            map.put("password", MsgSenderConstants.PW);
+            map.put("msg", MsgSenderConstants.TEMPLATE + msgCode);
+            map.put("phone", phone);
+            log.info("短信验证码" + msgCode);
+            log.info("开始发送短信" +  JSON.toJSONString(map));
+            String result = HttpsUtils.sendPost(MsgSenderConstants.URL, JSON.toJSONString(map));
             log.info("结束发送短信" + result);
-            String[] ss = result.split(",");
-            if ("0".equals(ss[1].substring(0, 1))) {
+            JSONObject jsonObject = JSONObject.parseObject(result);
+            String code = jsonObject.getString("code");
+            String errorMsg = jsonObject.getString("errorMsg");
+            if ("0".equals(code)) {
                 log.info("发送成功");
                 //存入redis
                 //根据busCode 1绑定手机，2购买绑定手机，存储到redis并设置过期时间
-
-                stringRedisTemplate.boundValueOps(busCode+phone).set(msgCode + "", 5, TimeUnit.MINUTES);
-
+                stringRedisTemplate.boundValueOps(busCode + phone).set(msgCode + "", 5, TimeUnit.MINUTES);
             } else
-                log.error("短信发送失败" + sb.toString() + "错误原因" + ss[1].substring(0, 3));
+                log.error("短信发送失败"  + "错误原因" + errorMsg);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -62,8 +64,8 @@ public class MsgSenderServiceImpl implements MsgSenderService {
     }
 
     @Override
-    public boolean checkCode(String phone, String code,String busCode) {
-        String redisCode = stringRedisTemplate.boundValueOps(busCode+phone).get();
+    public boolean checkCode(String phone, String code, String busCode) {
+        String redisCode = stringRedisTemplate.boundValueOps(busCode + phone).get();
         //            删除redis
         stringRedisTemplate.delete(phone);
 

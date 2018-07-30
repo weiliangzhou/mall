@@ -24,7 +24,7 @@ public class HttpsUtils {
         // pMap.put("Accept-Encoding", "gzip"); //请求定义gzip,响应也是压缩包
         pMap.put("connection", "Keep-Alive");
         pMap.put("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
-        pMap.put("Content-Type", "application/x-www-form-urlencoded");
+        pMap.put("Content-Type", "application/json");
         return pMap;
     }
 //    /**
@@ -100,9 +100,9 @@ public class HttpsUtils {
             }
 
             // 设置通用的请求属性
-            for (Map.Entry<String, String> entry : setProperty().entrySet()) {
-                connection.setRequestProperty(entry.getKey(), entry.getValue());
-            }
+            connection.setRequestProperty("connection", "Keep-Alive");
+            connection.setRequestProperty("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
             // 建立连接
             connection.connect();
             // 定义 BufferedReader输入流来读取URL的响应
@@ -169,9 +169,9 @@ public class HttpsUtils {
 
             // 设置通用的请求属性
 
-            for (Map.Entry<String, String> entry : setProperty().entrySet()) {
-                conn.setRequestProperty(entry.getKey(), entry.getValue());
-            }
+            conn.setRequestProperty("connection", "Keep-Alive");
+            conn.setRequestProperty("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+            conn.setRequestProperty("Content-Type", "application/json");
             conn.connect();
 
             // 获取URLConnection对象对应的输出流
