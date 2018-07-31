@@ -31,7 +31,7 @@ import java.util.Map;
 @EnableScheduling
 @Slf4j
 @RestController
-@RequestMapping("/wx")
+@RequestMapping("/wx/task")
 public class WxPayTask {
     @Autowired
     private OrderService orderService;
