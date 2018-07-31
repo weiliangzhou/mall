@@ -80,7 +80,11 @@ public class UserController {
         String userId = null;
         //用户信息（头像、昵称等）
         UserInfo userInfo = new UserInfo();
-        userInfo.setNickName(userLoginInfoVo.getNickName());
+        String nickName=userLoginInfoVo.getNickName();
+        if (nickName != null && nickName.length() > 0) {
+            nickName=nickName.replaceAll("[\ud800\udc00-\udbff\udfff\ud800-\udfff]", "");
+        }
+        userInfo.setNickName(nickName);
         userInfo.setLogoUrl(userLoginInfoVo.getLogoUrl());
         userInfo.setAvailable(1);
         if (StringUtils.isEmpty(userQuery)) {
@@ -138,6 +142,13 @@ public class UserController {
             userId = userQuery.getUserId();
             userInfo.setUserId(userId);
             userInfoService.modifyByParams(userInfo);
+            //用户主表头像也更新
+            if(CheckUtil.isNotEmpty(userLoginInfoVo.getLogoUrl())){
+                User user = new User();
+                user.setUserId(userQuery.getUserId());
+                user.setLogoUrl(userLoginInfoVo.getLogoUrl());
+                userService.updateUserByUserId(user);
+            }
             result.setMessage("更新用户头像昵称成功！！");
         }
         //返回用户登录态
