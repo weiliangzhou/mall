@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,9 +27,11 @@ import java.util.Map;
  * @Description: TODO
  * @date 2018/7/2414:02
  */
-//@Configuration
-//@EnableScheduling
+@Configuration
+@EnableScheduling
 @Slf4j
+@RestController
+@RequestMapping("/wx")
 public class WxPayTask {
     @Autowired
     private OrderService orderService;
@@ -35,7 +40,8 @@ public class WxPayTask {
 
 //    每天凌晨2点
 //    10分钟一次，测试数据
-//    @Scheduled(cron = "0 2 0 * * ?")
+    @GetMapping("/task")
+    @Scheduled(cron = "0 2 0 * * ?")
     public void queryOrderStatus() {
 //        小程序ID	appid	是	String(32)	wxd678efh567hg6787	微信分配的小程序ID
 //        商户号	mch_id	是	String(32)	1230000109	微信支付分配的商户号
