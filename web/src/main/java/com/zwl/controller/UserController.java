@@ -142,6 +142,13 @@ public class UserController {
             userId = userQuery.getUserId();
             userInfo.setUserId(userId);
             userInfoService.modifyByParams(userInfo);
+            //用户主表头像也更新
+            if(CheckUtil.isNotEmpty(userLoginInfoVo.getLogoUrl())){
+                User user = new User();
+                user.setUserId(userQuery.getUserId());
+                user.setLogoUrl(userLoginInfoVo.getLogoUrl());
+                userService.updateUserByUserId(user);
+            }
             result.setMessage("更新用户头像昵称成功！！");
         }
         //返回用户登录态
