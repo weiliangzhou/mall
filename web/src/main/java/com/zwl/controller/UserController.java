@@ -80,7 +80,11 @@ public class UserController {
         String userId = null;
         //用户信息（头像、昵称等）
         UserInfo userInfo = new UserInfo();
-        userInfo.setNickName(userLoginInfoVo.getNickName());
+        String nickName=userLoginInfoVo.getNickName();
+        if (nickName != null && nickName.length() > 0) {
+            nickName=nickName.replaceAll("[\ud800\udc00-\udbff\udfff\ud800-\udfff]", "");
+        }
+        userInfo.setNickName(nickName);
         userInfo.setLogoUrl(userLoginInfoVo.getLogoUrl());
         userInfo.setAvailable(1);
         if (StringUtils.isEmpty(userQuery)) {
