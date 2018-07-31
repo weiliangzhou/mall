@@ -24,8 +24,8 @@ import java.util.Map;
  * @Description: TODO
  * @date 2018/7/2414:02
  */
-@Configuration
-@EnableScheduling
+//@Configuration
+//@EnableScheduling
 @Slf4j
 public class WxPayTask {
     @Autowired
@@ -35,7 +35,7 @@ public class WxPayTask {
 
 //    每天凌晨2点
 //    10分钟一次，测试数据
-    @Scheduled(cron = "0 2 0 * * ?")
+//    @Scheduled(cron = "0 2 0 * * ?")
     public void queryOrderStatus() {
 //        小程序ID	appid	是	String(32)	wxd678efh567hg6787	微信分配的小程序ID
 //        商户号	mch_id	是	String(32)	1230000109	微信支付分配的商户号
