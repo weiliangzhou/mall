@@ -41,15 +41,12 @@ public class CertificationController {
         UserCertification isExist = certificationService.getOneByParams(queryUserCertification);
         if (isExist != null)
             BSUtil.isTrue(false, "身份证已经存在，请更换其他绑定！");
-//        UserCertification uc = certificationService.getOneByUserId(userCertification.getUserId());
-//        if (uc != null) {
-//            uc.setStatus(1);
-//            certificationService.modifyByUserId(userCertification);
-//        } else {
+        queryUserCertification.setStatus(1);
+        UserCertification isBinding = certificationService.getOneByParams(queryUserCertification);
+        if (isBinding != null)
+            BSUtil.isTrue(false, "身份证已经在审核中！！！！");
         userCertification.setStatus(1);
         certificationService.add(userCertification);
-//        }
-
         return result;
     }
 
