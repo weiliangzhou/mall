@@ -42,6 +42,14 @@ public class ProductController {
         String merchantId=jsonObject.getString("merchantId");
         Result result = new Result();
         List<Product> productList = productService.getProductList(merchantId);
+        for (Product p:productList
+             ) {
+            try {
+                p.setPriceDesc(MoneyUtil.changeF2Y(Long.valueOf(p.getPrice())));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         result.setData(productList);
         return JSON.toJSONString(result);
     }
