@@ -54,18 +54,17 @@ public class ProductController {
     public String updateProduct(/*@Validated(Update.class) */@RequestBody Product product) {
         Result result = new Result();
         //前端页面编辑传入的是元单位 ，需要转换成分
-      /*  if(product.getPriceDesc()!=null){
+        if(product.getPriceDesc()!=null){
 //            Integer price=product.getPrice()*100;
 //            product.setPrice(Integer.parseInt(MoneyUtil.changeY2F(product.getPriceDesc())));
             product.setPrice(Integer.parseInt(MoneyUtil.changeY2F(product.getPriceDesc())));
-        }*/
-      if(product.getPrice()!=null){
+        }
+    /*  if(product.getPrice()!=null){
           Integer price=product.getPrice()*100;
           product.setPrice(price);
-      }
+      }*/
         productService.updateProduct(product);
         return JSON.toJSONString(result);
     }
-
 
 }

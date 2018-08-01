@@ -60,7 +60,7 @@ public class Product {
     @NotBlank(message = "微信H5支付终端ip不能为空")
     private String spbillCreateIp;
 
-    public String getPriceDesc() {
+  /*  public String getPriceDesc() {
         if(this.price==null) return null;
         String p = null;
         try {
@@ -70,7 +70,7 @@ public class Product {
         }
 //        return this.price==null?null:this.price / 100 + "";
         return p;
-    }
+    }*/
     @RestPackIgnore
     @JSONField(serialize = false)
     @NotBlank(message = "微信H5支付终端ip不能为空",groups = {H5Buy.class})
