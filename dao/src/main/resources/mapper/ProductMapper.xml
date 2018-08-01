@@ -10,13 +10,16 @@
         <result column="validity_time" property="validityTime" jdbcType="INTEGER"/>
         <result column="price" property="price" jdbcType="INTEGER"/>
         <result column="merchant_id" property="merchantId" jdbcType="VARCHAR"/>
+        <result column="image_url" property="imageUrl" />
+        <result column="content" property="content" />
+        <result column="content_text" property="contentText" />
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
         <result column="available" property="available" jdbcType="SMALLINT"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, level, level_name, product_name, maid_percent, validity_time, price, merchant_id, 
-    create_time, modify_time, available
+    id, level, level_name, product_name, maid_percent, validity_time, price, merchant_id, image_url,
+    content,content_text,create_time, modify_time, available
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
@@ -51,6 +54,15 @@
             </if>
             <if test="merchantId != null">
                 merchant_id,
+            </if>
+            <if test="imageUrl != null">
+                image_url,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="contentText != null">
+                content_text,
             </if>
             <if test="createTime != null">
                 create_time,
@@ -87,6 +99,15 @@
             <if test="merchantId != null">
                 #{merchantId,jdbcType=VARCHAR},
             </if>
+            <if test="imageUrl != null">
+                #{imageUrl},
+            </if>
+            <if test="content != null">
+                #{content},
+            </if>
+            <if test="contentText != null">
+                #{contentText},
+            </if>
             <if test="createTime != null">
                 #{createTime,jdbcType=TIMESTAMP},
             </if>
@@ -118,6 +139,15 @@
             </if>
             <if test="merchantId != null">
                 merchant_id = #{merchantId,jdbcType=VARCHAR},
+            </if>
+            <if test="imageUrl != null">
+                image_url = #{imageUrl},
+            </if>
+            <if test="content != null">
+                content=#{content},
+            </if>
+            <if test="contentText != null">
+                content_text=#{contentText},
             </if>
             <if test="available != null">
                 available = #{available,jdbcType=SMALLINT},

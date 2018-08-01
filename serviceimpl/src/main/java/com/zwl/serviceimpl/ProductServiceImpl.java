@@ -169,4 +169,9 @@ public class ProductServiceImpl implements ProductService {
     public Integer getMaidPercentByLevel(Integer referrerLevel) {
         return productMapper.getMaidPercentByLevel(referrerLevel);
     }
+
+    @Override
+    public Product getProductById(Long id) {
+        return productMapper.selectByPrimaryKey(id);
+    }
 }

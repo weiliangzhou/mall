@@ -92,6 +92,12 @@ public class TokenFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
+        //获取商品列表 ||根据id获取商品详情
+        if (requestURL.contains("/product/getProductList") ||requestURL.contains("/product/getProductById")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
        /* //用户信息展示
         if (requestURL.contains("/user/getUserInfoByUserId")) {
             chain.doFilter(request, response);

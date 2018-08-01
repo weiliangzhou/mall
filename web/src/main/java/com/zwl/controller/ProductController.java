@@ -1,20 +1,28 @@
 package com.zwl.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.groups.Buy;
 import com.zwl.model.groups.H5Buy;
 import com.zwl.model.po.Product;
 import com.zwl.model.vo.BuyResult;
+import com.zwl.model.vo.ProductVo;
 import com.zwl.service.MsgSenderService;
 import com.zwl.service.ProductService;
+import com.zwl.util.MoneyUtil;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author 二师兄超级帅
@@ -73,5 +81,54 @@ public class ProductController {
         return JSON.toJSONString(result);
     }
 
+    /**
+     * 获取商品列表
+     * @param jsonObject
+     * @return
+     */
+    @PostMapping("/getProductList")
+    public String getProductList(@RequestBody JSONObject jsonObject) {
+        String merchantId=jsonObject.getString("merchantId");
+        Result result = new Result();
+        List<Product> productList = productService.getProductList(merchantId);
+        List<ProductVo> listVo=new ArrayList<>();
+        for (Product p:productList
+                ) {
+            ProductVo productVo = new ProductVo();
+            productVo.setId(p.getId());
+            productVo.setProductName(p.getProductName());
+            //小程序 不返回带格式介绍（数据量可能比较大）
+           // productVo.setContent(p.getContent());
+            productVo.setContentText(p.getContentText());
+            productVo.setImageUrl(p.getImageUrl());
+            //返回给前端 单位:元
+            productVo.setPrice(p.getPrice());
+            productVo.setPriceDesc(p.getPriceDesc());
 
+            listVo.add(productVo);
+        }
+        result.setData(listVo);
+        return JSON.toJSONString(result);
+    }
+
+    /**
+     * 根据id获取商品
+     * @return
+     */
+    @PostMapping(value = "/getProductById")
+    public String getProductById(@RequestBody JSONObject jsonObject) {
+        Result result = new Result();
+        Long id=jsonObject.getLong("id");
+        Product p = productService.getProductById(id);
+        ProductVo productVo = new ProductVo();
+        productVo.setId(p.getId());
+        productVo.setContent(p.getContent());
+        productVo.setContentText(p.getContentText());
+        productVo.setImageUrl(p.getImageUrl());
+        productVo.setPrice(p.getPrice());
+        productVo.setPriceDesc(p.getPriceDesc());
+
+        result.setData(productVo);
+        return JSON.toJSONString(result);
+    }
 }
