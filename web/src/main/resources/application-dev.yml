@@ -15,13 +15,13 @@ spring:
           #-------------- start ----------------# (1)
           master:
             #基本属性--注意，这里的为【jdbcurl】-- 默认使用HikariPool作为数据库连接池
-            jdbcurl: jdbc:mysql://rm-bp14t37l6w6xxcb40go.mysql.rds.aliyuncs.com:3306/test?useUnicode=true&characterEncoding=UTF-8&useSSL=true
+            jdbcurl: jdbc:mysql://rm-bp14t37l6w6xxcb40go.mysql.rds.aliyuncs.com:3306/dev_new?useUnicode=true&characterEncoding=UTF-8&useSSL=true
             username: weigutest
             password: Wegoo2018
             driver-class-name: com.mysql.jdbc.Driver
           slave:
             #基本属性--注意，这里为 【url】-- 使用 druid 作为数据库连接池
-            url: jdbc:mysql://rm-bp14t37l6w6xxcb40go.mysql.rds.aliyuncs.com:3306/test?useUnicode=true&characterEncoding=UTF-8&useSSL=true
+            url: jdbc:mysql://rm-bp14t37l6w6xxcb40go.mysql.rds.aliyuncs.com:3306/dev_new?useUnicode=true&characterEncoding=UTF-8&useSSL=true
             username: weigutest
             password: Wegoo2018
             driver-class-name: com.mysql.jdbc.Driver

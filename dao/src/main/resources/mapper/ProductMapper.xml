@@ -10,7 +10,7 @@
         <result column="validity_time" property="validityTime" jdbcType="INTEGER"/>
         <result column="price" property="price" jdbcType="INTEGER"/>
         <result column="merchant_id" property="merchantId" jdbcType="VARCHAR"/>
-        <result column="image_url" property="imageUrl" />
+        <result column="image_url" property="imageUrl" jdbcType="VARCHAR"/>
         <result column="content" property="content" />
         <result column="content_text" property="contentText" />
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
@@ -18,7 +18,7 @@
         <result column="available" property="available" jdbcType="SMALLINT"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, `level`, level_name, product_name, maid_percent, validity_time, price, merchant_id, image_url,
+    id, `level`, level_name, product_name, maid_percent, validity_time, price, merchant_id,image_url,
     content,content_text,create_time, modify_time, available
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
