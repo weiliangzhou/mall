@@ -103,7 +103,12 @@ public class ProductController {
             productVo.setImageUrl(p.getImageUrl());
             //返回给前端 单位:元
             productVo.setPrice(p.getPrice());
-            productVo.setPriceDesc(p.getPriceDesc());
+            try {
+                productVo.setPriceDesc(MoneyUtil.changeF2Y(Long.valueOf(p.getPrice())));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+//            productVo.setPriceDesc(p.getPriceDesc());
 
             listVo.add(productVo);
         }
