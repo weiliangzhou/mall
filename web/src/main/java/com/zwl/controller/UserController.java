@@ -5,10 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.baseresult.ResultCodeEnum;
 import com.zwl.model.exception.BSUtil;
-import com.zwl.model.po.Merchant;
-import com.zwl.model.po.TokenModel;
-import com.zwl.model.po.User;
-import com.zwl.model.po.UserInfo;
+import com.zwl.model.po.*;
 import com.zwl.model.vo.UserLoginInfoVo;
 import com.zwl.service.*;
 import com.zwl.serviceimpl.RedisTokenManagerImpl;
@@ -44,6 +41,8 @@ public class UserController {
     private RedisTokenManagerImpl tokenManager;
     @Autowired
     private MsgSenderService msgSenderService;
+    @Autowired
+    private ProductService productService;
 
 
     /**
@@ -229,7 +228,10 @@ public class UserController {
             result.setMessage("查无用户，请校验userId");
             return result;
         }
-        userLoginInfoVo.setMemberLevel(user.getMemberLevel());
+        Integer memberLevel=user.getMemberLevel();
+        Product product=productService.getProductByMemberLevel(memberLevel);
+        userLoginInfoVo.setMemberLevel(memberLevel);
+        userLoginInfoVo.setLevelName(product.getLevelName());
 //        userLoginInfoVo.setIsBindMobile(userInfo.getIsBindMobile()==null?0:1);
         //通过主表获取绑定手机号
         userLoginInfoVo.setIsBindMobile(user.getRegisterMobile() == null ? 0 : 1);
