@@ -35,4 +35,6 @@ public class UserLoginInfoVo {
     private String registerMobile;
     @ApiComment(value = "是否实名认证过", sample = "1")
     private Integer isCertification;
+    @ApiComment(value = "等级名称", sample = "院长")
+    private String levelName;
 }
