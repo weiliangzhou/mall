@@ -24,6 +24,7 @@ dao/target/
 *.ipr
 .idea/workspace.xml
 workspace.xml
+*.log
 
 ### NetBeans ###
 /nbproject/private/
