@@ -169,7 +169,7 @@
         from ss_product
         where available=1
     </select>
-    <select id="getProductByMemberLevel" resultMap="BaseResultMap" parameterType="string">
+    <select id="getProductByMemberLevel" resultMap="BaseResultMap" parameterType="Integer">
         select
         <include refid="Base_Column_List"/>
         from ss_product
