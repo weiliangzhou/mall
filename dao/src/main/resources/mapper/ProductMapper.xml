@@ -18,7 +18,7 @@
         <result column="available" property="available" jdbcType="SMALLINT"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, level, level_name, product_name, maid_percent, validity_time, price, merchant_id, image_url,
+    id, `level`, level_name, product_name, maid_percent, validity_time, price, merchant_id, image_url,
     content,content_text,create_time, modify_time, available
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
@@ -35,7 +35,7 @@
                 id,
             </if>
             <if test="level != null">
-                level,
+                `level`,
             </if>
             <if test="levelName != null">
                 level_name,
