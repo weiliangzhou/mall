@@ -141,7 +141,7 @@ public class WxPayServiceImpl implements WxPayService {
                 .setSpbillCreateIp(realIp)
                 .setTradeType("JSAPI")
                 .setOpenId(openId)
-                .setSceneInfo("{\"h5_info\": {\"type\":\"Wap\",\"wap_url\": \"admin.com\",\"wap_name\": \"二师兄超级帅\"}}")
+                .setSceneInfo("{\"h5_info\": {\"type\":\"Wap\",\"wap_url\": \"admin.com\",\"wap_name\": \"东遥课堂\"}}")
                 .setAttach("东遥课堂")
                 .setPaternerKey(wxPayKey)
                 .build();
