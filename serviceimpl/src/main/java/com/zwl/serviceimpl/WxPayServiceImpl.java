@@ -52,8 +52,8 @@ public class WxPayServiceImpl implements WxPayService {
         payMap.put("appid", appid);
         payMap.put("mch_id", mch_id);
         payMap.put("nonce_str", String.valueOf(System.currentTimeMillis()));
-        payMap.put("body", "测试，二师兄");
-        payMap.put("attach", "测试，二师兄");
+        payMap.put("body", "东遥课堂");
+        payMap.put("attach", "东遥课堂");
         payMap.put("out_trade_no", orderNo);
         payMap.put("total_fee", totalFee);
         payMap.put("spbill_create_ip", "127.0.0.1");
@@ -132,7 +132,7 @@ public class WxPayServiceImpl implements WxPayService {
         Map<String, String> params = WxPayH5.New()
                 .setAppId(appid)
                 .setMchId(mch_id)
-                .setBody("IJPay H5支付测试  -By 二师兄超级帅")
+                .setBody("东遥课堂")
                 .setOutTradeNo(orderNo)
                 .setTotalFee(totalFee)
                 .setTimeStart(timeStart)
@@ -142,7 +142,7 @@ public class WxPayServiceImpl implements WxPayService {
                 .setTradeType("JSAPI")
                 .setOpenId(openId)
                 .setSceneInfo("{\"h5_info\": {\"type\":\"Wap\",\"wap_url\": \"admin.com\",\"wap_name\": \"二师兄超级帅\"}}")
-                .setAttach("东遥学堂 -By 二师兄超级帅")
+                .setAttach("东遥课堂")
                 .setPaternerKey(wxPayKey)
                 .build();
         //获取微信返回的结果
