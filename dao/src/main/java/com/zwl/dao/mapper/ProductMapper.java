@@ -27,4 +27,6 @@ public interface ProductMapper {
 
     @Select("select maid_percent from ss_product  where level=#{referrerLevel} and available =1")
     Integer getMaidPercentByLevel(@Param("referrerLevel") Integer referrerLevel);
+
+    Product getProductByMemberLevel(Integer memberLevel);
 }

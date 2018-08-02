@@ -28,4 +28,6 @@ public interface ProductService {
     Integer getMaidPercentByLevel(Integer referrerLevel);
 
     Product getProductById(Long id);
+
+    Product getProductByMemberLevel(Integer memberLevel);
 }
