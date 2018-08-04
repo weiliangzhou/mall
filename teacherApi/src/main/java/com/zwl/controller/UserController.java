@@ -16,6 +16,7 @@ import com.zwl.service.MaidInfoService;
 import com.zwl.service.OperateUserRecordService;
 import com.zwl.service.UserService;
 import com.zwl.util.DateUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
@@ -30,6 +31,7 @@ import java.util.List;
 /**
  * 会员管理controller
  */
+@Slf4j
 @RequestMapping("/teacher/user")
 @RestController
 public class UserController {
@@ -53,7 +55,7 @@ public class UserController {
         Integer memberLevel = jsonObject.getInteger("memberLevel");
         String levelName = jsonObject.getString("levelName");
         String operator = jsonObject.getString("operator");
-
+        log.info("====后台添加用户的手机号为===："+registerMobile);
         //根据导入的注册手机号，查找
         User query = new User();
         query.setRegisterMobile(registerMobile);
