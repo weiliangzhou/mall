@@ -21,9 +21,9 @@ import java.io.IOException;
  * @Description: token过滤器
  * @date 2018/7/615:26
  */
-@Order(1)
+//@Order(1)
 // 重点
-@WebFilter(filterName = "tokenFilter", urlPatterns = "/wx/*")
+//@WebFilter(filterName = "tokenFilter", urlPatterns = "/wx/*")
 @Slf4j
 public class TokenFilter implements Filter {
 

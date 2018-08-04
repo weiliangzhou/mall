@@ -74,3 +74,5 @@ spring:
     default-property-inclusion:  non_null
 mapper:
     config-location: /mapper/*.xml
+pay:
+    pay-notify_url: http://xdy.wegoo.com.cn/wx/pay/pay_notify.do

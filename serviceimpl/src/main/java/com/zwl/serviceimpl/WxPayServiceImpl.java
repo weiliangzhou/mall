@@ -1,14 +1,12 @@
 package com.zwl.serviceimpl;
 
-import com.zwl.model.exception.BSUtil;
 import com.zwl.model.wxpay.PaymentKit;
 import com.zwl.model.wxpay.WxConstans;
 import com.zwl.model.wxpay.WxPayH5;
 import com.zwl.model.wxpay.WxPayVo;
-import com.zwl.service.OrderService;
-import com.zwl.service.WithdrawService;
 import com.zwl.service.WxPayService;
 import com.zwl.util.HttpsUtils;
+import com.zwl.util.PayNotifyProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,9 +29,7 @@ import java.util.Map;
 public class WxPayServiceImpl implements WxPayService {
 
     @Autowired
-    private WithdrawService withdrawService;
-    @Autowired
-    private OrderService orderService;
+    private PayNotifyProperties payNotifyProperties;
     private SimpleDateFormat sdf_yMdHms = new SimpleDateFormat("yyyyMMddHHmmss");
 
     @Override
@@ -59,7 +55,7 @@ public class WxPayServiceImpl implements WxPayService {
         payMap.put("spbill_create_ip", "127.0.0.1");
         payMap.put("time_start", timeStart);
         payMap.put("time_expire", timeExpire);
-        payMap.put("notify_url", WxConstans.USER_NOTIFY_URL);
+        payMap.put("notify_url", payNotifyProperties.getPayNotifyUrl());
         payMap.put("trade_type", "JSAPI");
         payMap.put("openid", openId);
         String sign = PaymentKit.createSign(payMap, wxPayKey);
@@ -137,7 +133,7 @@ public class WxPayServiceImpl implements WxPayService {
                 .setTotalFee(totalFee)
                 .setTimeStart(timeStart)
                 .setTimeExpire(timeExpire)
-                .setNotifyUrl(WxConstans.USER_NOTIFY_URL)
+                .setNotifyUrl(payNotifyProperties.getPayNotifyUrl())
                 .setSpbillCreateIp("127.0.0.1")
                 .setTradeType("JSAPI")
                 .setOpenId(openId)
@@ -191,15 +187,13 @@ public class WxPayServiceImpl implements WxPayService {
         WxPayVo wxPayVo = new WxPayVo();
         wxPayVo.setTimeStamp(date);
         wxPayVo.setNonceStr(params.get("nonce_str"));
-        wxPayVo.setPackageStr("prepay_id="+prepay_id);
+        wxPayVo.setPackageStr("prepay_id=" + prepay_id);
         wxPayVo.setSignType("MD5");
         wxPayVo.setPaySign(payResult.get("paySign").toString());
         wxPayVo.setMweb_url(mweb_url);
         wxPayVo.setAppid(gzhAppId);
         return wxPayVo;
     }
-
-
 
 
 //    @Override
