@@ -171,6 +171,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public Product getProductById(Long id) {
+        return productMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
     public Product getProductByMemberLevel(Integer memberLevel) {
         return productMapper.getProductByMemberLevel(memberLevel);
     }

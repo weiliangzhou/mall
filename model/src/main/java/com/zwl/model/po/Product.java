@@ -5,6 +5,7 @@ import com.terran4j.commons.api2doc.annotations.ApiComment;
 import com.terran4j.commons.restpack.RestPackIgnore;
 import com.zwl.model.groups.Buy;
 import com.zwl.model.groups.H5Buy;
+import com.zwl.util.MoneyUtil;
 import lombok.Data;
 import org.apache.ibatis.annotations.Update;
 
@@ -32,8 +33,9 @@ public class Product {
     @ApiComment(value = "时效（天为单位）", sample = "50")
     private Integer validityTime;
     @NotNull(message = "产品价格不能为空", groups = {Update.class})
-    @ApiComment(value = "产品价格", sample = "99元为单位")
+    @ApiComment(value = "产品价格", sample = "单位：分")
     private Integer price;
+    @ApiComment(value = "产品价格", sample = "单位：元")
     private String priceDesc;
     @NotBlank(message = "商户号不能为空", groups = {Buy.class,H5Buy.class})
     @JSONField(serialize = false)
@@ -58,9 +60,17 @@ public class Product {
     @NotBlank(message = "微信H5支付终端ip不能为空")
     private String spbillCreateIp;
 
-    public String getPriceDesc() {
-        return this.price / 100 + "";
-    }
+  /*  public String getPriceDesc() {
+        if(this.price==null) return null;
+        String p = null;
+        try {
+            p=MoneyUtil.changeF2Y(Long.valueOf(this.price));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//        return this.price==null?null:this.price / 100 + "";
+        return p;
+    }*/
     @RestPackIgnore
     @JSONField(serialize = false)
     @NotBlank(message = "微信H5支付终端ip不能为空",groups = {H5Buy.class})
@@ -70,5 +80,11 @@ public class Product {
     @JSONField(serialize = false)
     @NotBlank(message = "微信H5支付终端ip不能为空",groups = {H5Buy.class})
     private String code;
+    @ApiComment(value = "产品简介（带格式）", sample = "<p>10大板块，100节课让微商创业再也没有秘密！绝对是秒杀全网的课程！")
+    private String content;
+    @ApiComment(value = "产品简介（不带格式）", sample = "不带格式的介绍")
+    private String contentText;
+    @ApiComment(value = "产品图片", sample = "www.xiaochuang.oss.com")
+    private String imageUrl;
 
 }

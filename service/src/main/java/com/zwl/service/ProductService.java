@@ -29,5 +29,6 @@ public interface ProductService {
 
     Product getProductByMemberLevel(Integer memberLevel);
 
+    Product getProductById(Long id);
 
 }

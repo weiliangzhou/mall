@@ -140,7 +140,16 @@ public class UserController {
 
             userId = userQuery.getUserId();
             userInfo.setUserId(userId);
-            userInfoService.modifyByParams(userInfo);
+            //防止数据库 把用户信息表给删除了
+            UserInfo queryUserInfo = userInfoService.getByUserId(userId);
+            if(queryUserInfo==null){
+                userInfo.setUserId(userId);
+                userInfo.setAvailable(1);
+                //插入用户详情表
+                userInfoService.add(userInfo);
+            }else {
+                userInfoService.modifyByParams(userInfo);
+            }
             //用户主表头像也更新
             if(CheckUtil.isNotEmpty(userLoginInfoVo.getLogoUrl())){
                 User user = new User();

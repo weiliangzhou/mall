@@ -37,4 +37,6 @@ public class UserLoginInfoVo {
     private Integer isCertification;
     @ApiComment(value = "等级名称", sample = "院长")
     private String levelName;
+
+
 }
