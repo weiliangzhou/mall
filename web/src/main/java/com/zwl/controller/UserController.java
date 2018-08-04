@@ -175,6 +175,7 @@ public class UserController {
         String phone = jsonObject.getString("phone");
         String msgCode = jsonObject.getString("msgCode");
         String userId = jsonObject.getString("userId");
+        log.info("===========用户userid:===========："+userId);
 //        需要手机号码防重
         User queryUser = new User();
         queryUser.setRegisterMobile(phone);
