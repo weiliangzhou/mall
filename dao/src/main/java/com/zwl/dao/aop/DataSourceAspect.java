@@ -38,16 +38,16 @@ public class DataSourceAspect {
         String className = point.getTarget().getClass().getName();
         String method = point.getSignature().getName();
         String args = StringUtils.join(point.getArgs(), ",");
-        log.info("className:{}, method:{}, args:{} ", className, method, args);
+//        log.info("className:{}, method:{}, args:{} ", className, method, args);
         try {
             for (DatabaseType type : DatabaseType.values()) {
                 List<String> values = DynamicDataSource.METHOD_TYPE_MAP.get(type);
                 for (String key : values) {
                     if (method.startsWith(key)) {
-                        log.info(">>{} 方法使用的数据源为:{}<<", method, key);
+//                        log.info(">>{} 方法使用的数据源为:{}<<", method, key);
                         DatabaseContextHolder.setDatabaseType(type);
                         DatabaseType types = DatabaseContextHolder.getDatabaseType();
-                        log.info(">>{}方法使用的数据源为:{}<<", method, types);
+//                        log.info(">>{}方法使用的数据源为:{}<<", method, types);
                     }
                 }
             }
