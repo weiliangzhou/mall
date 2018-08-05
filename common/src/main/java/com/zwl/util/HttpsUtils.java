@@ -1,5 +1,13 @@
 package com.zwl.util;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.protocol.HTTP;
+
 import javax.net.ssl.*;
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -209,6 +217,45 @@ public class HttpsUtils {
                 ex.printStackTrace();
             }
         }
+        return result;
+    }
+
+
+    //返回图片地址
+    public static String httpPostWithJSON2(String url, String json)
+            throws Exception {
+        String result = null;
+        DefaultHttpClient httpClient = new DefaultHttpClient();
+        HttpPost httpPost = new HttpPost(url);
+        httpPost.addHeader(HTTP.CONTENT_TYPE, "application/json");
+        StringEntity se = new StringEntity(json);
+        se.setContentType("application/json");
+        se.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE, "UTF-8"));
+        httpPost.setEntity(se);
+        HttpResponse response = httpClient.execute(httpPost);
+        if (response != null) {
+            HttpEntity resEntity = response.getEntity();
+            if (resEntity != null) {
+                InputStream instreams = resEntity.getContent();
+                //上传至资源服务器生成url
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                byte[] bs = new byte[1024];//缓冲数组
+                int len = -1;
+                while ((len = instreams.read(bs)) != -1) {
+                    byteArrayOutputStream.write(bs, 0, len);
+                }
+                byte b[
+                        ] = byteArrayOutputStream.toByteArray();
+                byteArrayOutputStream.close();
+                instreams.close();
+                //将byte字节数组上传至资源服务器返回图片地址
+                // ......
+                // 获取文件名
+                // 获取文件后缀
+                result = AliOSSUtil.uploadFileByte(b);
+            }
+        }
+        httpPost.abort();
         return result;
     }
 

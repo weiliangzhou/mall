@@ -7,6 +7,7 @@ import com.aliyun.oss.model.PutObjectRequest;
 import com.aliyun.oss.model.PutObjectResult;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -67,6 +68,50 @@ public class AliOSSUtil {
 //    }
 
     /**
+     * 上传byte数组
+     */
+    public static String uploadFileByte(byte[] content) {
+        if (content == null)
+            return "";
+        //生成唯一的文件名
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+        df.format(new Date());
+        String filePath = "upload/qrCodeImage/" + df.format(new Date()) + "/" + UUIDUtil.getUUID32()+".png";
+        // 创建OSSClient实例
+        OSSClient ossClient = new OSSClient(END_POINT, ACCESS_KEY_ID, ACCESS_KEY_SECRET);
+        try {
+
+            // 上传Byte数组。
+            PutObjectResult result = ossClient.putObject(new PutObjectRequest(BUCKET_NAME, filePath, new ByteArrayInputStream(content)));
+            // 上传文件
+            if (null != result) {
+                // 拼装访问地址
+                String url;
+                StringBuffer sb = new StringBuffer();
+                sb.append("http://").append(BUCKET_NAME).append(".").append(END_POINT).append("/").append(filePath);
+                url = sb.toString();
+                return url;
+            } else
+                return null;
+
+        } catch (OSSException |
+                ClientException oe)
+
+        {
+            log.error("OSS上传失败:", oe);
+            oe.printStackTrace();
+            return null;
+        } finally
+
+        {
+            // 关闭OSS服务
+            ossClient.shutdown();
+        }
+
+    }
+
+
+    /**
      * 上传文件到bucket
      *
      * @param file 本地文件
@@ -81,7 +126,7 @@ public class AliOSSUtil {
         //生成唯一的文件名
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
         df.format(new Date());
-        String filePath =dir+df.format(new Date())+"/"+UUIDUtil.getUUID32()+file.getName().substring(file.getName().lastIndexOf("."));
+        String filePath = dir + df.format(new Date()) + "/" + UUIDUtil.getUUID32() + file.getName().substring(file.getName().lastIndexOf("."));
         // 创建OSSClient实例
         OSSClient ossClient = new OSSClient(END_POINT, ACCESS_KEY_ID, ACCESS_KEY_SECRET);
         try {

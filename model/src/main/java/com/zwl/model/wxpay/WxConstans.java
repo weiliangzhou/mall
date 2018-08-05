@@ -17,10 +17,8 @@ public class WxConstans {
 
     //    H5支付url
     public static final String PAY_URL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
-    //    支付回调测试地址
-//    public static final String USER_NOTIFY_URL = "http://xdy.wegoo.com.cn/wx/pay/pay_notify.do";
-    //线上地址
-//    public static final String USER_NOTIFY_URL = "https://xcx.wegoo.cn/wx/pay/pay_notify.do";
+    //    public static final String USER_NOTIFY_URL = "http://xdy.wegoo.com.cn:18080/wx/pay/pay_notify.do";
+    public static final String USER_NOTIFY_URL = "https://xcx.wegoo.cn/wx/pay/pay_notify.do";
     //    企业付款url
     public static final String ADMIN_PAY_URL = " https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
     //    微信支付密钥设置
@@ -36,6 +34,9 @@ public class WxConstans {
     public static final String WX_AUTHORIZATION = "https://api.weixin.qq.com/sns/jscode2session";
     //    查询订单
     public static final String QUERY_WX_ORDER = "https://api.mch.weixin.qq.com/pay/orderquery";
+
+//    微信生成二维码
+    public static final String QR_CODE="https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=";
 
 
 }
