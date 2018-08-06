@@ -40,8 +40,8 @@ public class MaidInfoCtroller {
         List<XiaXianVo>  xiaXianVoList=maidInfoService.getXiaXianList(userId);
         Integer totalMoney=maidInfoService.getTotalMaidMoneyByUserId(userId);
         Integer balance=userAccountService.getBalanceByUserId(userId);
-        xiaXianVVo.setTotalMoney(null==totalMoney?0:totalMoney/100);
-        xiaXianVVo.setBalance(null==balance?0:balance/100);
+        xiaXianVVo.setTotalMoney(null==totalMoney?0:totalMoney);
+        xiaXianVVo.setBalance(null==balance?0:balance);
         xiaXianVVo.setXiaXianVoList(xiaXianVoList);
         xiaXianVVo.setTotalPage(page.getTotal());
         xiaXianVVo.setUserId(userId);
