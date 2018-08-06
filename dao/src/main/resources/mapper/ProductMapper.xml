@@ -161,6 +161,7 @@
         from ss_product
         where available=1
         and merchant_id=#{merchantId}
+        order by id
 
     </select>
     <select id="getAdminProductList" resultMap="BaseResultMap">
