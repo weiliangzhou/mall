@@ -157,7 +157,9 @@
         <include refid="Base_Column_List"/>
         from ss_user_certification
         where merchant_id = #{merchantId}
-        and status=#{status}
+        <if test="status !=null">
+            and status=#{status}
+        </if>
     </select>
     <select id="getOneByParams" resultMap="BaseResultMap" parameterType="com.zwl.model.po.UserCertification">
         select
