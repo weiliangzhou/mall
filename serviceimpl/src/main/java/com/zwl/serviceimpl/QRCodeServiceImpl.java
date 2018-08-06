@@ -33,11 +33,11 @@ public class QRCodeServiceImpl implements QRCodeService {
         postMap.put("page", page);
         //先从redis缓存读取永久code   key=userId+page value=imageUrl
         String QRCode = stringRedisTemplate.boundValueOps(userId + "_qrcode_" + page).get();
-        log.info(QRCode);
+//        log.info(QRCode);
         if (QRCode == null) {
             try {
                 QRCode = HttpsUtils.httpPostWithJSON2(WxConstans.QR_CODE + accessToken, JSONObject.toJSONString(postMap));
-                log.info(QRCode);
+                log.info("二维码url"+QRCode);
                 stringRedisTemplate.boundValueOps(userId + "_qrcode_" + page).set(QRCode, 360, TimeUnit.DAYS);
 
             } catch (Exception e) {
