@@ -167,7 +167,7 @@
     <select id="getXiaXianList" resultType="com.zwl.model.vo.XiaXianVo" parameterType="string">
     SELECT
         usr.real_name as realName,
-        so.actual_money as money/100,
+        so.actual_money/100 as money,
         so.payment_time as buyTime,
         so.actual_money*sp.maid_percent/100 as maidMoney,
         usr.register_mobile as mobile
