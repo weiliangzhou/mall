@@ -46,7 +46,7 @@ public class TokenFilter implements Filter {
 
 
         // 注册、登录、注册短信、首页、回调 不需要token
-        if (requestURL.contains("/pay_notify.do")||requestURL.contains("/information/getInformationList")) {
+        if (requestURL.contains("/pay_notify.do") || requestURL.contains("/information/getInformationList")) {
             chain.doFilter(request, response);
             return;
         }
@@ -58,7 +58,11 @@ public class TokenFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-        if (requestURL.contains(" /wx/gzh/sendFormId")||requestURL.contains(" /wx/gzh/getFormId")) {
+        if (requestURL.contains("/qr/getQRCode")) {
+            chain.doFilter(request, response);
+            return;
+        }
+        if (requestURL.contains(" /wx/gzh/sendFormId") || requestURL.contains(" /wx/gzh/getFormId")) {
             chain.doFilter(request, response);
             return;
         }
@@ -69,7 +73,7 @@ public class TokenFilter implements Filter {
             return;
         }
         //H5支付
-        if (requestURL.contains("/wx/product/H5Buy")||requestURL.contains("/wx/pay/auth/pay.do")) {
+        if (requestURL.contains("/wx/product/H5Buy") || requestURL.contains("/wx/pay/auth/pay.do")) {
             chain.doFilter(request, response);
             return;
         }
@@ -80,14 +84,14 @@ public class TokenFilter implements Filter {
             return;
         }
         //套课程
-        if (requestURL.contains("/classset/getPageAllClass")||requestURL.contains("/classset/setpAddBrowseCount")||
+        if (requestURL.contains("/classset/getPageAllClass") || requestURL.contains("/classset/setpAddBrowseCount") ||
                 requestURL.contains("/classset/getById")) {
             chain.doFilter(request, response);
             return;
         }
         //节课程
-        if (requestURL.contains("/classinfo/getPageByClassSetId")||requestURL.contains("/classinfo/getById")
-                ||requestURL.contains("/classinfo/setpAddBrowseCount")) {
+        if (requestURL.contains("/classinfo/getPageByClassSetId") || requestURL.contains("/classinfo/getById")
+                || requestURL.contains("/classinfo/setpAddBrowseCount")) {
             chain.doFilter(request, response);
             return;
         }
@@ -97,7 +101,7 @@ public class TokenFilter implements Filter {
             return;
         }
         //获取商品列表 ||根据id获取商品详情
-        if (requestURL.contains("/product/getProductList") ||requestURL.contains("/product/getProductById")) {
+        if (requestURL.contains("/product/getProductList") || requestURL.contains("/product/getProductById")) {
             chain.doFilter(request, response);
             return;
         }

@@ -186,6 +186,7 @@
         </if>
         <if test="userId!=null">
             and user_id =#{userId}
+            and order_status=2
         </if>
 
     </select>

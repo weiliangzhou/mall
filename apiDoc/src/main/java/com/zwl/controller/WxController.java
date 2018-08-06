@@ -255,7 +255,16 @@ public class WxController {
         return result;
     }
 
-
+    @ApiComment("生成小程序二维码")
+    @RequestMapping(name = "生成小程序二维码",
+            value = "/wx/qr/getQRCode", method = RequestMethod.POST)
+    public Result getQRCode(@ApiComment("userId") String userId,
+                            @ApiComment("merchantId") String merchantId,
+                            @ApiComment("小程序页面") String page
+    ) {
+        Result result = new Result();
+        return result;
+    }
 
 
 }

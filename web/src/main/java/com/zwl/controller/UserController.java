@@ -51,7 +51,7 @@ public class UserController {
     @PostMapping("/authorization")
     public Result authorization(@RequestBody UserLoginInfoVo userLoginInfoVo) {
         log.info("====@@@@进入用户授权@@@@@==========");
-        log.info("====@@@@推荐人传入参数为@@@@@==========："+userLoginInfoVo.getReferrer());
+        log.info("====@@@@推荐人传入参数为@@@@@==========：" + userLoginInfoVo.getReferrer());
         Result result = new Result();
         //根据merchantid获取appid和secret
         Merchant merchant = merchantService.getMerchantByMerchantId(userLoginInfoVo.getMerchantId());
@@ -79,9 +79,9 @@ public class UserController {
         String userId = null;
         //用户信息（头像、昵称等）
         UserInfo userInfo = new UserInfo();
-        String nickName=userLoginInfoVo.getNickName();
+        String nickName = userLoginInfoVo.getNickName();
         if (nickName != null && nickName.length() > 0) {
-            nickName=nickName.replaceAll("[\ud800\udc00-\udbff\udfff\ud800-\udfff]", "");
+            nickName = nickName.replaceAll("[\ud800\udc00-\udbff\udfff\ud800-\udfff]", "");
         }
         userInfo.setNickName(nickName);
         userInfo.setLogoUrl(userLoginInfoVo.getLogoUrl());
@@ -103,15 +103,13 @@ public class UserController {
             if (CheckUtil.isNotEmpty(referrer)) {
                 User userIsBuy = userService.getByUserId(referrer);
 //                if (userIsBuy.getIsBuy() != null && userIsBuy.getMemberLevel() > 1) {
-                if (userIsBuy.getIsBuy() != null && userIsBuy.getIsBuy()==1) {
+                if (userIsBuy.getIsBuy() != null && userIsBuy.getIsBuy() == 1) {
                     user.setReferrer(userLoginInfoVo.getReferrer());
-                    log.info("==============@@@@@@@@新增用户 开始 分享绑定上下级关系@@用户推荐人referrer："+"为"+referrer);
+                    log.info("==============@@@@@@@@新增用户 开始 分享绑定上下级关系@@用户推荐人referrer：" + "为" + referrer);
                 }
             }
             user.setIsBuy(0);
             user.setMemberLevel(0);
-            //公众号对应的openid
-//            user.setFormId(userLoginInfoVo.getFormId());
             //插入用户表
             user.setLogoUrl(userLoginInfoVo.getLogoUrl());
             userService.addUser(user);
@@ -130,9 +128,9 @@ public class UserController {
                 if (CheckUtil.isNotEmpty(referrer)) {
                     User userIsBuy = userService.getByUserId(referrer);
 //                    if (userIsBuy.getIsBuy() != null && userIsBuy.getMemberLevel() > 1) {
-                    if (userIsBuy.getIsBuy() != null && userIsBuy.getIsBuy()==1) {
+                    if (userIsBuy.getIsBuy() != null && userIsBuy.getIsBuy() == 1) {
                         user.setReferrer(userLoginInfoVo.getReferrer());
-                        log.info("==============@@@@@@@@ 更新 开始 分享绑定上下级关系@@用户推荐人referrer："+"为"+referrer);
+                        log.info("==============@@@@@@@@ 更新 开始 分享绑定上下级关系@@用户推荐人referrer：" + "为" + referrer);
                         userService.updateUserByUserId(user);
                     }
                 }
@@ -142,16 +140,16 @@ public class UserController {
             userInfo.setUserId(userId);
             //防止数据库 把用户信息表给删除了
             UserInfo queryUserInfo = userInfoService.getByUserId(userId);
-            if(queryUserInfo==null){
+            if (queryUserInfo == null) {
                 userInfo.setUserId(userId);
                 userInfo.setAvailable(1);
                 //插入用户详情表
                 userInfoService.add(userInfo);
-            }else {
+            } else {
                 userInfoService.modifyByParams(userInfo);
             }
             //用户主表头像也更新
-            if(CheckUtil.isNotEmpty(userLoginInfoVo.getLogoUrl())){
+            if (CheckUtil.isNotEmpty(userLoginInfoVo.getLogoUrl())) {
                 User user = new User();
                 user.setUserId(userQuery.getUserId());
                 user.setLogoUrl(userLoginInfoVo.getLogoUrl());
@@ -175,7 +173,7 @@ public class UserController {
         String phone = jsonObject.getString("phone");
         String msgCode = jsonObject.getString("msgCode");
         String userId = jsonObject.getString("userId");
-        log.info("===========用户userid:===========："+userId);
+        log.info("===========用户userid:===========：" + userId);
 //        需要手机号码防重
         User queryUser = new User();
         queryUser.setRegisterMobile(phone);
@@ -233,15 +231,25 @@ public class UserController {
         userLoginInfoVo.setNickName(userInfo.getNickName());
         userLoginInfoVo.setLogoUrl(userInfo.getLogoUrl());
         User user = userService.getByUserId(userId);
-        if(user==null){
+        if (user == null) {
             result.setCode(ResultCodeEnum.EXCEPTION);
             result.setMessage("查无用户，请校验userId");
             return result;
         }
-        Integer memberLevel=user.getMemberLevel();
-        Product product=productService.getProductByMemberLevel(memberLevel);
+        Integer memberLevel = user.getMemberLevel();
+        String levelName;
+        //存在 0会员 游客等级
+//        if (memberLevel == 0) {
+//            levelName = "会员";
+//        } else
+        if (memberLevel == 0 || memberLevel == null) {
+            levelName = "游客";
+        } else {
+            Product product = productService.getProductByMemberLevel(memberLevel);
+            levelName = product.getLevelName();
+        }
         userLoginInfoVo.setMemberLevel(memberLevel);
-        userLoginInfoVo.setLevelName(product.getLevelName());
+        userLoginInfoVo.setLevelName(levelName);
 //        userLoginInfoVo.setIsBindMobile(userInfo.getIsBindMobile()==null?0:1);
         //通过主表获取绑定手机号
         userLoginInfoVo.setIsBindMobile(user.getRegisterMobile() == null ? 0 : 1);
@@ -266,7 +274,7 @@ public class UserController {
         if (userQuery == null) {
             result.setCode(ResultCodeEnum.EXCEPTION);
             result.setMessage("查无用户，请检查userId");
-            log.error("==============@@@@@@@@分享绑定上下级关系@@用户推荐人referrer："+"为"+referrer+"的用户的userid不存在");
+            log.error("==============@@@@@@@@分享绑定上下级关系@@用户推荐人referrer：" + "为" + referrer + "的用户的userid不存在");
             return result;
         }
 
@@ -282,7 +290,7 @@ public class UserController {
                 return result;
             }
 //            if (userIsBuy.getIsBuy() != null && userIsBuy.getMemberLevel() > 1) {
-            if (userIsBuy.getIsBuy() != null && userIsBuy.getIsBuy()==1) {
+            if (userIsBuy.getIsBuy() != null && userIsBuy.getIsBuy() == 1) {
                 user.setReferrer(referrer);
                 userService.updateUserByUserId(user);
             }
