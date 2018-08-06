@@ -8,7 +8,7 @@ package com.zwl.service;
  * @date 2018/7/1116:40
  */
 public interface WxAccessTokenService {
-    public String getAccessToken(String merchantId,String appid,String appSecret);
+    public String getAccessToken(String merchantId,String appid,String appSecret,int type);
     public String getGzhOpenId(String merchantId,String appid,String appSecret,String code);
 
 }

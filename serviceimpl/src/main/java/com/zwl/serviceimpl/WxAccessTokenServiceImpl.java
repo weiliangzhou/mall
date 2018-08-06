@@ -26,17 +26,18 @@ public class WxAccessTokenServiceImpl implements WxAccessTokenService {
     private StringRedisTemplate stringRedisTemplate;
 
     @Override
-    public String getAccessToken(String merchantId, String gzAppId, String gzAppKey) {
+    public String getAccessToken(String merchantId, String gzAppId, String gzAppKey,int type) {
         //先查询redis是否存在accessToken
         //如果存在则直接返回
         //否则调用api接口获取
         //access_token的有效期目前为2个小时
-        String accessToken = stringRedisTemplate.boundValueOps("accessToken_" + merchantId).get();
+//        type 1=公众号 2=微信小程序
+        String accessToken = stringRedisTemplate.boundValueOps("accessToken_" +merchantId+"_"+type).get();
         if (StringUtils.isBlank(accessToken)) {
             String result = HttpsUtils.sendGet(WxConstans.ACCESS_TOKEN + "&appid=" + gzAppId + "&secret=" + gzAppKey, null);
             JSONObject jsonObject = JSONObject.parseObject(result);
             accessToken = jsonObject.getString("access_token");
-            stringRedisTemplate.boundValueOps("accessToken_" + merchantId).set(accessToken, 2, TimeUnit.HOURS);
+            stringRedisTemplate.boundValueOps("accessToken_" +merchantId+"_"+type).set(accessToken, 2, TimeUnit.HOURS);
         }
         return accessToken;
     }

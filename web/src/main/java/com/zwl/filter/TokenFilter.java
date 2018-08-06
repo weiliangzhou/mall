@@ -58,6 +58,10 @@ public class TokenFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
+        if (requestURL.contains("/qr/getQRCode")) {
+            chain.doFilter(request, response);
+            return;
+        }
         if (requestURL.contains(" /wx/gzh/sendFormId") || requestURL.contains(" /wx/gzh/getFormId")) {
             chain.doFilter(request, response);
             return;
