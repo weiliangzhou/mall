@@ -92,8 +92,7 @@ public class ProductController {
         Result result = new Result();
         List<Product> productList = productService.getProductList(merchantId);
         List<ProductVo> listVo=new ArrayList<>();
-        for (Product p:productList
-                ) {
+        for (Product p:productList) {
             ProductVo productVo = new ProductVo();
             productVo.setId(p.getId());
             productVo.setProductName(p.getProductName());
