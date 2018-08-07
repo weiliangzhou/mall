@@ -76,7 +76,7 @@ public class AliOSSUtil {
         //生成唯一的文件名
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
         df.format(new Date());
-        String filePath = "upload/qrCodeImage/" + df.format(new Date()) + "/" + UUIDUtil.getUUID32()+".png";
+        String filePath = "upload/qrCodeImage/" + df.format(new Date()) + "/" + UUIDUtil.getUUID32()+".jpg";
         // 创建OSSClient实例
         OSSClient ossClient = new OSSClient(END_POINT, ACCESS_KEY_ID, ACCESS_KEY_SECRET);
         try {
