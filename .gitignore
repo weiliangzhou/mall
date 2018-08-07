@@ -33,3 +33,7 @@ workspace.xml
 /dist/
 /nbdist/
 /.nb-gradle/
+
+##MAVEN##
+mvnw
+mvnw.cmd
