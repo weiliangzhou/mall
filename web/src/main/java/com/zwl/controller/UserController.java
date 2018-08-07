@@ -222,14 +222,12 @@ public class UserController {
         Result result = new Result();
         //根据UserId查找用户详情表
         UserInfo userInfo = userInfoService.getByUserId(userId);
-        if (StringUtils.isEmpty(userInfo)) {
-            result.setCode(ResultCodeEnum.FAIL);
-            return result;
+        UserLoginInfoVo userLoginInfoVo = new UserLoginInfoVo();
+        if(userInfo!=null){
+            userLoginInfoVo.setNickName(userInfo.getNickName());
+            userLoginInfoVo.setLogoUrl(userInfo.getLogoUrl());
         }
 
-        UserLoginInfoVo userLoginInfoVo = new UserLoginInfoVo();
-        userLoginInfoVo.setNickName(userInfo.getNickName());
-        userLoginInfoVo.setLogoUrl(userInfo.getLogoUrl());
         User user = userService.getByUserId(userId);
         if (user == null) {
             result.setCode(ResultCodeEnum.EXCEPTION);
