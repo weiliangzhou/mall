@@ -88,7 +88,7 @@ public class AliOSSUtil {
                 // 拼装访问地址
                 String url;
                 StringBuffer sb = new StringBuffer();
-                sb.append("http://").append(BUCKET_NAME).append(".").append(END_POINT).append("/").append(filePath);
+                sb.append("https://").append(BUCKET_NAME).append(".").append(END_POINT).append("/").append(filePath);
                 url = sb.toString();
                 return url;
             } else
