@@ -240,7 +240,7 @@ public class UserController {
 //        if (memberLevel == 0) {
 //            levelName = "会员";
 //        } else
-        if (memberLevel == 0 || memberLevel == null) {
+        if (memberLevel == null || memberLevel == 0 ) {
             levelName = "游客";
         } else {
             Product product = productService.getProductByMemberLevel(memberLevel);

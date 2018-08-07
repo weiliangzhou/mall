@@ -2,11 +2,13 @@ package com.zwl.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.zwl.model.baseresult.Result;
+import com.zwl.model.baseresult.ResultCodeEnum;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.UserCertification;
 import com.zwl.model.po.UserInfo;
 import com.zwl.service.CertificationService;
 import com.zwl.service.UserInfoService;
+import com.zwl.util.CheckUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,6 +35,12 @@ public class CertificationController {
     @PostMapping("/add")
     public Result addCertification(@RequestBody UserCertification userCertification) {
         Result result = new Result();
+        if(CheckUtil.isNotEmpty(userCertification.getImg1Url())||CheckUtil.isNotEmpty(userCertification.getImg1Url())
+                ||CheckUtil.isNotEmpty(userCertification.getImg1Url())){
+            result.setCode(ResultCodeEnum.PARAMS_IS_NULL);
+            return result;
+        }
+
 //        身份证防重,只通过才,
         String cardNum = userCertification.getIdCard();
         UserCertification queryUserCertification = new UserCertification();
