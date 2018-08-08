@@ -5,6 +5,7 @@ import com.zwl.model.baseresult.Result;
 import com.zwl.model.baseresult.ResultCodeEnum;
 import com.zwl.model.po.TokenModel;
 import com.zwl.serviceimpl.RedisTokenManagerImpl;
+import com.zwl.util.ThreadVariable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
@@ -43,7 +44,7 @@ public class TokenFilter implements Filter {
         String token = request.getParameter("token");
         String requestURL = h_request.getRequestURL().toString();
         log.info("<<token>>请求url:" + requestURL + "  token:" + token);
-
+        ThreadVariable.clearThreadVariable();
 
         // 注册、登录、注册短信、首页、回调 不需要token
         if (requestURL.contains("/pay_notify.do") || requestURL.contains("/information/getInformationList")) {
@@ -117,6 +118,7 @@ public class TokenFilter implements Filter {
         token = token.replaceAll(" ", "+");
         TokenModel model = manager.getToken(token);
         if (manager.checkToken(model)) {
+            ThreadVariable.setUserID("xxx");
             // 如果token验证成功，将token对应的用户id存在request中，便于之后注入
             // request.setAttribute(Constants.CURRENT_USER_ID, model.getName());
             // app请求就一次，所有session没有用处 除非pc
