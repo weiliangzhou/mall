@@ -118,7 +118,6 @@ public class TokenFilter implements Filter {
         token = token.replaceAll(" ", "+");
         TokenModel model = manager.getToken(token);
         if (manager.checkToken(model)) {
-            ThreadVariable.setUserID("xxx");
             // 如果token验证成功，将token对应的用户id存在request中，便于之后注入
             // request.setAttribute(Constants.CURRENT_USER_ID, model.getName());
             // app请求就一次，所有session没有用处 除非pc

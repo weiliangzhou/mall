@@ -6,6 +6,7 @@ import java.util.Map;
 public class ThreadVariable {
 
 
+    public static final String USER_ID = "userId";
     private static ThreadLocal<Object> threadLocal = new ThreadLocal<Object>();
 
 
@@ -28,7 +29,7 @@ public class ThreadVariable {
      */
     public static String getUserID() {
         Map map = (Map) threadLocal.get();
-        Object obj = map.get("userId");
+        Object obj = map.get(USER_ID);
 
         if (obj != null) {
             return (String) obj;
@@ -39,7 +40,7 @@ public class ThreadVariable {
 
     public static void setUserID(String userID) {
         Map map = (Map) threadLocal.get();
-        Object obj = map.put("userId",userID);
+        Object obj = map.put(USER_ID,userID);
     }
 
     /**

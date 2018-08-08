@@ -59,6 +59,8 @@ public class RedisTokenManagerImpl implements TokenManager {
         if (token == null || !token.equals(model.getToken())) {
             return false;
         }
+        ThreadVariable.setUserID(model.getUserId());
+
         // 如果验证成功，说明此用户进行了一次有效操作，延长token的过期时间
         stringRedisTemplate.boundValueOps(model.getUserId()).expire(30, TimeUnit.DAYS);
         return true;
