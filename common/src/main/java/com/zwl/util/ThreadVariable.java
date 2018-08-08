@@ -1,7 +1,7 @@
 package com.zwl.util;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ThreadVariable {
 
@@ -18,7 +18,7 @@ public class ThreadVariable {
      */
     public static Object get(String attribute) {
         Map map = (Map) threadLocal.get();
-        if(map==null){
+        if (map == null) {
             return null;
         }
         return map.get(attribute);
@@ -31,7 +31,7 @@ public class ThreadVariable {
      */
     public static String getUserID() {
         Map map = (Map) threadLocal.get();
-        if(map==null){
+        if (map == null) {
             return null;
         }
         Object obj = map.get(USER_ID);
@@ -50,8 +50,7 @@ public class ThreadVariable {
             map = new HashMap();
             threadLocal.set(map);
         }
-
-        Object obj = map.put(USER_ID,userID);
+        map.put(USER_ID, userID);
     }
 
     /**
