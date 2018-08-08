@@ -37,7 +37,7 @@ public class WxAccessTokenServiceImpl implements WxAccessTokenService {
             String result = HttpsUtils.sendGet(WxConstans.ACCESS_TOKEN + "&appid=" + gzAppId + "&secret=" + gzAppKey, null);
             JSONObject jsonObject = JSONObject.parseObject(result);
             accessToken = jsonObject.getString("access_token");
-            stringRedisTemplate.boundValueOps("accessToken_" +merchantId+"_"+type).set(accessToken, 30, TimeUnit.MINUTES);
+            stringRedisTemplate.boundValueOps("accessToken_" +merchantId+"_"+type).set(accessToken, 5, TimeUnit.MINUTES);
         }
         return accessToken;
     }
