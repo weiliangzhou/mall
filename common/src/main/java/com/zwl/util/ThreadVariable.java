@@ -21,7 +21,6 @@ public class ThreadVariable {
         if(map==null){
             return null;
         }
-        System.out.println(map.toString());
         return map.get(attribute);
     }
 
