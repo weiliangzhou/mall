@@ -3,6 +3,7 @@ package com.zwl.serviceimpl;
 import com.zwl.model.po.TokenModel;
 import com.zwl.service.TokenManager;
 import com.zwl.util.Des3;
+import com.zwl.util.ThreadVariable;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -31,7 +32,6 @@ public class RedisTokenManagerImpl implements TokenManager {
         // 存储到redis并设置过期时间
         stringRedisTemplate.boundValueOps(userId).set(token, 30, TimeUnit.DAYS);
         //使用token作为key 存放User对象
-
         return model;
     }
 
@@ -59,8 +59,8 @@ public class RedisTokenManagerImpl implements TokenManager {
         if (token == null || !token.equals(model.getToken())) {
             return false;
         }
+        //暂时把userId放入threadLocal
         ThreadVariable.setUserID(model.getUserId());
-
         // 如果验证成功，说明此用户进行了一次有效操作，延长token的过期时间
         stringRedisTemplate.boundValueOps(model.getUserId()).expire(30, TimeUnit.DAYS);
         return true;
