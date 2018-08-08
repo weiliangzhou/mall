@@ -32,8 +32,6 @@ public class RedisTokenManagerImpl implements TokenManager {
         // 存储到redis并设置过期时间
         stringRedisTemplate.boundValueOps(userId).set(token, 30, TimeUnit.DAYS);
         //使用token作为key 存放User对象
-        //暂时把userId放入threadLocal
-        ThreadVariable.setUserID(userId);
         return model;
     }
 
@@ -61,6 +59,8 @@ public class RedisTokenManagerImpl implements TokenManager {
         if (token == null || !token.equals(model.getToken())) {
             return false;
         }
+        //暂时把userId放入threadLocal
+        ThreadVariable.setUserID(model.getUserId());
         // 如果验证成功，说明此用户进行了一次有效操作，延长token的过期时间
         stringRedisTemplate.boundValueOps(model.getUserId()).expire(30, TimeUnit.DAYS);
         return true;
