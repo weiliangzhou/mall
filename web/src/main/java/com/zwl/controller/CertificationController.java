@@ -36,7 +36,7 @@ public class CertificationController {
      * @return
      */
     @PostMapping("/add")
-    public Result addCertification(@Validated(CertificationVal.class) @RequestBody UserCertification userCertification) {
+    public synchronized Result addCertification(@Validated(CertificationVal.class) @RequestBody UserCertification userCertification) {
         Result result = new Result();
 //        身份证防重,只通过才,
         String cardNum = userCertification.getIdCard();
