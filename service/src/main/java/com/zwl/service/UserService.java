@@ -2,6 +2,7 @@ package com.zwl.service;
 
 
 import com.zwl.model.po.User;
+import com.zwl.model.vo.UserLoginInfoVo;
 import com.zwl.model.vo.UserQueryVo;
 
 import java.util.List;
@@ -62,4 +63,17 @@ public interface UserService {
 
     Integer getMaidPercentByUserId(String userId);
 
+    /**
+     * 保存授勸登錄信息
+     * @param userLoginInfoVo
+     * @param openid
+     * @return
+     */
+    String saveAuthorization(UserLoginInfoVo userLoginInfoVo, String openid);
+
+    /**
+     * 更新授權登錄信息
+     * @param userLoginInfoVo
+     */
+    void modifyAuthorization(UserLoginInfoVo userLoginInfoVo,User userQuery);
 }

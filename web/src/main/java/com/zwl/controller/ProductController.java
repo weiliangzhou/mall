@@ -102,11 +102,13 @@ public class ProductController {
             productVo.setImageUrl(p.getImageUrl());
             //返回给前端 单位:元
             productVo.setPrice(p.getPrice());
-            try {
+            if (p.getPrice() != null)
+                productVo.setPriceDesc(String.valueOf(p.getPrice() / 100));
+          /*  try {
                 productVo.setPriceDesc(MoneyUtil.changeF2Y(Long.valueOf(p.getPrice())));
             } catch (Exception e) {
                 e.printStackTrace();
-            }
+            }*/
 //            productVo.setPriceDesc(p.getPriceDesc());
 
             listVo.add(productVo);
@@ -130,8 +132,8 @@ public class ProductController {
         productVo.setContentText(p.getContentText());
         productVo.setImageUrl(p.getImageUrl());
         productVo.setPrice(p.getPrice());
-        productVo.setPriceDesc(p.getPriceDesc());
-
+        if (p.getPrice() != null)
+            productVo.setPriceDesc(String.valueOf(p.getPrice() / 100));
         result.setData(productVo);
         return JSON.toJSONString(result);
     }

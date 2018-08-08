@@ -10,7 +10,6 @@ import com.zwl.model.vo.UserLoginInfoVo;
 import com.zwl.service.*;
 import com.zwl.serviceimpl.RedisTokenManagerImpl;
 import com.zwl.util.CheckUtil;
-import com.zwl.util.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -51,7 +50,7 @@ public class UserController {
     @PostMapping("/authorization")
     public Result authorization(@RequestBody UserLoginInfoVo userLoginInfoVo) {
         log.info("====@@@@进入用户授权@@@@@==========");
-        log.info("====@@@@推荐人传入参数为@@@@@==========：" + userLoginInfoVo.getReferrer());
+        log.info("====@@@@推荐人传入参数为@@@@@==========："+userLoginInfoVo.getReferrer());
         Result result = new Result();
         //根据merchantid获取appid和secret
         Merchant merchant = merchantService.getMerchantByMerchantId(userLoginInfoVo.getMerchantId());
@@ -73,89 +72,12 @@ public class UserController {
         userQuery.setWechatOpenid(openid);
         userQuery.setMerchantId(userLoginInfoVo.getMerchantId());
         userQuery = userService.getOneByParams(userQuery);
-        //先查询用户之前是否线下导入过
-
-
-        String userId = null;
-        //用户信息（头像、昵称等）
-        UserInfo userInfo = new UserInfo();
-        String nickName = userLoginInfoVo.getNickName();
-        if (nickName != null && nickName.length() > 0) {
-            nickName = nickName.replaceAll("[\ud800\udc00-\udbff\udfff\ud800-\udfff]", "");
-        }
-        userInfo.setNickName(nickName);
-        userInfo.setLogoUrl(userLoginInfoVo.getLogoUrl());
-        userInfo.setAvailable(1);
-        if (StringUtils.isEmpty(userQuery)) {
-            //unionid可能为空
-//        String unionId = map.get("unionid").toString();
-            //1、微信授权的 2、线下导入的 3、手机号注册的
-            userId = UUIDUtil.getUUID32();
-            User user = new User();
-            user.setWechatOpenid(openid);
-            user.setUserId(userId);
-            user.setMerchantId(userLoginInfoVo.getMerchantId());
-            user.setRegisterFrom(1);
-            //推荐人userId 推荐人必须购买过
-           /* if (StringUtils.isEmpty(userLoginInfoVo.getReferrer()))
-                user.setReferrer("admin");*/
-            String referrer = userLoginInfoVo.getReferrer();
-            if (CheckUtil.isNotEmpty(referrer)) {
-                User userIsBuy = userService.getByUserId(referrer);
-//                if (userIsBuy.getIsBuy() != null && userIsBuy.getMemberLevel() > 1) {
-                if (userIsBuy.getIsBuy() != null && userIsBuy.getIsBuy() == 1) {
-                    user.setReferrer(userLoginInfoVo.getReferrer());
-                    log.info("==============@@@@@@@@新增用户 开始 分享绑定上下级关系@@用户推荐人referrer：" + "为" + referrer);
-                }
-            }
-            user.setIsBuy(0);
-            user.setMemberLevel(0);
-            //插入用户表
-            user.setLogoUrl(userLoginInfoVo.getLogoUrl());
-            userService.addUser(user);
-            userInfo.setUserId(userId);
-            userInfo.setAvailable(1);
-            //插入用户详情表
-            userInfoService.add(userInfo);
-
-        } else {
-            //如果用户还未购买，则可以更新推荐人
-            if ((userQuery.getIsBuy() == null || userQuery.getIsBuy() == 0) && CheckUtil.isNotEmpty(userLoginInfoVo.getReferrer())) {
-                User user = new User();
-                user.setUserId(userQuery.getUserId());
-                //推荐人userId 推荐人必须购买过
-                String referrer = userLoginInfoVo.getReferrer();
-                if (CheckUtil.isNotEmpty(referrer)) {
-                    User userIsBuy = userService.getByUserId(referrer);
-//                    if (userIsBuy.getIsBuy() != null && userIsBuy.getMemberLevel() > 1) {
-                    if (userIsBuy.getIsBuy() != null && userIsBuy.getIsBuy() == 1) {
-                        user.setReferrer(userLoginInfoVo.getReferrer());
-                        log.info("==============@@@@@@@@ 更新 开始 分享绑定上下级关系@@用户推荐人referrer：" + "为" + referrer);
-                        userService.updateUserByUserId(user);
-                    }
-                }
-            }
-
-            userId = userQuery.getUserId();
-            userInfo.setUserId(userId);
-            //防止数据库 把用户信息表给删除了
-            UserInfo queryUserInfo = userInfoService.getByUserId(userId);
-            if (queryUserInfo == null) {
-                userInfo.setUserId(userId);
-                userInfo.setAvailable(1);
-                //插入用户详情表
-                userInfoService.add(userInfo);
-            } else {
-                userInfoService.modifyByParams(userInfo);
-            }
-            //用户主表头像也更新
-            if (CheckUtil.isNotEmpty(userLoginInfoVo.getLogoUrl())) {
-                User user = new User();
-                user.setUserId(userQuery.getUserId());
-                user.setLogoUrl(userLoginInfoVo.getLogoUrl());
-                userService.updateUserByUserId(user);
-            }
-            result.setMessage("更新用户头像昵称成功！！");
+        String userId;
+        if(userQuery==null){//用户之前没授权登录过
+            userId=userService.saveAuthorization(userLoginInfoVo, openid);
+        } else {//如果用户还未购买，则可以更新推荐人
+            userId=userQuery.getUserId();
+            userService.modifyAuthorization(userLoginInfoVo,userQuery);
         }
         //返回用户登录态
         TokenModel model = tokenManager.createToken(userId);
@@ -166,6 +88,7 @@ public class UserController {
         result.setData(resultMap);
         return result;
     }
+
 
     //购买前绑定手机号
     @PostMapping("/bindingMobile")
@@ -236,10 +159,6 @@ public class UserController {
         }
         Integer memberLevel = user.getMemberLevel();
         String levelName;
-        //存在 0会员 游客等级
-//        if (memberLevel == 0) {
-//            levelName = "会员";
-//        } else
         if (memberLevel == null || memberLevel == 0 ) {
             levelName = "游客";
         } else {
@@ -265,7 +184,7 @@ public class UserController {
     public Result shareRelation(@RequestBody JSONObject jsonObject) {
         String referrer = jsonObject.getString("referrer");
         String userId = jsonObject.getString("userId");
-        String merchantId = jsonObject.getString("merchantId");
+//        String merchantId = jsonObject.getString("merchantId");
         log.info("==============@@@@@@@@分享绑定上下级关系@@用户" + userId + "推荐人referrer:" + referrer);
         Result result = new Result();
         User userQuery = userService.getByUserId(userId);
@@ -287,7 +206,6 @@ public class UserController {
                 result.setMessage("推荐人不存在，请检查referrer");
                 return result;
             }
-//            if (userIsBuy.getIsBuy() != null && userIsBuy.getMemberLevel() > 1) {
             if (userIsBuy.getIsBuy() != null && userIsBuy.getIsBuy() == 1) {
                 user.setReferrer(referrer);
                 userService.updateUserByUserId(user);
