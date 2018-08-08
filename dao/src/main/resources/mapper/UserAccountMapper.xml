@@ -63,7 +63,7 @@
         where user_id = #{userId,jdbcType=BIGINT}
     </select>
     <select id="getBalanceByUserId" parameterType="java.lang.String" resultType="int">
-    select balance/100 from ss_user_account where available=1 and user_id =#{userId}
+    select balance from ss_user_account where available=1 and user_id =#{userId}
   </select>
 
 </mapper>

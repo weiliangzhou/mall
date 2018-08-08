@@ -86,7 +86,7 @@ public class WithdrawServiceImpl implements WithdrawService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public synchronized void apply(Withdraw withdraw) {
-        Integer money = withdraw.getMoney() * 100;
+        Integer money = withdraw.getMoney()*100;
         if (money == 0)
             BSUtil.isTrue(false, "提现金额不能为0");
 
@@ -95,7 +95,6 @@ public class WithdrawServiceImpl implements WithdrawService {
         Integer balance = userAccountMapper.getBalanceByUserId(userId);
         if (balance == null)
             BSUtil.isTrue(false, "可用余额不足");
-
         if (money > balance)
             BSUtil.isTrue(false, "可用余额不足");
         User user = userService.getByUserId(userId);
