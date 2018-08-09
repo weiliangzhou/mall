@@ -8,6 +8,7 @@ import com.zwl.model.groups.Buy;
 import com.zwl.model.groups.CertificationVal;
 import com.zwl.model.po.UserCertification;
 import com.zwl.model.po.UserInfo;
+import com.zwl.model.vo.CertificationVo;
 import com.zwl.service.CertificationService;
 import com.zwl.service.UserInfoService;
 import com.zwl.util.CheckUtil;
@@ -64,26 +65,38 @@ public class CertificationController {
     public Result getOneByUserId(@RequestBody JSONObject jsonObject) {
         Result result = new Result();
         String userId = jsonObject.getString("userId");
+        //查询是否存在以及提交实名认证，并审核通过
         UserCertification queryUserCertification = new UserCertification();
         queryUserCertification.setUserId(userId);
         queryUserCertification.setStatus(2);
-        UserCertification userCertification = certificationService.getOneByParams(queryUserCertification);
-        UserCertification userCertification_temp = new UserCertification();
-        UserCertification qyc = new UserCertification();
-        qyc.setUserId(userId);
-        qyc.setStatus(1);
-        UserCertification ucf_1 = certificationService.getOneByParams(qyc);
-        if (ucf_1 != null) {
-            userCertification_temp.setStatus(1);
-            result.setData(userCertification_temp);
+        UserCertification userCertification2 = certificationService.getOneByParams(queryUserCertification);
+        if (userCertification2 != null) {
+            result.setData(userCertification2);
             return result;
         }
-        if (userCertification != null) {
-            result.setData(userCertification);
+        //查询是否已经提交了实名认证，还在审核中状态
+        queryUserCertification.setStatus(1);
+        UserCertification userCertification1 = certificationService.getOneByParams(queryUserCertification);
+        if (userCertification1 != null) {
+            CertificationVo certificationVoResult = new CertificationVo();
+            certificationVoResult.setStatus(1);
+            result.setData(certificationVoResult);
             return result;
         }
-        userCertification_temp.setStatus(0);
-        result.setData(userCertification_temp);
+        //查询是否已经提交了实名认证，已经被驳回状态
+        queryUserCertification.setStatus(3);
+        UserCertification userCertification3 = certificationService.getOneByParams(queryUserCertification);
+        if (userCertification3 != null) {
+            CertificationVo certificationVoResult = new CertificationVo();
+            certificationVoResult.setStatus(3);
+            certificationVoResult.setRejectReason(userCertification3.getRejectReason());
+            result.setData(certificationVoResult);
+            return result;
+        }
+        //用户还未提交实名认证
+        CertificationVo certificationVoResult = new CertificationVo();
+        certificationVoResult.setStatus(0);
+        result.setData(certificationVoResult);
         return result;
     }
 
