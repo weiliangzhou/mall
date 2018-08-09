@@ -3,10 +3,12 @@ package com.zwl.filter;
 import com.alibaba.fastjson.JSON;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.baseresult.ResultCodeEnum;
+import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.TokenModel;
 import com.zwl.serviceimpl.RedisTokenManagerImpl;
 import com.zwl.util.ThreadVariable;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 
@@ -115,6 +117,13 @@ public class TokenFilter implements Filter {
         // 验证token
         // token="nprI2s/ITAaGaLJfL+QkZZYKhMAH3C3PkQEbpv+qQwOFG7hECEPeR4lKz5NTpQ177Sk1MdBj1GEjyNM2V0G2Nbj3FfKz6X+C";
         // 这里token如果接收有空格的地方，，那就是+号没有处理好。。可以考虑变成%2B
+        if (StringUtils.isBlank(token)){
+            Result result = new Result();
+            result.setCode(ResultCodeEnum.TOKEN_ERROR);
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().println(JSON.toJSONString(result));
+            return;
+        }
         token = token.replaceAll(" ", "+");
         TokenModel model = manager.getToken(token);
         if (manager.checkToken(model)) {
