@@ -65,37 +65,28 @@ public class CertificationController {
     public Result getOneByUserId(@RequestBody JSONObject jsonObject) {
         Result result = new Result();
         String userId = jsonObject.getString("userId");
-        //查询是否存在以及提交实名认证，并审核通过
-        UserCertification queryUserCertification = new UserCertification();
-        queryUserCertification.setUserId(userId);
-        queryUserCertification.setStatus(2);
-        UserCertification userCertification2 = certificationService.getOneByParams(queryUserCertification);
-        if (userCertification2 != null) {
-            result.setData(userCertification2);
+        if(CheckUtil.isEmpty(userId)){
+            result.setCode(ResultCodeEnum.PARAMS_IS_NULL);
             return result;
         }
-        //查询是否已经提交了实名认证，还在审核中状态
-        queryUserCertification.setStatus(1);
-        UserCertification userCertification1 = certificationService.getOneByParams(queryUserCertification);
-        if (userCertification1 != null) {
-            CertificationVo certificationVoResult = new CertificationVo();
-            certificationVoResult.setStatus(1);
-            result.setData(certificationVoResult);
-            return result;
-        }
-        //查询是否已经提交了实名认证，已经被驳回状态
-        queryUserCertification.setStatus(3);
-        UserCertification userCertification3 = certificationService.getOneByParams(queryUserCertification);
-        if (userCertification3 != null) {
-            CertificationVo certificationVoResult = new CertificationVo();
-            certificationVoResult.setStatus(3);
-            certificationVoResult.setRejectReason(userCertification3.getRejectReason());
-            result.setData(certificationVoResult);
-            return result;
-        }
-        //用户还未提交实名认证
+        UserCertification userCertification=certificationService.getOneByUserId(userId);
+        Integer status=userCertification.getStatus();
         CertificationVo certificationVoResult = new CertificationVo();
-        certificationVoResult.setStatus(0);
+        switch (status) {
+            case 0:
+                certificationVoResult.setStatus(0);
+                break;
+            case 1:
+                certificationVoResult.setStatus(1);
+                break;
+            case 2:
+                certificationVoResult.setStatus(2);
+                break;
+            case 3:
+                certificationVoResult.setStatus(3);
+                certificationVoResult.setRejectReason(userCertification.getRejectReason());
+                break;
+        }
         result.setData(certificationVoResult);
         return result;
     }

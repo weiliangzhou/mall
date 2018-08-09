@@ -43,6 +43,12 @@ public class UserController {
     private MsgSenderService msgSenderService;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private CertificationService certificationService;
+    @Autowired
+    private MaidInfoService maidInfoService;
+    @Autowired
+    private UserAccountService userAccountService;
 
 
     /**
@@ -50,8 +56,6 @@ public class UserController {
      */
     @PostMapping("/authorization")
     public Result authorization(@RequestBody UserLoginInfoVo userLoginInfoVo) {
-        log.info("====@@@@进入用户授权@@@@@==========");
-        log.info("====@@@@推荐人传入参数为@@@@@==========：" + userLoginInfoVo.getReferrer());
         Result result = new Result();
         //根据merchantid获取appid和secret
         Merchant merchant = merchantService.getMerchantByMerchantId(userLoginInfoVo.getMerchantId());
@@ -97,7 +101,6 @@ public class UserController {
         String phone = jsonObject.getString("phone");
         String msgCode = jsonObject.getString("msgCode");
         String userId = jsonObject.getString("userId");
-        log.info("===========用户userid:===========：" + userId);
 //        需要手机号码防重
         User queryUser = new User();
         queryUser.setRegisterMobile(phone);
@@ -175,6 +178,15 @@ public class UserController {
         userLoginInfoVo.setIsBindMobile(user.getRegisterMobile() == null ? 0 : 1);
         userLoginInfoVo.setRegisterMobile(user.getRegisterMobile());
         userLoginInfoVo.setIsCertification(userInfo.getIsCertification() == null ? 0 : 1);
+        //实名认证状态
+        UserCertification userCertification = certificationService.getOneByUserId(userId);
+        userLoginInfoVo.setCertificationStatus(userCertification.getStatus());
+        Integer xiaxianCount = maidInfoService.getXiaXianCountByUserId(userId);
+        userLoginInfoVo.setXiaxianCount(xiaxianCount);
+        Integer balance=userAccountService.getBalanceByUserId(userId);
+        //余额：分转元
+        balance=balance==null?0:balance/100;
+        userLoginInfoVo.setBalance(balance);
 
         result.setData(userLoginInfoVo);
         return result;
@@ -188,7 +200,6 @@ public class UserController {
         String referrer = jsonObject.getString("referrer");
         String userId = jsonObject.getString("userId");
 //        String merchantId = jsonObject.getString("merchantId");
-        log.info("==============@@@@@@@@分享绑定上下级关系@@用户" + userId + "推荐人referrer:" + referrer);
         Result result = new Result();
         User userQuery = userService.getByUserId(userId);
         if (userQuery == null) {
