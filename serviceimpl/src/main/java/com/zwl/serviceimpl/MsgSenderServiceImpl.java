@@ -2,14 +2,15 @@ package com.zwl.serviceimpl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.zwl.model.exception.BSUtil;
 import com.zwl.model.msgsend.MsgSenderConstants;
 import com.zwl.service.MsgSenderService;
 import com.zwl.util.HttpsUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -36,27 +37,33 @@ public class MsgSenderServiceImpl implements MsgSenderService {
     @Override
     public void sendCode(String phone, String busCode) {
         try {
+            String checkLimit = stringRedisTemplate.boundValueOps(phone + "_limit1").get();
+            if (StringUtils.isNotBlank(checkLimit))
+                BSUtil.isTrue(false, "请一分钟之后重发！");
             Map map = new HashMap();
-            Random random = new Random();
-            int msgCode = random.nextInt(999999);
+            int msgCode = new Random().nextInt(999999);
+            if (msgCode < 100000)
+                msgCode += 100000;
             map.put("account", MsgSenderConstants.UN);
             map.put("password", MsgSenderConstants.PW);
             map.put("msg", MsgSenderConstants.TEMPLATE + msgCode);
             map.put("phone", phone);
             log.info("短信验证码" + msgCode);
-            log.info("开始发送短信" +  JSON.toJSONString(map));
+            log.info("开始发送短信" + JSON.toJSONString(map));
             String result = HttpsUtils.sendPost(MsgSenderConstants.URL, JSON.toJSONString(map));
             log.info("结束发送短信" + result);
             JSONObject jsonObject = JSONObject.parseObject(result);
             String code = jsonObject.getString("code");
             String errorMsg = jsonObject.getString("errorMsg");
+            //发送短信后，记录该手机号，限制1分钟只能发送一次
+            stringRedisTemplate.boundValueOps(phone + "_limit1").set(msgCode + "", 1, TimeUnit.MINUTES);
             if ("0".equals(code)) {
                 log.info("发送成功");
                 //存入redis
                 //根据busCode 1绑定手机，2购买绑定手机，存储到redis并设置过期时间
                 stringRedisTemplate.boundValueOps(busCode + phone).set(msgCode + "", 5, TimeUnit.MINUTES);
             } else
-                log.error("短信发送失败"  + "错误原因" + errorMsg);
+                log.error("短信发送失败" + "错误原因" + errorMsg);
         } catch (Exception e) {
             e.printStackTrace();
         }

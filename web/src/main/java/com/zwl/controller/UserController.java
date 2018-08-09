@@ -10,6 +10,7 @@ import com.zwl.model.vo.UserLoginInfoVo;
 import com.zwl.service.*;
 import com.zwl.serviceimpl.RedisTokenManagerImpl;
 import com.zwl.util.CheckUtil;
+import com.zwl.util.ThreadVariable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -50,7 +51,7 @@ public class UserController {
     @PostMapping("/authorization")
     public Result authorization(@RequestBody UserLoginInfoVo userLoginInfoVo) {
         log.info("====@@@@进入用户授权@@@@@==========");
-        log.info("====@@@@推荐人传入参数为@@@@@==========："+userLoginInfoVo.getReferrer());
+        log.info("====@@@@推荐人传入参数为@@@@@==========：" + userLoginInfoVo.getReferrer());
         Result result = new Result();
         //根据merchantid获取appid和secret
         Merchant merchant = merchantService.getMerchantByMerchantId(userLoginInfoVo.getMerchantId());
@@ -73,11 +74,11 @@ public class UserController {
         userQuery.setMerchantId(userLoginInfoVo.getMerchantId());
         userQuery = userService.getOneByParams(userQuery);
         String userId;
-        if(userQuery==null){//用户之前没授权登录过
-            userId=userService.saveAuthorization(userLoginInfoVo, openid);
+        if (userQuery == null) {//用户之前没授权登录过
+            userId = userService.saveAuthorization(userLoginInfoVo, openid);
         } else {//如果用户还未购买，则可以更新推荐人
-            userId=userQuery.getUserId();
-            userService.modifyAuthorization(userLoginInfoVo,userQuery);
+            userId = userQuery.getUserId();
+            userService.modifyAuthorization(userLoginInfoVo, userQuery);
         }
         //返回用户登录态
         TokenModel model = tokenManager.createToken(userId);
@@ -141,12 +142,14 @@ public class UserController {
      */
     @PostMapping("/getUserInfoByUserId")
     public Result getUserInfoByUserId(@RequestBody JSONObject jsonObject) {
-        String userId = jsonObject.getString("userId");
+        String userId_local = ThreadVariable.getUserID();
+        String userId_param = jsonObject.getString("userId");
+        String userId = org.apache.commons.lang3.StringUtils.isBlank(userId_local) ? userId_param : userId_local;
         Result result = new Result();
         //根据UserId查找用户详情表
         UserInfo userInfo = userInfoService.getByUserId(userId);
         UserLoginInfoVo userLoginInfoVo = new UserLoginInfoVo();
-        if(userInfo!=null){
+        if (userInfo != null) {
             userLoginInfoVo.setNickName(userInfo.getNickName());
             userLoginInfoVo.setLogoUrl(userInfo.getLogoUrl());
         }
@@ -159,7 +162,7 @@ public class UserController {
         }
         Integer memberLevel = user.getMemberLevel();
         String levelName;
-        if (memberLevel == null || memberLevel == 0 ) {
+        if (memberLevel == null || memberLevel == 0) {
             levelName = "游客";
         } else {
             Product product = productService.getProductByMemberLevel(memberLevel);
