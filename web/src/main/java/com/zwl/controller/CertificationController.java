@@ -2,12 +2,18 @@ package com.zwl.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.zwl.model.baseresult.Result;
+import com.zwl.model.baseresult.ResultCodeEnum;
 import com.zwl.model.exception.BSUtil;
+import com.zwl.model.groups.Buy;
+import com.zwl.model.groups.CertificationVal;
 import com.zwl.model.po.UserCertification;
 import com.zwl.model.po.UserInfo;
+import com.zwl.model.vo.CertificationVo;
 import com.zwl.service.CertificationService;
 import com.zwl.service.UserInfoService;
+import com.zwl.util.CheckUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +37,7 @@ public class CertificationController {
      * @return
      */
     @PostMapping("/add")
-    public Result addCertification(@RequestBody UserCertification userCertification) {
+    public synchronized Result addCertification(@Validated(CertificationVal.class) @RequestBody UserCertification userCertification) {
         Result result = new Result();
 //        身份证防重,只通过才,
         String cardNum = userCertification.getIdCard();
@@ -59,26 +65,29 @@ public class CertificationController {
     public Result getOneByUserId(@RequestBody JSONObject jsonObject) {
         Result result = new Result();
         String userId = jsonObject.getString("userId");
-        UserCertification queryUserCertification = new UserCertification();
-        queryUserCertification.setUserId(userId);
-        queryUserCertification.setStatus(2);
-        UserCertification userCertification = certificationService.getOneByParams(queryUserCertification);
-        UserCertification userCertification_temp = new UserCertification();
-        UserCertification qyc = new UserCertification();
-        qyc.setUserId(userId);
-        qyc.setStatus(1);
-        UserCertification ucf_1 = certificationService.getOneByParams(qyc);
-        if (ucf_1 != null) {
-            userCertification_temp.setStatus(1);
-            result.setData(userCertification_temp);
+        if(CheckUtil.isEmpty(userId)){
+            result.setCode(ResultCodeEnum.PARAMS_IS_NULL);
             return result;
         }
-        if (userCertification != null) {
-            result.setData(userCertification);
-            return result;
+        UserCertification userCertification=certificationService.getOneByUserId(userId);
+        Integer status=userCertification.getStatus();
+        CertificationVo certificationVoResult = new CertificationVo();
+        switch (status) {
+            case 0:
+                certificationVoResult.setStatus(0);
+                break;
+            case 1:
+                certificationVoResult.setStatus(1);
+                break;
+            case 2:
+                certificationVoResult.setStatus(2);
+                break;
+            case 3:
+                certificationVoResult.setStatus(3);
+                certificationVoResult.setRejectReason(userCertification.getRejectReason());
+                break;
         }
-        userCertification_temp.setStatus(0);
-        result.setData(userCertification_temp);
+        result.setData(certificationVoResult);
         return result;
     }
 

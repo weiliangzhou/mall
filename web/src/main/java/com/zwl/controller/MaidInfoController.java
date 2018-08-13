@@ -50,7 +50,7 @@ public class MaidInfoController {
             totalCount = userQuotaCount.getTotalCount();
         }
         maidInfoVVo.setCount(count);
-        maidInfoVVo.setTotalAmount(totalAmount == null ? 0 : totalAmount);
+        maidInfoVVo.setTotalAmount(totalAmount == null ? 0 : totalAmount/100);
         maidInfoVVo.setMaidInfoVoList(maidInfoList);
         maidInfoVVo.setTotalCount(totalCount);
         result.setData(maidInfoVVo);

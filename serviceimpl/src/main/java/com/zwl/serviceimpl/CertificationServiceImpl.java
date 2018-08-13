@@ -3,7 +3,6 @@ package com.zwl.serviceimpl;
 import com.zwl.dao.mapper.UserCertificationMapper;
 import com.zwl.model.po.UserCertification;
 import com.zwl.service.CertificationService;
-import com.zwl.util.CheckUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,10 +26,39 @@ public class CertificationServiceImpl implements CertificationService {
     public int modifyByUserId(UserCertification userCertification) {
         return userCertificationMapper.updateByUserId(userCertification);
     }
-
     @Override
     public UserCertification getOneByUserId(String userId) {
-        return userCertificationMapper.selectOneByUserId(userId);
+        /*//用户还未提交实名认证
+        List<UserCertification> userCertificationList = userCertificationMapper.selectListByUserId(userId);
+        if(CheckUtil.isEmpty(userCertificationList)){
+            UserCertification userCertification=new UserCertification();
+            userCertification.setStatus(0);
+            return  userCertification;
+        }*/
+        //查询是否存在以及提交实名认证，并审核通过
+        UserCertification queryUserCertification = new UserCertification();
+        queryUserCertification.setUserId(userId);
+        queryUserCertification.setStatus(2);
+        UserCertification userCertification2 = userCertificationMapper.getOneByParams(queryUserCertification);
+        if (userCertification2 != null) {
+            return userCertification2;
+        }
+        //查询是否已经提交了实名认证，还在审核中状态
+        queryUserCertification.setStatus(1);
+        UserCertification userCertification1 = userCertificationMapper.getOneByParams(queryUserCertification);
+        if (userCertification1 != null) {
+            return userCertification1;
+        }
+        //查询是否已经提交了实名认证，已经被驳回状态
+        queryUserCertification.setStatus(3);
+        UserCertification userCertification3 = userCertificationMapper.getOneByParams(queryUserCertification);
+        if (userCertification3 != null) {
+            return userCertification3;
+        }
+        //用户还未提交实名认证
+        UserCertification userCertification=new UserCertification();
+        userCertification.setStatus(0);
+        return userCertification;
     }
 
     @Override

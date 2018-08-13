@@ -145,9 +145,8 @@ public class WxController {
     @ApiComment(value = "根据userId查询用户提交的实名认证信息", seeClass = UserCertification.class)
     @RequestMapping(name = "根据userId查询用户提交的实名认证信息",
             value = "/wx/certification/getOneByUserId", method = RequestMethod.POST)
-    public UserCertification getOneCertificationByUserId(@ApiComment("userId") String userId) {
-        Result result = new Result();
-        UserCertification u = new UserCertification();
+    public CertificationVo getOneCertificationByUserId(@ApiComment("userId") String userId) {
+        CertificationVo u = new CertificationVo();
         return u;
     }
 

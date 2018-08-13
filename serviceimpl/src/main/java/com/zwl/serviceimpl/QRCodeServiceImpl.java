@@ -38,7 +38,7 @@ public class QRCodeServiceImpl implements QRCodeService {
             try {
                 QRCode = HttpsUtils.httpPostWithJSON2(WxConstans.QR_CODE + accessToken, JSONObject.toJSONString(postMap));
                 log.info("二维码url"+QRCode);
-                stringRedisTemplate.boundValueOps(userId + "_qrcode_" + page).set(QRCode, 360, TimeUnit.DAYS);
+                stringRedisTemplate.boundValueOps(userId + "_qrcode_" + page).set(QRCode, 4, TimeUnit.MINUTES);
 
             } catch (Exception e) {
                 e.printStackTrace();
