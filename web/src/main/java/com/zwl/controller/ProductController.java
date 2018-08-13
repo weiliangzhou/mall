@@ -110,7 +110,10 @@ public class ProductController {
                 e.printStackTrace();
             }*/
 //            productVo.setPriceDesc(p.getPriceDesc());
-
+            Integer buyCount=p.getBuyCount()==null?0:p.getBuyCount();
+            String buyCountDesc=buyCount+"人购买";
+            productVo.setBuyCount(buyCount);
+            productVo.setBuyCountDesc(buyCountDesc);
             listVo.add(productVo);
         }
         result.setData(listVo);

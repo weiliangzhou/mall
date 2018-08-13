@@ -56,6 +56,8 @@ public class UserController {
      */
     @PostMapping("/authorization")
     public Result authorization(@RequestBody UserLoginInfoVo userLoginInfoVo) {
+        log.info("====@@@@进入用户授权@@@@@==========");
+        log.info("====@@@@推荐人传入参数为@@@@@==========：" + userLoginInfoVo.getReferrer());
         Result result = new Result();
         //根据merchantid获取appid和secret
         Merchant merchant = merchantService.getMerchantByMerchantId(userLoginInfoVo.getMerchantId());
@@ -82,6 +84,7 @@ public class UserController {
             userId = userService.saveAuthorization(userLoginInfoVo, openid);
         } else {//如果用户还未购买，则可以更新推荐人
             userId = userQuery.getUserId();
+            log.info("====@@@@用户之前已经授权登录过，userId为：@@@@@==========：" + userId);
             userService.modifyAuthorization(userLoginInfoVo, userQuery);
         }
         //返回用户登录态
@@ -183,6 +186,7 @@ public class UserController {
         userLoginInfoVo.setCertificationStatus(userCertification.getStatus());
         Integer xiaxianCount = maidInfoService.getXiaXianCountByUserId(userId);
         userLoginInfoVo.setXiaxianCount(xiaxianCount);
+        //账户余额
         Integer balance=userAccountService.getBalanceByUserId(userId);
         //余额：分转元
         balance=balance==null?0:balance/100;
@@ -200,6 +204,8 @@ public class UserController {
         String referrer = jsonObject.getString("referrer");
         String userId = jsonObject.getString("userId");
 //        String merchantId = jsonObject.getString("merchantId");
+        log.info("====@@@@进入用户授权@@@@@==========userId："+userId);
+        log.info("====@@@@推荐人传入参数为@@@@@==========：" + referrer);
         Result result = new Result();
         User userQuery = userService.getByUserId(userId);
         if (userQuery == null) {
@@ -217,13 +223,19 @@ public class UserController {
             User userIsBuy = userService.getByUserId(referrer);
             if (userIsBuy == null) {
                 result.setCode(ResultCodeEnum.EXCEPTION);
-                result.setMessage("推荐人不存在，请检查referrer");
+                result.setMessage("推荐人不存在，请检查referrer！");
                 return result;
             }
             if (userIsBuy.getIsBuy() != null && userIsBuy.getIsBuy() == 1) {
                 user.setReferrer(referrer);
                 userService.updateUserByUserId(user);
+            }else {
+                result.setCode(ResultCodeEnum.EXCEPTION);
+                result.setMessage("推荐人还未购买，不绑定关系！");
             }
+        }else{
+            result.setCode(ResultCodeEnum.EXCEPTION);
+            result.setMessage("该用户已经购买，不再改绑推荐人！");
         }
 
         return result;

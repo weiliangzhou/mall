@@ -13,6 +13,7 @@
         <result column="image_url" property="imageUrl" jdbcType="VARCHAR"/>
         <result column="content" property="content" />
         <result column="content_text" property="contentText" />
+        <result column="buy_count" property="buyCount" jdbcType="INTEGER"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
         <result column="available" property="available" jdbcType="SMALLINT"/>

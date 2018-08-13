@@ -50,9 +50,10 @@ public class ClassSetController {
         List<ClassVo> list = classSetService.getAllClassOrderById(merchantId);
         for (ClassVo classVo : list
                 ) {
+            Long browseCount = 0L;
             if (classVo.getClassType() == 1) {
                 ClassSetStatistics css = classSetStatisticsService.getByClassSetId(classVo.getId());
-                classVo.setBrowseCount(css == null ? 0L : css.getBrowseCount());
+                browseCount = css.getBrowseCount()==null?0L:css.getBrowseCount();
                 //    如果是堂，logo是节的可配置优先级），
                 //    按照发布时间倒序
                 String logoUrl = classInfoService.getLogoUrlByClassSetId(classVo.getId());
@@ -60,8 +61,10 @@ public class ClassSetController {
             }
             if (classVo.getClassType() == 2) {
                 ClassInfoStatistics csi = classInfoStatisticsService.getByClassInfoId(classVo.getId());
-                classVo.setBrowseCount(csi == null ? 0L : csi.getListenCount());
+                browseCount=csi.getListenCount()==null?0L:csi.getListenCount();
             }
+            classVo.setBrowseCount(browseCount);
+            classVo.setBrowseCountDesc(browseCount+"人收听");
         }
 
         PageClassVo pageClassVo = new PageClassVo();
