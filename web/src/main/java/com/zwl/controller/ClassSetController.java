@@ -16,6 +16,7 @@ import com.zwl.service.ClassInfoStatisticsService;
 import com.zwl.service.ClassSetService;
 import com.zwl.service.ClassSetStatisticsService;
 import com.zwl.util.CheckUtil;
+import com.zwl.util.MathUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,7 +40,7 @@ public class ClassSetController {
     private ClassInfoStatisticsService classInfoStatisticsService;
     @Autowired
     private ClassInfoService classInfoService;
-
+    private static final long CONSTANT_WAN=10000L;
     @PostMapping("/getPageAllClass")
     public Result getPageAllClass(@RequestBody JSONObject jsonObject) {
         Result result = new Result();
@@ -51,20 +52,33 @@ public class ClassSetController {
         for (ClassVo classVo : list
                 ) {
             Long browseCount = 0L;
+            //套课程
             if (classVo.getClassType() == 1) {
-                ClassSetStatistics css = classSetStatisticsService.getByClassSetId(classVo.getId());
-                browseCount = css.getBrowseCount()==null?0L:css.getBrowseCount();
+                List<ClassInfo> classInfoList = classInfoService.getByClassSetId(classVo.getId());
+                if (CheckUtil.isNotEmpty(classInfoList)) {
+                    for (ClassInfo c : classInfoList
+                            ) {
+                        ClassInfoStatistics csi = classInfoStatisticsService.getByClassInfoId(c.getId());
+                        Long temp = csi==null||csi.getListenCount() == null ? 0L : csi.getListenCount();
+                        browseCount = temp+browseCount;
+                    }
+                }
                 //    如果是堂，logo是节的可配置优先级），
                 //    按照发布时间倒序
                 String logoUrl = classInfoService.getLogoUrlByClassSetId(classVo.getId());
                 classVo.setLogoUrl(logoUrl);
             }
+            //单节课程
             if (classVo.getClassType() == 2) {
                 ClassInfoStatistics csi = classInfoStatisticsService.getByClassInfoId(classVo.getId());
-                browseCount=csi.getListenCount()==null?0L:csi.getListenCount();
+                browseCount = csi==null||csi.getListenCount() == null ? 0L : csi.getListenCount();
             }
             classVo.setBrowseCount(browseCount);
-            classVo.setBrowseCountDesc(browseCount+"人收听");
+            String classListenCountDesc=String.valueOf(browseCount);
+            if(browseCount>=CONSTANT_WAN){
+                classListenCountDesc=MathUtil.changeWan(classListenCountDesc)+"万";
+            }
+            classVo.setBrowseCountDesc(classListenCountDesc+ "人收听");
         }
 
         PageClassVo pageClassVo = new PageClassVo();
@@ -114,26 +128,23 @@ public class ClassSetController {
         classVo.setContent(classSet.getContent());
         classVo.setLogoUrl(classSet.getBannerUrl());
         //浏览人数
-        ClassSetStatistics css = classSetStatisticsService.getByClassSetId(id);
-        classVo.setBrowseCount(css.getBrowseCount()==null?0:css.getBrowseCount());
         List<ClassInfo> classInfoList = classInfoService.getByClassSetId(id);
         classVo.setChildrenSize(CheckUtil.isEmpty(classInfoList)?0:classInfoList.size());
-
-        //下属的节课程
-       /* List<ClassInfo> classInfoList = classInfoService.getByClassSetId(id);
-        List<ClassVo> children =new ArrayList<>();
-        for (ClassInfo classInfo: classInfoList
-                ) {
-            ClassVo classVoTemp = new ClassVo();
-            classVoTemp.setId(classInfo.getId());
-            classVoTemp.setTitle(classInfo.getTitle());
-            classVoTemp.setCreateTime(classInfo.getCreateTime());
-            classVoTemp.setModifyTime(classInfo.getModifyTime());
-            classVoTemp.setCategoryTitle(c.getCategoryTitle());
-            children.add(classVoTemp);
+        if (CheckUtil.isNotEmpty(classInfoList)) {
+            Long classListenCount = 0L;
+            for (ClassInfo c : classInfoList
+                    ) {
+                ClassInfoStatistics cis = classInfoStatisticsService.getByClassInfoId(c.getId());
+                Long browseCount = cis==null||cis.getListenCount() == null ? 0L : cis.getListenCount();
+                classListenCount += browseCount;
+            }
+            classVo.setBrowseCount(classListenCount);
+            String classListenCountDesc=String.valueOf(classListenCount);
+            if(classListenCount>=CONSTANT_WAN){
+                classListenCountDesc=MathUtil.changeWan(classListenCountDesc)+"万";
+            }
+            classVo.setBrowseCountDesc(classListenCountDesc+ "人收听");
         }
-        classVo.setChildren(children);
-*/
 
         result.setData(classVo);
         return result;

@@ -191,7 +191,7 @@
             and available = #{available,jdbcType=INTEGER}
         </if>
         <if test="status != null and status==3">
-            limit 1
+            order by  create_time limit 1
         </if>
 
     </select>

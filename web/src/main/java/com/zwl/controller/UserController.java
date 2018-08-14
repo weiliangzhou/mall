@@ -180,7 +180,7 @@ public class UserController {
         //通过主表获取绑定手机号
         userLoginInfoVo.setIsBindMobile(user.getRegisterMobile() == null ? 0 : 1);
         userLoginInfoVo.setRegisterMobile(user.getRegisterMobile());
-        userLoginInfoVo.setIsCertification(userInfo.getIsCertification() == null ? 0 : 1);
+//        userLoginInfoVo.setIsCertification(userInfo.getIsCertification() == null ? 0 : 1);
         //实名认证状态
         UserCertification userCertification = certificationService.getOneByUserId(userId);
         userLoginInfoVo.setCertificationStatus(userCertification.getStatus());
