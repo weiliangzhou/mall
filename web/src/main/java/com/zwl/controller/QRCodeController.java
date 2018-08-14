@@ -3,6 +3,7 @@ package com.zwl.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zwl.model.baseresult.Result;
+import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.Merchant;
 import com.zwl.model.po.User;
 import com.zwl.service.MerchantService;
@@ -40,18 +41,17 @@ public class QRCodeController {
         String userId = jsonObject.getString("userId");
         String page = jsonObject.getString("page");
 //        友好提示:如果分享出去，当前用户未购买学员以上等级产品，不能造成分佣，
-        User user = userService.getByUserId(userId);
-        Integer memberLevel = user.getMemberLevel();
-        String msg = "";
-        if (memberLevel == null || memberLevel <= 4)
-            msg = "您未购买学员产品，分享出去，可能不会给您带来收益！";
+        //User user = userService.getByUserId(userId);
+        //Integer memberLevel = user.getMemberLevel();
+        //if (memberLevel == null || memberLevel <= 4)
+        //    BSUtil.isTrue(false, "您未购买学员产品，分享出去，可能不会给您带来收益！");
         Merchant merchant = merchantService.getMerchantByMerchantId(merchantId);
         String appid = merchant.getAppId();
         String appSecret = merchant.getAppSecret();
         //type 1=公众号 2=微信小程序
         String accessToken = wxAccessTokenService.getAccessToken(merchantId, appid, appSecret, 2);
         String qrCode = qrCodeService.getQRCode(userId, page, accessToken);
-        log.info(qrCode);
+        log.info("微信小程序accessToken"+accessToken);
         Result result = new Result();
         result.setData(qrCode);
         return JSON.toJSONString(result);

@@ -28,7 +28,7 @@ public class UserAccountController {
         String userId = jsonObject.getString("userId");
         Integer balance = userAccountService.getBalanceByUserId(userId);
         Result result = new Result();
-        result.setData(balance == null ? 0 : balance / 100);
+        result.setData(balance == null ? 0 : balance/100);
         return result;
     }
 

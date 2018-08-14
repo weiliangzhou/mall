@@ -8,7 +8,6 @@ import com.zwl.model.po.User;
 import com.zwl.model.po.Withdraw;
 import com.zwl.model.po.WithdrawFlow;
 import com.zwl.model.wxpay.AdminPayVo;
-import com.zwl.service.UserCertificationService;
 import com.zwl.service.UserService;
 import com.zwl.service.WithdrawService;
 import com.zwl.util.UUIDUtil;
@@ -37,8 +36,6 @@ public class WithdrawServiceImpl implements WithdrawService {
     private WithdrawFlowMapper withdrawFlowMapper;
     @Autowired
     private UserService userService;
-    @Autowired
-    private UserCertificationService userCertificationService;
 
     @Override
     public List<Withdraw> getWithdrawList() {
@@ -86,7 +83,7 @@ public class WithdrawServiceImpl implements WithdrawService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public synchronized void apply(Withdraw withdraw) {
-        Integer money = withdraw.getMoney() * 100;
+        Integer money = withdraw.getMoney()*100;
         if (money == 0)
             BSUtil.isTrue(false, "提现金额不能为0");
 
@@ -95,7 +92,6 @@ public class WithdrawServiceImpl implements WithdrawService {
         Integer balance = userAccountMapper.getBalanceByUserId(userId);
         if (balance == null)
             BSUtil.isTrue(false, "可用余额不足");
-
         if (money > balance)
             BSUtil.isTrue(false, "可用余额不足");
         User user = userService.getByUserId(userId);

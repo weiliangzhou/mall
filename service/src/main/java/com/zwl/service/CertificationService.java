@@ -27,8 +27,8 @@ public interface CertificationService {
      * @return
      */
     int modifyByUserId(UserCertification userCertification);
-
-    /**
+/*
+    *//**
      * 根据userId查询用户提交的实名认证信息
      *
      * @param userId
@@ -66,4 +66,11 @@ public interface CertificationService {
      * @return
      */
     List<UserCertification>  getListByUserId(String userId);
+
+    /**
+     * 根据userId查询用户提交的实名认证信息
+     * @param userId
+     * @return
+     *//*
+    UserCertification getByUserId(String userId);*/
 }

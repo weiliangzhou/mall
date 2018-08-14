@@ -35,8 +35,14 @@ public class UserLoginInfoVo {
     private String registerMobile;
     @ApiComment(value = "是否实名认证过", sample = "1")
     private Integer isCertification;
+    @ApiComment(value = "用户实名认证状态", sample = "1")
+    private Integer certificationStatus;
     @ApiComment(value = "等级名称", sample = "院长")
     private String levelName;
+    @ApiComment(value = "账户余额（元）", sample = "1078000")
+    private Integer balance;
+    @ApiComment(value = "邀请记录人数（人）", sample = "108")
+    private Integer xiaxianCount;
 
 
 }
