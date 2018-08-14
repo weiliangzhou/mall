@@ -32,6 +32,7 @@ public class UserCertification {
     @NotBlank(message = "手持身份证不能为空", groups = {CertificationVal.class})
     @ApiComment(value = "手持身份证", sample = "https://image.baidu.com/search/detail?ct=503316480&z=0&ipn=d&word=%E6%89%8B%E6%8C%81%E8%BA%AB%E4%BB%BD%E8%AF%81&step_word=&hs=0&pn=1&spn=0&di=19307542101&pi=0&rn=1&tn=baiduimagedetail&is=0%2C0&istype=2&ie=utf-8&oe=utf-8&in=&cl=2&lm=-1&st=-1&cs=30378554%2C1776136751&os=2734060140%2C4109532893&simid=4231119681%2C617668854&adpicid=0&lpn=0&ln=1954&fr=&fmq=1531297750123_R&fm=result&ic=0&s=undefined&se=&sme=&tab=0&width=&height=&face=undefined&ist=&jit=&cg=&bdtype=0&oriquery=&objurl=http%3A%2F%2Farticle.fd.zol-img.com.cn%2Ft_s640x2000%2Fg5%2FM00%2F0D%2F07%2FChMkJ1hbq4iIN6g-AADHtLmdducAAYyYADoKCkAAMfM815.jpg&fromurl=ippr_z2C%24qAzdH3FAzdH3F31_z%26e3Bz5s_z%26e3Bv54_z%26e3BvgAzdH3FmanAzdH3Fmana0ab_wss_z%26e3Bip4s&gsm=0&rpstart=0&rpnum=0&islist=&querylist=")
     private String img3Url;
+    @NotBlank(message = "用户id不能为空", groups = {CertificationVal.class})
     @ApiComment(value = "用户id", sample = "ec28f6b9183f498eb9153f1593151aca")
     private String userId;
     @ApiComment(value = "商户id", sample = "0571XUDONGYA")

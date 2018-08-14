@@ -51,6 +51,7 @@ public class CertificationServiceImpl implements CertificationService {
         }
         //查询是否已经提交了实名认证，已经被驳回状态
         queryUserCertification.setStatus(3);
+        queryUserCertification.setAvailable(0);
         UserCertification userCertification3 = userCertificationMapper.getOneByParams(queryUserCertification);
         if (userCertification3 != null) {
             return userCertification3;

@@ -179,6 +179,29 @@
         usr.available = 1
         AND usr.referrer = #{userId}
         AND so.available = 1
+        AND so.order_status=1
+        AND usr.user_id = so.user_id
+        and usr.member_level=sp.`level`
+    </select>
+    <!--小程序分类获取推荐下线-->
+    <select id="getXiaXianSortList" resultType="com.zwl.model.vo.XiaXianSortVo" parameterType="string">
+    SELECT
+        usr.real_name as realName,
+        so.actual_money/100 as money,
+        so.payment_time as buyTime,
+        so.actual_money*sp.maid_percent/10000 as maidMoney,
+        usr.register_mobile as mobile,
+        sp.`level` AS `level`,
+		sp.level_name AS levelName
+    FROM
+        ss_user usr,
+        ss_order so,
+        ss_product sp
+    WHERE
+        usr.available = 1
+        AND usr.referrer = #{userId}
+        AND so.available = 1
+        AND so.order_status=1
         AND usr.user_id = so.user_id
         and usr.member_level=sp.`level`
     </select>

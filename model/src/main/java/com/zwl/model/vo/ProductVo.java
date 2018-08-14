@@ -19,4 +19,8 @@ public class ProductVo {
     private String priceDesc;
     @ApiComment(value = "产品名称", sample = "99元套餐A")
     private String productName;
+    @ApiComment(value = "购买人数", sample = "123000")
+    private Integer buyCount;
+    @ApiComment(value = "购买人数描述", sample = "12.3万人购买")
+    private String buyCountDesc;
 }
