@@ -268,6 +268,7 @@ public class WxPayController {
                             //在不是试听课的时候，查询当前用户有效会员等级并且小于等于推荐人的有效会员等级才可以返佣(小班不返佣！！！！！)
 //                            Integer memberLevel=userService.getMemberLevel(userId);
                             Integer referrerLevel = referrerUser.getMemberLevel();
+                            log.info("是否满足分佣referrerLevel:"+referrerLevel+"------------memberLevel:"+memberLevel);
                             if (referrerLevel >= memberLevel && referrerLevel >= 4) {
 //                            //通过userId获取推荐人对应的分佣比例
                                 Integer maidPercent_referrer = productService.getMaidPercentByLevel(referrerLevel);
