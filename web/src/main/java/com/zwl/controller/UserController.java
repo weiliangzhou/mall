@@ -178,6 +178,7 @@ public class UserController {
             Product product = productService.getProductByMemberLevel(memberLevel);
             levelName = product.getLevelName();
         }
+        log.info("memberLevel::"+memberLevel);
         userLoginInfoVo.setMemberLevel(memberLevel);
         userLoginInfoVo.setLevelName(levelName);
 //        userLoginInfoVo.setIsBindMobile(userInfo.getIsBindMobile()==null?0:1);
