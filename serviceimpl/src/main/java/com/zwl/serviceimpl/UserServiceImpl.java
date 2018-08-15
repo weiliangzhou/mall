@@ -88,7 +88,6 @@ public class UserServiceImpl implements UserService {
             }
         }
         user.setIsBuy(0);
-        user.setMemberLevel(0);
         //插入用户表
         user.setLogoUrl(userLoginInfoVo.getLogoUrl());
         userMapper.insert(user);

@@ -120,6 +120,8 @@ public class UserController {
         User user = new User();
         user.setUserId(userId);
         user.setRegisterMobile(phone);
+        //绑定手机成为会员
+        user.setMemberLevel(0);
         int count = userService.updateUserByUserId(user);
         if (count == 0)
             BSUtil.isTrue(false, "绑定失败");
@@ -168,12 +170,15 @@ public class UserController {
         }
         Integer memberLevel = user.getMemberLevel();
         String levelName;
-        if (memberLevel == null || memberLevel == 0) {
+        if (null == memberLevel || memberLevel == -1) {
             levelName = "游客";
+        } else if (memberLevel == 0) {
+            levelName = "会员";
         } else {
             Product product = productService.getProductByMemberLevel(memberLevel);
             levelName = product.getLevelName();
         }
+        log.info("memberLevel::" + memberLevel);
         userLoginInfoVo.setMemberLevel(memberLevel);
         userLoginInfoVo.setLevelName(levelName);
 //        userLoginInfoVo.setIsBindMobile(userInfo.getIsBindMobile()==null?0:1);
@@ -187,9 +192,9 @@ public class UserController {
         Integer xiaxianCount = maidInfoService.getXiaXianCountByUserId(userId);
         userLoginInfoVo.setXiaxianCount(xiaxianCount);
         //账户余额
-        Integer balance=userAccountService.getBalanceByUserId(userId);
+        Integer balance = userAccountService.getBalanceByUserId(userId);
         //余额：分转元
-        balance=balance==null?0:balance/100;
+        balance = balance == null ? 0 : balance / 100;
         userLoginInfoVo.setBalance(balance);
 
         result.setData(userLoginInfoVo);
@@ -204,7 +209,7 @@ public class UserController {
         String referrer = jsonObject.getString("referrer");
         String userId = jsonObject.getString("userId");
 //        String merchantId = jsonObject.getString("merchantId");
-        log.info("====@@@@进入用户授权@@@@@==========userId："+userId);
+        log.info("====@@@@进入用户授权@@@@@==========userId：" + userId);
         log.info("====@@@@推荐人传入参数为@@@@@==========：" + referrer);
         Result result = new Result();
         User userQuery = userService.getByUserId(userId);
@@ -229,11 +234,11 @@ public class UserController {
             if (userIsBuy.getIsBuy() != null && userIsBuy.getIsBuy() == 1) {
                 user.setReferrer(referrer);
                 userService.updateUserByUserId(user);
-            }else {
+            } else {
                 result.setCode(ResultCodeEnum.EXCEPTION);
                 result.setMessage("推荐人还未购买，不绑定关系！");
             }
-        }else{
+        } else {
             result.setCode(ResultCodeEnum.EXCEPTION);
             result.setMessage("该用户已经购买，不再改绑推荐人！");
         }
