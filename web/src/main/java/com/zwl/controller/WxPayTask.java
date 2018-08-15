@@ -30,8 +30,8 @@ import java.util.Map;
 @Configuration
 @EnableScheduling
 @Slf4j
-@RestController
-@RequestMapping("/wx/task")
+//@RestController
+//@RequestMapping("/wx/task")
 public class WxPayTask {
     @Autowired
     private OrderService orderService;
@@ -40,7 +40,7 @@ public class WxPayTask {
 
 //    每天凌晨2点
 //    10分钟一次，测试数据
-    @GetMapping("/task")
+//    @GetMapping("/task")
     @Scheduled(cron = "0 2 0 * * ?")
     public void queryOrderStatus() {
 //        小程序ID	appid	是	String(32)	wxd678efh567hg6787	微信分配的小程序ID

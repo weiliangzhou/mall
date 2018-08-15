@@ -170,7 +170,7 @@ public class UserController {
         }
         Integer memberLevel = user.getMemberLevel();
         String levelName;
-        if (null == memberLevel) {
+        if (memberLevel == -1) {
             levelName = "游客";
         } else if (memberLevel == 0) {
             levelName = "会员";
