@@ -20,7 +20,7 @@
     </resultMap>
     <sql id="Base_Column_List">
     id, `level`, level_name, product_name, maid_percent, validity_time, price, merchant_id,image_url,
-    content,content_text,create_time, modify_time, available
+    content,content_text,buy_count,create_time, modify_time, available
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
