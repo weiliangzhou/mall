@@ -57,52 +57,52 @@ public class WxPayTask {
         List<Order> orderList=orderService.getOrderList(orderQuery);
         for (Order order:orderList){
             String orderNo=order.getOrderNo();
-            String merchantId=order.getMerchantId();
-            Merchant merchant=merchantService.getMerchantByMerchantId(merchantId);
-            String appid=merchant.getAppId();
-            String wxPayKey=merchant.getWxPayKey();
-            Map queryMap=new HashMap();
-            queryMap.put("appid",appid);
-            queryMap.put("mch_id",merchantId);
-            queryMap.put("out_trade_no",orderNo);
-            queryMap.put("nonce_str",String.valueOf(System.currentTimeMillis()));
-            String sign = PaymentKit.createSign(queryMap, wxPayKey);
-            queryMap.put("sign",sign);
-            log.info("开始发送查询微信支付订单xml--->" + PaymentKit.toXml(queryMap));
-            String xmlResult = HttpsUtils.sendPost(WxConstans.QUERY_WX_ORDER, PaymentKit.toXml(queryMap)).toString();
-            Map<String, String> result = PaymentKit.xmlToMap(xmlResult);
-            log.info("结束发送查询微信支付订单xml--->" + result);
-            String return_code = result.get("return_code");
-            String return_msg = result.get("return_msg");
-            if (!PaymentKit.codeIsOK(return_code)) {
-                log.error("return_code>" + return_code + " return_msg>" + return_msg);
-                throw new RuntimeException(return_msg);
-            }
-            String result_code = result.get("result_code");
-            if (!PaymentKit.codeIsOK(result_code)) {
-                log.error("result_code>" + result_code + " return_msg>" + return_msg);
-                throw new RuntimeException(return_msg);
-            }
-
-//            以下字段在return_code 、result_code、trade_state都为SUCCESS时有返回 ，
-//            如trade_state不为 SUCCESS，则只返回out_trade_no（必传）和attach（选传）。
-            String trade_state=result.get("trade_state");
-            String out_trade_no=result.get("out_trade_no");
-            if("CLOSED".equals(trade_state)){
-//                SUCCESS—支付成功
-//                REFUND—转入退款
-//                NOTPAY—未支付
-//                CLOSED—已关闭
-//                REVOKED—已撤销（刷卡支付）
-//                USERPAYING--用户支付中
-//                PAYERROR--支付失败(其他原因，如银行返回失败)
+//            String merchantId=order.getMerchantId();
+//            Merchant merchant=merchantService.getMerchantByMerchantId(merchantId);
+//            String appid=merchant.getAppId();
+//            String wxPayKey=merchant.getWxPayKey();
+//            Map queryMap=new HashMap();
+//            queryMap.put("appid",appid);
+//            queryMap.put("mch_id",merchantId);
+//            queryMap.put("out_trade_no",orderNo);
+//            queryMap.put("nonce_str",String.valueOf(System.currentTimeMillis()));
+//            String sign = PaymentKit.createSign(queryMap, wxPayKey);
+//            queryMap.put("sign",sign);
+//            log.info("开始发送查询微信支付订单xml--->" + PaymentKit.toXml(queryMap));
+//            String xmlResult = HttpsUtils.sendPost(WxConstans.QUERY_WX_ORDER, PaymentKit.toXml(queryMap)).toString();
+//            Map<String, String> result = PaymentKit.xmlToMap(xmlResult);
+//            log.info("结束发送查询微信支付订单xml--->" + result);
+//            String return_code = result.get("return_code");
+//            String return_msg = result.get("return_msg");
+//            if (!PaymentKit.codeIsOK(return_code)) {
+//                log.error("return_code>" + return_code + " return_msg>" + return_msg);
+//                throw new RuntimeException(return_msg);
+//            }
+//            String result_code = result.get("result_code");
+//            if (!PaymentKit.codeIsOK(result_code)) {
+//                log.error("result_code>" + result_code + " return_msg>" + return_msg);
+//                throw new RuntimeException(return_msg);
+//            }
+//
+////            以下字段在return_code 、result_code、trade_state都为SUCCESS时有返回 ，
+////            如trade_state不为 SUCCESS，则只返回out_trade_no（必传）和attach（选传）。
+//            String trade_state=result.get("trade_state");
+//            String out_trade_no=result.get("out_trade_no");
+//            if("CLOSED".equals(trade_state)){
+////                SUCCESS—支付成功
+////                REFUND—转入退款
+////                NOTPAY—未支付
+////                CLOSED—已关闭
+////                REVOKED—已撤销（刷卡支付）
+////                USERPAYING--用户支付中
+////                PAYERROR--支付失败(其他原因，如银行返回失败)
                 Order order_t=new Order();
-                order_t.setOrderNo(out_trade_no);
+                order_t.setOrderNo(orderNo);
                 order_t.setOrderStatus(-1);
-                log.info("微信订单已经关闭开始更新本地订单"+out_trade_no);
+                log.info("微信订单已经关闭开始更新本地订单"+orderNo);
                 orderService.updateOrder(order);
-                log.info("微信订单已经关闭结束更新本地订单"+out_trade_no);
-            }
+                log.info("微信订单已经关闭结束更新本地订单"+orderNo);
+//            }
         }
     }
 }
