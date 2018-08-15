@@ -1,10 +1,10 @@
 package com.zwl.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.terran4j.commons.api2doc.annotations.Api2Doc;
-import com.terran4j.commons.api2doc.annotations.ApiComment;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.vo.XiaXianVVo;
 import com.zwl.model.vo.XiaXianVo;
@@ -30,13 +30,13 @@ public class MaidInfoCtroller {
     @Autowired
     private UserAccountService userAccountService;
     @PostMapping("/teacher/getXiaXianList")
-    public XiaXianVVo getXiaXianList(@RequestBody JSONObject jsonObject) {
+    public String getXiaXianList(@RequestBody JSONObject jsonObject) {
+        Result result = new Result();
         String userId=jsonObject.getString("userId");
         Integer pageNum=jsonObject.getInteger("pageNum");
         Integer pageSize=jsonObject.getInteger("pageSize");
         Page page=PageHelper.startPage(pageNum, pageSize);
         XiaXianVVo xiaXianVVo = new XiaXianVVo();
-        Result result = new Result();
         List<XiaXianVo>  xiaXianVoList=maidInfoService.getXiaXianList(userId);
         Integer totalMoney=maidInfoService.getTotalMaidMoneyByUserId(userId);
         Integer balance=userAccountService.getBalanceByUserId(userId);
@@ -46,7 +46,7 @@ public class MaidInfoCtroller {
         xiaXianVVo.setTotalPage(page.getTotal());
         xiaXianVVo.setUserId(userId);
         result.setData(xiaXianVVo);
-        return xiaXianVVo;
+        return JSON.toJSONString(result);
     }
 
 }

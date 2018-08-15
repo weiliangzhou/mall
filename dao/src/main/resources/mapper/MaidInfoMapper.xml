@@ -217,6 +217,7 @@
         usr.available = 1
         AND usr.referrer = #{userId}
         AND so.available = 1
+        AND so.order_status=1
         AND usr.user_id = so.user_id
         and usr.member_level=sp.`level`
     </select>
