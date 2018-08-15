@@ -15,6 +15,10 @@ import java.util.List;
 public class ClassVo {
     @ApiComment(value = "套或节课程id", sample = "1")
     private Long id;
+    @ApiComment(value = "所属课程分类id", sample = "1")
+    private Long categoryId;
+    @ApiComment(value = "所属套课程id", sample = "1")
+    private Long classSetId;
     @ApiComment(value = "套或节课程标题", sample = "新人创业培训")
     private String title;
     @ApiComment(value = "所属的课程分类名称", sample = "朋友圈学习")
@@ -37,6 +41,8 @@ public class ClassVo {
 //    如果是堂，logo是节的可配置优先级），
 //    按照发布时间倒序
     private String logoUrl;
+    @ApiComment(value = "音频url", sample = "www.test.com")
+    private String audioUrl;
     //如果是套，返回下属的节课程
     private List<ClassVo> children;
     @ApiComment(value = "套课观看要求最低会员等级", sample = "1")
