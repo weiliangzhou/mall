@@ -31,5 +31,5 @@ public interface ProductService {
 
     Product getProductById(Long id);
 
-    int updateBuyCountById(Long productId);
+    int updateBuyCountById(Long productId,String merchantId);
 }

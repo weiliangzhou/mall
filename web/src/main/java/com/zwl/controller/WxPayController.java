@@ -239,7 +239,7 @@ public class WxPayController {
                             break;
                     }
                     //购买成功之后,更新购买数量
-                    productService.updateBuyCountById(productId);
+                    productService.updateBuyCountById(productId,merchantId);
 
                     if (StringUtils.isNotBlank(referrerId)) {
                         User referrerUser = userService.getByUserId(referrerId);
