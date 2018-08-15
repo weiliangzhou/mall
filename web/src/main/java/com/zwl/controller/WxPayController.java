@@ -238,6 +238,9 @@ public class WxPayController {
                             userQuotaCountService.saveOrUpdate(userId, 100);
                             break;
                     }
+                    //购买成功之后,更新购买数量
+                    productService.updateBuyCountById(productId);
+
                     if (StringUtils.isNotBlank(referrerId)) {
                         User referrerUser = userService.getByUserId(referrerId);
                         if (null != referrerUser) {
@@ -313,6 +316,7 @@ public class WxPayController {
                             }
                         }
                     }
+
 //                    根据商户号 获取购买模版 formId ,appSecret
 //                    log.info("开始发送购买模版");
 //                    String gzOpenId = stringRedisTemplate.boundValueOps("formId_" + userId).get();

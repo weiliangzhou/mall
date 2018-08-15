@@ -4,6 +4,7 @@ import com.zwl.model.po.Product;
 import com.zwl.model.vo.ProductItemVo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -29,4 +30,7 @@ public interface ProductMapper {
     Integer getMaidPercentByLevel(@Param("referrerLevel") Integer referrerLevel);
 
     Product getProductByMemberLevel(Integer memberLevel);
+
+    @Update("update ss_product set buy_count = buy_count+1 where id = #{productId}")
+    int updateBuyCountById(@Param("productId") Long productId);
 }

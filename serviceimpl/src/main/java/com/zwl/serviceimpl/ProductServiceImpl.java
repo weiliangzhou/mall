@@ -176,6 +176,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public int updateBuyCountById(Long productId) {
+        return productMapper.updateBuyCountById(productId);
+    }
+
+    @Override
     public Product getProductByMemberLevel(Integer memberLevel) {
         return productMapper.getProductByMemberLevel(memberLevel);
     }
