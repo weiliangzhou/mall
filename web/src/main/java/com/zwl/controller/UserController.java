@@ -170,7 +170,7 @@ public class UserController {
         }
         Integer memberLevel = user.getMemberLevel();
         String levelName;
-        if (memberLevel == -1) {
+        if (null == memberLevel || memberLevel == -1) {
             levelName = "游客";
         } else if (memberLevel == 0) {
             levelName = "会员";
@@ -178,7 +178,7 @@ public class UserController {
             Product product = productService.getProductByMemberLevel(memberLevel);
             levelName = product.getLevelName();
         }
-        log.info("memberLevel::"+memberLevel);
+        log.info("memberLevel::" + memberLevel);
         userLoginInfoVo.setMemberLevel(memberLevel);
         userLoginInfoVo.setLevelName(levelName);
 //        userLoginInfoVo.setIsBindMobile(userInfo.getIsBindMobile()==null?0:1);
