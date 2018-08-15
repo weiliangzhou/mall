@@ -57,6 +57,8 @@ public class ClassInfoController {
                 classVo.setLogoUrl(c.getLogoUrl());
                 classVo.setTitle(c.getTitle());
                 classVo.setContentText(c.getContentText());
+                classVo.setAudioUrl(c.getAudioUrl());
+                classVo.setContent(c.getContent());
 
                 ClassInfoStatistics cis = classInfoStatisticsService.getByClassInfoId(c.getId());
                 Long browseCount = cis==null||cis.getListenCount() == null ? 0L : cis.getListenCount();
