@@ -120,6 +120,7 @@ public class UserController {
         User user = new User();
         user.setUserId(userId);
         user.setRegisterMobile(phone);
+        //绑定手机成为会员
         user.setMemberLevel(0);
         int count = userService.updateUserByUserId(user);
         if (count == 0)
@@ -169,7 +170,7 @@ public class UserController {
         }
         Integer memberLevel = user.getMemberLevel();
         String levelName;
-        if (memberLevel == -1) {
+        if (null == memberLevel) {
             levelName = "游客";
         } else if (memberLevel == 0) {
             levelName = "会员";
