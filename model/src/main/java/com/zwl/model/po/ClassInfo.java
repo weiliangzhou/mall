@@ -38,5 +38,12 @@ public class ClassInfo {
     private Integer available = 1;
     @ApiComment(value = "不带格式介绍", sample = "不带格式介绍")
     private String contentText;
+/*
+    public void setListenCount(Long listenCount) {
+        this.listenCount=listenCount==null?0L:listenCount;
+    }
 
+    public Long getListenCount() {
+        return  this.listenCount==null?0L:this.listenCount;
+    }*/
 }

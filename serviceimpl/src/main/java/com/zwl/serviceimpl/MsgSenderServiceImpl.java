@@ -71,6 +71,33 @@ public class MsgSenderServiceImpl implements MsgSenderService {
     }
 
     @Override
+    public void sendMsg(String phone, String msg) {
+        try {
+            Map map = new HashMap();
+            map.put("account", MsgSenderConstants.UN);
+            map.put("password", MsgSenderConstants.PW);
+            map.put("msg", msg);
+            map.put("phone", phone);
+            log.info("开始发送短信" + JSON.toJSONString(map));
+            String result = HttpsUtils.sendPost(MsgSenderConstants.URL, JSON.toJSONString(map));
+            log.info("结束发送短信" + result);
+            JSONObject jsonObject = JSONObject.parseObject(result);
+            String code = jsonObject.getString("code");
+            String errorMsg = jsonObject.getString("errorMsg");
+            if ("0".equals(code)) {
+                log.info("发送成功");
+                //存入redis
+            } else
+                log.error("短信发送失败" + "错误原因" + errorMsg);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+
+    @Override
     public boolean checkCode(String phone, String code, String busCode) {
         String redisCode = stringRedisTemplate.boundValueOps(busCode + phone).get();
         //            删除redis

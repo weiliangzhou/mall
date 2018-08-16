@@ -11,6 +11,7 @@ import com.zwl.model.vo.BuyResult;
 import com.zwl.model.vo.ProductVo;
 import com.zwl.service.MsgSenderService;
 import com.zwl.service.ProductService;
+import com.zwl.util.MathUtil;
 import com.zwl.util.MoneyUtil;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class ProductController {
     private ProductService productService;
     @Autowired
     private MsgSenderService msgSenderService;
-
+    private static final long CONSTANT_WAN=10000;
     @PostMapping("/auth/buy")
     public String buy(@Validated(Buy.class) @RequestBody Product product) {
         Result result = new Result();
@@ -104,13 +105,14 @@ public class ProductController {
             productVo.setPrice(p.getPrice());
             if (p.getPrice() != null)
                 productVo.setPriceDesc(String.valueOf(p.getPrice() / 100));
-          /*  try {
-                productVo.setPriceDesc(MoneyUtil.changeF2Y(Long.valueOf(p.getPrice())));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }*/
-//            productVo.setPriceDesc(p.getPriceDesc());
-
+            Integer buyCount=p.getBuyCount()==null?0:p.getBuyCount();
+            String buyCountDesc=String.valueOf(buyCount);
+            if(buyCount>CONSTANT_WAN){
+                buyCountDesc=MathUtil.changeWan(buyCountDesc)+"万";
+            }
+            buyCountDesc=buyCountDesc+"人购买";
+            productVo.setBuyCount(buyCount);
+            productVo.setBuyCountDesc(buyCountDesc);
             listVo.add(productVo);
         }
         result.setData(listVo);

@@ -9,5 +9,6 @@ package com.zwl.service;
  */
 public interface MsgSenderService {
     public void sendCode(String phone,String busCode);
+    public void sendMsg(String phone,String msg);
     public boolean checkCode(String phone,String code,String busCode);
 }

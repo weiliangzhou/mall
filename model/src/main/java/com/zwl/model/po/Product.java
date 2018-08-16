@@ -86,5 +86,7 @@ public class Product {
     private String contentText;
     @ApiComment(value = "产品图片", sample = "www.xiaochuang.oss.com")
     private String imageUrl;
+    @ApiComment(value = "购买人数", sample = "98")
+    private Integer buyCount;
 
 }

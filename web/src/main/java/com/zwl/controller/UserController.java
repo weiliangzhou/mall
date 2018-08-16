@@ -56,6 +56,8 @@ public class UserController {
      */
     @PostMapping("/authorization")
     public Result authorization(@RequestBody UserLoginInfoVo userLoginInfoVo) {
+        log.info("====@@@@进入用户授权@@@@@==========");
+        log.info("====@@@@推荐人传入参数为@@@@@==========：" + userLoginInfoVo.getReferrer());
         Result result = new Result();
         //根据merchantid获取appid和secret
         Merchant merchant = merchantService.getMerchantByMerchantId(userLoginInfoVo.getMerchantId());
@@ -82,6 +84,7 @@ public class UserController {
             userId = userService.saveAuthorization(userLoginInfoVo, openid);
         } else {//如果用户还未购买，则可以更新推荐人
             userId = userQuery.getUserId();
+            log.info("====@@@@用户之前已经授权登录过，userId为：@@@@@==========：" + userId);
             userService.modifyAuthorization(userLoginInfoVo, userQuery);
         }
         //返回用户登录态
@@ -117,6 +120,8 @@ public class UserController {
         User user = new User();
         user.setUserId(userId);
         user.setRegisterMobile(phone);
+        //绑定手机成为会员
+        user.setMemberLevel(0);
         int count = userService.updateUserByUserId(user);
         if (count == 0)
             BSUtil.isTrue(false, "绑定失败");
@@ -165,27 +170,31 @@ public class UserController {
         }
         Integer memberLevel = user.getMemberLevel();
         String levelName;
-        if (memberLevel == null || memberLevel == 0) {
+        if (null == memberLevel || memberLevel == -1) {
             levelName = "游客";
+        } else if (memberLevel == 0) {
+            levelName = "会员";
         } else {
             Product product = productService.getProductByMemberLevel(memberLevel);
             levelName = product.getLevelName();
         }
+        log.info("memberLevel::" + memberLevel);
         userLoginInfoVo.setMemberLevel(memberLevel);
         userLoginInfoVo.setLevelName(levelName);
 //        userLoginInfoVo.setIsBindMobile(userInfo.getIsBindMobile()==null?0:1);
         //通过主表获取绑定手机号
         userLoginInfoVo.setIsBindMobile(user.getRegisterMobile() == null ? 0 : 1);
         userLoginInfoVo.setRegisterMobile(user.getRegisterMobile());
-        userLoginInfoVo.setIsCertification(userInfo.getIsCertification() == null ? 0 : 1);
+//        userLoginInfoVo.setIsCertification(userInfo.getIsCertification() == null ? 0 : 1);
         //实名认证状态
         UserCertification userCertification = certificationService.getOneByUserId(userId);
         userLoginInfoVo.setCertificationStatus(userCertification.getStatus());
         Integer xiaxianCount = maidInfoService.getXiaXianCountByUserId(userId);
         userLoginInfoVo.setXiaxianCount(xiaxianCount);
-        Integer balance=userAccountService.getBalanceByUserId(userId);
+        //账户余额
+        Integer balance = userAccountService.getBalanceByUserId(userId);
         //余额：分转元
-        balance=balance==null?0:balance/100;
+        balance = balance == null ? 0 : balance / 100;
         userLoginInfoVo.setBalance(balance);
 
         result.setData(userLoginInfoVo);
@@ -200,6 +209,8 @@ public class UserController {
         String referrer = jsonObject.getString("referrer");
         String userId = jsonObject.getString("userId");
 //        String merchantId = jsonObject.getString("merchantId");
+        log.info("====@@@@进入用户授权@@@@@==========userId：" + userId);
+        log.info("====@@@@推荐人传入参数为@@@@@==========：" + referrer);
         Result result = new Result();
         User userQuery = userService.getByUserId(userId);
         if (userQuery == null) {
@@ -217,13 +228,19 @@ public class UserController {
             User userIsBuy = userService.getByUserId(referrer);
             if (userIsBuy == null) {
                 result.setCode(ResultCodeEnum.EXCEPTION);
-                result.setMessage("推荐人不存在，请检查referrer");
+                result.setMessage("推荐人不存在，请检查referrer！");
                 return result;
             }
             if (userIsBuy.getIsBuy() != null && userIsBuy.getIsBuy() == 1) {
                 user.setReferrer(referrer);
                 userService.updateUserByUserId(user);
+            } else {
+                result.setCode(ResultCodeEnum.EXCEPTION);
+                result.setMessage("推荐人还未购买，不绑定关系！");
             }
+        } else {
+            result.setCode(ResultCodeEnum.EXCEPTION);
+            result.setMessage("该用户已经购买，不再改绑推荐人！");
         }
 
         return result;

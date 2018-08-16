@@ -12,6 +12,6 @@ public class PageClassInfoVo {
     private Long totalPage;
     @ApiComment("当前页")
     private Integer pageNum;
-    @ApiComment(seeClass = ClassInfo.class)
-    private List<ClassInfo> list;
+    @ApiComment(seeClass = ClassVo.class)
+    private List<ClassVo> list;
 }

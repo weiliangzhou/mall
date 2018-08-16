@@ -84,15 +84,15 @@ public class ProductServiceImpl implements ProductService {
             queryUser.setRegisterMobile(phone);
             user = userService.getOneByParams(queryUser);
             if (user == null)
-                BSUtil.isTrue(false,"请先进入微信小程序授权并绑定手机号");
+                BSUtil.isTrue(false, "请先进入微信小程序授权并绑定手机号");
 
             userId = user.getUserId();
         } else {
             userId = product.getUserId();
             user = userService.getByUserId(userId);
         }
-        Merchant merchant=merchantService.getMerchantByMerchantId(user.getMerchantId());
-        String appid=merchant.getAppId();
+        Merchant merchant = merchantService.getMerchantByMerchantId(user.getMerchantId());
+        String appid = merchant.getAppId();
         //查询产品信息
         //生成订单(订单号使用 年月日时分秒+mch_no+userId（自增的Id）)
         //生成订单操作日志流水表
@@ -115,7 +115,7 @@ public class ProductServiceImpl implements ProductService {
 
         if (null != alreadyLevel && alreadyLevel >= level)
             BSUtil.isTrue(false, "不能重复购买此商品！");
-        String orderNo = sdf_yMdHm.format(new Date()) + merchantId + userLongId+productId;
+        String orderNo = sdf_yMdHm.format(new Date()) + merchantId + userLongId + productId;
         Order order = new Order();
         order.setOrderNo(orderNo);
         order.setProductId(productId);
@@ -136,7 +136,7 @@ public class ProductServiceImpl implements ProductService {
             orderMapper.insertSelective(order);
         } catch (Exception e) {
             e.printStackTrace();
-            BSUtil.isTrue(false, "系统繁忙,请稍后重试！",e);
+            BSUtil.isTrue(false, "系统繁忙,请稍后重试！", e);
         }
         OrderFlow orderFlow = new OrderFlow();
         orderFlow.setOrderNo(orderNo);
@@ -173,6 +173,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product getProductById(Long id) {
         return productMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public int updateBuyCountById(Long productId, String merchantId) {
+        return productMapper.updateBuyCountById(productId,merchantId);
     }
 
     @Override

@@ -39,8 +39,20 @@ public class CertificationController {
     @PostMapping("/add")
     public synchronized Result addCertification(@Validated(CertificationVal.class) @RequestBody UserCertification userCertification) {
         Result result = new Result();
+        UserCertification temp = certificationService.getOneByUserId(userCertification.getUserId());
+        switch (temp.getStatus()) {
+            case 1:
+                result.setCode(ResultCodeEnum.EXCEPTION);
+                result.setMessage("该用户实名认证正在审核中");
+                return result;
+            case 2:
+                result.setCode(ResultCodeEnum.EXCEPTION);
+                result.setMessage("该用户实名认证已经提交并审批通过");
+                return result;
+        }
+
 //        身份证防重,只通过才,
-        String cardNum = userCertification.getIdCard();
+   /*     String cardNum = userCertification.getIdCard();
         UserCertification queryUserCertification = new UserCertification();
         queryUserCertification.setIdCard(cardNum);
         queryUserCertification.setStatus(2);
@@ -50,7 +62,7 @@ public class CertificationController {
         queryUserCertification.setStatus(1);
         UserCertification isBinding = certificationService.getOneByParams(queryUserCertification);
         if (isBinding != null)
-            BSUtil.isTrue(false, "身份证已经在审核中！！！！");
+            BSUtil.isTrue(false, "身份证已经在审核中！！！！");*/
         userCertification.setStatus(1);
         certificationService.add(userCertification);
         return result;
