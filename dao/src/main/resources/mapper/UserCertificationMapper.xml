@@ -190,10 +190,10 @@
         <if test="available != null">
             and available = #{available,jdbcType=INTEGER}
         </if>
-        <if test="status != null and status==3">
+      <!--  <if test="status != null and status==3">
             order by  create_time limit 1
-        </if>
-
+        </if>-->
+        order by create_time desc limit 1
     </select>
 
     <!--查询用户的所提交的所有审核-->
