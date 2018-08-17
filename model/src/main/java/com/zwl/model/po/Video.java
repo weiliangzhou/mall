@@ -30,7 +30,7 @@ public class Video {
     private String merchantId;
     @ApiComment(value = "创建时间", sample = "2018-07-05 18:00:00")
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
-    private Date createTime;
+    private Date createTime = new Date();
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     @ApiComment(value = "更新时间", sample = "2018-07-05 18:00:00")
     private Date modifyTime;
