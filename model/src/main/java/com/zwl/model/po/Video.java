@@ -25,6 +25,10 @@ public class Video {
     private String title;
     @ApiComment(value = "内容", sample = "<p>10大板块，100节课让微商创业再也没有秘密！绝对是秒杀全网的课程！")
     private String content;
+    @ApiComment(value = "内容,不带格式", sample = "10大板块，100节课让微商创业再也没有秘密！绝对是秒杀全网的课程！")
+    private String contentText;
+    @ApiComment(value = "视频时长", sample = "10")
+    private Integer playTime;
     @JSONField(serialize = false)
     @RestPackIgnore
     private String merchantId;
@@ -37,5 +41,11 @@ public class Video {
     @RestPackIgnore
     @JSONField(serialize = false)
     private Integer available = 1;
+    @NotNull(message = "是否推荐不能为空", groups = {Update.class})
+    @ApiComment(value = "是否推荐", sample = "0不推荐，1推荐")
+    private Integer isRecommend;
+    @NotNull(message = "是否展示不能为空", groups = {Update.class})
+    @ApiComment(value = "是否展示", sample = "0不展示，1展示")
+    private Integer isShow;
 
 }

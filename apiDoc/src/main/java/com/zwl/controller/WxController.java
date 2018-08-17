@@ -267,9 +267,12 @@ public class WxController {
 
     @ApiComment(value = "获取视频列表", seeClass = Video.class)
     @RequestMapping(name = "获取视频列表", value = "/wx/video/getVideoList", method = RequestMethod.POST)
-    public Result getVideoList(@ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize, @ApiComment("商户号") String merchantId) {
-        Result result = new Result();
-        return result;
+    public Video getVideoList(@ApiComment("pageNum") Integer pageNum,
+                               @ApiComment("pageSize") Integer pageSize,
+                               @ApiComment("商户号") String merchantId,
+                               @ApiComment(value = "查询条件",sample = "0查询推荐视频 1查询所有视频") Integer queryType) {
+        Video video = new Video();
+        return video;
     }
 
 }

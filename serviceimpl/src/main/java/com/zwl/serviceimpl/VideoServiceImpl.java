@@ -2,6 +2,7 @@ package com.zwl.serviceimpl;
 
 import com.zwl.dao.mapper.VideoMapper;
 import com.zwl.model.po.Video;
+import com.zwl.model.vo.QueryTypeVideoVo;
 import com.zwl.model.vo.VideoVo;
 import com.zwl.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,8 @@ public class VideoServiceImpl implements VideoService {
     private VideoMapper videoMapper;
 
     @Override
-    public List<Video> getWxVideoList(Video video) {
-        return videoMapper.getWxVideoList(video);
+    public List<Video> getWxVideoList(QueryTypeVideoVo queryTypeVideoVo) {
+        return videoMapper.getWxVideoList(queryTypeVideoVo);
     }
 
     @Override

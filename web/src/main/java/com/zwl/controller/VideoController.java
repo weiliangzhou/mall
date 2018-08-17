@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.po.Video;
+import com.zwl.model.vo.QueryTypeVideoVo;
 import com.zwl.model.vo.VideoVo;
 import com.zwl.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +31,13 @@ public class VideoController {
         String merchantId=jsonObject.getString("merchantId");
         Integer pageNum=jsonObject.getInteger("pageNum");
         Integer pageSize=jsonObject.getInteger("pageSize");
+        Integer queryType = jsonObject.getInteger("queryType");
         PageHelper.startPage(pageNum, pageSize);
         Result result = new Result();
-        Video video = new Video();
-        video.setMerchantId(merchantId);
-        List<Video> videoList = videoService.getWxVideoList(video);
+        QueryTypeVideoVo queryTypeVideoVo = new QueryTypeVideoVo();
+        queryTypeVideoVo.setMerchantId(merchantId);
+        queryTypeVideoVo.setQueryType(queryType);
+        List<Video> videoList = videoService.getWxVideoList(queryTypeVideoVo);
         result.setData(videoList);
         return JSON.toJSONString(result);
     }
