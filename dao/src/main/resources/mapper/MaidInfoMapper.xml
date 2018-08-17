@@ -156,7 +156,7 @@
     SELECT
     usr.logo_url as logoUrl,
     usr.real_name as realName,
-    usr.register_mobile as phone,
+    INSERT(usr.register_mobile,4,4,'****')  as phone,
     smi.level as level,
     smi.maid_money/100 as maidMoney,
     smi.create_time as createTime
