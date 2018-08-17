@@ -21,9 +21,6 @@
         from ss_video
         where available=1
         and merchant_id = #{merchantId}
-        <if test="title != null" >
-            and title like  CONCAT('%',#{title},'%')
-        </if>
         order by modify_time desc
     </select>
     <select id="getVideoList" resultMap="BaseResultMap" parameterType="com.zwl.model.po.Video">
@@ -98,22 +95,22 @@
         update ss_video
         <set >
             <if test="imageUrl != null" >
-                #{imageUrl,jdbcType=VARCHAR},
+                image_url = #{imageUrl,jdbcType=VARCHAR},
             </if>
             <if test="videoUrl != null" >
-                #{videoUrl,jdbcType=VARCHAR},
+                video_url = #{videoUrl,jdbcType=VARCHAR},
             </if>
             <if test="title != null" >
-                #{title,jdbcType=VARCHAR},
+                title = #{title,jdbcType=VARCHAR},
             </if>
             <if test="content != null" >
-                #{content,jdbcType=VARCHAR},
+                content = #{content,jdbcType=VARCHAR},
             </if>
             <if test="merchantId != null" >
-                #{merchantId,jdbcType=VARCHAR},
+                merchant_id = #{merchantId,jdbcType=VARCHAR},
             </if>
             <if test="available != null" >
-                #{available,jdbcType=INTEGER},
+                available = #{available,jdbcType=INTEGER},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
