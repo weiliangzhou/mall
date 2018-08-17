@@ -8,11 +8,11 @@ import com.zwl.model.baseresult.Result;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.Banner;
 import com.zwl.model.vo.BannerVo;
-import com.zwl.model.vo.PageClassInfoVo;
 import com.zwl.service.BannerService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,13 +31,16 @@ public class BannerController {
      * @param jsonObject
      * @return
      */
-    @PostMapping("/getBannerList")
-    public String  getBannerList(@RequestBody JSONObject jsonObject){
+    @PostMapping("/selectBanner")
+    public String  selectBanner(@RequestBody JSONObject jsonObject){
         Result result = new Result();
+        String merchantId=jsonObject.getString("merchantId");
         Integer pageNum = jsonObject.getInteger("pageNum");
         Integer pageSize = jsonObject.getInteger("pageSize");
         Page page = PageHelper.startPage(pageNum, pageSize);
-        List<Banner> bannerList =bannerService.getBannerList();
+        Banner banner=new Banner();
+        banner .setMerchantId(merchantId);
+        List<Banner> bannerList =bannerService.selectBanner(banner);
         BannerVo bannerVo = new BannerVo();
         bannerVo.setPageNum(pageNum);
         bannerVo.setTotalPage(page.getTotal());
@@ -53,9 +56,9 @@ public class BannerController {
      * @return
      */
     @RequestMapping("insertBanner")
-    public String insertBanner(Banner banner){
+    public String insertBanner(@Validated(Update.class) Banner banner){
         Result result = new Result();
-        int count= bannerService.insertBanner(banner);
+        int count= bannerService.insert(banner);
         if(count != 1)
             BSUtil.isTrue(false, "新增失败");
         return JSON.toJSONString(result);
@@ -67,8 +70,8 @@ public class BannerController {
      * @return
      */
     @RequestMapping("/deleteBanner")
-    public String  deleteBanner(@RequestBody JSONObject jsonObject){
-        Long id = jsonObject.getLong("id");
+    public String  deleteBanner(@Validated(Update.class) @RequestBody JSONObject jsonObject){
+        int id = jsonObject.getInteger("id");
         Result result = new Result();
         int count= bannerService.deleteBanner(id);
         if(count != 1)
@@ -82,9 +85,9 @@ public class BannerController {
      * @return
      */
     @PostMapping("/updateBanner")
-    public String updateBanner(Banner banner){
+    public String updateBanner(@Validated(Update.class) Banner banner){
         Result result = new Result();
-        int count = bannerService.updateBanner(banner);
+        int count = bannerService.updateByPrimaryKey(banner);
         if(count != 1)
             BSUtil.isTrue(false, "修改失败");
         return  JSON.toJSONString(result);
