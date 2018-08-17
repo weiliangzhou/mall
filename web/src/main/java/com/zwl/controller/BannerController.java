@@ -7,6 +7,7 @@ import com.zwl.model.po.Banner;
 import com.zwl.service.BannerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -16,13 +17,18 @@ public class BannerController {
     @Autowired
     private BannerService bannerService;
 
-    @PostMapping("/getBannerList")
+    @PostMapping("/selectBanner")
     public String  getBannerList(@RequestBody JSONObject jsonObject){
         Result result = new Result();
-        List<Banner>  bannerList =bannerService.getBannerList();
+        String merchantId=jsonObject.getString("merchantId");
+        Banner banner=new Banner();
+        banner.setMerchantId(merchantId);
+        List<Banner> bannerList =bannerService.selectBanner(banner);
         result.setData(bannerList);
         return JSON.toJSONString(result);
 
     }
+
+
 
 }

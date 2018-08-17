@@ -114,7 +114,7 @@ public class TokenFilter implements Filter {
             return;
         }
         //微信页面轮播图
-        if (requestURL.contains("/wx/banner/getBannerList")) {
+        if (requestURL.contains("/wx/banner/selectBanner")) {
             chain.doFilter(request, response);
             return;
         }
