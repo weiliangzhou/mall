@@ -86,6 +86,11 @@ public class TokenFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
+        //获取视频列表
+        if (requestURL.contains("/wx/video/getVideoList")) {
+            chain.doFilter(request, response);
+            return;
+        }
         //套课程
         if (requestURL.contains("/classset/getPageAllClass") || requestURL.contains("/classset/setpAddBrowseCount") ||
                 requestURL.contains("/classset/getById")) {
@@ -108,7 +113,11 @@ public class TokenFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-
+        //微信页面轮播图
+        if (requestURL.contains("/wx/banner/getBannerList")) {
+            chain.doFilter(request, response);
+            return;
+        }
        /* //用户信息展示
         if (requestURL.contains("/user/getUserInfoByUserId")) {
             chain.doFilter(request, response);

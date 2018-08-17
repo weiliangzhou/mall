@@ -265,5 +265,11 @@ public class WxController {
         return result;
     }
 
+    @ApiComment(value = "获取视频列表", seeClass = Video.class)
+    @RequestMapping(name = "获取视频列表", value = "/wx/video/getVideoList", method = RequestMethod.POST)
+    public Result getVideoList(@ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize, @ApiComment("商户号") String merchantId) {
+        Result result = new Result();
+        return result;
+    }
 
 }
