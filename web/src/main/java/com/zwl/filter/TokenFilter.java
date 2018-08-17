@@ -108,7 +108,11 @@ public class TokenFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-
+        //微信页面轮播图
+        if (requestURL.contains("/wx/banner/getBannerList")) {
+            chain.doFilter(request, response);
+            return;
+        }
        /* //用户信息展示
         if (requestURL.contains("/user/getUserInfoByUserId")) {
             chain.doFilter(request, response);

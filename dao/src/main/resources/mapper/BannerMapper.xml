@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zwl.dao.mapper.BannerMapper">
+    <resultMap id="BaseResultMap" type="com.zwl.model.po.Banner">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
+        <result column="image_url" property="imageUrl" jdbcType="VARCHAR"/>
+        <result column="href_url" property="hrefUrl" jdbcType="VARCHAR"/>
+        <result column="merchant_id" property="merchantId" jdbcType="VARCHAR"/>
+        <result column="available" property="available" jdbcType="SMALLINT"/>
+    </resultMap>
+
+    <select id="getBannerList" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select  id,merchant_id, image_url,href_url,create_time, modify_time, available from ss_banner
+        <where>
+            <if test="available != null">
+                available=#{available,jdbcType=SMALLINT}
+            </if>
+        </where>
+    </select>
+
+    <!--新增-->
+    <insert id="insertBanner"  parameterType="com.zwl.model.po.Banner" >
+        insert into ss_banner (id, merchant_id, create_time, modify_time,
+       available, image_url, href_url)
+      values (#{id,jdbcType=BIGINT}, #{merchantId,jdbcType=VARCHAR}, now(), now(),
+      #{available,jdbcType=INTEGER}, #{imageUrl,jdbcType=VARCHAR}, #{hrefUrl,jdbcType=VARCHAR})
+
+    </insert>
+
+    <!--更新-->
+    <update id="updateBanner" parameterType="com.zwl.model.po.Banner" >
+        update ss_banner
+        <set >
+            <if test="merchantId != null" >
+                merchant_id = #{merchantId,jdbcType=VARCHAR},
+            </if>
+            <if test="available != null" >
+                available = #{available,jdbcType=INTEGER},
+            </if>
+            <if test="imageUrl != null" >
+                image_url = #{image_url,jdbcType=VARCHAR},
+            </if>
+            <if test="hrefUrl != null" >
+                href_url = #{href_url,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <!--删除-->
+    <delete id="deleteBanner"  parameterType="com.zwl.model.po.Banner" >
+          delete  from  ss_banner where id = #{id,jdbcType=BIGINT}
+    </delete>
+</mapper>
