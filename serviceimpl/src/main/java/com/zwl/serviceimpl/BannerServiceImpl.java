@@ -34,6 +34,4 @@ public class BannerServiceImpl implements BannerService {
     public int updateBanner(Banner banner) {
         return bannerMapper.updateBanner(banner);
     }
-
-
 }
