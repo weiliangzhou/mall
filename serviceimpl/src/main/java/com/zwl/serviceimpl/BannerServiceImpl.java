@@ -31,7 +31,7 @@ public class BannerServiceImpl implements BannerService {
     }
 
     @Override
-    public int updateBanner(Banner banner) {11111
+    public int updateBanner123(Banner banner) {
         return bannerMapper.updateBanner(banner);
     }
 
