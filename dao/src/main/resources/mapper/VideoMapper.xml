@@ -21,9 +21,6 @@
         from ss_video
         where available=1
         and merchant_id = #{merchantId}
-        <if test="title != null" >
-            and title like  CONCAT('%',#{title},'%')
-        </if>
         order by modify_time desc
     </select>
     <select id="getVideoList" resultMap="BaseResultMap" parameterType="com.zwl.model.po.Video">

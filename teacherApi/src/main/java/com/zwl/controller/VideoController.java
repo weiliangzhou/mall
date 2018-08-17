@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.zwl.model.baseresult.Result;
+import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.Video;
 import com.zwl.model.vo.VideoVo;
 import com.zwl.service.VideoService;
@@ -55,6 +56,7 @@ public class VideoController {
     public String addVideo(@Validated(Update.class) @RequestBody Video video) {
         Result result = new Result();
         int count = videoService.addVideo(video);
+        if(1 != count)BSUtil.isTrue(false,"新增失败");
         return JSONObject.toJSONString(result);
     }
 
@@ -62,6 +64,7 @@ public class VideoController {
     public String updateVideo(@Validated(Update.class) @RequestBody Video video) {
         Result result = new Result();
         int count = videoService.updateVideo(video);
+        if(1 != count)BSUtil.isTrue(false,"修改失败");
         return JSONObject.toJSONString(result);
     }
 
@@ -70,6 +73,7 @@ public class VideoController {
         Result result = new Result();
         Integer id = jsonObject.getInteger("id");
         int count = videoService.deleteVideo(id);
+        if(1 != count)BSUtil.isTrue(false,"删除失败");
         return JSONObject.toJSONString(result);
     }
 }
