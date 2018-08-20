@@ -43,9 +43,18 @@ public class Video {
     private Integer available = 1;
     @NotNull(message = "是否推荐不能为空", groups = {Update.class})
     @ApiComment(value = "是否推荐", sample = "0不推荐，1推荐")
-    private Integer isRecommend;
+    private Integer isRecommend = 0;
     @NotNull(message = "是否展示不能为空", groups = {Update.class})
     @ApiComment(value = "是否展示", sample = "0不展示，1展示")
-    private Integer isShow;
+    private Integer isShow = 0;
+    private String isRecommendDesc;
+    private String isShowDesc;
 
+//    public String getIsRecommendDesc() {
+//        return this.isRecommend == 0 ? "不推荐" : "推荐";
+//    }
+//
+//    public String getIsShowDesc() {
+//        return this.isShow == 0 ? "不展示" : "展示";
+//    }
 }
