@@ -274,5 +274,11 @@ public class WxController {
         Video video = new Video();
         return video;
     }
+    @ApiComment(value = "根据id获取视频祥情", seeClass = Video.class)
+    @RequestMapping(name = "根据id获取视频祥情", value = "/wx/video/getVideoInfoById", method = RequestMethod.POST)
+    public Video getVideoInfoById(@ApiComment("id") Integer id) {
+        Video video = new Video();
+        return video;
+    }
 
 }
