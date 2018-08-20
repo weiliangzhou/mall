@@ -88,7 +88,6 @@ public class UserServiceImpl implements UserService {
             }
         }
         user.setIsBuy(0);
-        user.setMemberLevel(0);
         //插入用户表
         user.setLogoUrl(userLoginInfoVo.getLogoUrl());
         userMapper.insert(user);
@@ -137,6 +136,11 @@ public class UserServiceImpl implements UserService {
             user.setLogoUrl(userLoginInfoVo.getLogoUrl());
             userMapper.updateUserByUserId(user);
         }
+    }
+
+    @Override
+    public User getReferrerByUserId(String userId) {
+        return userMapper.getReferrerByUserId(userId);
     }
 
 }

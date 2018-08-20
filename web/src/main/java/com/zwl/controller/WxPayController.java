@@ -48,6 +48,8 @@ public class WxPayController {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
     @Autowired
+    private MsgSenderService msgSenderService;
+    @Autowired
     private ProductService productService;
     private SimpleDateFormat sdf_yMdHms = new SimpleDateFormat("yyyyMMddHHmmss");
 
@@ -238,6 +240,9 @@ public class WxPayController {
                             userQuotaCountService.saveOrUpdate(userId, 100);
                             break;
                     }
+                    //购买成功之后,更新购买数量
+                    productService.updateBuyCountById(productId, merchantId);
+
                     if (StringUtils.isNotBlank(referrerId)) {
                         User referrerUser = userService.getByUserId(referrerId);
                         if (null != referrerUser) {
@@ -265,6 +270,7 @@ public class WxPayController {
                             //在不是试听课的时候，查询当前用户有效会员等级并且小于等于推荐人的有效会员等级才可以返佣(小班不返佣！！！！！)
 //                            Integer memberLevel=userService.getMemberLevel(userId);
                             Integer referrerLevel = userService.getMemberLevel(referrerId);
+                            log.info("referrerLevel:" + referrerLevel + "------------memberLevel:" + memberLevel);
                             if (null != referrerLevel && referrerLevel >= memberLevel && referrerLevel >= 4) {
 //                            //通过userId获取推荐人对应的分佣比例
                                 Integer maidPercent_referrer = productService.getMaidPercentByLevel(referrerLevel);
@@ -309,10 +315,20 @@ public class WxPayController {
                                 } else
                                     userAccountService.addBanlanceByUserId(referrerId, maidMoney);
                                 log.info("回调支付成功，更新用户余额成功");
+//                                【东遥课堂】尾号7903成功购买99元课程 , 你将获得奖励90元 ,  尽快查阅小程序
+                                String referrerPhone = referrerUser.getRegisterMobile();
+                                if (StringUtils.isNotBlank(referrerPhone)) {
+                                    String userMobile = user.getRegisterMobile();
+                                    String msg = "【东遥课堂】手机尾号" + userMobile.substring(userMobile.length()-4) + "成功购买" + productName + ", 你将获得奖励" + maidMoney / 100 + "元 ,  尽快查阅小程序~";
+                                    msgSenderService.sendMsg(referrerPhone, msg);
+                                }
 
                             }
+//
+
                         }
                     }
+
 //                    根据商户号 获取购买模版 formId ,appSecret
 //                    log.info("开始发送购买模版");
 //                    String gzOpenId = stringRedisTemplate.boundValueOps("formId_" + userId).get();
@@ -347,6 +363,11 @@ public class WxPayController {
         xml.put("return_code", "SUCCESS");
         xml.put("return_msg", "OK");
         return PaymentKit.toXml(xml);
+    }
+
+    public static void main(String[] args) {
+        String ss="1111324325";
+        System.out.println(ss.substring(ss.length()-4));
     }
 }
 

@@ -17,4 +17,6 @@ public interface MaidInfoMapper {
     @Select("SELECT sum(maid_money) from ss_maid_info where user_id=#{userId} and available=1")
     Integer getTotalMaidMoneyByUserId(@Param("userId") String userId);
     Integer getXiaXianCountByUserId(String userId);
+    @Select("select count(*) from ss_maid_info where user_id=#{userId}")
+    Integer getMaidInfoCount(String userId);
 }

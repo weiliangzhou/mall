@@ -13,13 +13,14 @@
         <result column="image_url" property="imageUrl" jdbcType="VARCHAR"/>
         <result column="content" property="content" />
         <result column="content_text" property="contentText" />
+        <result column="buy_count" property="buyCount" jdbcType="INTEGER"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
         <result column="available" property="available" jdbcType="SMALLINT"/>
     </resultMap>
     <sql id="Base_Column_List">
     id, `level`, level_name, product_name, maid_percent, validity_time, price, merchant_id,image_url,
-    content,content_text,create_time, modify_time, available
+    content,content_text,buy_count,create_time, modify_time, available
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select

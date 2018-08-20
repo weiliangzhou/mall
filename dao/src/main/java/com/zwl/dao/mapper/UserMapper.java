@@ -52,4 +52,6 @@ public interface UserMapper {
      * @return
      */
     List<User> search(@Param("merchantId") String merchantId,@Param("registerMobile")String registerMobile,@Param("registerFrom")Integer registerFrom);
- }
+
+    User getReferrerByUserId(String userId);
+}

@@ -1,10 +1,6 @@
 server:
   port: 8082
 spring:
-  servlet:
-       multipart:
-         max-file-size: 3Mb
-         max-request-size: 3Mb
   http:
     encoding:
       enabled: true
@@ -15,15 +11,15 @@ spring:
           #-------------- start ----------------# (1)
           master:
             #基本属性--注意，这里的为【jdbcurl】-- 默认使用HikariPool作为数据库连接池
-            jdbcurl: jdbc:mysql://47.98.55.127:3306/dev_new?useUnicode=true&characterEncoding=UTF-8&useSSL=false
-            username: root
-            password: weigu2018
+            jdbcurl: jdbc:mysql://rm-bp14t37l6w6xxcb40go.mysql.rds.aliyuncs.com:3306/test?useUnicode=true&characterEncoding=UTF-8
+            username: weigutest
+            password: Wegoo2018
             driver-class-name: com.mysql.jdbc.Driver
           slave:
             #基本属性--注意，这里为 【url】-- 使用 druid 作为数据库连接池
-            url: jdbc:mysql://47.98.55.127:3306/dev_new?useUnicode=true&characterEncoding=UTF-8&useSSL=false
-            username: root
-            password: weigu2018
+            url: jdbc:mysql://rm-bp14t37l6w6xxcb40go.mysql.rds.aliyuncs.com:3306/test?useUnicode=true&characterEncoding=UTF-8
+            username: weigutest
+            password: Wegoo2018
             driver-class-name: com.mysql.jdbc.Driver
           read: get,select,count,list,query,find
           write: add,create,update,delete,remove,insert
@@ -49,6 +45,8 @@ spring:
             #打开PSCache，并指定每个连接上PSCache的大小。oracle设为true，mysql设为false。分库分表较多推荐设置为false
             pool-prepared-statements: false
             max-pool-prepared-statement-per-connection-size: 20
+  jackson:
+    default-property-inclusion:  non_null
     #redis配置
   redis:
         host: 127.0.0.1
@@ -70,9 +68,12 @@ spring:
 #        max-connections: 50
 #        expiry-timeout: 10000
 #        idle-timeout: 30000
-  jackson:
-    default-property-inclusion:  non_null
+
 mapper:
     config-location: /mapper/*.xml
-pay:
-    pay-notify_url: http://xdy.wegoo.com.cn/wx/pay/pay_notify.do
+# 本地环境
+api2doc:
+  title: saas商城——by二师兄超级帅
+  icon: https://spring.io/img/homepage/icon-spring-framework.svg
+
+

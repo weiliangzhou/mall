@@ -1,6 +1,10 @@
 server:
-  port: 8083
+  port: 8081
 spring:
+  servlet:
+     multipart:
+       max-file-size: 300Mb
+       max-request-size: 300Mb
   http:
     encoding:
       enabled: true
@@ -11,15 +15,15 @@ spring:
           #-------------- start ----------------# (1)
           master:
             #基本属性--注意，这里的为【jdbcurl】-- 默认使用HikariPool作为数据库连接池
-            jdbcurl: jdbc:mysql://47.98.55.127:3306/dev_new?useUnicode=true&characterEncoding=UTF-8&useSSL=true
-            username: root
-            password: weigu2018
+            jdbcurl: jdbc:mysql://rm-bp14t37l6w6xxcb40go.mysql.rds.aliyuncs.com:3306/saas_online?useUnicode=true&characterEncoding=UTF-8&useSSL=true
+            username: weiguonline
+            password: cx@xcb!B
             driver-class-name: com.mysql.jdbc.Driver
           slave:
             #基本属性--注意，这里为 【url】-- 使用 druid 作为数据库连接池
-            url: jdbc:mysql://47.98.55.127:3306/dev_new?useUnicode=true&characterEncoding=UTF-8&useSSL=true
-            username: root
-            password: weigu2018
+            url: jdbc:mysql://rm-bp14t37l6w6xxcb40go.mysql.rds.aliyuncs.com:3306/saas_online?useUnicode=true&characterEncoding=UTF-8&useSSL=true
+            username: weiguonline
+            password: cx@xcb!B
             driver-class-name: com.mysql.jdbc.Driver
           read: get,select,count,list,query,find
           write: add,create,update,delete,remove,insert
@@ -66,8 +70,8 @@ spring:
 #        max-connections: 50
 #        expiry-timeout: 10000
 #        idle-timeout: 30000
-
+  jackson:
+    default-property-inclusion:  non_null
 mapper:
     config-location: /mapper/*.xml
-
 

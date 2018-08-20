@@ -76,4 +76,11 @@ public interface UserService {
      * @param userLoginInfoVo
      */
     void modifyAuthorization(UserLoginInfoVo userLoginInfoVo,User userQuery);
+
+    /**
+     * 根据userId获取推荐人信息
+     * @param userId
+     * @return
+     */
+    User getReferrerByUserId(String userId);
 }

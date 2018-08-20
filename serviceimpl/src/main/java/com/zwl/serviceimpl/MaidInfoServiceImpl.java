@@ -46,4 +46,9 @@ public class MaidInfoServiceImpl implements MaidInfoService {
     public Integer getTotalMaidMoneyByUserId(String userId) {
         return maidInfoMapper.getTotalMaidMoneyByUserId(userId);
     }
+
+    @Override
+    public Integer getMaidInfoCount(String userId) {
+        return maidInfoMapper.getMaidInfoCount(userId);
+    }
 }

@@ -48,8 +48,8 @@ public class VideoController {
         Result result = new Result();
         Video video = new Video();
         video.setId(id);
-        Video video1 = videoService.getVideoInfoById(video);
-        result.setData(video1);
+        video = videoService.getVideoInfoById(video);
+        result.setData(video);
         return JSON.toJSONString(result);
     }
 }
