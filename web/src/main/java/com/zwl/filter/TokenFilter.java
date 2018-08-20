@@ -91,6 +91,11 @@ public class TokenFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
+        //根据id获取视频
+        if (requestURL.contains("/wx/video/getVideoInfoById")) {
+            chain.doFilter(request, response);
+            return;
+        }
         //套课程
         if (requestURL.contains("/classset/getPageAllClass") || requestURL.contains("/classset/setpAddBrowseCount") ||
                 requestURL.contains("/classset/getById")) {

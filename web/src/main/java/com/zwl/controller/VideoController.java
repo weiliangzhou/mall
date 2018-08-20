@@ -41,4 +41,15 @@ public class VideoController {
         result.setData(videoList);
         return JSON.toJSONString(result);
     }
+
+    @PostMapping("/getVideoInfoById")
+    public String getVideoInfoById(@RequestBody JSONObject jsonObject){
+        Integer id = jsonObject.getInteger("id");
+        Result result = new Result();
+        Video video = new Video();
+        video.setId(id);
+        Video video1 = videoService.getVideoInfoById(video);
+        result.setData(video1);
+        return JSON.toJSONString(result);
+    }
 }

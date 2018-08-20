@@ -19,6 +19,12 @@
     <sql id="Base_Column_List">
         id,image_url,video_url,title,content,content_text,play_time,merchant_id,create_time,modify_time,available,is_recommend,is_show
     </sql>
+    <select id="getVideoInfoById" resultMap="BaseResultMap" parameterType="com.zwl.model.po.Video">
+        select
+        <include refid="Base_Column_List"/>
+        from ss_video
+        where id = #{id}
+    </select>
     <select id="getWxVideoList" resultMap="BaseResultMap" parameterType="com.zwl.model.vo.QueryTypeVideoVo">
         select
         <include refid="Base_Column_List"/>

@@ -18,4 +18,6 @@ public interface VideoMapper {
 
     @Update("update ss_video set available =0 where id=#{id}")
     int deleteVideo(@Param("id") Integer id);
+
+    Video getVideoInfoById(Video video);
 }
