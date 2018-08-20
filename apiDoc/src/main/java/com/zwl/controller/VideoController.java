@@ -23,7 +23,12 @@ public class VideoController {
 
     @ApiComment(value = "获取视频列表", seeClass =Video.class)
     @RequestMapping(name = "获取视频列表", value = "/teacher/video/getVideoList", method = RequestMethod.POST)
-    public Video getVideoList(@ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize, @ApiComment("商户号") String merchantId, @ApiComment("标题") String title){
+    public Video getVideoList(@ApiComment("pageNum") Integer pageNum,
+                              @ApiComment("pageSize") Integer pageSize,
+                              @ApiComment("商户号") String merchantId,
+                              @ApiComment("标题") String title,
+                              @ApiComment(value = "是否推荐",sample = "0不推荐 1推荐") String isRecommend,
+                              @ApiComment(value = "是否展示",sample = "0不展示 1展示") String isShow){
         Video video = new Video();
         return video;
     }

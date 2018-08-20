@@ -38,9 +38,13 @@ public class VideoController {
         Integer pageNum=jsonObject.getInteger("pageNum");
         Integer pageSize=jsonObject.getInteger("pageSize");
         String title = jsonObject.getString("title");
+        Integer isRecommend = jsonObject.getInteger("isRecommend");
+        Integer isShow = jsonObject.getInteger("isShow");
         Video video = new Video();
         video.setMerchantId(merchantId);
         video.setTitle(title);
+        video.setIsRecommend(isRecommend);
+        video.setIsShow(isShow);
         Page page = PageHelper.startPage(pageNum, pageSize);
         Result result = new Result();
         List<Video> videoList = videoService.getVideoList(video);
