@@ -27,8 +27,8 @@ public class VideoController {
                               @ApiComment("pageSize") Integer pageSize,
                               @ApiComment("商户号") String merchantId,
                               @ApiComment("标题") String title,
-                              @ApiComment(value = "是否推荐",sample = "0不推荐 1推荐") String isRecommend,
-                              @ApiComment(value = "是否展示",sample = "0不展示 1展示") String isShow){
+                              @ApiComment(value = "是否推荐",sample = "0不推荐 1推荐") Integer isRecommend,
+                              @ApiComment(value = "是否展示",sample = "0不展示 1展示") Integer isShow){
         Video video = new Video();
         return video;
     }
@@ -49,7 +49,7 @@ public class VideoController {
 
     @ApiComment("视频删除")
     @RequestMapping(name = "视频删除", value = "/teacher/video/delete", method = RequestMethod.POST)
-    public String deleteVideo(@ApiComment("id") String id){
+    public String deleteVideo(@ApiComment("id") Integer id){
         Result result = new Result();
         return JSONObject.toJSONString(result);
     }

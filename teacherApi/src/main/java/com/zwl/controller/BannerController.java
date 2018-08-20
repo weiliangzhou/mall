@@ -31,16 +31,18 @@ public class BannerController {
      * @param jsonObject
      * @return
      */
-    @PostMapping("/selectBanner")
-    public String  selectBanner(@RequestBody JSONObject jsonObject){
+    @PostMapping("/getBannerList")
+    public String getBannerList(@RequestBody JSONObject jsonObject){
         Result result = new Result();
         String merchantId=jsonObject.getString("merchantId");
+        Integer isShow = jsonObject.getInteger("isShow");
         Integer pageNum = jsonObject.getInteger("pageNum");
         Integer pageSize = jsonObject.getInteger("pageSize");
         Page page = PageHelper.startPage(pageNum, pageSize);
         Banner banner=new Banner();
         banner .setMerchantId(merchantId);
-        List<Banner> bannerList =bannerService.selectBanner(banner);
+        banner.setIsShow(isShow);
+        List<Banner> bannerList =bannerService.getBannerList(banner);
         BannerVo bannerVo = new BannerVo();
         bannerVo.setPageNum(pageNum);
         bannerVo.setTotalPage(page.getTotal());
@@ -55,12 +57,11 @@ public class BannerController {
      * @param banner
      * @return
      */
-    @RequestMapping("insertBanner")
-    public String insertBanner(@Validated(Update.class) Banner banner){
+    @RequestMapping("/add")
+    public String addBanner(@Validated(Update.class) @RequestBody Banner banner){
         Result result = new Result();
-        int count= bannerService.insert(banner);
-        if(count != 1)
-            BSUtil.isTrue(false, "新增失败");
+        int count= bannerService.addBanner(banner);
+        if(1 != count)BSUtil.isTrue(false, "新增失败");
         return JSON.toJSONString(result);
     }
 
@@ -69,13 +70,12 @@ public class BannerController {
      * @param jsonObject
      * @return
      */
-    @RequestMapping("/deleteBanner")
-    public String  deleteBanner(@Validated(Update.class) @RequestBody JSONObject jsonObject){
-        int id = jsonObject.getInteger("id");
+    @RequestMapping("/delete")
+    public String deleteBanner(@RequestBody JSONObject jsonObject){
+        Integer id = jsonObject.getInteger("id");
         Result result = new Result();
         int count= bannerService.deleteBanner(id);
-        if(count != 1)
-            BSUtil.isTrue(false, "删除失败");
+        if(1 != count) BSUtil.isTrue(false, "删除失败");
         return  JSON.toJSONString(result);
     }
 
@@ -84,13 +84,12 @@ public class BannerController {
      * @param banner
      * @return
      */
-    @PostMapping("/updateBanner")
-    public String updateBanner(@Validated(Update.class) Banner banner){
+    @PostMapping("/update")
+    public String updateBanner(@Validated(Update.class) @RequestBody Banner banner){
         Result result = new Result();
-        int count = bannerService.updateByPrimaryKey(banner);
-        if(count != 1)
-            BSUtil.isTrue(false, "修改失败");
-        return  JSON.toJSONString(result);
+        int count = bannerService.updateBanner(banner);
+        if(1 != count)BSUtil.isTrue(false, "修改失败");
+        return JSON.toJSONString(result);
     }
 
 

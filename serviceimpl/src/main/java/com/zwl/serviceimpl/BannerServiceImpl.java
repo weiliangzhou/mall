@@ -16,18 +16,18 @@ public class BannerServiceImpl implements BannerService {
     private BannerMapper bannerMapper;
 
     @Override
-    public int insert(Banner banner) {
-        return bannerMapper.insert(banner);
+    public List<Banner> getWxBannerList(Banner banner) {
+        return bannerMapper.getWxBannerList(banner);
     }
 
     @Override
-    public int insertSelective(Banner banner) {
-        return bannerMapper.insertSelective(banner);
+    public List<Banner> getBannerList(Banner banner) {
+        return bannerMapper.getBannerList(banner);
     }
 
     @Override
-    public List<Banner> selectBanner(Banner banner) {
-        return bannerMapper.selectBanner(banner);
+    public int addBanner(Banner banner) {
+        return bannerMapper.addBanner(banner);
     }
 
     @Override
@@ -36,12 +36,8 @@ public class BannerServiceImpl implements BannerService {
     }
 
     @Override
-    public int updateByPrimaryKeySelective(Banner banner) {
-        return bannerMapper.updateByPrimaryKeySelective(banner);
+    public int updateBanner(Banner banner) {
+        return bannerMapper.updateBanner(banner);
     }
 
-    @Override
-    public int updateByPrimaryKey(Banner banner) {
-        return bannerMapper.updateByPrimaryKey(banner);
-    }
 }

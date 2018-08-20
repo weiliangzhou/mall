@@ -17,13 +17,13 @@ public class BannerController {
     @Autowired
     private BannerService bannerService;
 
-    @PostMapping("/selectBanner")
+    @PostMapping("/getBannerList")
     public String  getBannerList(@RequestBody JSONObject jsonObject){
         Result result = new Result();
-        String merchantId=jsonObject.getString("merchantId");
+        String merchantId = jsonObject.getString("merchantId");
         Banner banner=new Banner();
         banner.setMerchantId(merchantId);
-        List<Banner> bannerList =bannerService.selectBanner(banner);
+        List<Banner> bannerList =bannerService.getWxBannerList(banner);
         result.setData(bannerList);
         return JSON.toJSONString(result);
 
