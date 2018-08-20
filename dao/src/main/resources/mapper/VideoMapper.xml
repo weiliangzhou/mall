@@ -40,6 +40,12 @@
         <if test="title != null" >
             and title like  CONCAT('%',#{title},'%')
         </if>
+        <if test="isRecommend != null">
+            and is_recommend = #{isRecommend}
+        </if>
+        <if test="isShow != null">
+            and is_show = #{isShow}
+        </if>
         order by modify_time desc
     </select>
 
