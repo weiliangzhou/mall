@@ -166,22 +166,19 @@
     </select>
     <select id="getXiaXianList" resultType="com.zwl.model.vo.XiaXianVo" parameterType="string">
     SELECT
-        usr.real_name as realName,
-        so.actual_money/100 as money,
-        so.payment_time as buyTime,
-        so.actual_money*sp.maid_percent/10000 as maidMoney,
-        usr.register_mobile as mobile
+	su.real_name AS realName,
+	smi.order_actual_money / 100 AS money,
+	smi.create_time AS buyTime,
+	smi.maid_money/100 as maidMoney,
+	su.register_mobile AS mobile
     FROM
-        ss_user usr,
-        ss_order so,
-        ss_product sp
+        ss_user su,
+        ss_maid_info smi
     WHERE
-        usr.available = 1
-        AND usr.referrer = #{userId}
-        AND so.available = 1
-        AND so.order_status=1
-        AND usr.user_id = so.user_id
-        and usr.member_level=sp.`level`
+        su.referrer = #{userId}
+        and su.user_id=smi.maid_user_id
+        and su.referrer=smi.user_id
+
     </select>
     <!--小程序分类获取推荐下线-->
     <select id="getXiaXianSortList" resultType="com.zwl.model.vo.XiaXianSortVo" parameterType="string">
