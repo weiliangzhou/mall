@@ -179,7 +179,7 @@ public class UserController {
             levelName = product.getLevelName();
         }
         log.info("memberLevel::" + memberLevel);
-        userLoginInfoVo.setMemberLevel(memberLevel);
+        userLoginInfoVo.setMemberLevel(null==memberLevel?-1:memberLevel);
         userLoginInfoVo.setLevelName(levelName);
 //        userLoginInfoVo.setIsBindMobile(userInfo.getIsBindMobile()==null?0:1);
         //通过主表获取绑定手机号
