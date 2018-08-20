@@ -39,4 +39,9 @@ public class VideoServiceImpl implements VideoService {
     public int deleteVideo(Integer id) {
         return videoMapper.deleteVideo(id);
     }
+
+    @Override
+    public Video getVideoInfoById(Video video) {
+        return videoMapper.getVideoInfoById(video);
+    }
 }
