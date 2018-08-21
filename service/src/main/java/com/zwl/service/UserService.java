@@ -83,4 +83,11 @@ public interface UserService {
      * @return
      */
     User getReferrerByUserId(String userId);
+
+    /**
+     * 根据userId获取总业绩
+     * @param userIdTemp
+     * @return
+     */
+    Integer getTotalPerformanceByUserId(String userIdTemp);
 }
