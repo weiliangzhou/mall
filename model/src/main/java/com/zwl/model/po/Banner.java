@@ -20,6 +20,14 @@ public class Banner {
     @NotBlank(message = "banner跳转路径不能为空", groups = {Update.class})
     @ApiComment(value = "banner跳转路径",sample = "http://www.google.com")
     private String hrefUrl;
+    @NotBlank(message = "banner主题不能为空", groups = {Update.class})
+    @ApiComment(value = "banner主题",sample = "七夕活动")
+    private String theme;
+    @NotNull(message = "排序号不能为空", groups = {Update.class})
+    @ApiComment(value = "排序号",sample = "1")
+    private Integer queueNumber;
+    @ApiComment(value = "说明",sample = "这个banner主要应用于七夕节活动...")
+    private String description;
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     @ApiComment(value = "创建时间", sample = "2018-07-05 18:00:00")
     private Date createTime = new Date();

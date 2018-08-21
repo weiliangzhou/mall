@@ -1,6 +1,7 @@
 package com.zwl.serviceimpl;
 
 import com.zwl.dao.mapper.BannerMapper;
+import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.Banner;
 import com.zwl.service.BannerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ public class BannerServiceImpl implements BannerService {
 
     @Override
     public int addBanner(Banner banner) {
+        List<Banner> bannerList= bannerMapper.getBannerByQueueNumber(banner);
+        if(0<bannerList.size())BSUtil.isTrue(false,"序列号已存在");
         return bannerMapper.addBanner(banner);
     }
 
@@ -37,6 +40,8 @@ public class BannerServiceImpl implements BannerService {
 
     @Override
     public int updateBanner(Banner banner) {
+        List<Banner> bannerList= bannerMapper.getBannerByQueueNumber(banner);
+        if(0<bannerList.size())BSUtil.isTrue(false,"序列号已存在");
         return bannerMapper.updateBanner(banner);
     }
 
