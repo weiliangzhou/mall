@@ -16,5 +16,5 @@ public interface MaidInfoByMonthMapper {
 
     int updateByPrimaryKey(MaidInfoByMonth record);
 
-    int getExistCountByUserIdAndRecordTime(@Param("userId") String xzUserId, @Param("recordTime") String recordTime);
+    int getExistCountByUserIdAndRecordTime(@Param("userId") String xzUserId, @Param("recordTime") String recordTime, @Param("maidType") Integer maidType);
 }

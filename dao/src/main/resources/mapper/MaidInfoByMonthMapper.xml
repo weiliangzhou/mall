@@ -134,6 +134,10 @@
         where id = #{id,jdbcType=BIGINT}
     </update>
     <select id="getExistCountByUserIdAndRecordTime" resultType="int">
-    select  count(*) from ss_maid_info_by_month where user_id=#{userId} and record_time =#{recordTime}
+    select  count(*) from ss_maid_info_by_month
+    where user_id=#{userId}
+    and DATE_FORMAT(record_time,'%Y-%m')=#{recordTime}
+    and maid_type=#{maidType}
+    and available =1
    </select>
 </mapper>
