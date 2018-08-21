@@ -5,6 +5,9 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="image_url" jdbcType="VARCHAR" property="imageUrl" />
     <result column="href_url" jdbcType="VARCHAR" property="hrefUrl" />
+    <result column="theme" jdbcType="VARCHAR" property="theme" />
+    <result column="queue_number" jdbcType="INTEGER" property="queueNumber" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
     <result column="available" jdbcType="INTEGER" property="available" />
@@ -12,8 +15,16 @@
     <result column="is_show" jdbcType="INTEGER" property="isShow" />
     </resultMap>
     <sql id="Base_Column_List">
-        id, image_url, href_url, create_time, modify_time, available, merchant_id, is_show
+        id, image_url, href_url, theme, queue_number, description, create_time, modify_time, available, merchant_id, is_show
     </sql>
+
+    <select id="getBannerByQueueNumber" parameterType="com.zwl.model.po.Banner" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from ss_banner
+        where queue_number = #{queueNumber,jdbcType=INTEGER}
+    </select>
+
     <select id="getWxBannerList" parameterType="com.zwl.model.po.Banner" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
@@ -21,7 +32,7 @@
         where available=1
         and merchant_id = #{merchantId}
         and is_show = 1
-        order by modify_time desc
+        order by queue_number asc
     </select>
 
     <select id="getBannerList" parameterType="com.zwl.model.po.Banner" resultMap="BaseResultMap">
@@ -30,6 +41,9 @@
         from ss_banner
         where available=1
         and merchant_id = #{merchantId}
+        <if test="theme != null">
+            and theme like  CONCAT('%',#{theme},'%')
+        </if>
         <if test="isShow != null">
             and is_show = #{isShow}
         </if>
@@ -47,6 +61,15 @@
           </if>
           <if test="hrefUrl != null">
               href_url,
+          </if>
+          <if test="theme != null">
+              theme,
+          </if>
+          <if test="queueNumber != null">
+              queue_number,
+          </if>
+          <if test="description != null">
+              description,
           </if>
           <if test="createTime != null">
               create_time,
@@ -71,6 +94,15 @@
           <if test="hrefUrl != null">
               #{hrefUrl,jdbcType=VARCHAR},
           </if>
+          <if test="theme != null">
+              #{theme,jdbcType=VARCHAR},
+          </if>
+          <if test="queueNumber != null">
+              #{queueNumber,jdbcType=INTEGER},
+          </if>
+          <if test="description != null">
+              #{description,jdbcType=VARCHAR},
+          </if>
           <if test="createTime != null">
               #{createTime,jdbcType=TIMESTAMP},
           </if>
@@ -94,6 +126,15 @@
           </if>
           <if test="hrefUrl != null">
               href_url = #{hrefUrl,jdbcType=VARCHAR},
+          </if>
+          <if test="theme != null">
+              theme = #{theme,jdbcType=VARCHAR},
+          </if>
+          <if test="queueNumber != null">
+              queue_number = #{queueNumber,jdbcType=INTEGER},
+          </if>
+          <if test="description != null">
+              description = #{description,jdbcType=VARCHAR},
           </if>
           <if test="available != null">
               available = #{available,jdbcType=INTEGER},

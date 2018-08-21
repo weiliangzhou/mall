@@ -36,12 +36,14 @@ public class BannerController {
         Result result = new Result();
         String merchantId=jsonObject.getString("merchantId");
         Integer isShow = jsonObject.getInteger("isShow");
+        String theme = jsonObject.getString("theme");
         Integer pageNum = jsonObject.getInteger("pageNum");
         Integer pageSize = jsonObject.getInteger("pageSize");
         Page page = PageHelper.startPage(pageNum, pageSize);
         Banner banner=new Banner();
-        banner .setMerchantId(merchantId);
+        banner.setMerchantId(merchantId);
         banner.setIsShow(isShow);
+        banner.setTheme(theme);
         List<Banner> bannerList =bannerService.getBannerList(banner);
         BannerVo bannerVo = new BannerVo();
         bannerVo.setPageNum(pageNum);

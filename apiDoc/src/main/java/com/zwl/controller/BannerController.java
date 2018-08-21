@@ -18,7 +18,9 @@ public class BannerController {
 
      @ApiComment(value = "获取banner列表",seeClass = Banner.class)
      @RequestMapping(name = "获取banner列表", value = "/teacher/banner/getBannerList", method = RequestMethod.POST)
-     public Banner getBannerList(@ApiComment("商户号") String merchantId , @ApiComment(value = "是否展示",sample = "0不展示 1展示") Integer isShow){
+     public Banner getBannerList(@ApiComment("商户号") String merchantId ,
+                                 @ApiComment(value = "是否展示",sample = "0不展示 1展示") Integer isShow ,
+                                 @ApiComment("banner主题") String theme){
          Banner banner=new Banner();
          return banner;
      }

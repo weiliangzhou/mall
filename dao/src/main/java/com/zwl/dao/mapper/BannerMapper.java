@@ -17,5 +17,7 @@ public interface BannerMapper {
     int deleteBanner( Integer id);
 
     int updateBanner(Banner banner);
+
+    List<Banner> getBannerByQueueNumber(Banner banner);
 }
 
