@@ -5,18 +5,14 @@ import com.zwl.model.po.Banner;
 import java.util.List;
 
 public interface BannerService {
+    List<Banner> getWxBannerList(Banner banner);
 
+    List<Banner> getBannerList(Banner banner);
 
+    int addBanner(Banner banner);
 
-        int insert(Banner banner);
+    int deleteBanner(Integer id);
 
-        List<Banner> selectBanner(Banner banner);
-
-        int deleteBanner( Integer id);
-
-        int updateByPrimaryKey(Banner banner);
-
-        int insertSelective(Banner banner);
-        int updateByPrimaryKeySelective(Banner banner);
+    int updateBanner(Banner banner);
 
 }

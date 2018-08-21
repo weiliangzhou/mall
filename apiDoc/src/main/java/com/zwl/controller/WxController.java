@@ -281,4 +281,10 @@ public class WxController {
         return video;
     }
 
+    @ApiComment(value = "获取banner列表", seeClass = Banner.class)
+    @RequestMapping(name = "获取banner列表", value = "/wx/banner/getBannerList", method = RequestMethod.POST)
+    public Banner getBannerList(@ApiComment("商户号") String merchantId) {
+        Banner banner = new Banner();
+        return banner;
+    }
 }

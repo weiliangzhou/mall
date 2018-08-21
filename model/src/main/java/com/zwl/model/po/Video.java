@@ -29,6 +29,7 @@ public class Video {
     private String contentText;
     @ApiComment(value = "视频时长", sample = "10")
     private Integer playTime;
+    @NotBlank(message = "商户号不能为空", groups = {Update.class})
     @JSONField(serialize = false)
     @RestPackIgnore
     private String merchantId;
