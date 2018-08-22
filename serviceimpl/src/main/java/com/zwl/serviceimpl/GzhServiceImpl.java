@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.zwl.model.po.Merchant;
+import com.zwl.model.vo.GzhMsgTemplate;
 import com.zwl.model.wxpay.WxConstans;
 import com.zwl.service.GZHService;
 import com.zwl.service.MerchantService;
@@ -64,13 +65,29 @@ public class GzhServiceImpl implements GZHService {
 //        课程：总裁班
 //        参加人：王小二或者手机号码
 //        欢迎登陆东遥课堂微信小程序收听！
-        String data = "\"first\":{\"value\":\"东遥课堂更新新课程啦！\",\"color\":\"#173177\"},\"keyword1\":{\"value\":" + className + ",\"color\":\"#173177\"},\"keyword2\":{\"value\":" + realNameOrPhone + ",\"color\":\"#173177\"},\"remark\":{\"value\":\"欢迎登陆东遥课堂微信小程序收听！\",\"color\":\"#173177\"}";
+        GzhMsgTemplate gzhMsgTemplate=new GzhMsgTemplate();
+        Map first=new HashMap();
+        first.put("value","微商夜大有新课程啦！");
+        first.put("color","#173177");
+        Map keyword1=new HashMap();
+        keyword1.put("value",className);
+        keyword1.put("color","#173177");
+        Map keyword2=new HashMap();
+        keyword2.put("value","微商夜大");
+        keyword2.put("color","#173177");
+        Map remark=new HashMap();
+        remark.put("value","欢迎登陆东遥课堂微信小程序收听！");
+        remark.put("color","#173177");
+        gzhMsgTemplate.setFirst(first);
+        gzhMsgTemplate.setKeyword1(keyword1);
+        gzhMsgTemplate.setKeyword2(keyword2);
+        gzhMsgTemplate.setRemark(remark);
         Map requestMap = new HashMap();
         requestMap.put("touser", openId);
         requestMap.put("appid", gzAppId);
         requestMap.put("template_id", templateId);
         requestMap.put("miniprogram", miniprogramMap);
-        requestMap.put("data", data);
+        requestMap.put("data", gzhMsgTemplate);
         log.info("发送微信模板" + JSON.toJSONString(requestMap));
         Map msgMap = new HashMap();
         msgMap.put("msgurl", msgurl);
@@ -131,7 +148,7 @@ public class GzhServiceImpl implements GZHService {
         List<String> openidList = new ArrayList<>();
         openidList.add("obBoO0yVr8DwoZK47eSidlIFUE7A");
         openidList.add("obBoO01VBFIZd1S51jEKLnkuzPfQ");
-        String templateId = "vKTAdPqxkoB15tFpxykxhVywZI5zG1NQGLjKva-rji8";
+        String templateId = "niRn7EQ3Hb7pXD13o2D9JL6YpSWVqX2uV1I30EWmI8s";
         for (String openId : openidList) {
             sendGzhMsgByOne(openId, className, realNameOrPhone, merchantId, gzAppId, gzAppKey, xcxAppId, templateId);
         }

@@ -1,5 +1,6 @@
 package com.zwl.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zwl.util.HttpsUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -19,10 +20,11 @@ public class MqListener {
     // 使用JmsListener配置消费者监听的队列，其中text是接收到的消息
     @JmsListener(destination = "kctz.queue")
     public void receiveQueue(String text) {
-        log.info("Consumer收到的报文为:" + text);
+//        log.info("Consumer收到的报文为:" + text);
         JSONObject jsonObject=JSONObject.parseObject(text);
         String msgurl=jsonObject.getString("msgurl");
         String params=jsonObject.getString("data");
+        log.info(params);
         String result = HttpsUtils.sendPost(msgurl, params);
         log.info("发送微信模板结果" + result);
 //        {
