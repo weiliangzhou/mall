@@ -3,12 +3,10 @@ package com.zwl.serviceimpl;
 import com.zwl.dao.mapper.VideoMapper;
 import com.zwl.model.po.Video;
 import com.zwl.model.vo.QueryTypeVideoVo;
-import com.zwl.model.vo.VideoVo;
 import com.zwl.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 @Service
 public class VideoServiceImpl implements VideoService {
@@ -17,22 +15,34 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     public List<Video> getWxVideoList(QueryTypeVideoVo queryTypeVideoVo) {
-        return videoMapper.getWxVideoList(queryTypeVideoVo);
+        List<Video> videoList = videoMapper.getWxVideoList(queryTypeVideoVo);
+        for(Video video:videoList){
+            Integer playTime = video.getPlayTime();
+            String playTimeDesc = playTime/60 + "分" + playTime%60 + "秒";
+            video.setPlayTimeDesc(playTimeDesc);
+        }
+        return videoList;
     }
 
     @Override
     public List<Video> getVideoList(Video video) {
-        return videoMapper.getVideoList(video);
+        List<Video> videoList = videoMapper.getVideoList(video);
+        for(Video video1:videoList){
+            Integer playTime = video1.getPlayTime();
+            String playTimeDesc = playTime/60 + ":" + playTime%60;
+            video1.setPlayTimeDesc(playTimeDesc);
+        }
+        return videoList;
     }
 
     @Override
-    public int addVideo(Video video) {
-        return videoMapper.addVideo(video);
+    public int addVideo(QueryTypeVideoVo queryTypeVideoVo) {
+        return videoMapper.addVideo(queryTypeVideoVo);
     }
 
     @Override
-    public int updateVideo(Video video) {
-        return videoMapper.updateVideo(video);
+    public int updateVideo(QueryTypeVideoVo queryTypeVideoVo) {
+        return videoMapper.updateVideo(queryTypeVideoVo);
     }
 
     @Override

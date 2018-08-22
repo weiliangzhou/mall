@@ -6,7 +6,6 @@ import com.github.pagehelper.PageHelper;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.po.Video;
 import com.zwl.model.vo.QueryTypeVideoVo;
-import com.zwl.model.vo.VideoVo;
 import com.zwl.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

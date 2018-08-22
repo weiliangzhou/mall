@@ -12,9 +12,9 @@ public interface VideoMapper {
 
     List<Video> getVideoList(Video video);
 
-    int addVideo(Video video);
+    int addVideo(QueryTypeVideoVo queryTypeVideoVo);
 
-    int updateVideo(Video video);
+    int updateVideo(QueryTypeVideoVo queryTypeVideoVo);
 
     @Update("update ss_video set available =0 where id=#{id}")
     int deleteVideo(@Param("id") Integer id);

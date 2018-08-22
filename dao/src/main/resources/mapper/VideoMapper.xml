@@ -55,7 +55,7 @@
         order by modify_time desc
     </select>
 
-    <insert id="addVideo" parameterType="com.zwl.model.po.Video" >
+    <insert id="addVideo" parameterType="com.zwl.model.vo.QueryTypeVideoVo" >
         insert into ss_video
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="id != null" >
@@ -135,7 +135,7 @@
         </trim>
     </insert>
 
-    <update id="updateVideo" parameterType="com.zwl.model.po.Video" >
+    <update id="updateVideo" parameterType="com.zwl.model.vo.QueryTypeVideoVo" >
         update ss_video
         <set >
             <if test="imageUrl != null" >
