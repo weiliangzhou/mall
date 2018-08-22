@@ -18,7 +18,7 @@ public class VideoServiceImpl implements VideoService {
         List<Video> videoList = videoMapper.getWxVideoList(queryTypeVideoVo);
         for(Video video:videoList){
             Integer playTime = video.getPlayTime();
-            String playTimeDesc = playTime/60 + "分" + playTime%60 + "秒";
+            String playTimeDesc = playTime/60 + ":" + playTime%60;
             video.setPlayTimeDesc(playTimeDesc);
         }
         return videoList;
@@ -29,7 +29,7 @@ public class VideoServiceImpl implements VideoService {
         List<Video> videoList = videoMapper.getVideoList(video);
         for(Video video1:videoList){
             Integer playTime = video1.getPlayTime();
-            String playTimeDesc = playTime/60 + ":" + playTime%60;
+            String playTimeDesc = playTime/60 + "分" + playTime%60 + "秒";
             video1.setPlayTimeDesc(playTimeDesc);
         }
         return videoList;
