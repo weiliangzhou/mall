@@ -7,6 +7,7 @@ import com.github.pagehelper.PageHelper;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.Video;
+import com.zwl.model.vo.QueryTypeVideoVo;
 import com.zwl.model.vo.VideoVo;
 import com.zwl.service.VideoService;
 import lombok.extern.slf4j.Slf4j;
@@ -57,17 +58,25 @@ public class VideoController {
     }
 
     @PostMapping("/add")
-    public String addVideo(@Validated(Update.class) @RequestBody Video video) {
+    public String addVideo(@Validated(Update.class) @RequestBody QueryTypeVideoVo queryTypeVideoVo ) {
+        Integer minute = queryTypeVideoVo.getMinute();
+        Integer second = queryTypeVideoVo.getSecond();
+        Integer playtime = minute * 60 + second;
+        queryTypeVideoVo.setPlayTime(playtime);
         Result result = new Result();
-        int count = videoService.addVideo(video);
+        int count = videoService.addVideo(queryTypeVideoVo);
         if(1 != count)BSUtil.isTrue(false,"新增失败");
         return JSONObject.toJSONString(result);
     }
 
     @PostMapping("/update")
-    public String updateVideo(@Validated(Update.class) @RequestBody Video video) {
+    public String updateVideo(@Validated(Update.class) @RequestBody QueryTypeVideoVo queryTypeVideoVo) {
+        Integer minute = queryTypeVideoVo.getMinute();
+        Integer second = queryTypeVideoVo.getSecond();
+        Integer playtime = minute * 60 + second;
+        queryTypeVideoVo.setPlayTime(playtime);
         Result result = new Result();
-        int count = videoService.updateVideo(video);
+        int count = videoService.updateVideo(queryTypeVideoVo);
         if(1 != count)BSUtil.isTrue(false,"修改失败");
         return JSONObject.toJSONString(result);
     }
