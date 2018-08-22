@@ -12,6 +12,7 @@ import com.zwl.model.vo.ClassVo;
 import com.zwl.model.vo.PageClassVo;
 import com.zwl.service.ClassInfoService;
 import com.zwl.service.ClassSetService;
+import com.zwl.service.GZHService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,16 +32,21 @@ public class ClassSetController {
     private ClassSetService classSetService;
     @Autowired
     private ClassInfoService classInfoService;
+    @Autowired
+    private GZHService gzhService;
     /**
      * 套课程新增
      * @return
      */
     @PostMapping("/add")
     public Result add(@RequestBody ClassSet classSet) {
+        String className=classSet.getTitle();
+        String merchantId=classSet.getMerchantId();
         Result result = new Result();
         classSet.setAvailable(1);
         int flag=classSetService.add(classSet);
         defineResult(result, flag);
+        gzhService.sendGzhMsgByAll(className,"测试",merchantId);
         return result;
     }
 

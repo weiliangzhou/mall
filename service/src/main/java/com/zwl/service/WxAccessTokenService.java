@@ -1,5 +1,7 @@
 package com.zwl.service;
 
+import java.util.List;
+
 /**
  * @author 二师兄超级帅
  * @Title: 微信公众号获取token
@@ -9,6 +11,4 @@ package com.zwl.service;
  */
 public interface WxAccessTokenService {
     public String getAccessToken(String merchantId,String appid,String appSecret,int type);
-    public String getGzhOpenId(String merchantId,String appid,String appSecret,String code);
-
 }

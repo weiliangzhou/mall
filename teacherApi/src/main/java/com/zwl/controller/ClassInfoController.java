@@ -12,6 +12,7 @@ import com.zwl.model.vo.ClassVo;
 import com.zwl.model.vo.PageClassInfoVo;
 import com.zwl.service.ClassCategoryService;
 import com.zwl.service.ClassInfoService;
+import com.zwl.service.GZHService;
 import com.zwl.util.CheckUtil;
 import com.zwl.util.MathUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +34,13 @@ public class ClassInfoController {
     private ClassInfoService classInfoService;
     @Autowired
     private ClassCategoryService classCategoryService;
+    @Autowired
+    private GZHService gzhService;
 
     @PostMapping("/add")
     public Result add(@RequestBody ClassInfo classInfo) {
+        String className=classInfo.getTitle();
+        String merchantId=classInfo.getMerchantId();
         Result result = new Result();
         classInfo.setAvailable(1);
         int addFlag = classInfoService.add(classInfo);
@@ -44,6 +49,7 @@ public class ClassInfoController {
         else if (addFlag == 0) {
             result.setCode(ResultCodeEnum.FAIL);
         }
+        gzhService.sendGzhMsgByAll(className,"测试",merchantId);
         return result;
     }
 

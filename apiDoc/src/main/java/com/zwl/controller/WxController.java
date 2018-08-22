@@ -228,16 +228,16 @@ public class WxController {
         return result;
     }
 
-    @ApiComment("发送公众号openid")
-    @RequestMapping(name = "发送公众号openid",
+    @ApiComment("发送小程序formId")
+    @RequestMapping(name = "发送小程序formId",
             value = "/gzh/sendFormId", method = RequestMethod.POST)
-    public Result sendFormId(@ApiComment("formId") String formId, @ApiComment("userId") String userId) {
+    public Result sendFormId(@ApiComment("formId") String formId, @ApiComment("userId") String userId) {//, @ApiComment("type 0代表支付1代表课程") String type
         Result result = new Result();
         return result;
     }
 
-    @ApiComment("获取公众号openid")
-    @RequestMapping(name = "获取公众号openid",
+    @ApiComment("获取小程序formId")
+    @RequestMapping(name = "获取小程序formId",
             value = "/gzh/getFormId", method = RequestMethod.POST)
     public Result getFormId(@ApiComment("userId") String userId) {
         Result result = new Result();
