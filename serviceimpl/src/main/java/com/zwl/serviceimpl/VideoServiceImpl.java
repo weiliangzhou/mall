@@ -20,6 +20,7 @@ public class VideoServiceImpl implements VideoService {
             Integer playTime = video.getPlayTime();
             String playTimeDesc = playTime/60 + ":" + playTime%60;
             video.setPlayTimeDesc(playTimeDesc);
+            if(null==video.getModifyTime())video.setModifyTime(video.getCreateTime());
         }
         return videoList;
     }
@@ -31,6 +32,7 @@ public class VideoServiceImpl implements VideoService {
             Integer playTime = video1.getPlayTime();
             String playTimeDesc = playTime/60 + "分" + playTime%60 + "秒";
             video1.setPlayTimeDesc(playTimeDesc);
+            if(null==video1.getModifyTime())video1.setModifyTime(video1.getCreateTime());
         }
         return videoList;
     }
