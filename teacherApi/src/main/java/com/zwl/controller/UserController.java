@@ -129,6 +129,7 @@ public class UserController {
             //存在推荐人为null
             User userTemp = userService.getByUserId(user.getReferrer());
             userVo.setReferrerRealName(userTemp == null ? "" : userTemp.getRealName());
+            userVo.setReferrerRegisterMobile(userTemp == null ? "" : userTemp.getRegisterMobile());
             //下线人数
             Integer xiaxianCount = maidInfoService.getXiaXianCountByUserId(user.getUserId());
             userVo.setXiaxianCount(StringUtils.isEmpty(xiaxianCount) ? 0 : xiaxianCount);

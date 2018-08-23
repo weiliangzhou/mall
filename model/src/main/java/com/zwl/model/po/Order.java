@@ -41,7 +41,7 @@ public class Order {
     @RestPackIgnore
     @JSONField(serialize = false)
     private Integer orderStatus = 0;
-    @ApiComment(value = "订单状态", sample = "订单状态  0待支付 1成功  -1超时关闭")
+    @ApiComment(value = "订单状态", sample = "订单状态 0待支付 1已发货 2已完成 -1超时关闭")
     private String orderStatusDesc;
     @RestPackIgnore
     @JSONField(serialize = false)
@@ -67,11 +67,11 @@ public class Order {
     @RestPackIgnore
     @JSONField(serialize = false)
     private String wxSign;
-
     @RestPackIgnore
     @JSONField(serialize = false)
     private Integer available = 1;
-
+    @ApiComment(value = "收货地址", sample = "北京三里屯")
+    private String address;
 
     public Integer getActualMoneyDesc() {
         return this.actualMoney == null ? 0 : this.actualMoney / 100;
@@ -86,7 +86,9 @@ public class Order {
             case 0:
                 return "未支付";
             case 1:
-                return "成功";
+                return "已发货";
+            case 2:
+                return "已完成";
             case -1:
                 return "订单超时";
             default:

@@ -28,6 +28,8 @@ public class UserVo {
     private Integer registerFrom;
     @ApiComment(value = "推荐人真实姓名", sample = "游东方")
     private String referrerRealName;
+    @ApiComment(value = "推荐人手机号", sample = "13111111111")
+    private String referrerRegisterMobile;
     @ApiComment(value = "下线付费人数", sample = "8")
     private Integer xiaxianCount;
 

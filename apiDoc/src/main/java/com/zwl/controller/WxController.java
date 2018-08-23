@@ -26,7 +26,7 @@ public class WxController {
     @ApiComment("购买")
     @RequestMapping(name = "购买",
             value = "/wx/product/auth/buy", method = RequestMethod.POST)
-    public BuyResult buy(@ApiComment("产品id") String id, @ApiComment("微信商户号") String merchantId, @ApiComment("userId") String userId) {
+    public BuyResult buy(@ApiComment("产品id") String id,@ApiComment("收货地址") String address, @ApiComment("微信商户号") String merchantId, @ApiComment("userId") String userId) {
         BuyResult buyResult = new BuyResult();
         return buyResult;
     }
@@ -287,4 +287,20 @@ public class WxController {
         Banner banner = new Banner();
         return banner;
     }
+    @ApiComment(value = "确认收货", seeClass = Banner.class)
+    @RequestMapping(name = "确认收货", value = "/wx/order/confirmReceipt", method = RequestMethod.POST)
+    public Result confirmReceipt(@ApiComment("订单号") String orderNo) {
+        Result result = new Result();
+        return result;
+    }
+
+
+    @ApiComment("个人订单列表")
+    @RequestMapping(name = "个人订单列表",
+            value = "/wx/order/getOrderList", method = RequestMethod.POST)
+    public List<Order> getOrderListByUserId(@ApiComment("商户号") String merchantId,@ApiComment("userId") String userId, @ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize) {
+        List<Order> orderList = new ArrayList<>();
+        return orderList;
+    }
+
 }

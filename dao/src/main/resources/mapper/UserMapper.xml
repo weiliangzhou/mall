@@ -260,7 +260,7 @@
             ss_order so,
             ss_user su
         WHERE
-            so.order_status = 1
+            so.order_status >= 1
             AND payment_no IS NOT NULL
             AND su.referrer = #{userId}
             AND so.user_id = su.user_id
