@@ -23,8 +23,8 @@ import java.util.List;
  * @Description: TODO
  * @date 2018/8/2015:38
  */
-@Configuration
-@EnableScheduling
+//@Configuration
+//@EnableScheduling
 @Slf4j
 public class XZFenYongTask {
     @Autowired

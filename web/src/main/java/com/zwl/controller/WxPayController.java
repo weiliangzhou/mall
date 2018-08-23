@@ -33,8 +33,8 @@ public class WxPayController {
     private MaidInfoService maidInfoService;
     @Autowired
     private WxPayService wxPayService;
-    @Autowired
-    private WxSenderService wxSenderService;
+//    @Autowired
+//    private WxSenderService wxSenderService;
     @Autowired
     private UserAccountService userAccountService;
     @Autowired
