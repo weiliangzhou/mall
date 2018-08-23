@@ -173,7 +173,12 @@
 	) UNION ALL
 	(
 	SELECT
-		'' AS logoUrl,
+	CASE
+			maid_type
+			WHEN 0 THEN
+			'http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180823/0acd14b3553b4d4c89075b281ca80393.png' ELSE 'http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180823/40e1e20cb5114dbd95ba285f7102d236.png'
+		END
+		 AS logoUrl,
 	CASE
 			maid_type
 			WHEN 0 THEN
