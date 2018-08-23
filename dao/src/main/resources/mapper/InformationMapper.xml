@@ -128,7 +128,12 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-
+  <select id="getInformationInfo" resultMap="BaseResultMap" parameterType="com.zwl.model.po.Information">
+    select
+    <include refid="Base_Column_List" />
+    from ss_information
+    where id = #{id,jdbcType=INTEGER}
+  </select>
 
   <select id="getInformationList" resultMap="BaseResultMap" parameterType="com.zwl.model.po.Information">
     select

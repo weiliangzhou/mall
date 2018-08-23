@@ -130,6 +130,13 @@ public class WxController {
         return information;
     }
 
+    @ApiComment(value = "根据id获取资讯祥情", seeClass = Video.class)
+    @RequestMapping(name = "根据id获取资讯祥情", value = "/wx/information/getInformationInfo", method = RequestMethod.POST)
+    public Information getInformationInfo(@ApiComment("id") Integer id) {
+        Information information = new Information();
+        return information;
+    }
+
     @ApiComment(value = "用户上传实名认证信息", seeClass = UserCertification.class)
     @RequestMapping(name = "用户上传实名认证信息",
             value = "/wx/certification/add", method = RequestMethod.POST)
