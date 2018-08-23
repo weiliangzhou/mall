@@ -34,4 +34,12 @@ public class ClassSet {
     @ApiComment(value = "不带格式介绍", sample = "不带格式介绍")
     private String contentText;
 
+    @ApiComment(value = "套课类型", sample = "视频/音频")
+    private String style;
+
+    @ApiComment(value = "是否推荐", sample = "0不推荐 1推荐")
+    private Integer isRecommend;
+
+    @ApiComment(value = "封面", sample = "www.baidu.com")
+    private String frontCover;
 }

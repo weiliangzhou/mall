@@ -10,6 +10,7 @@ import com.zwl.model.po.ClassInfo;
 import com.zwl.model.po.ClassInfoStatistics;
 import com.zwl.model.vo.ClassVo;
 import com.zwl.model.vo.PageClassInfoVo;
+import com.zwl.model.vo.ParamClassInfoVo;
 import com.zwl.service.ClassCategoryService;
 import com.zwl.service.ClassInfoService;
 import com.zwl.util.CheckUtil;
@@ -35,10 +36,14 @@ public class ClassInfoController {
     private ClassCategoryService classCategoryService;
 
     @PostMapping("/add")
-    public Result add(@RequestBody ClassInfo classInfo) {
+    public Result add(@RequestBody ParamClassInfoVo paramClassInfoVo) {
+        Integer minute = paramClassInfoVo.getMinute();
+        Integer second = paramClassInfoVo.getSecond();
+        Integer playtime = minute * 60 + second;
+        paramClassInfoVo.setPlayTime(playtime);
         Result result = new Result();
-        classInfo.setAvailable(1);
-        int addFlag = classInfoService.add(classInfo);
+        paramClassInfoVo.setAvailable(1);
+        int addFlag = classInfoService.add(paramClassInfoVo);
         if (addFlag == -1)
             BSUtil.isTrue(false, "已经存在相同的名称");
         else if (addFlag == 0) {
@@ -48,9 +53,13 @@ public class ClassInfoController {
     }
 
     @PostMapping("/modify")
-    public Result modify(@RequestBody ClassInfo classInfo) {
+    public Result modify(@RequestBody ParamClassInfoVo paramClassInfoVo) {
+        Integer minute = paramClassInfoVo.getMinute();
+        Integer second = paramClassInfoVo.getSecond();
+        Integer playtime = minute * 60 + second;
+        paramClassInfoVo.setPlayTime(playtime);
         Result result = new Result();
-        int modifyFlag = classInfoService.modifyByParams(classInfo);
+        int modifyFlag = classInfoService.modifyByParams(paramClassInfoVo);
         if (modifyFlag == -1) {
             result.setCode(ResultCodeEnum.FAIL);
             result.setMessage("已经存在相同的名称");
@@ -74,7 +83,7 @@ public class ClassInfoController {
         Page page = PageHelper.startPage(pageNum, pageSize);
         List<ClassInfo> classInfoList = classInfoService.getByClassSetId(classSetId);
         List<ClassVo> listVo=new ArrayList<>();
-        if(CheckUtil.isNotEmpty(listVo)){
+        if(CheckUtil.isNotEmpty(classInfoList)){
             for (ClassInfo c:classInfoList
                     ) {
                 ClassVo classVo = new ClassVo();
@@ -87,7 +96,11 @@ public class ClassInfoController {
                 classVo.setAudioUrl(c.getAudioUrl());
                 classVo.setCategoryId(c.getCategoryId());
                 classVo.setClassSetId(c.getClassSetId());
-
+                if(null != c.getPlayTime()) {
+                    Integer playTime = c.getPlayTime();
+                    String playTimeDesc = playTime / 60 + "分" + playTime % 60 + "秒";
+                    classVo.setPlayTimeDesc(playTimeDesc);
+                }
                 listVo.add(classVo);
             }
         }

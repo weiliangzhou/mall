@@ -1,6 +1,7 @@
 package com.zwl.dao.mapper;
 
 import com.zwl.model.po.ClassInfo;
+import com.zwl.model.vo.ParamClassInfoVo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -13,7 +14,7 @@ public interface ClassInfoMapper {
     /**
      * 新增
      */
-    int insert(ClassInfo classInfo);
+    int insert(ParamClassInfoVo paramClassInfoVo);
 
     /**
      * 根据id获取节课程详情
@@ -26,10 +27,10 @@ public interface ClassInfoMapper {
     /**
      * 更新指定id的参数
      *
-     * @param classInfo
+     * @param paramClassInfoVo
      * @return
      */
-    int updateByParams(ClassInfo classInfo);
+    int updateByParams(ParamClassInfoVo paramClassInfoVo);
 
     /**
      * 获取merchantId下的所有节课程
