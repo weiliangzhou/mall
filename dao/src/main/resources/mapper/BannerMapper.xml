@@ -5,6 +5,7 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="image_url" jdbcType="VARCHAR" property="imageUrl" />
     <result column="href_url" jdbcType="VARCHAR" property="hrefUrl" />
+    <result column="href_type" jdbcType="INTEGER" property="hrefType" />
     <result column="theme" jdbcType="VARCHAR" property="theme" />
     <result column="queue_number" jdbcType="INTEGER" property="queueNumber" />
     <result column="description" jdbcType="VARCHAR" property="description" />
@@ -15,7 +16,7 @@
     <result column="is_show" jdbcType="INTEGER" property="isShow" />
     </resultMap>
     <sql id="Base_Column_List">
-        id, image_url, href_url, theme, queue_number, description, create_time, modify_time, available, merchant_id, is_show
+        id, image_url, href_url, href_type, theme, queue_number, description, create_time, modify_time, available, merchant_id, is_show
     </sql>
 
     <select id="getBannerByQueueNumber" parameterType="com.zwl.model.po.Banner" resultMap="BaseResultMap">
@@ -62,6 +63,9 @@
           <if test="hrefUrl != null">
               href_url,
           </if>
+          <if test="hrefType != null">
+              href_type,
+          </if>
           <if test="theme != null">
               theme,
           </if>
@@ -93,6 +97,9 @@
           </if>
           <if test="hrefUrl != null">
               #{hrefUrl,jdbcType=VARCHAR},
+          </if>
+          <if test="hrefType != null">
+              #{hrefType,jdbcType=INTEGER},
           </if>
           <if test="theme != null">
               #{theme,jdbcType=VARCHAR},
@@ -126,6 +133,9 @@
           </if>
           <if test="hrefUrl != null">
               href_url = #{hrefUrl,jdbcType=VARCHAR},
+          </if>
+          <if test="hrefType != null">
+              href_type = #{hrefType,jdbcType=INTEGER},
           </if>
           <if test="theme != null">
               theme = #{theme,jdbcType=VARCHAR},

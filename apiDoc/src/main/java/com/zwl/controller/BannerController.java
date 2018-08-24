@@ -18,7 +18,9 @@ public class BannerController {
 
      @ApiComment(value = "获取banner列表",seeClass = Banner.class)
      @RequestMapping(name = "获取banner列表", value = "/teacher/banner/getBannerList", method = RequestMethod.POST)
-     public Banner getBannerList(@ApiComment("商户号") String merchantId ,
+     public Banner getBannerList(@ApiComment("pageNum") Integer pageNum,
+                                 @ApiComment("pageSize") Integer pageSize,
+                                 @ApiComment("商户号") String merchantId ,
                                  @ApiComment(value = "是否展示",sample = "0不展示 1展示") Integer isShow ,
                                  @ApiComment("banner主题") String theme){
          Banner banner=new Banner();
@@ -27,14 +29,29 @@ public class BannerController {
 
     @ApiComment("banner添加")
     @RequestMapping(name = "banner添加", value = "/teacher/banner/add", method = RequestMethod.POST)
-    public String addBanner(@ApiComment("Banner对象")Banner banner) {
+    public String addBanner(@ApiComment("图片地址")String imageUrl,
+                            @ApiComment("跳转地址")String hrefUrl,
+                            @ApiComment(value = "跳转类型",sample = "0不跳转 1应用内跳转 2应用外跳转")Integer hrefType,
+                            @ApiComment("banner主题")String theme,
+                            @ApiComment("排序号")Integer queueNumber,
+                            @ApiComment("banner说明")String description,
+                            @ApiComment("商户号")String merchantId,
+                            @ApiComment("是否展示 0不展示，默认1展示")Integer isShow) {
         Result result = new Result();
         return JSONObject.toJSONString(result);
     }
 
     @ApiComment("banner编辑")
     @RequestMapping(name = "banner编辑", value = "/teacher/banner/update", method = RequestMethod.POST)
-    public String updateBanner(@ApiComment("Banner对象")Banner banner) {
+    public String updateBanner(@ApiComment("id")Integer id,
+                               @ApiComment("图片地址")String imageUrl,
+                               @ApiComment("跳转地址")String hrefUrl,
+                               @ApiComment(value = "跳转类型",sample = "0不跳转 1应用内跳转 2应用外跳转")Integer hrefType,
+                               @ApiComment("banner主题")String theme,
+                               @ApiComment("排序号")Integer queueNumber,
+                               @ApiComment("banner说明")String description,
+                               @ApiComment("商户号")String merchantId,
+                               @ApiComment("是否展示 0不展示，1展示")Integer isShow) {
         Result result = new Result();
         return JSONObject.toJSONString(result);
     }
