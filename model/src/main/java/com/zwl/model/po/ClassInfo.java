@@ -38,10 +38,20 @@ public class ClassInfo {
     private Integer available = 1;
     @ApiComment(value = "不带格式介绍", sample = "不带格式介绍")
     private String contentText;
-    @ApiComment(value = "节课类型", sample = "视频/音频")
-    private String style;
+    @ApiComment(value = "节课类型", sample = "0音频 1视频")
+    private Integer style;
     @ApiComment(value = "是否推荐", sample = "0不推荐，1推荐")
     private Integer isRecommend;
     @ApiComment(value = "课程时长", sample = "10")
     private Integer playTime;
+    private String styleDesc;
+
+    public String getStyleDesc() {
+        switch (this.style == null ? 3 : this.style){
+            case 1: return "音频";
+            case 2: return "视频";
+            case 3: return "未选择";
+            default: return "未选择";
+        }
+    }
 }

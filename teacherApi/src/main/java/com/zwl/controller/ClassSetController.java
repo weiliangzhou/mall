@@ -132,6 +132,7 @@ public class ClassSetController {
                     classVo.setCreateTime(classInfo.getCreateTime());
                     classVo.setModifyTime(classInfo.getModifyTime());
                     classVo.setCategoryTitle(c.getCategoryTitle());
+                    classVo.setStyleDesc(c.getStyleDesc());
                     children.add(classVo);
                 }
                 c.setChildren(children);
