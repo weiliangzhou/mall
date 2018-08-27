@@ -7,13 +7,12 @@ import com.zwl.model.baseresult.Result;
 import com.zwl.model.baseresult.ResultCodeEnum;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.ClassInfo;
-import com.zwl.model.po.ClassInfoStatistics;
 import com.zwl.model.vo.ClassVo;
 import com.zwl.model.vo.PageClassInfoVo;
+import com.zwl.model.vo.ParamClassInfoVo;
 import com.zwl.service.ClassCategoryService;
 import com.zwl.service.ClassInfoService;
 import com.zwl.util.CheckUtil;
-import com.zwl.util.MathUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -81,9 +80,9 @@ public class ClassInfoController {
         Integer pageSize = jsonObject.getInteger("pageSize");
         Page page = PageHelper.startPage(pageNum, pageSize);
         List<ClassInfo> classInfoList = classInfoService.getByClassSetId(classSetId);
-        List<ClassVo> listVo=new ArrayList<>();
-        if(CheckUtil.isNotEmpty(classInfoList)){
-            for (ClassInfo c:classInfoList
+        List<ClassVo> listVo = new ArrayList<>();
+        if (CheckUtil.isNotEmpty(classInfoList)) {
+            for (ClassInfo c : classInfoList
                     ) {
                 ClassVo classVo = new ClassVo();
                 classVo.setId(c.getId());
@@ -95,7 +94,7 @@ public class ClassInfoController {
                 classVo.setAudioUrl(c.getAudioUrl());
                 classVo.setCategoryId(c.getCategoryId());
                 classVo.setClassSetId(c.getClassSetId());
-                if(null != c.getPlayTime()) {
+                if (null != c.getPlayTime()) {
                     Integer playTime = c.getPlayTime();
                     String playTimeDesc = playTime / 60 + "分" + playTime % 60 + "秒";
                     classVo.setPlayTimeDesc(playTimeDesc);
