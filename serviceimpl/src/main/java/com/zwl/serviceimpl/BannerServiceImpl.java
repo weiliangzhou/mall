@@ -28,8 +28,8 @@ public class BannerServiceImpl implements BannerService {
 
     @Override
     public int addBanner(Banner banner) {
-        List<Banner> bannerList= bannerMapper.getBannerByQueueNumber(banner);
-        if(0<bannerList.size())BSUtil.isTrue(false,"序列号已存在");
+//        List<Banner> bannerList= bannerMapper.getBannerByQueueNumber(banner);
+//        if(0<bannerList.size())BSUtil.isTrue(false,"序列号已存在");
         return bannerMapper.addBanner(banner);
     }
 
@@ -40,8 +40,8 @@ public class BannerServiceImpl implements BannerService {
 
     @Override
     public int updateBanner(Banner banner) {
-        List<Banner> bannerList= bannerMapper.getBannerByQueueNumber(banner);
-        if(0<bannerList.size())BSUtil.isTrue(false,"序列号已存在");
+//        List<Banner> bannerList= bannerMapper.getBannerByQueueNumber(banner);
+//        if(0<bannerList.size())BSUtil.isTrue(false,"序列号已存在");
         return bannerMapper.updateBanner(banner);
     }
 
