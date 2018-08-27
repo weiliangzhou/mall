@@ -18,11 +18,9 @@ import java.util.List;
  * @Description: TODO
  * @date 2018/7/2414:02
  */
-//@Configuration
-//@EnableScheduling
+@Configuration
+@EnableScheduling
 @Slf4j
-//@RestController
-//@RequestMapping("/wx/task")
 public class WxPayTask {
     @Autowired
     private OrderService orderService;
@@ -32,9 +30,9 @@ public class WxPayTask {
     //    每天凌晨2点
 //    10分钟一次，测试数据
 //    @GetMapping("/task")
-//    @Scheduled(cron = "0 2 0 * * ?")
+    @Scheduled(cron = "0 2 0 * * ?")
     //每1分钟执行一次
-//    @Scheduled(cron = "0 */5 *  * * * ")
+//    @Scheduled(cron = "0 */3 *  * * * ")
     public void queryOrderStatus() {
 //        小程序ID	appid	是	String(32)	wxd678efh567hg6787	微信分配的小程序ID
 //        商户号	mch_id	是	String(32)	1230000109	微信支付分配的商户号
@@ -47,11 +45,12 @@ public class WxPayTask {
 //        然后遍历查询
         //查询遍历订单
         log.info("开始更新订单超时作废-------------------");
-        Order orderQuery = new Order();
-        orderQuery.setOrderStatus(0);
-        List<Order> orderList = orderService.getOrderList(orderQuery);
-        for (Order order : orderList) {
-            String orderNo = order.getOrderNo();
+        orderService.updateOrderSetOverTime();
+//        Order orderQuery = new Order();
+//        orderQuery.setOrderStatus(0);
+//        List<Order> orderList = orderService.getOrderList(orderQuery);
+//        for (Order order : orderList) {
+//            String orderNo = order.getOrderNo();
 //            String merchantId=order.getMerchantId();
 //            Merchant merchant=merchantService.getMerchantByMerchantId(merchantId);
 //            String appid=merchant.getAppId();
@@ -91,13 +90,13 @@ public class WxPayTask {
 ////                REVOKED—已撤销（刷卡支付）
 ////                USERPAYING--用户支付中
 ////                PAYERROR--支付失败(其他原因，如银行返回失败)
-            Order order_t = new Order();
-            order_t.setOrderNo(orderNo);
-            order_t.setOrderStatus(-1);
-            log.info("微信订单已经关闭开始更新本地订单" + orderNo);
-            orderService.updateOrder(order);
-            log.info("微信订单已经关闭结束更新本地订单" + orderNo);
+//            Order order_t = new Order();
+//            order_t.setOrderNo(orderNo);
+//            order_t.setOrderStatus(-1);
+//            log.info("微信订单已经关闭开始更新本地订单" + orderNo);
+//            orderService.updateOrder(order);
+//            log.info("微信订单已经关闭结束更新本地订单" + orderNo);
 //            }
-        }
+//        }
     }
 }
