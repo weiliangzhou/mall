@@ -294,6 +294,12 @@ public class WxController {
         Banner banner = new Banner();
         return banner;
     }
+    @ApiComment(value = "获取图标列表", seeClass =Icon.class)
+    @RequestMapping(name = "获取图标列表", value = "/wx/icon/getIconList", method = RequestMethod.POST)
+    public Icon getIconList(@ApiComment("商户号") String merchantId){
+        Icon icon = new Icon();
+        return icon;
+    }
     @ApiComment(value = "确认收货", seeClass = Banner.class)
     @RequestMapping(name = "确认收货", value = "/wx/order/confirmReceipt", method = RequestMethod.POST)
     public Result confirmReceipt(@ApiComment("订单号") String orderNo) {
