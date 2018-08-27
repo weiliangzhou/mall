@@ -38,12 +38,10 @@ public class ClassInfo {
     private Integer available = 1;
     @ApiComment(value = "不带格式介绍", sample = "不带格式介绍")
     private String contentText;
-/*
-    public void setListenCount(Long listenCount) {
-        this.listenCount=listenCount==null?0L:listenCount;
-    }
-
-    public Long getListenCount() {
-        return  this.listenCount==null?0L:this.listenCount;
-    }*/
+    @ApiComment(value = "节课类型", sample = "视频/音频")
+    private String style;
+    @ApiComment(value = "是否推荐", sample = "0不推荐，1推荐")
+    private Integer isRecommend;
+    @ApiComment(value = "课程时长", sample = "10")
+    private Integer playTime;
 }
