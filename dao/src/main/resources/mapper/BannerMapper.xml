@@ -23,7 +23,9 @@
         select
         <include refid="Base_Column_List" />
         from ss_banner
-        where queue_number = #{queueNumber,jdbcType=INTEGER}
+        where available=1
+        and merchant_id = #{merchantId,jdbcType = VARCHAR}
+        and queue_number = #{queueNumber,jdbcType=INTEGER}
     </select>
 
     <select id="getWxBannerList" parameterType="com.zwl.model.po.Banner" resultMap="BaseResultMap">
