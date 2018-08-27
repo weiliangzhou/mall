@@ -25,7 +25,7 @@ public class ClassSetController {
             value = "/teacher/classset/add", method = RequestMethod.POST)
     public Result add(@ApiComment("title") String title, @ApiComment("bannerUrl") String bannerUrl, @ApiComment("categoryId") String categoryId
             , @ApiComment("merchantId") String merchantId, @ApiComment("requiredMemberLevel") Integer requiredMemberLevel, @ApiComment("content") String content,
-                      @ApiComment("节课类型 视频/音频") String style, @ApiComment("是否推荐 0不推荐 1推荐") Integer isRecommend,@ApiComment("套课封面") String frontCover
+                      @ApiComment("节课类型 0音频 1视频") Integer style, @ApiComment("是否推荐 0不推荐 1推荐") Integer isRecommend,@ApiComment("套课封面") String frontCover
     ) {
         Result result = new Result();
         return result;
@@ -38,7 +38,7 @@ public class ClassSetController {
             value = "/teacher/classset/modify", method = RequestMethod.POST)
     public Result modify(@ApiComment("删除和修改都要传id") Long id,@ApiComment("title") String title, @ApiComment("bannerUrl") String bannerUrl, @ApiComment("categoryId") Long categoryId
             ,  @ApiComment("requiredMemberLevel") Integer requiredMemberLevel, @ApiComment("content") String content,@ApiComment("删除时传available") String available,
-                         @ApiComment("节课类型 视频/音频") String style, @ApiComment("是否推荐 0不推荐 1推荐") Integer isRecommend,@ApiComment("套课封面") String frontCover) {
+                         @ApiComment("节课类型 0音频 1视频") Integer style, @ApiComment("是否推荐 0不推荐 1推荐") Integer isRecommend,@ApiComment("套课封面") String frontCover) {
         Result result = new Result();
 
         return result;

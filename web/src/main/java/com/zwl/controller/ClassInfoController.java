@@ -73,6 +73,7 @@ public class ClassInfoController {
                     String playTimeDesc = playTime/60 + ":" + playTime%60;
                     classVo.setPlayTimeDesc(playTimeDesc);
                 }
+                classVo.setStyleDesc(c.getStyleDesc());
                 listVo.add(classVo);
            }
         }

@@ -101,6 +101,11 @@ public class TokenFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
+        //获取图标列表
+        if (requestURL.contains("/wx/icon/getIconList")) {
+            chain.doFilter(request, response);
+            return;
+        }
         //套课程
         if (requestURL.contains("/classset/getPageAllClass") || requestURL.contains("/classset/setpAddBrowseCount") ||
                 requestURL.contains("/classset/getById")) {

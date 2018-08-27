@@ -47,7 +47,7 @@ public class Video {
     private Integer isRecommend = 0;
     @NotNull(message = "是否展示不能为空", groups = {Update.class})
     @ApiComment(value = "是否展示", sample = "0不展示，1展示")
-    private Integer isShow = 0;
+    private Integer isShow = 1;
     @ApiComment(value = "播放时长", sample = "6分10秒")
     private String playTimeDesc;
 }
