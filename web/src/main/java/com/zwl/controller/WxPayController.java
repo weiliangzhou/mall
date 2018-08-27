@@ -151,6 +151,14 @@ public class WxPayController {
                 String out_trade_no = params.get("out_trade_no");
                 // 支付完成时间，格式为yyyyMMddHHmmss
                 String time_end = params.get("time_end");
+
+                // 根据订单号判断是否是线下活动，如果是则不返佣
+
+
+
+
+
+
                 Order order = orderService.findOrderByOrderNo(out_trade_no);
                 //如果order状态为支付成功，则不更新
                 Integer status = order.getOrderStatus();

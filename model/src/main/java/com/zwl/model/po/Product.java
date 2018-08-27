@@ -76,6 +76,6 @@ public class Product {
     @ApiComment(value = "购买人数", sample = "98")
     private Integer buyCount;
     @ApiComment(value = "收货地址", sample = "98")
-    @NotBlank(message = "userID不能为空", groups = {Buy.class})
-    private Integer address;
+//    @NotBlank(message = "userID不能为空", groups = {Buy.class})
+    private String address;
 }

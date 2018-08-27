@@ -189,12 +189,14 @@
         <if test="phone!=null">
             and phone like CONCAT('%',#{phone},'%')
         </if>
-        <if test="orderStatus!=null">
+        <if test="orderStatus!=null and orderStatus != 12">
             and order_status = #{orderStatus}
+        </if>
+        <if test="orderStatus!=null and orderStatus == 12">
+            and order_status in (1,2)
         </if>
         <if test="userId!=null">
             and user_id =#{userId}
-            and order_status in(1,2)
         </if>
         order by modify_time desc
 

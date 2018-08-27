@@ -72,6 +72,8 @@ public class Order {
     private Integer available = 1;
     @ApiComment(value = "收货地址", sample = "北京三里屯")
     private String address;
+    @ApiComment(value = "个人订单列表logo", sample = "北京三里屯")
+    private String imageUrl;
 
     public Integer getActualMoneyDesc() {
         return this.actualMoney == null ? 0 : this.actualMoney / 100;

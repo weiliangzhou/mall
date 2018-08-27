@@ -6,14 +6,18 @@ import com.github.pagehelper.PageHelper;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.Order;
+import com.zwl.model.po.Product;
 import com.zwl.service.OrderService;
+import com.zwl.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author 二师兄超级帅
@@ -27,6 +31,8 @@ import java.util.List;
 public class OrderController {
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private ProductService productService;
 
     @PostMapping("/getOrderList")
     public String getOrderList(@RequestBody JSONObject jsonObject) {
@@ -44,6 +50,21 @@ public class OrderController {
         Result result = new Result();
         PageHelper.startPage(pageNum, pageSize);
         List<Order> orderList = orderService.getOrderList(order);
+        List<Product> productList = productService.getProductList(order.getMerchantId());
+        Map productImageMap = new HashMap<>();
+        for (Product product : productList) {
+            if (product == null) continue;
+            Long productId = product.getId();
+            String imageUrl = product.getImageUrl();
+            productImageMap.put(productId, imageUrl);
+        }
+
+        for (Order order_temp : orderList) {
+            Long productId = order_temp.getProductId();
+            String imageUrl = productImageMap.get(productId) == null ? "" : productImageMap.get(productId).toString();
+            order_temp.setImageUrl(imageUrl);
+        }
+
         result.setData(orderList);
         return JSON.toJSONString(result);
     }
