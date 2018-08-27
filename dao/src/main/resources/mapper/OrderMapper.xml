@@ -19,6 +19,7 @@
         <result column="phone" property="phone" jdbcType="VARCHAR"/>
         <result column="payment_no" property="paymentNo" jdbcType="VARCHAR"/>
         <result column="payment_time" property="paymentTime" jdbcType="TIMESTAMP"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
         <result column="available" property="available" jdbcType="SMALLINT"/>
@@ -29,6 +30,7 @@
     phone,real_name,
     payment_no,
     payment_time,
+    address,
     create_time, modify_time, available
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
@@ -91,6 +93,9 @@
             <if test="paymentTime != null">
                 payment_time,
             </if>
+            <if test="address != null">
+                address,
+            </if>
             <if test="createTime != null">
                 create_time,
             </if>
@@ -147,26 +152,29 @@
             <if test="paymentTime != null">
                 #{paymentTime,jdbcType=TIMESTAMP},
             </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
             <if test="createTime != null">
-               now(),
+                now(),
             </if>
 
         </trim>
 
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.zwl.model.po.Order" >
+    <update id="updateByPrimaryKeySelective" parameterType="com.zwl.model.po.Order">
         update ss_order
-        <set >
-            <if test="payWay != null" >
+        <set>
+            <if test="payWay != null">
                 pay_way = #{payWay,jdbcType=SMALLINT},
             </if>
-            <if test="orderStatus != null" >
+            <if test="orderStatus != null">
                 order_status = #{orderStatus,jdbcType=SMALLINT},
             </if>
-            <if test="paymentNo != null" >
+            <if test="paymentNo != null">
                 payment_no = #{paymentNo,jdbcType=VARCHAR},
             </if>
-            <if test="paymentTime != null" >
+            <if test="paymentTime != null">
                 payment_time = #{paymentTime,jdbcType=TIMESTAMP},
             </if>
         </set>
@@ -181,13 +189,16 @@
         <if test="phone!=null">
             and phone like CONCAT('%',#{phone},'%')
         </if>
-        <if test="orderStatus!=null">
+        <if test="orderStatus!=null and orderStatus != 12">
             and order_status = #{orderStatus}
+        </if>
+        <if test="orderStatus!=null and orderStatus == 12">
+            and order_status in (1,2)
         </if>
         <if test="userId!=null">
             and user_id =#{userId}
-            and order_status=1
         </if>
+        order by modify_time desc
 
     </select>
     <select id="findOrderByOrderNo" resultMap="BaseResultMap" parameterType="string">

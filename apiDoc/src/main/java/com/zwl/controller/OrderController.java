@@ -25,14 +25,14 @@ public class OrderController {
     @ApiComment("订单列表")
     @RequestMapping(name = "订单列表",
             value = "/teacher/order/getOrderList", method = RequestMethod.POST)
-    public OrderVo getOrderList(@ApiComment("商户号") String merchantId, @ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize, @ApiComment("手机号") String phone, @ApiComment("订单状态 0未付款 1成功 -1超时关闭") Integer orderStatus) {
+    public OrderVo getOrderList(@ApiComment("商户号") String merchantId, @ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize, @ApiComment("手机号") String phone, @ApiComment("订单状态 0未付款 1已发货 2已完成 -1超时关闭") Integer orderStatus) {
         OrderVo orderVo=new OrderVo();
         return orderVo;
     }
     @ApiComment("个人消费列表")
     @RequestMapping(name = "个人消费列表",
             value = "/teacher/order/getOrderList1", method = RequestMethod.POST)
-    public List<Order> getOrderListByUserId(@ApiComment("商户号") String merchantId,@ApiComment("userId") String userId, @ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize) {
+    public List<Order> getOrderListByUserId(@ApiComment("商户号") String merchantId,@ApiComment("userId") String userId, @ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize,@ApiComment("orderStatus 传入12") Integer orderStatus) {
         List<Order> orderList = new ArrayList<>();
         return orderList;
     }

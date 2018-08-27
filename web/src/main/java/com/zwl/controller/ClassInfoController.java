@@ -68,6 +68,12 @@ public class ClassInfoController {
                 }
                 classVo.setBrowseCount(browseCount);
                 classVo.setBrowseCountDesc(browseCountDesc+"人收听");
+                if(null != c.getPlayTime()){
+                    Integer playTime = c.getPlayTime();
+                    String playTimeDesc = playTime/60 + ":" + playTime%60;
+                    classVo.setPlayTimeDesc(playTimeDesc);
+                }
+                classVo.setStyleDesc(c.getStyleDesc());
                 listVo.add(classVo);
            }
         }

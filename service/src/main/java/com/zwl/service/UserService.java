@@ -76,4 +76,18 @@ public interface UserService {
      * @param userLoginInfoVo
      */
     void modifyAuthorization(UserLoginInfoVo userLoginInfoVo,User userQuery);
+
+    /**
+     * 根据userId获取推荐人信息
+     * @param userId
+     * @return
+     */
+    User getReferrerByUserId(String userId);
+
+    /**
+     * 根据userId获取总业绩
+     * @param userIdTemp
+     * @return
+     */
+    Integer getTotalPerformanceByUserId(String userIdTemp);
 }

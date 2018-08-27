@@ -53,5 +53,8 @@ public class ClassVo {
     private String contentText;
     @ApiComment(value = "套课下属节课程数", sample = "3")
     private Integer childrenSize;
-
+    @ApiComment(value = "课程时长", sample = "6分10秒")
+    private String playTimeDesc;
+    @ApiComment(value = "课程类型", sample = "音频/视频/未选择")
+    private String styleDesc;
 }

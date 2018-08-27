@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zwl.dao.mapper.VideoMapper">
+    <resultMap id="BaseResultMap" type="com.zwl.model.po.Video">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="image_url" property="imageUrl" jdbcType="VARCHAR"/>
+        <result column="video_url" property="videoUrl" jdbcType="VARCHAR"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="content" property="content" jdbcType="LONGVARBINARY"/>
+        <result column="content_text" property="contentText" jdbcType="VARCHAR"/>
+        <result column="play_time" property="playTime" jdbcType="INTEGER"/>
+        <result column="merchant_id" property="merchantId" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
+        <result column="available" property="available" jdbcType="INTEGER"/>
+        <result column="is_recommend" property="isRecommend" jdbcType="INTEGER"/>
+        <result column="is_show" property="isShow" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,image_url,video_url,title,content,content_text,play_time,merchant_id,create_time,modify_time,available,is_recommend,is_show
+    </sql>
+    <select id="getVideoInfoById" resultMap="BaseResultMap" parameterType="com.zwl.model.po.Video">
+        select
+        <include refid="Base_Column_List"/>
+        from ss_video
+        where id = #{id}
+    </select>
+    <select id="getWxVideoList" resultMap="BaseResultMap" parameterType="com.zwl.model.vo.QueryTypeVideoVo">
+        select
+        <include refid="Base_Column_List"/>
+        from ss_video
+        where available=1
+        and merchant_id = #{merchantId}
+        and is_show = 1
+        <if test="queryType == 0">
+            and is_recommend = 1
+        </if>
+        order by modify_time desc
+    </select>
+    <select id="getVideoList" resultMap="BaseResultMap" parameterType="com.zwl.model.po.Video">
+        select
+        <include refid="Base_Column_List"/>
+        from ss_video
+        where available=1
+        and merchant_id = #{merchantId}
+        <if test="title != null" >
+            and title like  CONCAT('%',#{title},'%')
+        </if>
+        <if test="isRecommend != null">
+            and is_recommend = #{isRecommend}
+        </if>
+        <if test="isShow != null">
+            and is_show = #{isShow}
+        </if>
+        order by modify_time desc
+    </select>
+
+    <insert id="addVideo" parameterType="com.zwl.model.vo.QueryTypeVideoVo" >
+        insert into ss_video
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="imageUrl != null" >
+                image_url,
+            </if>
+            <if test="videoUrl != null" >
+                video_url,
+            </if>
+            <if test="title != null" >
+                title,
+            </if>
+            <if test="content != null" >
+                content,
+            </if>
+            <if test="contentText != null" >
+                content_text,
+            </if>
+            <if test="playTime != null" >
+                play_time,
+            </if>
+            <if test="merchantId != null" >
+                merchant_id,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="available != null" >
+                available,
+            </if>
+            <if test="isRecommend != null" >
+                is_recommend,
+            </if>
+            <if test="isShow != null" >
+                is_show,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="imageUrl != null" >
+                #{imageUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="videoUrl != null" >
+                #{videoUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="title != null" >
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null" >
+                #{content,jdbcType=LONGVARBINARY},
+            </if>
+            <if test="contentText != null" >
+                #{contentText,jdbcType=VARCHAR},
+            </if>
+            <if test="playTime != null" >
+                #{playTime,jdbcType=INTEGER},
+            </if>
+            <if test="merchantId != null" >
+                #{merchantId,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="available != null" >
+                #{available,jdbcType=INTEGER},
+            </if>
+            <if test="isRecommend != null" >
+                #{isRecommend,jdbcType=INTEGER},
+            </if>
+            <if test="isShow != null" >
+                #{isShow,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateVideo" parameterType="com.zwl.model.vo.QueryTypeVideoVo" >
+        update ss_video
+        <set >
+            <if test="imageUrl != null" >
+                image_url = #{imageUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="videoUrl != null" >
+                video_url = #{videoUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="title != null" >
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null" >
+                content = #{content,jdbcType=LONGVARBINARY},
+            </if>
+            <if test="contentText != null" >
+                content_text = #{contentText,jdbcType=VARCHAR},
+            </if>
+            <if test="playTime != null" >
+                play_time = #{playTime,jdbcType=INTEGER},
+            </if>
+            <if test="merchantId != null" >
+                merchant_id = #{merchantId,jdbcType=VARCHAR},
+            </if>
+            <if test="available != null" >
+                available = #{available,jdbcType=INTEGER},
+            </if>
+            <if test="isRecommend != null" >
+                is_recommend = #{isRecommend,jdbcType=INTEGER},
+            </if>
+            <if test="isShow != null" >
+                is_show = #{isShow,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

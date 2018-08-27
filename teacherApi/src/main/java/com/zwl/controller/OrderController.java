@@ -37,6 +37,7 @@ public class OrderController {
         String phone = jsonObject.getString("phone");
         Integer orderStatus = jsonObject.getInteger("orderStatus");
         String userId = jsonObject.getString("userId");
+        //老师后台 ->付费会员->消费订单 增加orderStatus=12
         Order order = new Order();
         order.setMerchantId(merchantId);
         order.setPhone(phone);

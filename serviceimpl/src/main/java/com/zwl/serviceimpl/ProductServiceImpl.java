@@ -114,7 +114,7 @@ public class ProductServiceImpl implements ProductService {
         Integer alreadyLevel = userService.getMemberLevel(userId);
 
         if (null != alreadyLevel && alreadyLevel >= level)
-            BSUtil.isTrue(false, "不能重复购买此商品！");
+            BSUtil.isTrue(false, "不能重复购买！");
         String orderNo = sdf_yMdHm.format(new Date()) + merchantId + userLongId + productId;
         Order order = new Order();
         order.setOrderNo(orderNo);

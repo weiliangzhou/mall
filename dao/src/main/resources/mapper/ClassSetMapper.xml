@@ -14,21 +14,24 @@
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="available" property="available" jdbcType="INTEGER" />
     <result column="content_text" property="contentText" />
+    <result column="style" property="style" jdbcType="INTEGER" />
+    <result column="is_recommend" property="isRecommend" jdbcType="INTEGER" />
+    <result column="front_cover" property="frontCover" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, title, banner_url,content, category_id, merchant_id, is_show, required_member_level,
-    create_time, modify_time, available,content_text
+    create_time, modify_time, available,content_text,style,is_recommend,front_cover
   </sql>
   <!--新增套课程-->
   <insert id="insert" parameterType="com.zwl.model.po.ClassSet" >
     insert into ss_class_set (id, title, banner_url,content,
       category_id, merchant_id, is_show,
       required_member_level, create_time, modify_time,
-      available,content_text)
+      available,content_text,style,is_recommend,front_cover)
     values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{bannerUrl,jdbcType=VARCHAR},#{content,jdbcType=LONGVARCHAR},
       #{categoryId,jdbcType=INTEGER}, #{merchantId,jdbcType=VARCHAR}, #{isShow,jdbcType=BIT},
       #{requiredMemberLevel,jdbcType=INTEGER}, now(), now(),
-      #{available,jdbcType=INTEGER},#{contentText})
+      #{available,jdbcType=INTEGER},#{contentText},#{style,jdbcType=INTEGER},#{isRecommend,jdbcType=INTEGER},#{frontCover,jdbcType=VARCHAR})
   </insert>
   <!--修改指定id的套课程参数-->
   <update id="updateByParams" parameterType="com.zwl.model.po.ClassSet" >
@@ -60,7 +63,16 @@
         content = #{content},
       </if>
       <if test="contentText != null" >
-        content_text = #{contentText}
+        content_text = #{contentText},
+      </if>
+      <if test="style != null" >
+        style = #{style,jdbcType=INTEGER},
+      </if>
+      <if test="isRecommend != null" >
+        is_recommend = #{isRecommend,jdbcType=INTEGER},
+      </if>
+      <if test="frontCover != null" >
+        front_cover = #{frontCover,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -117,6 +129,15 @@
       </if>
       <if test="contentText != null" >
         AND content_text = #{contentText}
+      </if>
+      <if test="style != null" >
+        AND style = #{style,jdbcType=INTEGER}
+      </if>
+      <if test="isRecommend != null" >
+        AND is_recommend = #{isRecommend,jdbcType=INTEGER}
+      </if>
+      <if test="frontCover != null" >
+        AND front_cover = #{frontCover,jdbcType=VARCHAR}
       </if>
     </where>
   </select>

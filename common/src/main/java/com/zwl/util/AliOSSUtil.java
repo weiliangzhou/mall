@@ -20,7 +20,7 @@ public class AliOSSUtil {
     /**
      * 管理控制台里面获取EndPoint
      */
-    private final static String END_POINT = "oss-cn-hangzhou.aliyuncs.com";
+    private final static String END_POINT = "oss-cn-hangzhou-internal.aliyuncs.com";
     /**
      * 云账号AccessKey有所有API访问权限，建议遵循阿里云安全最佳实践，创建并使用RAM子账号进行API访问或日常运维，请登录 https://ram.console.aliyun.com 创建
      */
@@ -33,7 +33,7 @@ public class AliOSSUtil {
     /**
      * 管理控制台里面获取的访问域名
      */
-    private final static String FILE_HOST = "http://file.weigoo.com/";
+    private final static String FILE_HOST = "oss-cn-hangzhou.aliyuncs.com";
 
 //    /**
 //     * 上传文件到bucket
@@ -88,7 +88,7 @@ public class AliOSSUtil {
                 // 拼装访问地址
                 String url;
                 StringBuffer sb = new StringBuffer();
-                sb.append("https://").append(BUCKET_NAME).append(".").append(END_POINT).append("/").append(filePath);
+                sb.append("https://").append(BUCKET_NAME).append(".").append(FILE_HOST).append("/").append(filePath);
                 url = sb.toString();
                 return url;
             } else
@@ -136,7 +136,7 @@ public class AliOSSUtil {
                 // 拼装访问地址
                 String url;
                 StringBuffer sb = new StringBuffer();
-                sb.append("http://").append(BUCKET_NAME).append(".").append(END_POINT).append("/").append(filePath);
+                sb.append("http://").append(BUCKET_NAME).append(".").append(FILE_HOST).append("/").append(filePath);
                 /*if (StringUtils.isNotBlank(styleName)) {
                     sb.append("/").append(styleName);
                 }*/

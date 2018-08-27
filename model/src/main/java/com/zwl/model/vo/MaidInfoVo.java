@@ -25,7 +25,7 @@ public class MaidInfoVo {
     private String logoUrl;
     @ApiComment(value = "真实姓名", sample = "二师兄")
     private String realName;
-    @ApiComment(value = "手机号", sample = "13900000001")
+    @ApiComment(value = "手机号", sample = "139****0001")
     private String phone;
     @ApiComment(value = "等级", sample = "院长")
     private Integer level;

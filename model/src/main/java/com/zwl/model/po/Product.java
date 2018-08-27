@@ -5,7 +5,6 @@ import com.terran4j.commons.api2doc.annotations.ApiComment;
 import com.terran4j.commons.restpack.RestPackIgnore;
 import com.zwl.model.groups.Buy;
 import com.zwl.model.groups.H5Buy;
-import com.zwl.util.MoneyUtil;
 import lombok.Data;
 import org.apache.ibatis.annotations.Update;
 
@@ -15,7 +14,7 @@ import java.util.Date;
 
 @Data
 public class Product {
-    @NotNull(message = "产品ID不能为空", groups = {Update.class, Buy.class,H5Buy.class})
+    @NotNull(message = "产品ID不能为空", groups = {Update.class, Buy.class, H5Buy.class})
     @ApiComment(value = "产品ID", sample = "1")
     private Long id;
     @ApiComment(value = "会员等级", sample = "1")
@@ -37,7 +36,7 @@ public class Product {
     private Integer price;
     @ApiComment(value = "产品价格", sample = "单位：元")
     private String priceDesc;
-    @NotBlank(message = "商户号不能为空", groups = {Buy.class,H5Buy.class})
+    @NotBlank(message = "商户号不能为空", groups = {Buy.class, H5Buy.class})
     @JSONField(serialize = false)
     @RestPackIgnore
     private String merchantId;
@@ -59,26 +58,14 @@ public class Product {
     @JSONField(serialize = false)
     @NotBlank(message = "微信H5支付终端ip不能为空")
     private String spbillCreateIp;
-
-  /*  public String getPriceDesc() {
-        if(this.price==null) return null;
-        String p = null;
-        try {
-            p=MoneyUtil.changeF2Y(Long.valueOf(this.price));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-//        return this.price==null?null:this.price / 100 + "";
-        return p;
-    }*/
     @RestPackIgnore
     @JSONField(serialize = false)
-    @NotBlank(message = "微信H5支付终端ip不能为空",groups = {H5Buy.class})
+    @NotBlank(message = "手机号码", groups = {H5Buy.class})
     private String phone;
-//    验证码
+    //    验证码
     @RestPackIgnore
     @JSONField(serialize = false)
-    @NotBlank(message = "微信H5支付终端ip不能为空",groups = {H5Buy.class})
+    @NotBlank(message = "系统繁忙，请刷新页面", groups = {H5Buy.class})
     private String code;
     @ApiComment(value = "产品简介（带格式）", sample = "<p>10大板块，100节课让微商创业再也没有秘密！绝对是秒杀全网的课程！")
     private String content;
@@ -88,5 +75,7 @@ public class Product {
     private String imageUrl;
     @ApiComment(value = "购买人数", sample = "98")
     private Integer buyCount;
-
+    @ApiComment(value = "收货地址", sample = "98")
+//    @NotBlank(message = "userID不能为空", groups = {Buy.class})
+    private String address;
 }

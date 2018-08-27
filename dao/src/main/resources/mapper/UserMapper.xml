@@ -14,7 +14,7 @@
         <result column="referrer" property="referrer" jdbcType="VARCHAR"/>
         <result column="member_level" property="memberLevel" jdbcType="SMALLINT"/>
         <result column="level_name" property="levelName" jdbcType="VARCHAR"/>
-        <result column="is_buy" property="isBuy" />
+        <result column="is_buy" property="isBuy"/>
         <result column="expires_time" property="expiresTime" jdbcType="TIMESTAMP"/>
         <result column="register_time" property="registerTime" jdbcType="TIMESTAMP"/>
         <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
@@ -239,6 +239,33 @@
         <if test="registerFrom !=null">
             AND register_from =#{registerFrom}
         </if>
+
+    </select>
+
+
+    <select id="getReferrerByUserId" resultMap="BaseResultMap" parameterType="string">
+
+        select
+        <include refid="Base_Column_List"/>
+        from ss_user
+        where user_id=(select referrer from ss_user where user_id=#{userId})
+
+
+    </select>
+
+    <select id="getTotalPerformanceByUserId" resultType="int" parameterType="string">
+        SELECT
+	      sum( so.actual_money ) / 100
+        FROM
+            ss_order so,
+            ss_user su
+        WHERE
+            so.order_status >= 1
+            AND payment_no IS NOT NULL
+            AND su.referrer = #{userId}
+            AND so.user_id = su.user_id
+            AND so.`level` >1
+            AND PERIOD_DIFF( date_format( '2018-09-01', '%Y%m' ), date_format( so.payment_time, '%Y%m' ) ) = 1
 
     </select>
 

@@ -15,4 +15,8 @@ public interface OrderService {
     List<Order> getOrderList(Order order);
     int updateOrder(Order order);
     Order findOrderByOrderNo(String OrderNo);
+    /**
+     * 作废超时订单
+     */
+    void updateOrderSetOverTime();
 }
