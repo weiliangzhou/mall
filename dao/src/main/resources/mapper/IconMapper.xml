@@ -6,13 +6,14 @@
     <result column="title" property="title" jdbcType="VARCHAR" />
     <result column="picture_url" property="pictureUrl" jdbcType="VARCHAR" />
     <result column="href_url" property="hrefUrl" jdbcType="VARCHAR" />
+    <result column="href_type" property="hrefType" jdbcType="INTEGER" />
     <result column="available" property="available" jdbcType="INTEGER" />
     <result column="merchant_id" property="merchantId" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, title, picture_url, href_url, available, merchant_id, create_time, modify_time
+    id, title, picture_url, href_url, href_type, available, merchant_id, create_time, modify_time
   </sql>
   <select id="getIconList" resultMap="BaseResultMap" parameterType="com.zwl.model.po.Icon" >
     select 
@@ -37,6 +38,9 @@
       <if test="hrefUrl != null" >
         href_url,
       </if>
+      <if test="hrefType != null" >
+        href_type,
+      </if>
       <if test="available != null" >
         available,
       </if>
@@ -60,6 +64,9 @@
       <if test="hrefUrl != null" >
         #{hrefUrl,jdbcType=VARCHAR},
       </if>
+      <if test="hrefType != null" >
+        #{hrefType,jdbcType=INTEGER},
+      </if>
       <if test="available != null" >
         #{available,jdbcType=INTEGER},
       </if>
@@ -82,6 +89,9 @@
       </if>
       <if test="hrefUrl != null" >
         href_url = #{hrefUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="hrefType != null" >
+        href_type = #{hrefType,jdbcType=INTEGER},
       </if>
       <if test="available != null" >
         available = #{available,jdbcType=INTEGER},

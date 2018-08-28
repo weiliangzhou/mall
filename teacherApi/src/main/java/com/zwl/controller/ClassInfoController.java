@@ -54,8 +54,10 @@ public class ClassInfoController {
     public Result modify(@RequestBody ParamClassInfoVo paramClassInfoVo) {
         Integer minute = paramClassInfoVo.getMinute();
         Integer second = paramClassInfoVo.getSecond();
-        Integer playtime = minute * 60 + second;
-        paramClassInfoVo.setPlayTime(playtime);
+        if(null != minute && null != second){
+            Integer playtime = minute * 60 + second;
+            paramClassInfoVo.setPlayTime(playtime);
+        }
         Result result = new Result();
         int modifyFlag = classInfoService.modifyByParams(paramClassInfoVo);
         if (modifyFlag == -1) {
