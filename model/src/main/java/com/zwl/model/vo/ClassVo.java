@@ -57,4 +57,6 @@ public class ClassVo {
     private String playTimeDesc;
     @ApiComment(value = "课程类型", sample = "音频/视频/未选择")
     private String styleDesc;
+    @ApiComment(value = "观后感类型", sample = "0课后感 1已读")
+    private Integer commentType;
 }
