@@ -18,8 +18,8 @@ import java.util.List;
  * @Description: TODO
  * @date 2018/7/2414:02
  */
-@Configuration
-@EnableScheduling
+//@Configuration
+//@EnableScheduling
 @Slf4j
 public class WxPayTask {
     @Autowired
