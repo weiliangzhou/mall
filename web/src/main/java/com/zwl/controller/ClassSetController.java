@@ -72,6 +72,8 @@ public class ClassSetController {
             if (classVo.getClassType() == 2) {
                 ClassInfoStatistics csi = classInfoStatisticsService.getByClassInfoId(classVo.getId());
                 browseCount = csi==null||csi.getListenCount() == null ? 0L : csi.getListenCount();
+                //节课因没封面，封面设置为它的logo图片
+                classVo.setFrontCover(classVo.getLogoUrl());
             }
             classVo.setBrowseCount(browseCount);
             String classListenCountDesc=String.valueOf(browseCount);

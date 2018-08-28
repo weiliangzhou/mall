@@ -5,6 +5,7 @@ import com.zwl.model.vo.ClassSetItemVo;
 import com.zwl.model.vo.ClassVo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -72,4 +73,12 @@ public interface ClassSetMapper {
      * @return
      */
     List<ClassVo> search(@Param("merchantId") String merchantId, @Param("title") String title);
+
+    /**
+     * 删除套课
+     * @param id
+     * @return
+     */
+    @Update("update ss_class_set set available =0 where id=#{id}")
+    int deleteClassSet(@Param("id")Long id);
 }

@@ -6,6 +6,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.baseresult.ResultCodeEnum;
+import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.ClassInfo;
 import com.zwl.model.po.ClassSet;
 import com.zwl.model.vo.ClassVo;
@@ -69,6 +70,19 @@ public class ClassSetController {
         int flag=classSetService.modifyByParams(classSet);
         defineResult(result, flag);
         return result;
+    }
+
+    /**
+     * 套课程删除
+     * @return
+     */
+    @PostMapping("/delete")
+    public String deleteClassSet(@RequestBody JSONObject jsonObject) {
+        Long id = jsonObject.getLong("id");
+        Result result = new Result();
+        int count=classSetService.deleteClassSet(id);
+        if(1 != count) BSUtil.isTrue(false, "删除失败");
+        return JSON.toJSONString(result);
     }
 
   /*  *//**
@@ -138,7 +152,8 @@ public class ClassSetController {
                     classVo.setCreateTime(classInfo.getCreateTime());
                     classVo.setModifyTime(classInfo.getModifyTime());
                     classVo.setCategoryTitle(c.getCategoryTitle());
-                    classVo.setStyleDesc(c.getStyleDesc());
+                    classVo.setStyle(classInfo.getStyle());
+                    classVo.setIsRecommend(classInfo.getIsRecommend());
                     children.add(classVo);
                 }
                 c.setChildren(children);

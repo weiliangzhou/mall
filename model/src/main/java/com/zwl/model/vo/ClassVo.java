@@ -55,6 +55,12 @@ public class ClassVo {
     private Integer childrenSize;
     @ApiComment(value = "课程时长", sample = "6分10秒")
     private String playTimeDesc;
-    @ApiComment(value = "课程类型", sample = "音频/视频/未选择")
-    private String styleDesc;
+    @ApiComment(value = "课程类型", sample = "0音频/1视频/2未选择")
+    private Integer style;
+    @ApiComment(value = "观后感类型", sample = "0课后感 1已读")
+    private Integer commentType;
+    @ApiComment(value = "是否推荐", sample = "0不推荐/1推荐")
+    private Integer isRecommend;
+    @ApiComment(value = "封面", sample = "www.baidu.com")
+    private String frontCover;
 }
