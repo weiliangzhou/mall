@@ -101,7 +101,8 @@ public class ClassInfoController {
                     String playTimeDesc = playTime / 60 + "分" + playTime % 60 + "秒";
                     classVo.setPlayTimeDesc(playTimeDesc);
                 }
-                classVo.setStyleDesc(c.getStyleDesc());
+                classVo.setStyle(c.getStyle());
+                classVo.setIsRecommend(c.getIsRecommend());
                 listVo.add(classVo);
             }
         }

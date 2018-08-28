@@ -64,4 +64,11 @@ public interface ClassSetService {
      * @return
      */
     List<ClassVo> search(String merchantId, String title);
+
+    /**
+     * 删除套课
+     * @param id
+     * @return
+     */
+    int deleteClassSet(Long id);
 }

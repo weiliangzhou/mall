@@ -44,14 +44,4 @@ public class ClassInfo {
     private Integer isRecommend;
     @ApiComment(value = "课程时长", sample = "10")
     private Integer playTime;
-    private String styleDesc;
-
-    public String getStyleDesc() {
-        switch (this.style == null ? 3 : this.style){
-            case 1: return "音频";
-            case 2: return "视频";
-            case 3: return "未选择";
-            default: return "未选择";
-        }
-    }
 }
