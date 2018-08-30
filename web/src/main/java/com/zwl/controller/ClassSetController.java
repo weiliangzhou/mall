@@ -47,8 +47,9 @@ public class ClassSetController {
         String merchantId = jsonObject.getString("merchantId");
         Integer pageNum = jsonObject.getInteger("pageNum");
         Integer pageSize = jsonObject.getInteger("pageSize");
+        Integer queryType = jsonObject.getInteger("queryType");
         Page page = PageHelper.startPage(pageNum, pageSize);
-        List<ClassVo> list = classSetService.getAllClassOrderById(merchantId);
+        List<ClassVo> list = classSetService.getAllClassOrderById(merchantId,queryType);
         for (ClassVo classVo : list
                 ) {
             Long browseCount = 0L;

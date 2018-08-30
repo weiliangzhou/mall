@@ -32,6 +32,7 @@ public class ClassInfoController {
     public Result add(@ApiComment("title") String title,  @ApiComment("categoryId") Long categoryId,  @ApiComment("classSetId") Long classSetId
             , @ApiComment("merchantId") String merchantId,   @ApiComment("audioUrl") String audioUrl, @ApiComment("logoUrl") String logoUrl,
                       @ApiComment("content") String content, @ApiComment("节课类型 0音频 1视频") Integer style, @ApiComment("是否推荐 0不推荐 1推荐") Integer isRecommend,
+                      @ApiComment("是否展示 0不展示 1展示") Integer isShow,
                       @ApiComment("时长分") Integer minute, @ApiComment("时长秒") Integer second){
         Result result = new Result();
 
@@ -43,7 +44,7 @@ public class ClassInfoController {
             value = "/teacher/classinfo/modify", method = RequestMethod.POST)
     public Result modify(@ApiComment("id") Long id,@ApiComment("title") String title,  @ApiComment("categoryId") Long categoryId,  @ApiComment("classSetId") Long classSetId
             ,  @ApiComment("audioUrl") String audioUrl, @ApiComment("logoUrl") String logoUrl, @ApiComment("content") String content, @ApiComment("节课类型 0音频 1视频") Integer style,
-                         @ApiComment("是否推荐 0不推荐 1推荐") Integer isRecommend, @ApiComment("时长分") Integer minute, @ApiComment("时长秒") Integer second){
+                         @ApiComment("是否推荐 0不推荐 1推荐") Integer isRecommend,@ApiComment("是否展示 0不展示 1展示") Integer isShow, @ApiComment("时长分") Integer minute, @ApiComment("时长秒") Integer second){
         Result result = new Result();
 
         return result;

@@ -95,5 +95,10 @@ public class ClassInfoServiceImpl implements ClassInfoService {
         return  classInfoMapper.getLogoUrlByClassSetId(id);
     }
 
+    @Override
+    public List<ClassInfo> getWxByClassSetId(Long classSetId) {
+        return classInfoMapper.selectWxByClassSetId(classSetId);
+    }
+
 
 }

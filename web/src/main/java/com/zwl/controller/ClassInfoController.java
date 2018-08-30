@@ -55,7 +55,7 @@ public class ClassInfoController {
         String userId = jsonObject.getString("userId");
         String merchantId = jsonObject.getString("merchantId");
         Page page=PageHelper.startPage(pageNum, pageSize);
-        List<ClassInfo> classInfoList = classInfoService.getByClassSetId(classSetId);
+        List<ClassInfo> classInfoList = classInfoService.getWxByClassSetId(classSetId);
         List<ClassVo> listVo=new ArrayList<>();
         if(CheckUtil.isNotEmpty(classInfoList)){
             for (ClassInfo c:classInfoList
@@ -83,6 +83,7 @@ public class ClassInfoController {
                 }
                 classVo.setStyle(c.getStyle());
                 classVo.setIsRecommend(c.getIsRecommend());
+                classVo.setIsShow(c.getIsShow());
                 ClassInfoComment classInfoComment = new ClassInfoComment();
                 classInfoComment.setClassInfoId(c.getId());
                 classInfoComment.setUserId(userId);

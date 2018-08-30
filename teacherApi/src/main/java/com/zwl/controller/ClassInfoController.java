@@ -13,7 +13,9 @@ import com.zwl.model.vo.ParamClassInfoVo;
 import com.zwl.service.ClassCategoryService;
 import com.zwl.service.ClassInfoService;
 import com.zwl.util.CheckUtil;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,11 +36,13 @@ public class ClassInfoController {
     private ClassCategoryService classCategoryService;
 
     @PostMapping("/add")
-    public Result add(@RequestBody ParamClassInfoVo paramClassInfoVo) {
+    public Result add(@Validated(Update.class) @RequestBody ParamClassInfoVo paramClassInfoVo) {
         Integer minute = paramClassInfoVo.getMinute();
         Integer second = paramClassInfoVo.getSecond();
-        Integer playtime = minute * 60 + second;
-        paramClassInfoVo.setPlayTime(playtime);
+        if(null != minute && null != second){
+            Integer playtime = minute * 60 + second;
+            paramClassInfoVo.setPlayTime(playtime);
+        }
         Result result = new Result();
         paramClassInfoVo.setAvailable(1);
         int addFlag = classInfoService.add(paramClassInfoVo);
@@ -51,7 +55,7 @@ public class ClassInfoController {
     }
 
     @PostMapping("/modify")
-    public Result modify(@RequestBody ParamClassInfoVo paramClassInfoVo) {
+    public Result modify(@Validated(Update.class) @RequestBody ParamClassInfoVo paramClassInfoVo) {
         Integer minute = paramClassInfoVo.getMinute();
         Integer second = paramClassInfoVo.getSecond();
         if(null != minute && null != second){
@@ -84,8 +88,7 @@ public class ClassInfoController {
         List<ClassInfo> classInfoList = classInfoService.getByClassSetId(classSetId);
         List<ClassVo> listVo = new ArrayList<>();
         if (CheckUtil.isNotEmpty(classInfoList)) {
-            for (ClassInfo c : classInfoList
-                    ) {
+            for (ClassInfo c : classInfoList) {
                 ClassVo classVo = new ClassVo();
                 classVo.setId(c.getId());
                 classVo.setLogoUrl(c.getLogoUrl());
@@ -103,6 +106,7 @@ public class ClassInfoController {
                 }
                 classVo.setStyle(c.getStyle());
                 classVo.setIsRecommend(c.getIsRecommend());
+                classVo.setIsShow(c.getIsShow());
                 listVo.add(classVo);
             }
         }

@@ -8,7 +8,7 @@
     <result column="content" property="content" jdbcType="LONGVARCHAR" />
     <result column="category_id" property="categoryId" jdbcType="INTEGER" />
     <result column="merchant_id" property="merchantId" jdbcType="VARCHAR" />
-    <result column="is_show" property="isShow" jdbcType="BIT" />
+    <result column="is_show" property="isShow" jdbcType="INTEGER" />
     <result column="required_member_level" property="requiredMemberLevel" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
@@ -29,7 +29,7 @@
       required_member_level, create_time, modify_time,
       available,content_text,style,is_recommend,front_cover)
     values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{bannerUrl,jdbcType=VARCHAR},#{content,jdbcType=LONGVARCHAR},
-      #{categoryId,jdbcType=INTEGER}, #{merchantId,jdbcType=VARCHAR}, #{isShow,jdbcType=BIT},
+      #{categoryId,jdbcType=INTEGER}, #{merchantId,jdbcType=VARCHAR}, #{isShow,jdbcType=INTEGER},
       #{requiredMemberLevel,jdbcType=INTEGER}, now(), now(),
       #{available,jdbcType=INTEGER},#{contentText},#{style,jdbcType=INTEGER},#{isRecommend,jdbcType=INTEGER},#{frontCover,jdbcType=VARCHAR})
   </insert>
@@ -37,7 +37,7 @@
   <update id="updateByParams" parameterType="com.zwl.model.po.ClassSet" >
     update ss_class_set
     <set >
-      modify_time=now(),
+
       <if test="title != null" >
         title = #{title,jdbcType=VARCHAR},
       </if>
@@ -51,7 +51,7 @@
         merchant_id = #{merchantId,jdbcType=VARCHAR},
       </if>
       <if test="isShow != null" >
-        is_show = #{isShow,jdbcType=BIT},
+        is_show = #{isShow,jdbcType=INTEGER},
       </if>
       <if test="requiredMemberLevel != null" >
         required_member_level = #{requiredMemberLevel,jdbcType=INTEGER},
@@ -116,7 +116,7 @@
         AND merchant_id = #{merchantId,jdbcType=VARCHAR}
       </if>
       <if test="isShow != null" >
-        AND is_show = #{isShow,jdbcType=BIT}
+        AND is_show = #{isShow,jdbcType=INTEGER}
       </if>
       <if test="requiredMemberLevel != null" >
         AND required_member_level = #{requiredMemberLevel,jdbcType=INTEGER}
@@ -164,10 +164,11 @@
     <result column="content_text" property="contentText" />
     <result column="style" property="style" jdbcType="INTEGER" />
     <result column="is_recommend" property="isRecommend" jdbcType="INTEGER" />
+    <result column="is_show" property="isShow" jdbcType="INTEGER" />
     <result column="front_cover" property="frontCover" jdbcType="VARCHAR" />
   </resultMap>
   <!--查询所有的套课 和单独的节课程lsit-->
-  <select id="selectAllClass" resultMap="AllClassResultMap">
+  <select id="selectAllClass" resultMap="AllClassResultMap" parameterType="com.zwl.model.po.ClassSet">
       SELECT *
        from (
 ( SELECT
@@ -183,6 +184,7 @@
 	scs.content_text AS content_text,
     CASE WHEN scs.style IS NULL THEN 2 ELSE scs.style END AS style,
     scs.is_recommend AS is_recommend,
+    scs.is_show AS is_show,
     scs.front_cover AS front_cover
   FROM
     ss_class_category scc,
@@ -192,6 +194,12 @@
     AND scc.available = 1
     AND scs.available = 1
     AND scs.merchant_id =#{merchantId}
+    <if test="isRecommend != null">
+      AND scs.is_recommend = #{isRecommend}
+    </if>
+    <if test="isShow != null">
+      AND scs.is_show = #{isShow}
+    </if>
   ) UNION ALL
   (
   SELECT
@@ -207,6 +215,7 @@
 	sci.content_text AS  content_text,
     CASE WHEN sci.style IS NULL THEN 2 ELSE sci.style END AS style,
     sci.is_recommend AS is_recommend,
+    sci.is_show AS is_show,
     '' AS front_cover
   FROM
     ss_class_category scc,
@@ -217,6 +226,12 @@
     AND sci.merchant_id = #{merchantId}
     AND scc.available = 1
     AND sci.available = 1
+    <if test="isRecommend != null">
+      AND sci.is_recommend = #{isRecommend}
+    </if>
+    <if test="isShow != null">
+      AND sci.is_show = #{isShow}
+    </if>
   ) ) t
   <where>
     <if test="title!=null">
@@ -243,6 +258,7 @@ ORDER BY t.required_member_level DESC,t.modify_time DESC
     scs.content_text AS content_text,
     CASE WHEN scs.style IS NULL THEN 2 ELSE scs.style END AS style,
     scs.is_recommend AS is_recommend,
+    scs.is_show AS is_show,
     scs.front_cover AS front_cover
     FROM
     ss_class_category scc,
@@ -251,8 +267,12 @@ ORDER BY t.required_member_level DESC,t.modify_time DESC
     scc.id = scs.category_id
     AND scc.available = 1
     AND scs.available = 1
+    AND scc.is_show = 1
+    AND scs.is_show = 1
     AND scs.merchant_id =#{merchantId}
-    AND scs.is_recommend = 1
+    <if test="queryType == 0">
+      AND scs.is_recommend = 1
+    </if>
     ) UNION ALL
     (
     SELECT
@@ -268,6 +288,7 @@ ORDER BY t.required_member_level DESC,t.modify_time DESC
     sci.content_text AS  content_text,
     CASE WHEN sci.style IS NULL THEN 2 ELSE sci.style END AS style,
     sci.is_recommend AS is_recommend,
+    sci.is_show AS is_show,
     '' AS front_cover
     FROM
     ss_class_category scc,
@@ -278,9 +299,13 @@ ORDER BY t.required_member_level DESC,t.modify_time DESC
     AND sci.merchant_id = #{merchantId}
     AND scc.available = 1
     AND sci.available = 1
-    AND sci.is_recommend = 1
+    AND scc.is_show = 1
+    AND sci.is_show = 1
+    <if test="queryType == 0">
+      AND sci.is_recommend = 1
+    </if>
     ) ) t
-    ORDER BY t.required_member_level DESC,t.id asc
+    ORDER BY t.required_member_level DESC,t.modify_time DESC
   </select>
 
   <!--搜索-->

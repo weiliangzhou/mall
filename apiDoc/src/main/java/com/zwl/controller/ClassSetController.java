@@ -24,9 +24,8 @@ public class ClassSetController {
     @RequestMapping(name = "新增套课程",
             value = "/teacher/classset/add", method = RequestMethod.POST)
     public Result add(@ApiComment("title") String title, @ApiComment("bannerUrl") String bannerUrl, @ApiComment("categoryId") String categoryId
-            , @ApiComment("merchantId") String merchantId, @ApiComment("requiredMemberLevel") Integer requiredMemberLevel, @ApiComment("content") String content,
-                      @ApiComment("节课类型 0音频 1视频") Integer style, @ApiComment("是否推荐 0不推荐 1推荐") Integer isRecommend,@ApiComment("套课封面") String frontCover
-    ) {
+            , @ApiComment("merchantId") String merchantId, @ApiComment("是否展示 0不展示 1展示") Integer isShow,@ApiComment("requiredMemberLevel") Integer requiredMemberLevel, @ApiComment("content") String content,
+                       @ApiComment("节课类型 0音频 1视频") Integer style, @ApiComment("是否推荐 0不推荐 1推荐") Integer isRecommend,@ApiComment("套课封面") String frontCover) {
         Result result = new Result();
         return result;
     }
@@ -36,8 +35,8 @@ public class ClassSetController {
     @ApiComment("修改套课程")
     @RequestMapping(name = "修改套课程",
             value = "/teacher/classset/modify", method = RequestMethod.POST)
-    public Result modify(@ApiComment("修改都要传id") Long id,@ApiComment("title") String title, @ApiComment("bannerUrl") String bannerUrl, @ApiComment("categoryId") Long categoryId
-            ,  @ApiComment("requiredMemberLevel") Integer requiredMemberLevel, @ApiComment("content") String content,@ApiComment("available") String available,
+    public Result modify(@ApiComment("id") Long id,@ApiComment("title") String title, @ApiComment("bannerUrl") String bannerUrl, @ApiComment("categoryId") Long categoryId, @ApiComment("是否展示 0不展示 1展示") Integer isShow,
+                         @ApiComment("requiredMemberLevel") Integer requiredMemberLevel, @ApiComment("content") String content,@ApiComment("available") String available,
                          @ApiComment("节课类型 0音频 1视频") Integer style, @ApiComment("是否推荐 0不推荐 1推荐") Integer isRecommend,@ApiComment("套课封面") String frontCover) {
         Result result = new Result();
 
@@ -53,7 +52,8 @@ public class ClassSetController {
     @ApiComment("课程列表")
     @RequestMapping(name = "课程列表",
             value = "/teacher/classset/getPageClassList", method = RequestMethod.POST)
-    public PageClassVo getPageAllClass(@ApiComment("merchantId") String merchantId, @ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize,@ApiComment("标题模糊搜索时传") String title) {
+    public PageClassVo getPageAllClass(@ApiComment("merchantId") String merchantId, @ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize,
+                                       @ApiComment("标题模糊搜索时传") String title, @ApiComment("是否展示模糊搜索时传") Integer isShow, @ApiComment("是否推荐模糊搜索时传") Integer isRecommend) {
         PageClassVo pageClassVo=new PageClassVo();
         return pageClassVo;
     }

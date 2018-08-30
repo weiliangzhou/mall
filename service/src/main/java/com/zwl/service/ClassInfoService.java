@@ -45,5 +45,10 @@ public interface ClassInfoService {
      */
     String getLogoUrlByClassSetId(Long id);
 
-
+    /**
+     * 微信小程序根据套课Id获取列表，不展示的已过滤
+     * @param classSetId
+     * @return
+     */
+    List<ClassInfo> getWxByClassSetId(Long classSetId);
 }

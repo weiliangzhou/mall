@@ -81,4 +81,11 @@ public interface ClassInfoMapper {
 
     @Update("update ss_class_info set available =0 where id=#{id}")
     int deleteClassInfo(@Param("id")Long id);
+
+    /**
+     * 根据ClassSetId获取节课列表，不展示的已过滤
+     * @param classSetId
+     * @return
+     */
+    List<ClassInfo> selectWxByClassSetId(Long classSetId);
 }

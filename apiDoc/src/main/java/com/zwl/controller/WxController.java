@@ -171,7 +171,10 @@ public class WxController {
     @ApiComment("课程列表")
     @RequestMapping(name = "课程列表",
             value = "/wx/classset/getPageAllClass", method = RequestMethod.POST)
-    public PageClassVo getPageAllClass(@ApiComment("merchantId") String merchantId, @ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize) {
+    public PageClassVo getPageAllClass(@ApiComment("merchantId") String merchantId,
+                                       @ApiComment("pageNum") Integer pageNum,
+                                       @ApiComment("pageSize") Integer pageSize,
+                                       @ApiComment("0查询推荐课程 1查询所有课程") Integer queryType) {
         PageClassVo pageClassVo = new PageClassVo();
         return pageClassVo;
     }

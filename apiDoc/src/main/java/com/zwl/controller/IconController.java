@@ -30,6 +30,7 @@ public class IconController {
     public String addIcon(@ApiComment("图标名称")String title,
                            @ApiComment("图片地址")String pictureUrl,
                            @ApiComment("跳转地址")String hrefUrl,
+                          @ApiComment("跳转类型 0不跳转 1应用内跳转 2 应用外跳转")Integer hrefType,
                            @ApiComment("商户号")String merchantId) {
         Result result = new Result();
         return JSONObject.toJSONString(result);
@@ -41,6 +42,7 @@ public class IconController {
                               @ApiComment("图标名称")String title,
                               @ApiComment("图片地址")String pictureUrl,
                               @ApiComment("跳转地址")String hrefUrl,
+                             @ApiComment("跳转类型 0不跳转 1应用内跳转 2 应用外跳转")Integer hrefType,
                               @ApiComment("商户号")String merchantId) {
         Result result = new Result();
         return JSONObject.toJSONString(result);

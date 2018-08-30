@@ -59,6 +59,8 @@ public class ClassVo {
     private Integer style;
     @ApiComment(value = "观后感类型", sample = "0课后感 1已读")
     private Integer commentType;
+    @ApiComment(value = "是否展示", sample = "0不展示，1展示")
+    private Integer isShow;
     @ApiComment(value = "是否推荐", sample = "0不推荐/1推荐")
     private Integer isRecommend;
     @ApiComment(value = "封面", sample = "www.baidu.com")

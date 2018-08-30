@@ -41,7 +41,7 @@ public interface ClassSetService {
      * @Parma title 搜索
      * @return
      */
-    List<ClassVo> getAllClass(String merchantId,String title);
+    List<ClassVo> getAllClass(ClassSet classSet);
     /**
      * 获取所有的课程列表
      * 包括套课程 和 单独的节课程
@@ -50,7 +50,7 @@ public interface ClassSetService {
      * @Parma title 搜索
      * @return
      */
-    List<ClassVo> getAllClassOrderById(String merchantId);
+    List<ClassVo> getAllClassOrderById(String merchantId,Integer queryType);
 
     /**
      * 获取分类下面的套课下拉值

@@ -10,7 +10,7 @@
     <result column="logo_url" property="logoUrl" jdbcType="VARCHAR" />
     <result column="title" property="title" jdbcType="VARCHAR" />
     <result column="content" property="content" jdbcType="VARCHAR" />
-    <result column="is_show" property="isShow" jdbcType="BIT" />
+    <result column="is_show" property="isShow" jdbcType="INTEGER" />
     <result column="listen_count" property="listenCount" jdbcType="BIGINT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
@@ -71,6 +71,9 @@
       <if test="content != null" >
         content = #{content,jdbcType=VARCHAR},
       </if>
+      <if test="isShow != null" >
+        is_show = #{isShow,jdbcType=INTEGER},
+      </if>
       <if test="listenCount != null" >
         listen_count = #{listenCount,jdbcType=BIGINT},
       </if>
@@ -121,6 +124,9 @@
       </if>
       <if test="content != null" >
         AND  content = #{content,jdbcType=VARCHAR}
+      </if>
+      <if test="isShow != null" >
+        AND is_show = #{isShow,jdbcType=INTEGER}
       </if>
       <if test="listenCount != null" >
         AND  listen_count = #{listenCount,jdbcType=BIGINT}
@@ -173,4 +179,14 @@
     and available = 1
   </select>
 
+  <select id="selectWxByClassSetId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    select
+    <include refid="Base_Column_List" />
+    from
+    ss_class_info
+    where
+    class_set_id = #{classSetId,jdbcType=BIGINT}
+    and available = 1
+    and is_show = 1
+  </select>
 </mapper>
