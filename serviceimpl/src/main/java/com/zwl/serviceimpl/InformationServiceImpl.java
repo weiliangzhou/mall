@@ -22,7 +22,7 @@ public class InformationServiceImpl implements InformationService {
 
     @Override
     public List<Information> getInformationList(Information information) {
-        return informationMapper.getInformationInfo(information);
+        return informationMapper.getInformationList(information);
     }
 
     @Override
