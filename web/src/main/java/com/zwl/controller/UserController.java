@@ -179,7 +179,7 @@ public class UserController {
             levelName = product.getLevelName();
         }
         log.info("memberLevel::" + memberLevel);
-        userLoginInfoVo.setMemberLevel(memberLevel);
+        userLoginInfoVo.setMemberLevel(null==memberLevel?-1:memberLevel);
         userLoginInfoVo.setLevelName(levelName);
 //        userLoginInfoVo.setIsBindMobile(userInfo.getIsBindMobile()==null?0:1);
         //通过主表获取绑定手机号
@@ -189,8 +189,8 @@ public class UserController {
         //实名认证状态
         UserCertification userCertification = certificationService.getOneByUserId(userId);
         userLoginInfoVo.setCertificationStatus(userCertification.getStatus());
-        Integer xiaxianCount = maidInfoService.getXiaXianCountByUserId(userId);
-        userLoginInfoVo.setXiaxianCount(xiaxianCount);
+        Integer xiaxianCount = maidInfoService.getMaidInfoCount(userId);
+        userLoginInfoVo.setXiaxianCount(null==xiaxianCount?0:xiaxianCount);
         //账户余额
         Integer balance = userAccountService.getBalanceByUserId(userId);
         //余额：分转元

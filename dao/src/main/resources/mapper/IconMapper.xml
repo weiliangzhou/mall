@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zwl.dao.mapper.IconMapper" >
+  <resultMap id="BaseResultMap" type="com.zwl.model.po.Icon" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="picture_url" property="pictureUrl" jdbcType="VARCHAR" />
+    <result column="href_url" property="hrefUrl" jdbcType="VARCHAR" />
+    <result column="href_type" property="hrefType" jdbcType="INTEGER" />
+    <result column="available" property="available" jdbcType="INTEGER" />
+    <result column="merchant_id" property="merchantId" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, title, picture_url, href_url, href_type, available, merchant_id, create_time, modify_time
+  </sql>
+  <select id="getIconList" resultMap="BaseResultMap" parameterType="com.zwl.model.po.Icon" >
+    select 
+    <include refid="Base_Column_List" />
+    from ss_icon
+    where available=1
+    and merchant_id = #{merchantId}
+  </select>
+  <insert id="insertSelective" parameterType="com.zwl.model.po.Icon" >
+    insert into ss_icon
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="pictureUrl != null" >
+        picture_url,
+      </if>
+      <if test="hrefUrl != null" >
+        href_url,
+      </if>
+      <if test="hrefType != null" >
+        href_type,
+      </if>
+      <if test="available != null" >
+        available,
+      </if>
+      <if test="merchantId != null" >
+        merchant_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="pictureUrl != null" >
+        #{pictureUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="hrefUrl != null" >
+        #{hrefUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="hrefType != null" >
+        #{hrefType,jdbcType=INTEGER},
+      </if>
+      <if test="available != null" >
+        #{available,jdbcType=INTEGER},
+      </if>
+      <if test="merchantId != null" >
+        #{merchantId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zwl.model.po.Icon" >
+    update ss_icon
+    <set >
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="pictureUrl != null" >
+        picture_url = #{pictureUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="hrefUrl != null" >
+        href_url = #{hrefUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="hrefType != null" >
+        href_type = #{hrefType,jdbcType=INTEGER},
+      </if>
+      <if test="available != null" >
+        available = #{available,jdbcType=INTEGER},
+      </if>
+      <if test="merchantId != null" >
+        merchant_id = #{merchantId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

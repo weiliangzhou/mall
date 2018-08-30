@@ -13,6 +13,7 @@
         <result column="pay_way" property="payWay" jdbcType="INTEGER"/>
         <result column="operator" property="operator" jdbcType="VARCHAR"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="merchant_id" property="merchantId" jdbcType="VARCHAR"/>
         <result column="success_time" property="successTime" jdbcType="TIMESTAMP"/>
         <result column="payment_no" property="paymentNo" jdbcType="VARCHAR"/>
         <result column="payment_time" property="paymentTime" jdbcType="TIMESTAMP"/>
@@ -21,7 +22,7 @@
         <result column="available" property="available" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, withdraw_id, money, open_id, real_name, user_id, account, status, pay_way, operator, 
+    id, withdraw_id, money, open_id, real_name, user_id, account, status, pay_way, operator, merchant_id,
     remark, success_time, payment_no, payment_time, create_time, modify_time, available
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
@@ -62,6 +63,9 @@
             </if>
             <if test="operator != null">
                 operator,
+            </if>
+            <if test="merchantId != null">
+                merchant_id,
             </if>
             <if test="remark != null">
                 remark,
@@ -111,6 +115,9 @@
             </if>
             <if test="operator != null">
                 #{operator,jdbcType=VARCHAR},
+            </if>
+            <if test="merchantId != null">
+                #{merchantId,jdbcType=VARCHAR},
             </if>
             <if test="remark != null">
                 #{remark,jdbcType=VARCHAR},

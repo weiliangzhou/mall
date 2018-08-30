@@ -95,10 +95,11 @@ public class CertificationController {
                 return result;
             }
             certificationVo.setRegisterMobile(user.getRegisterMobile());
-            UserCertification ucQuery = new UserCertification();
+           /* UserCertification ucQuery = new UserCertification();
             ucQuery.setId(uc.getId());
-//            UserCertification userCertification = certificationService.getOneByUserId(uc.getUserId());
-            UserCertification userCertification = certificationService.getOneByParams(ucQuery);
+            UserCertification userCertification = certificationService.getOneByParams(ucQuery);*/
+            UserCertification userCertification = certificationService.getOneByUserId(uc.getUserId());
+
             certificationVo.setRealname(userCertification.getRealname());
             String modifyDateStr = DateUtil.getFormatString("yyyy-MM-dd HH:mm:ss", userCertification.getModifyTime());
             certificationVo.setModifyTime(modifyDateStr);

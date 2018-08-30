@@ -35,5 +35,10 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.findOrderByOrderNo(OrderNo);
     }
 
+    @Override
+    public void updateOrderSetOverTime() {
+        orderMapper.updateOrderSetOverTime();
+    }
+
 
 }

@@ -6,13 +6,17 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.baseresult.ResultCodeEnum;
+import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.ClassInfo;
 import com.zwl.model.po.ClassSet;
 import com.zwl.model.vo.ClassVo;
 import com.zwl.model.vo.PageClassVo;
 import com.zwl.service.ClassInfoService;
 import com.zwl.service.ClassSetService;
+import com.zwl.service.GZHService;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,16 +35,21 @@ public class ClassSetController {
     private ClassSetService classSetService;
     @Autowired
     private ClassInfoService classInfoService;
+    @Autowired
+    private GZHService gzhService;
     /**
      * 套课程新增
      * @return
      */
     @PostMapping("/add")
-    public Result add(@RequestBody ClassSet classSet) {
+    public Result add(@Validated(Update.class) @RequestBody ClassSet classSet) {
+        String className=classSet.getTitle();
+        String merchantId=classSet.getMerchantId();
         Result result = new Result();
         classSet.setAvailable(1);
         int flag=classSetService.add(classSet);
         defineResult(result, flag);
+        gzhService.sendGzhMsgByAll(className,"测试",merchantId);
         return result;
     }
 
@@ -58,11 +67,24 @@ public class ClassSetController {
      * @return
      */
     @PostMapping("/modify")
-    public Result modify(@RequestBody ClassSet classSet) {
+    public Result modify(@Validated(Update.class) @RequestBody ClassSet classSet) {
         Result result = new Result();
         int flag=classSetService.modifyByParams(classSet);
         defineResult(result, flag);
         return result;
+    }
+
+    /**
+     * 套课程删除
+     * @return
+     */
+    @PostMapping("/delete")
+    public String deleteClassSet(@RequestBody JSONObject jsonObject) {
+        Long id = jsonObject.getLong("id");
+        Result result = new Result();
+        int count=classSetService.deleteClassSet(id);
+        if(1 != count) BSUtil.isTrue(false, "删除失败");
+        return JSON.toJSONString(result);
     }
 
   /*  *//**
@@ -117,21 +139,29 @@ public class ClassSetController {
         Integer pageSize = jsonObject.getInteger("pageSize");
         //title 可空
         String title = jsonObject.getString("title");
+        Integer isShow = jsonObject.getInteger("isShow");
+        Integer isRecommend = jsonObject.getInteger("isRecommend");
+        ClassSet classSet = new ClassSet();
+        classSet.setMerchantId(merchantId);
+        classSet.setTitle(title);
+        classSet.setIsShow(isShow);
+        classSet.setIsRecommend(isRecommend);
         Page page=PageHelper.startPage(pageNum, pageSize);
-        List<ClassVo> list=classSetService.getAllClass(merchantId,title);
-        for (ClassVo c:list
-                ) {
+        List<ClassVo> list=classSetService.getAllClass(classSet);
+        for (ClassVo c:list) {
             if(c.getClassType()==1){
                 List<ClassInfo> classInfoList = classInfoService.getByClassSetId(c.getId());
                 List<ClassVo> children =new ArrayList<>();
-                for (ClassInfo classInfo: classInfoList
-                        ) {
+                for (ClassInfo classInfo: classInfoList) {
                     ClassVo classVo = new ClassVo();
                     classVo.setId(classInfo.getId());
                     classVo.setTitle(classInfo.getTitle());
                     classVo.setCreateTime(classInfo.getCreateTime());
                     classVo.setModifyTime(classInfo.getModifyTime());
                     classVo.setCategoryTitle(c.getCategoryTitle());
+                    classVo.setStyle(classInfo.getStyle());
+                    classVo.setIsRecommend(classInfo.getIsRecommend());
+                    classVo.setIsShow(classInfo.getIsShow());
                     children.add(classVo);
                 }
                 c.setChildren(children);

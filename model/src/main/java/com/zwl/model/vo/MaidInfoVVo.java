@@ -21,6 +21,8 @@ public class MaidInfoVVo {
     private Integer count;
     @ApiComment("总共可邀请小班名额")
     private Integer totalCount;
+    @ApiComment("推荐人的手机号码")
+    private String referrerPhone;
     @ApiComment(seeClass = MaidInfoVo.class)
     private List<MaidInfoVo> maidInfoVoList;
 }

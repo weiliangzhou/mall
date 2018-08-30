@@ -1,8 +1,10 @@
 package com.zwl.dao.mapper;
 
 import com.zwl.model.po.ClassInfo;
+import com.zwl.model.vo.ParamClassInfoVo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -13,7 +15,7 @@ public interface ClassInfoMapper {
     /**
      * 新增
      */
-    int insert(ClassInfo classInfo);
+    int insert(ParamClassInfoVo paramClassInfoVo);
 
     /**
      * 根据id获取节课程详情
@@ -26,10 +28,10 @@ public interface ClassInfoMapper {
     /**
      * 更新指定id的参数
      *
-     * @param classInfo
+     * @param paramClassInfoVo
      * @return
      */
-    int updateByParams(ClassInfo classInfo);
+    int updateByParams(ParamClassInfoVo paramClassInfoVo);
 
     /**
      * 获取merchantId下的所有节课程
@@ -77,4 +79,13 @@ public interface ClassInfoMapper {
     @Select("select logo_url from ss_class_info where class_set_id=#{id} order by modify_time desc limit 1")
     String getLogoUrlByClassSetId(@Param("id") Long id);
 
+    @Update("update ss_class_info set available =0 where id=#{id}")
+    int deleteClassInfo(@Param("id")Long id);
+
+    /**
+     * 根据ClassSetId获取节课列表，不展示的已过滤
+     * @param classSetId
+     * @return
+     */
+    List<ClassInfo> selectWxByClassSetId(Long classSetId);
 }

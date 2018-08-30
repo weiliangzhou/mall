@@ -138,4 +138,14 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public User getReferrerByUserId(String userId) {
+        return userMapper.getReferrerByUserId(userId);
+    }
+
+    @Override
+    public Integer getTotalPerformanceByUserId(String userId) {
+        return userMapper.getTotalPerformanceByUserId(userId);
+    }
+
 }

@@ -1,24 +1,15 @@
 package com.zwl.controller;
 
-import com.zwl.model.po.Merchant;
 import com.zwl.model.po.Order;
-import com.zwl.model.wxpay.PaymentKit;
-import com.zwl.model.wxpay.WxConstans;
 import com.zwl.service.MerchantService;
 import com.zwl.service.OrderService;
-import com.zwl.util.HttpsUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author 二师兄超级帅
@@ -27,21 +18,21 @@ import java.util.Map;
  * @Description: TODO
  * @date 2018/7/2414:02
  */
-@Configuration
-@EnableScheduling
+//@Configuration
+//@EnableScheduling
 @Slf4j
-//@RestController
-//@RequestMapping("/wx/task")
 public class WxPayTask {
     @Autowired
     private OrderService orderService;
     @Autowired
     private MerchantService merchantService;
 
-//    每天凌晨2点
+    //    每天凌晨2点
 //    10分钟一次，测试数据
 //    @GetMapping("/task")
     @Scheduled(cron = "0 2 0 * * ?")
+    //每1分钟执行一次
+//    @Scheduled(cron = "0 */3 *  * * * ")
     public void queryOrderStatus() {
 //        小程序ID	appid	是	String(32)	wxd678efh567hg6787	微信分配的小程序ID
 //        商户号	mch_id	是	String(32)	1230000109	微信支付分配的商户号
@@ -52,11 +43,14 @@ public class WxPayTask {
 //        签名类型	sign_type	否	String(32)	HMAC-SHA256	签名类型，目前支持HMAC-SHA256和MD5，默认为MD5
 //        先查询未付款的订单列表
 //        然后遍历查询
-        Order orderQuery=new Order();
-        orderQuery.setOrderStatus(0);
-        List<Order> orderList=orderService.getOrderList(orderQuery);
-        for (Order order:orderList){
-            String orderNo=order.getOrderNo();
+        //查询遍历订单
+        log.info("开始更新订单超时作废-------------------");
+        orderService.updateOrderSetOverTime();
+//        Order orderQuery = new Order();
+//        orderQuery.setOrderStatus(0);
+//        List<Order> orderList = orderService.getOrderList(orderQuery);
+//        for (Order order : orderList) {
+//            String orderNo = order.getOrderNo();
 //            String merchantId=order.getMerchantId();
 //            Merchant merchant=merchantService.getMerchantByMerchantId(merchantId);
 //            String appid=merchant.getAppId();
@@ -96,13 +90,13 @@ public class WxPayTask {
 ////                REVOKED—已撤销（刷卡支付）
 ////                USERPAYING--用户支付中
 ////                PAYERROR--支付失败(其他原因，如银行返回失败)
-                Order order_t=new Order();
-                order_t.setOrderNo(orderNo);
-                order_t.setOrderStatus(-1);
-                log.info("微信订单已经关闭开始更新本地订单"+orderNo);
-                orderService.updateOrder(order);
-                log.info("微信订单已经关闭结束更新本地订单"+orderNo);
+//            Order order_t = new Order();
+//            order_t.setOrderNo(orderNo);
+//            order_t.setOrderStatus(-1);
+//            log.info("微信订单已经关闭开始更新本地订单" + orderNo);
+//            orderService.updateOrder(order);
+//            log.info("微信订单已经关闭结束更新本地订单" + orderNo);
 //            }
-        }
+//        }
     }
 }

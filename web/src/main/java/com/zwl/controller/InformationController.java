@@ -40,12 +40,15 @@ public class InformationController {
         result.setData(informationList);
         return JSON.toJSONString(result);
     }
-//    @PostMapping("/wx/getInformationInfo")
-//    public String getInformationInfo(@RequestBody JSONObject jsonObject) {
-//        String merchant_id = jsonObject.getString("informationId");
-//        Result result = new Result();
-//        List<Information> informationList = informationService.getInformationList(merchant_id);
-//        result.setData(informationList);
-//        return JSONObject.toJSONString(result);
-//    }
+    @PostMapping("/getInformationInfo")
+    public String getInformationInfo(@RequestBody JSONObject jsonObject) {
+        Integer id = jsonObject.getInteger("id");
+        Result result = new Result();
+        Information information = new Information();
+        information.setId(id);
+        List<Information> informationList = informationService.getInformationList(information);
+        result.setData(informationList);
+        return JSONObject.toJSONString(result);
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.zwl.service;
 
 import com.zwl.model.po.ClassInfo;
+import com.zwl.model.vo.ParamClassInfoVo;
 
 import java.util.List;
 
@@ -8,7 +9,7 @@ public interface ClassInfoService {
     /**
      * 新增
      */
-    int add(ClassInfo classInfo);
+    int add(ParamClassInfoVo paramClassInfoVo);
 
     /**
      * 根据id获取节课程详情
@@ -19,10 +20,10 @@ public interface ClassInfoService {
 
     /**
      * 更新指定id的参数
-     * @param classInfo
+     * @param paramClassInfoVo
      * @return
      */
-    int modifyByParams(ClassInfo classInfo);
+    int modifyByParams(ParamClassInfoVo paramClassInfoVo);
 
     /**
      * 获取merchantId下的所有节课程
@@ -44,5 +45,10 @@ public interface ClassInfoService {
      */
     String getLogoUrlByClassSetId(Long id);
 
-
+    /**
+     * 微信小程序根据套课Id获取列表，不展示的已过滤
+     * @param classSetId
+     * @return
+     */
+    List<ClassInfo> getWxByClassSetId(Long classSetId);
 }

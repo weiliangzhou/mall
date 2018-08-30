@@ -9,6 +9,7 @@ import com.zwl.model.po.Information;
 import com.zwl.model.vo.InformationVo;
 import com.zwl.service.InformationService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -40,7 +41,7 @@ public class InformationController {
         Integer pageSize = jsonObject.getInteger("pageSize");
         String title = jsonObject.getString("title");
         Information information = new Information();
-        information.setTitle(title);
+        information.setTitle(StringUtils.isBlank(title)?null:title);
         information.setMerchantId(merchantId);
         Result result = new Result();
         Page page = PageHelper.startPage(pageNum, pageSize);
