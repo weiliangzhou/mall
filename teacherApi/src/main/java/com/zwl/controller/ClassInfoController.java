@@ -12,6 +12,7 @@ import com.zwl.model.vo.PageClassInfoVo;
 import com.zwl.model.vo.ParamClassInfoVo;
 import com.zwl.service.ClassCategoryService;
 import com.zwl.service.ClassInfoService;
+import com.zwl.service.GZHService;
 import com.zwl.util.CheckUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,9 +33,14 @@ public class ClassInfoController {
     private ClassInfoService classInfoService;
     @Autowired
     private ClassCategoryService classCategoryService;
+    @Autowired
+    private GZHService gzhService;
+
 
     @PostMapping("/add")
     public Result add(@RequestBody ParamClassInfoVo paramClassInfoVo) {
+        String className=paramClassInfoVo.getTitle();
+        String merchantId=paramClassInfoVo.getMerchantId();
         Integer minute = paramClassInfoVo.getMinute();
         Integer second = paramClassInfoVo.getSecond();
         Integer playtime = minute * 60 + second;
@@ -47,6 +53,7 @@ public class ClassInfoController {
         else if (addFlag == 0) {
             result.setCode(ResultCodeEnum.FAIL);
         }
+        gzhService.sendGzhMsgByAll(className,"测试",merchantId);
         return result;
     }
 
