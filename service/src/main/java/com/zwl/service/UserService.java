@@ -90,4 +90,19 @@ public interface UserService {
      * @return
      */
     Integer getTotalPerformanceByUserId(String userIdTemp);
+
+    /**
+     * 根据手机号 查找存量数据
+     * @param registerMobile
+     * @return
+     */
+    boolean findStockData(String registerMobile);
+
+    /**
+     * 根据手机号更新存量数据
+     * @param registerMobile
+     * @param openid
+     * @return
+     */
+    String updateUserStockDataByRegisterMobile( String registerMobile, String openid);
 }
