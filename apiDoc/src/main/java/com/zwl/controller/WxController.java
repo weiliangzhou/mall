@@ -226,13 +226,22 @@ public class WxController {
         return result;
     }
 
-    @ApiComment("发送验证码")
+    @ApiComment("发送")
     @RequestMapping(name = "发送验证码",
             value = "/wx/user/sendMsgCode", method = RequestMethod.POST)
     public Result sendRegisterCode(@ApiComment("phone") String phone,@ApiComment("busCode 1注册  2购买") String busCode) {
         Result result = new Result();
         return result;
     }
+    @ApiComment("校验验证码")
+    @RequestMapping(name = "校验验证码",
+            value = "/wx/user/checkCode", method = RequestMethod.POST)
+    public Result checkCode(@ApiComment("phone") String phone,@ApiComment("busCode 1注册  2购买  3新小程序") String busCode) {
+        Result result = new Result();
+        return result;
+    }
+
+
 
     @ApiComment("绑定手机")
     @RequestMapping(name = "绑定手机",

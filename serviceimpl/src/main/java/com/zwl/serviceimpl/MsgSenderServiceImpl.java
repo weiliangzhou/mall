@@ -109,7 +109,7 @@ public class MsgSenderServiceImpl implements MsgSenderService {
                 if (redisCode.equals(code))
                     return true;
             } else {
-                if ("xdy".equals(code))
+                if ("xdy".equals(code)||redisCode.equals(code))
                     return true;
 
             }

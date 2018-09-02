@@ -82,7 +82,7 @@ public class TokenFilter implements Filter {
         }
         //发送验证码
 
-        if (requestURL.contains("/wx/user/sendMsgCode")) {
+        if (requestURL.contains("/wx/user/sendMsgCode")||requestURL.contains("/wx/user/checkCode")) {
             chain.doFilter(request, response);
             return;
         }

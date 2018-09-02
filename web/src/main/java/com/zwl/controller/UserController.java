@@ -150,6 +150,18 @@ public class UserController {
         return result;
     }
 
+    @PostMapping("/checkCode")
+    public Result checkCode(@RequestBody JSONObject jsonObject) {
+        String phone = jsonObject.getString("phone");
+        String busCode = jsonObject.getString("busCode");
+        String code = jsonObject.getString("code");
+        boolean flag = msgSenderService.checkCode(phone, code, busCode);
+        if (!flag)
+            BSUtil.isTrue(false, "验证码错误");
+        Result result = new Result();
+        return result;
+    }
+
 
     /**
      * 用户信息展示
