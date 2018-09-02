@@ -2,6 +2,7 @@ package com.zwl.serviceimpl;
 
 import com.zwl.dao.mapper.UserInfoMapper;
 import com.zwl.dao.mapper.UserMapper;
+import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.User;
 import com.zwl.model.po.UserInfo;
 import com.zwl.model.vo.UserLoginInfoVo;
@@ -9,6 +10,8 @@ import com.zwl.model.vo.UserQueryVo;
 import com.zwl.service.UserService;
 import com.zwl.util.CheckUtil;
 import com.zwl.util.UUIDUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -16,8 +19,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-@SuppressWarnings("all")
+
+
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
@@ -70,7 +75,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED,isolation = Isolation.DEFAULT,timeout=36000,rollbackFor=Exception.class)
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, timeout = 36000, rollbackFor = Exception.class)
     public String saveAuthorization(UserLoginInfoVo userLoginInfoVo, String openid) {
         String userId = UUIDUtil.getUUID32();
         User user = new User();
@@ -79,6 +84,7 @@ public class UserServiceImpl implements UserService {
         user.setMerchantId(userLoginInfoVo.getMerchantId());
         //1、微信授权的 2、线下导入的 3、手机号注册的
         user.setRegisterFrom(1);
+        user.setRegisterMobile(userLoginInfoVo.getRegisterMobile());
         //推荐人userId 推荐人必须购买过
         String referrer = userLoginInfoVo.getReferrer();
         if (CheckUtil.isNotEmpty(referrer)) {
@@ -101,13 +107,15 @@ public class UserServiceImpl implements UserService {
         userInfo.setLogoUrl(userLoginInfoVo.getLogoUrl());
         userInfo.setUserId(userId);
         userInfo.setAvailable(1);
+        userInfo.setRegisterMobile(userLoginInfoVo.getRegisterMobile());
+        userInfo.setIsBindMobile(1);
         //插入用户详情表
         userInfoMapper.insert(userInfo);
         return userId;
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED,isolation = Isolation.DEFAULT,timeout=36000,rollbackFor=Exception.class)
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, timeout = 36000, rollbackFor = Exception.class)
     public void modifyAuthorization(UserLoginInfoVo userLoginInfoVo, User userQuery) {
         //如果用户还未购买，则可以更新推荐人
         if ((userQuery.getIsBuy() == null || userQuery.getIsBuy() == 0) && CheckUtil.isNotEmpty(userLoginInfoVo.getReferrer())) {
@@ -117,7 +125,7 @@ public class UserServiceImpl implements UserService {
             String referrer = userLoginInfoVo.getReferrer();
             if (CheckUtil.isNotEmpty(referrer)) {
                 User userIsBuy = userMapper.getUserByUserId(referrer);
-                if (userIsBuy.getIsBuy() != null && userIsBuy.getIsBuy()==1) {
+                if (userIsBuy.getIsBuy() != null && userIsBuy.getIsBuy() == 1) {
                     user.setReferrer(userLoginInfoVo.getReferrer());
                     userMapper.updateUserByUserId(user);
                 }
@@ -126,11 +134,11 @@ public class UserServiceImpl implements UserService {
             }
         }
         String userId = userQuery.getUserId();
-        UserInfo userInfo=new UserInfo();
+        UserInfo userInfo = new UserInfo();
         userInfo.setUserId(userId);
         userInfoMapper.updateByParams(userInfo);
         //用户主表头像也更新
-        if(CheckUtil.isNotEmpty(userLoginInfoVo.getLogoUrl())){
+        if (CheckUtil.isNotEmpty(userLoginInfoVo.getLogoUrl())) {
             User user = new User();
             user.setUserId(userQuery.getUserId());
             user.setLogoUrl(userLoginInfoVo.getLogoUrl());
@@ -146,6 +154,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public Integer getTotalPerformanceByUserId(String userId) {
         return userMapper.getTotalPerformanceByUserId(userId);
+    }
+
+    @Override
+    public boolean findStockData(String registerMobile) {
+        int count = userMapper.findStockData(registerMobile);
+        if (count == 0)
+            return false;
+        return true;
+    }
+
+    @Override
+    public String updateUserStockDataByRegisterMobile(String registerMobile, String openid) {
+        log.info("存量用户迁移"+"registerMobile:"+registerMobile+"新的openid:"+openid);
+        int count = userMapper.updateUserStockDataByRegisterMobile(registerMobile, openid);
+        if (count == 1)
+            return userMapper.getUserIdByOpenId(openid);
+        else
+            BSUtil.isTrue(false, "用户绑定数据更新失败！");
+        return "";
     }
 
 }
