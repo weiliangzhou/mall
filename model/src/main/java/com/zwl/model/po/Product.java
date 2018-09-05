@@ -60,12 +60,12 @@ public class Product {
     private String spbillCreateIp;
     @RestPackIgnore
     @JSONField(serialize = false)
-    @NotBlank(message = "手机号码", groups = {H5Buy.class})
+    @NotBlank(message = "手机号码")
     private String phone;
     //    验证码
     @RestPackIgnore
     @JSONField(serialize = false)
-    @NotBlank(message = "系统繁忙，请刷新页面", groups = {H5Buy.class})
+    @NotBlank(message = "系统繁忙，请刷新页面")
     private String code;
     @ApiComment(value = "产品简介（带格式）", sample = "<p>10大板块，100节课让微商创业再也没有秘密！绝对是秒杀全网的课程！")
     private String content;

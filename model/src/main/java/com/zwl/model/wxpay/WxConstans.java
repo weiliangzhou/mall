@@ -36,5 +36,9 @@ public class WxConstans {
      * H5微信获取用户授权信息 权限为 snsapi_userinfo 才可获取到
      */
     public static final String GET_WECHAT_USERINFO = "https://api.weixin.qq.com/sns/userinfo?lang=zh_CN";
+    /**
+     * 微信获取JS执行权限
+     */
+    public static final String WECHAT_JSAPI = "https://api.weixin.qq.com/cgi-bin/ticket/getticket";
 
 }

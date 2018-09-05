@@ -2,6 +2,7 @@ package com.zwl.serviceimpl;
 
 import com.alibaba.fastjson.JSON;
 import com.zwl.model.exception.BSUtil;
+import com.zwl.model.vo.JsApiTokenVo;
 import com.zwl.model.vo.WxH5AccessTokenVo;
 import com.zwl.model.vo.WxUserInfoVo;
 import com.zwl.model.wxpay.WxConstans;
@@ -48,5 +49,19 @@ public class H5AppWeChatServiceImpl implements H5AppWeChatService {
         }
         WxUserInfoVo userInfoVo = JSON.parseObject(resultStr , WxUserInfoVo.class);
         return userInfoVo;
+    }
+
+    @Override
+    public JsApiTokenVo getWechatJsApiToken(String accessToken) {
+        if(  null  == accessToken ){
+            BSUtil.isTrue(Boolean.FALSE , "accessToken不能为空");
+        }
+        String args = String.format("?access_token=%s&type=jsapi", accessToken);
+        String resultStr = HttpsUtils.sendGet(WxConstans.WECHAT_JSAPI + args, null);
+        if (null == resultStr) {
+            BSUtil.isTrue(Boolean.FALSE, "微信返回 jsApiToken 为空");
+        }
+        JsApiTokenVo tokenVo = JSON.parseObject(resultStr , JsApiTokenVo.class);
+        return tokenVo;
     }
 }

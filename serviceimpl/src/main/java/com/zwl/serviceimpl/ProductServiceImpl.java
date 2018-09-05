@@ -88,10 +88,13 @@ public class ProductServiceImpl implements ProductService {
 //
 //            userId = user.getUserId();
 //        } else {
-            userId = product.getUserId();
-            user = userService.getByUserId(userId);
+        userId = product.getUserId();
+        user = userService.getByUserId(userId);
 //        }
-        Merchant merchant = merchantService.getMerchantByMerchantId(user.getMerchantId());
+        Merchant merchant = merchantService.getMerchantByMerchantId(product.getMerchantId());
+        if (merchant == null) {
+            BSUtil.isTrue(Boolean.FALSE, "商户号不存在:" + user.getMerchantId());
+        }
         String appid = merchant.getAppId();
         //查询产品信息
         //生成订单(订单号使用 年月日时分秒+mch_no+userId（自增的Id）)
@@ -177,7 +180,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public int updateBuyCountById(Long productId, String merchantId) {
-        return productMapper.updateBuyCountById(productId,merchantId);
+        return productMapper.updateBuyCountById(productId, merchantId);
     }
 
     @Override
