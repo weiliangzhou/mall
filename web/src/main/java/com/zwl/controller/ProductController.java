@@ -67,13 +67,13 @@ public class ProductController {
 //        product.setId(id);
 //        product.setUserId(userId);
 //        product.setMerchantId(merchantId);
-        String code =product.getCode();
-        String phone =product.getPhone();
+//        String code =product.getCode();
+//        String phone =product.getPhone();
 //        校验验证码
         //  校验验证码
-        boolean isValidate = msgSenderService.checkCode(phone, code,"2");
-        if (!isValidate)
-            BSUtil.isTrue(false, "验证码错误");
+//        boolean isValidate = msgSenderService.checkCode(phone, code,"2");
+//        if (!isValidate)
+//            BSUtil.isTrue(false, "验证码错误");
         BuyResult buyResult = productService.buy(product);
         result.setData(buyResult);
 //        String result = "{'ret':'true','data':"+JSON.toJSONString(buyResult)+"}";
