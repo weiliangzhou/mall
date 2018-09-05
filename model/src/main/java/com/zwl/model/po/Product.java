@@ -78,4 +78,9 @@ public class Product {
     @ApiComment(value = "收货地址", sample = "98")
 //    @NotBlank(message = "userID不能为空", groups = {Buy.class})
     private String address;
+    //跳转地址
+    @NotBlank(message = "跳转地址")
+    private String redirectUrl;
+
+
 }
