@@ -4,17 +4,21 @@ import com.alibaba.fastjson.JSONObject;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.Merchant;
+import com.zwl.model.vo.JsApiTokenVo;
+import com.zwl.model.wxpay.HashKit;
+import com.zwl.service.GZHService;
+import com.zwl.service.H5AppWeChatService;
 import com.zwl.service.MerchantService;
 import com.zwl.service.WxAccessTokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -35,6 +39,8 @@ public class GZController {
     private WxAccessTokenService wxAccessTokenService;
     @Autowired
     private MerchantService merchantService;
+    @Autowired
+    private H5AppWeChatService h5AppWeChatService;
 
     @PostMapping("/sendFormId")
     public Result saveFormIdToRedis(@RequestBody JSONObject jsonObject) {
@@ -68,6 +74,30 @@ public class GZController {
         }
         Result result = new Result();
         result.setData(openId);
+        return result;
+    }
+
+    //@RequestParam(value = "merchantId") String merchantId ,@RequestParam(value = "url") String url
+    @PostMapping("/getGzhJsApiToken")
+    public Result getGzhJsApiToken(@RequestBody JSONObject jsonObject) {
+        String merchantId = jsonObject.getString("merchantId");
+        String url = jsonObject.getString("url");
+        Merchant merchant = merchantService.getMerchantByMerchantId(merchantId);
+        String accessToken = wxAccessTokenService.getAccessToken(merchant.getMerchantId(), merchant.getGzAppId(), merchant.getGzAppKey(), 1);
+        JsApiTokenVo apiTokenVo = h5AppWeChatService.getWechatJsApiToken(accessToken);
+        String nonceStr = "Wm3WZYTPz0wzccnW";
+        String ticket = apiTokenVo.getTicket();
+        String timestamp = String.valueOf(new Date().getTime());
+        String sing = String.format("jsapi_ticket=%s&noncestr=%s&timestamp=%s&url=%s", ticket, nonceStr, timestamp, url);
+        String signature = HashKit.sha1(sing);
+        Result result = new Result();
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("nonceStr", nonceStr);
+        resultMap.put("jsapi_ticket", ticket);
+        resultMap.put("timestamp", timestamp);
+        resultMap.put("url", url);
+        resultMap.put("signature", signature);
+        result.setData(resultMap);
         return result;
     }
 }
