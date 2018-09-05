@@ -43,6 +43,8 @@ public class UserLoginInfoVo {
     private Integer balance;
     @ApiComment(value = "邀请记录人数（人）", sample = "108")
     private Integer xiaxianCount;
+    @ApiComment(value = "授权业务分类", sample = "1小程序 2 H5网页授权")
+    private Integer busCode;
 
 
 }

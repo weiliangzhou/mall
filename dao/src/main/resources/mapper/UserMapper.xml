@@ -269,4 +269,10 @@
 
     </select>
 
+    <select id="getUserByOpenIdAndMerchantId"  resultMap="BaseResultMap">
+          select
+           <include refid="Base_Column_List"/>
+           from ss_user s where s.user_id = #{openId} and s.merchant_id = #{merchantId}
+    </select>
+
 </mapper>
