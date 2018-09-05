@@ -87,7 +87,15 @@ public class UserController {
             if (isStockData)//存量数据需要更新openid
                 userId = userService.updateUserStockDataByRegisterMobile(registerMobile, openid);
             else  // 并且不是存量数据
+            {
+                //手机号码防重
+                User queryUser = new User();
+                queryUser.setRegisterMobile(registerMobile);
+                User validate_user = userService.getOneByParams(queryUser);
+                if (validate_user != null)
+                    BSUtil.isTrue(false, "已存在该手机号码");
                 userId = userService.saveAuthorization(userLoginInfoVo, openid);
+            }
         } else {//如果用户还未购买，则可以更新推荐人
             userId = userQuery.getUserId();
             log.info("====@@@@用户之前已经授权登录过，userId为：@@@@@==========：" + userId);
