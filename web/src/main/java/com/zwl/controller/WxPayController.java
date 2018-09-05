@@ -79,7 +79,8 @@ public class WxPayController {
 
         log.info(openId);
         String wxPayKey = merchant.getWxPayKey();
-        WxPayVo wxPayVo = wxPayService.pay(realIp, openId, orderNo, totalFee, gzhAppId, merchantId, wxPayKey);
+//        WxPayVo wxPayVo = wxPayService.pay(realIp, openId, orderNo, totalFee, gzhAppId, merchantId, wxPayKey);
+        WxPayVo wxPayVo = wxPayService.H5Pay(realIp, openId, orderNo, totalFee, gzhAppId, merchantId, wxPayKey);
         Result result_return = new Result();
         result_return.setData(wxPayVo);
         return JSON.toJSONString(result_return);
