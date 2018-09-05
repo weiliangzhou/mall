@@ -58,7 +58,7 @@ public class WxPayController {
      * 注意：必须再web页面中发起支付且域名已添加到开发配置中
      */
     @PostMapping("/auth/pay.do")
-    public String wapPay(HttpServletRequest request, @RequestBody JSONObject jsonObject) {
+    public String wapPay(HttpServletRequest request, @RequestBody(required = false) JSONObject jsonObject) {
         String realIp = IpKit.getRealIp(request);
         if (StrKit.isBlank(realIp)) {
             realIp = "127.0.0.1";

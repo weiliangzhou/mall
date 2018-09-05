@@ -31,6 +31,10 @@ public class WxConstans {
     public static final String SEND_XCX_MSG = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=";
     //    获取公众号openidList
 //    http请求方式: GET（请使用https协议）
-    public static final String GET_OPENID_LIST="https://api.weixin.qq.com/cgi-bin/user/get?access_token=";
+    public static final String GET_OPENID_LIST = "https://api.weixin.qq.com/cgi-bin/user/get?access_token=";
+    /**
+     * H5微信获取用户授权信息 权限为 snsapi_userinfo 才可获取到
+     */
+    public static final String GET_WECHAT_USERINFO = "https://api.weixin.qq.com/sns/userinfo?lang=zh_CN";
 
 }

@@ -56,4 +56,6 @@ public interface UserMapper {
     User getReferrerByUserId(String userId);
 
     Integer getTotalPerformanceByUserId(String userId);
+
+    User getUserByOpenIdAndMerchantId(@Param("openId") String openId, @Param("merchantId") String merchantId);
 }

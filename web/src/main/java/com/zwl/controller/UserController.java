@@ -2,6 +2,7 @@ package com.zwl.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.baseresult.ResultCodeEnum;
 import com.zwl.model.exception.BSUtil;
@@ -56,45 +57,20 @@ public class UserController {
      */
     @PostMapping("/authorization")
     public Result authorization(@RequestBody UserLoginInfoVo userLoginInfoVo) {
-        log.info("====@@@@进入用户授权@@@@@==========");
-        log.info("====@@@@推荐人传入参数为@@@@@==========：" + userLoginInfoVo.getReferrer());
-        Result result = new Result();
-        //根据merchantid获取appid和secret
-        Merchant merchant = merchantService.getMerchantByMerchantId(userLoginInfoVo.getMerchantId());
-        if (merchant == null)
-            BSUtil.isTrue(false, "商户不存在");
-        //根据code获取openid 去掉数据库appid和appsecret的空格和换行等
-        String resultStr = miniAppWeChatService.authorizationCode(userLoginInfoVo.getCode(), merchant.getAppId(), merchant.getAppSecret());
-        if (StringUtils.isEmpty(resultStr))
-            BSUtil.isTrue(false, "获取不到微信用户信息");
-        Map map = JSON.parseObject(resultStr, Map.class);
-        if (!StringUtils.isEmpty(map.get("errcode"))) {
-            result.setCode(map.get("errcode").toString());
-            result.setMessage("微信返回错误信息：" + map.get("errmsg").toString());
-            return result;
+        if( userLoginInfoVo == null ){
+            BSUtil.isTrue(Boolean.FALSE,"参数错误");
         }
-        String openid = map.get("openid").toString();
-        //先查询用户之前是否授权登录过
-        User userQuery = new User();
-        userQuery.setWechatOpenid(openid);
-        userQuery.setMerchantId(userLoginInfoVo.getMerchantId());
-        userQuery = userService.getOneByParams(userQuery);
-        String userId;
-        if (userQuery == null) {//用户之前没授权登录过
-            userId = userService.saveAuthorization(userLoginInfoVo, openid);
-        } else {//如果用户还未购买，则可以更新推荐人
-            userId = userQuery.getUserId();
-            log.info("====@@@@用户之前已经授权登录过，userId为：@@@@@==========：" + userId);
-            userService.modifyAuthorization(userLoginInfoVo, userQuery);
+        if( userLoginInfoVo.getBusCode() == null ){
+            BSUtil.isTrue(Boolean.FALSE,"请输入要授权的方式 1:小程序 2:H5页面授权");
         }
-        //返回用户登录态
-        TokenModel model = tokenManager.createToken(userId);
-        String token = model.getSignToken();
-        Map resultMap = new HashMap<String, Object>();
-        resultMap.put("token", token);
-        resultMap.put("userId", userId);
-        result.setData(resultMap);
+        Result result = null;
+        if( userLoginInfoVo.getBusCode() == 1 ){
+             result = userService.miniAppWeChatAuthorization(userLoginInfoVo , userLoginInfoVo.getCode() , userLoginInfoVo.getMerchantId()  );
+        } else if( userLoginInfoVo.getBusCode() == 2) {
+            result = userService.h5WeChatAuthorization(userLoginInfoVo , userLoginInfoVo.getCode() , userLoginInfoVo.getMerchantId()  );
+        }
         return result;
+
     }
 
 
