@@ -1,6 +1,7 @@
 package com.zwl.service;
 
 
+import com.zwl.model.baseresult.Result;
 import com.zwl.model.po.User;
 import com.zwl.model.vo.UserLoginInfoVo;
 import com.zwl.model.vo.UserQueryVo;
@@ -17,7 +18,8 @@ public interface UserService {
     void addUser(User user);
 
     /**
-     *  根据userId获取用户信息
+     * 根据userId获取用户信息
+     *
      * @param userId
      * @return
      */
@@ -25,6 +27,7 @@ public interface UserService {
 
     /**
      * 根据用户参数动态获取（openid等）
+     *
      * @param user
      * @return
      */
@@ -32,6 +35,7 @@ public interface UserService {
 
     /**
      * 根据主键userId更新
+     *
      * @param user
      * @return
      */
@@ -39,25 +43,29 @@ public interface UserService {
 
     /**
      * 根据用户参数获取用户list
+     *
      * @param user
      * @return
      */
     List<User> getListByParams(User user);
+
     /**
      * 获取用户列表
+     *
      * @param merchantId
-     * @param queryType:普通会员列表  0
-     * @param queryType:付费会员列表  1
+     * @param queryType:普通会员列表 0
+     * @param queryType:付费会员列表 1
      * @return
      */
-    List<User> getUserListByMerchantId( UserQueryVo userQueryVo);
+    List<User> getUserListByMerchantId(UserQueryVo userQueryVo);
 
 
     /**
      * 搜索
+     *
      * @return
      */
-    List<User> search(String merchantId,String registerMobile,Integer registerFrom);
+    List<User> search(String merchantId, String registerMobile, Integer registerFrom);
 
     Integer getMemberLevel(String userId);
 
@@ -65,6 +73,7 @@ public interface UserService {
 
     /**
      * 保存授勸登錄信息
+     *
      * @param userLoginInfoVo
      * @param openid
      * @return
@@ -73,12 +82,14 @@ public interface UserService {
 
     /**
      * 更新授權登錄信息
+     *
      * @param userLoginInfoVo
      */
-    void modifyAuthorization(UserLoginInfoVo userLoginInfoVo,User userQuery);
+    void modifyAuthorization(UserLoginInfoVo userLoginInfoVo, User userQuery);
 
     /**
      * 根据userId获取推荐人信息
+     *
      * @param userId
      * @return
      */
@@ -86,23 +97,35 @@ public interface UserService {
 
     /**
      * 根据userId获取总业绩
+     *
      * @param userIdTemp
      * @return
      */
     Integer getTotalPerformanceByUserId(String userIdTemp);
 
     /**
-     * 根据手机号 查找存量数据
-     * @param registerMobile
-     * @return
+     * 通过微信openId 跟商户的编号查询用户
+     * @param openId 微信openId
+     * @param merchantId 商户的编号
+     * @return 用户
      */
-    boolean findStockData(String registerMobile);
+    User getUserByOpenIdAndMerchantId( String openId, String merchantId);
 
     /**
-     * 根据手机号更新存量数据
-     * @param registerMobile
-     * @param openid
-     * @return
+     * 小程序登录
+     *
+     * @param userLoginInfoVo
+     * @param code            微信授权code
+     * @param merchantId      商户APP编号用于获取APPID APPKEY
      */
-    String updateUserStockDataByRegisterMobile( String registerMobile, String openid);
+    Result miniAppWeChatAuthorization(UserLoginInfoVo userLoginInfoVo, String code, String merchantId);
+
+    /**
+     * h5获取用户使用权限
+     *
+     * @param userLoginInfoVo
+     * @param code            微信授权code
+     * @param merchantId      商户APP编号用于获取APPID APPKEY
+     */
+    Result h5WeChatAuthorization(UserLoginInfoVo userLoginInfoVo, String code, String merchantId);
 }

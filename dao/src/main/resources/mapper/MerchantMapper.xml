@@ -34,6 +34,6 @@
     select
     <include refid="Base_Column_List" />
     from ss_merchant
-    where merchant_id = #{merchantId,jdbcType=VARCHAR}
+    where merchant_id = #{merchantId,jdbcType=VARCHAR} and available = 1
   </select>
 </mapper>

@@ -195,7 +195,7 @@ public class WxPayServiceImpl implements WxPayService {
         return wxPayVo;
     }
     @Override
-    public WxPayVo H5Pay(String realIp, String openId, String orderNo, String totalFee, String gzhAppId, String mch_id, String wxPayKey) {
+    public WxPayVo H5Pay(String realIp, String openId, String orderNo, String totalFee, String gzhAppId, String mch_id, String wxPayKey,String redirectUrl) {
         log.info("开始微信支付realIp-->" + realIp + "openId-->" + openId + "orderNo-->" + orderNo + "totalFee-->" + totalFee + "gzhAppId-->" + gzhAppId + "mch_id-->" + mch_id + "wxPayKey->" + wxPayKey);
 
         //此域名必须在商户平台--"产品中心"--"开发配置"中添加
@@ -271,7 +271,12 @@ public class WxPayServiceImpl implements WxPayService {
         wxPayVo.setPackageStr("prepay_id=" + prepay_id);
         wxPayVo.setSignType("MD5");
         wxPayVo.setPaySign(payResult.get("paySign").toString());
-        wxPayVo.setMweb_url(mweb_url);
+//        1.需对redirect_url进行urlencode处理
+//        2.由于设置redirect_url后,回跳指定页面的操作可能发生在：
+//        1,微信支付中间页调起微信收银台后超过5秒
+//        2,用户点击“取消支付“或支付完成后点“完成”按钮。因此无法保证页面回跳时，
+//        支付流程已结束，所以商户设置的redirect_url地址不能自动执行查单操作，应让用户去点击按钮触发查单操作。回跳页面展示效果可参考下图
+        wxPayVo.setMweb_url(mweb_url+"&redirect_url="+redirectUrl);
         wxPayVo.setAppid(gzhAppId);
         return wxPayVo;
     }
