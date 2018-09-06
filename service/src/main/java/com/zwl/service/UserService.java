@@ -168,9 +168,9 @@ public interface UserService {
     /**
      * @param phone          手机号码
      * @param msgCode        短信验证码
-     * @param gzhOpenId      公众号openid
+//     * @param gzhOpenId      公众号openid
      * @param merchantId     商户编号
      * @param wxAccreditCode h5微信授权code
      */
-    H5LoginResultVo h5WeChatLogin(String phone, String msgCode, String gzhOpenId, String merchantId, String wxAccreditCode);
+    H5LoginResultVo h5WeChatLogin(String phone, String msgCode, String merchantId, String wxAccreditCode);
 }

@@ -20,7 +20,7 @@ public class WxUserInfoVo {
     /**
      * 用户特权信息，json 数组
      */
-    private String province[];
+    private String province;
     /**
      * 用户头像
      */
@@ -38,6 +38,10 @@ public class WxUserInfoVo {
      */
     private String unionid;
     /**
+     * 用户特权信息，json 数组，如微信沃卡用户为（chinaunicom）
+     */
+    private String privilege[];
+    /**
      * 错误编码
      */
     private Integer errcode;
@@ -45,46 +49,6 @@ public class WxUserInfoVo {
      * 错误信息
      */
     private String errmsg;
-
-    public String getHeadimgurl() {
-        return headimgurl;
-    }
-
-    public void setHeadimgurl(String headimgurl) {
-        this.headimgurl = headimgurl;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public Integer getErrcode() {
-        return errcode;
-    }
-
-    public void setErrcode(Integer errcode) {
-        this.errcode = errcode;
-    }
-
-    public String getErrmsg() {
-        return errmsg;
-    }
-
-    public void setErrmsg(String errmsg) {
-        this.errmsg = errmsg;
-    }
 
     public String getOpenid() {
         return openid;
@@ -110,12 +74,36 @@ public class WxUserInfoVo {
         this.sex = sex;
     }
 
-    public String[] getProvince() {
+    public String getProvince() {
         return province;
     }
 
-    public void setProvince(String[] province) {
+    public void setProvince(String province) {
         this.province = province;
+    }
+
+    public String getHeadimgurl() {
+        return headimgurl;
+    }
+
+    public void setHeadimgurl(String headimgurl) {
+        this.headimgurl = headimgurl;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getUnionid() {
@@ -124,5 +112,29 @@ public class WxUserInfoVo {
 
     public void setUnionid(String unionid) {
         this.unionid = unionid;
+    }
+
+    public Integer getErrcode() {
+        return errcode;
+    }
+
+    public void setErrcode(Integer errcode) {
+        this.errcode = errcode;
+    }
+
+    public String getErrmsg() {
+        return errmsg;
+    }
+
+    public void setErrmsg(String errmsg) {
+        this.errmsg = errmsg;
+    }
+
+    public String[] getPrivilege() {
+        return privilege;
+    }
+
+    public void setPrivilege(String[] privilege) {
+        this.privilege = privilege;
     }
 }

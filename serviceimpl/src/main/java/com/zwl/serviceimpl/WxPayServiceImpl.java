@@ -215,7 +215,7 @@ public class WxPayServiceImpl implements WxPayService {
                 .setTimeStart(timeStart)
                 .setTimeExpire(timeExpire)
                 .setNotifyUrl(payNotifyProperties.getPayNotifyUrl())
-                .setSpbillCreateIp("127.0.0.1")
+                .setSpbillCreateIp(realIp)
                 .setTradeType("MWEB")
 //                .setOpenId(openId)
                 .setSceneInfo("{\"h5_info\": {\"type\":\"Wap\",\"wap_url\": \"https://xcx.wegoo.cn\",\"wap_name\": \"东遥课堂\"}}")

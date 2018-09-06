@@ -105,7 +105,7 @@ public class ProductController {
             realIp = "127.0.0.1";
         }
 //        WxPayVo wxPayVo = wxPayService.pay(realIp, openId, orderNo, totalFee, gzhAppId, merchantId, wxPayKey);
-        WxPayVo wxPayVo = wxPayService.H5Pay(realIp, user.getWechatOpenid(), orderNo, totalFee.toString(), gzhAppId, merchantId, wxPayKey,redirectUrl);
+        WxPayVo wxPayVo = wxPayService.H5Pay("115.206.245.202", user.getWechatOpenid(), orderNo, totalFee.toString(), gzhAppId, merchantId, wxPayKey,redirectUrl);
         result.setData(wxPayVo);
 //        String result = "{'ret':'true','data':"+JSON.toJSONString(buyResult)+"}";
         //加上返回参数

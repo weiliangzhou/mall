@@ -5,9 +5,9 @@ package com.zwl.model.vo;
  */
 public class H5LoginResultVo {
     /**
-     * 用户tokent
+     * 用户token
      */
-    private String tokent;
+    private String token;
     /**
      * 公众号 openId
      */
@@ -16,22 +16,42 @@ public class H5LoginResultVo {
      * 用户编号
      */
     private String userId;
+    private Integer errorcode;
+    private String errormsg;
 
-    public H5LoginResultVo(String tokent, String gzhOpenId, String userId) {
-        this.tokent = tokent;
+    public H5LoginResultVo(String tokent, String gzhOpenId, String userId, Integer errorcode, String errorMsg) {
+        this.token = tokent;
         this.gzhOpenId = gzhOpenId;
         this.userId = userId;
+        this.errorcode = errorcode;
+        this.errormsg = errorMsg;
     }
 
     public H5LoginResultVo() {
     }
 
-    public String getTokent() {
-        return tokent;
+    public Integer getErrorcode() {
+        return errorcode;
     }
 
-    public void setTokent(String tokent) {
-        this.tokent = tokent;
+    public void setErrorcode(Integer errorcode) {
+        this.errorcode = errorcode;
+    }
+
+    public String getErrormsg() {
+        return errormsg;
+    }
+
+    public void setErrormsg(String errormsg) {
+        this.errormsg = errormsg;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getGzhOpenId() {

@@ -157,6 +157,11 @@
         where s.user_id = #{userId}
     </update>
 
+    <update id="updateUserGzhOpenIdByUserId">
+        update ss_user s set s.gzh_openid = #{gzhOpenId}
+        where s.user_id = #{userId}
+    </update>
+
     <select id="getUserByUserId" resultMap="BaseResultMap" parameterType="string">
         select
         <include refid="Base_Column_List"/>

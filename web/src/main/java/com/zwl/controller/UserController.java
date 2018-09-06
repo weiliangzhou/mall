@@ -73,11 +73,11 @@ public class UserController {
     @PostMapping("/h5WeChatLogin")
     public Result h5WeChatLogin(@RequestBody JSONObject jsonObject) {
         String phone = jsonObject.getString("phone");
-        String msgCode = jsonObject.getString("msgcode");
-        String gzhOpenId = jsonObject.getString("gzhopenid");
-        String merchantId = jsonObject.getString("merchantid");
+        String msgCode = jsonObject.getString("msgCode");
+//        String gzhOpenId = jsonObject.getString("gzhOpenid");
+        String merchantId = jsonObject.getString("merchantId");
         String wxAccreditCode = jsonObject.getString("wxAccreditCode");
-        H5LoginResultVo resultVo = userService.h5WeChatLogin(phone, msgCode, gzhOpenId, merchantId, wxAccreditCode);
+        H5LoginResultVo resultVo = userService.h5WeChatLogin(phone, msgCode, merchantId, wxAccreditCode);
         Result result = new Result();
         result.setData(resultVo);
         return result;

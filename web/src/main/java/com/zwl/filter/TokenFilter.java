@@ -80,9 +80,14 @@ public class TokenFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
+        // 获取微信js api 权限  跟 h5登录权限
+        if (requestURL.contains("/wx/gzh/getGzhJsApiToken") || requestURL.contains("/wx/user/h5WeChatLogin")) {
+            chain.doFilter(request, response);
+            return;
+        }
         //发送验证码
 
-        if (requestURL.contains("/wx/user/sendMsgCode")||requestURL.contains("/wx/user/checkCode")) {
+        if (requestURL.contains("/wx/user/sendMsgCode") || requestURL.contains("/wx/user/checkCode")) {
             chain.doFilter(request, response);
             return;
         }
@@ -156,7 +161,7 @@ public class TokenFilter implements Filter {
         // 验证token
         // token="nprI2s/ITAaGaLJfL+QkZZYKhMAH3C3PkQEbpv+qQwOFG7hECEPeR4lKz5NTpQ177Sk1MdBj1GEjyNM2V0G2Nbj3FfKz6X+C";
         // 这里token如果接收有空格的地方，，那就是+号没有处理好。。可以考虑变成%2B
-        if (StringUtils.isBlank(token)){
+        if (StringUtils.isBlank(token)) {
             Result result = new Result();
             result.setCode(ResultCodeEnum.TOKEN_ERROR);
             response.setCharacterEncoding("UTF-8");

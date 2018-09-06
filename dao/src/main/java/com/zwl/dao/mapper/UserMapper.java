@@ -69,4 +69,6 @@ public interface UserMapper {
     User getUserByPhone(@Param("phone") String phone);
 
     void updateUserPhoneByUserId(@Param("userId") String userId, @Param("phone") String phone);
+
+    void updateUserGzhOpenIdByUserId(@Param("userId") String userId, @Param("gzhOpenId") String gzhOpenId);
 }
