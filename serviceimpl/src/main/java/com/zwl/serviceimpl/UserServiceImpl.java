@@ -114,6 +114,8 @@ public class UserServiceImpl implements UserService {
         user.setIsBuy(0);
         //插入用户表
         user.setLogoUrl(userLoginInfoVo.getLogoUrl());
+        user.setMemberLevel(0);
+        user.setLevelName("会员");
         userMapper.insert(user);
         //用户信息（头像、昵称等）
         UserInfo userInfo = new UserInfo();
