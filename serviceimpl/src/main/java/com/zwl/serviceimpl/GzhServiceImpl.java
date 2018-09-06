@@ -3,13 +3,15 @@ package com.zwl.serviceimpl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.Merchant;
 import com.zwl.model.vo.GzhMsgTemplate;
+import com.zwl.model.vo.JsApiTokenVo;
+import com.zwl.model.vo.WxJsApiTokenMessage;
+import com.zwl.model.wxpay.HashKit;
+import com.zwl.model.wxpay.PaymentKit;
 import com.zwl.model.wxpay.WxConstans;
-import com.zwl.service.GZHService;
-import com.zwl.service.MerchantService;
-import com.zwl.service.MqSenderService;
-import com.zwl.service.WxAccessTokenService;
+import com.zwl.service.*;
 import com.zwl.util.HttpsUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.activemq.command.ActiveMQQueue;
@@ -18,10 +20,7 @@ import org.springframework.stereotype.Service;
 
 import javax.jms.Destination;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author 二师兄超级帅
@@ -40,6 +39,8 @@ public class GzhServiceImpl implements GZHService {
     private MqSenderService mqSenderService;
     @Autowired
     private MerchantService merchantService;
+    @Autowired
+    private H5AppWeChatService h5AppWeChatService;
 
 
     @Override
@@ -65,19 +66,19 @@ public class GzhServiceImpl implements GZHService {
 //        课程：总裁班
 //        参加人：王小二或者手机号码
 //        欢迎登陆东遥课堂微信小程序收听！
-        GzhMsgTemplate gzhMsgTemplate=new GzhMsgTemplate();
-        Map first=new HashMap();
-        first.put("value","微商夜大有新课程啦！");
-        first.put("color","#173177");
-        Map keyword1=new HashMap();
-        keyword1.put("value",className);
-        keyword1.put("color","#173177");
-        Map keyword2=new HashMap();
-        keyword2.put("value","微商夜大");
-        keyword2.put("color","#173177");
-        Map remark=new HashMap();
-        remark.put("value","欢迎登陆东遥课堂微信小程序收听！");
-        remark.put("color","#173177");
+        GzhMsgTemplate gzhMsgTemplate = new GzhMsgTemplate();
+        Map first = new HashMap();
+        first.put("value", "微商夜大有新课程啦！");
+        first.put("color", "#173177");
+        Map keyword1 = new HashMap();
+        keyword1.put("value", className);
+        keyword1.put("color", "#173177");
+        Map keyword2 = new HashMap();
+        keyword2.put("value", "微商夜大");
+        keyword2.put("color", "#173177");
+        Map remark = new HashMap();
+        remark.put("value", "欢迎登陆东遥课堂微信小程序收听！");
+        remark.put("color", "#173177");
         gzhMsgTemplate.setFirst(first);
         gzhMsgTemplate.setKeyword1(keyword1);
         gzhMsgTemplate.setKeyword2(keyword2);
@@ -152,6 +153,27 @@ public class GzhServiceImpl implements GZHService {
         for (String openId : openidList) {
             sendGzhMsgByOne(openId, className, realNameOrPhone, merchantId, gzAppId, gzAppKey, xcxAppId, templateId);
         }
+    }
+
+    @Override
+    public WxJsApiTokenMessage getGzhJsApiToken(String merchantId, String url) {
+        if (null == merchantId) {
+            BSUtil.isTrue(Boolean.FALSE, "商户号不能为空");
+        }
+        Merchant merchant = merchantService.getMerchantByMerchantId(merchantId);
+        if (null == merchant) {
+            BSUtil.isTrue(Boolean.FALSE, "商户不存在:" + merchantId);
+        }
+        String accessToken = wxAccessTokenService.getAccessToken(merchant.getMerchantId(), merchant.getGzAppId(), merchant.getGzAppKey(), 1);
+        JsApiTokenVo apiTokenVo = h5AppWeChatService.getWechatJsApiToken(accessToken);
+        Map<String, String> params = new HashMap<>();
+        params.put("jsapi_ticket", apiTokenVo.getTicket());
+        params.put("noncestr", HashKit.generateSalt(16));
+        params.put("timestamp", String.valueOf(new Date().getTime()));
+        params.put("url", url);
+        String sing = PaymentKit.packageSign(params, false);
+        String signature = HashKit.sha1(sing);
+        return new WxJsApiTokenMessage(params.get("jsapi_ticket"), params.get("noncestr"), params.get("timestamp"), params.get("url"), signature);
     }
 
     public static List<String> parseOpenidList(String result) {

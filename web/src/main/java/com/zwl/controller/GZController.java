@@ -5,6 +5,7 @@ import com.zwl.model.baseresult.Result;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.Merchant;
 import com.zwl.model.vo.JsApiTokenVo;
+import com.zwl.model.vo.WxJsApiTokenMessage;
 import com.zwl.model.wxpay.HashKit;
 import com.zwl.service.GZHService;
 import com.zwl.service.H5AppWeChatService;
@@ -41,6 +42,8 @@ public class GZController {
     private MerchantService merchantService;
     @Autowired
     private H5AppWeChatService h5AppWeChatService;
+    @Autowired
+    private GZHService gzhService;
 
     @PostMapping("/sendFormId")
     public Result saveFormIdToRedis(@RequestBody JSONObject jsonObject) {
@@ -82,22 +85,7 @@ public class GZController {
     public Result getGzhJsApiToken(@RequestBody JSONObject jsonObject) {
         String merchantId = jsonObject.getString("merchantId");
         String url = jsonObject.getString("url");
-        Merchant merchant = merchantService.getMerchantByMerchantId(merchantId);
-        String accessToken = wxAccessTokenService.getAccessToken(merchant.getMerchantId(), merchant.getGzAppId(), merchant.getGzAppKey(), 1);
-        JsApiTokenVo apiTokenVo = h5AppWeChatService.getWechatJsApiToken(accessToken);
-        String nonceStr = "Wm3WZYTPz0wzccnW";
-        String ticket = apiTokenVo.getTicket();
-        String timestamp = String.valueOf(new Date().getTime());
-        String sing = String.format("jsapi_ticket=%s&noncestr=%s&timestamp=%s&url=%s", ticket, nonceStr, timestamp, url);
-        String signature = HashKit.sha1(sing);
-        Result result = new Result();
-        Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("nonceStr", nonceStr);
-        resultMap.put("jsapi_ticket", ticket);
-        resultMap.put("timestamp", timestamp);
-        resultMap.put("url", url);
-        resultMap.put("signature", signature);
-        result.setData(resultMap);
-        return result;
+        WxJsApiTokenMessage wxJsApiTokenMessage = gzhService.getGzhJsApiToken( merchantId , url );
+        return wxJsApiTokenMessage;
     }
 }
