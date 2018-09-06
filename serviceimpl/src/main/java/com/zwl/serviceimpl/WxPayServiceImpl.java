@@ -136,7 +136,7 @@ public class WxPayServiceImpl implements WxPayService {
                 .setNotifyUrl(payNotifyProperties.getPayNotifyUrl())
                 .setSpbillCreateIp("127.0.0.1")
                 .setTradeType("JSAPI")
-                .setOpenId(openId)
+//                .setOpenId(openId)
                 .setSceneInfo("{\"h5_info\": {\"type\":\"Wap\",\"wap_url\": \"admin.com\",\"wap_name\": \"东遥课堂\"}}")
                 .setAttach("东遥课堂")
                 .setPaternerKey(wxPayKey)
@@ -217,10 +217,10 @@ public class WxPayServiceImpl implements WxPayService {
                 .setNotifyUrl(payNotifyProperties.getPayNotifyUrl())
                 .setSpbillCreateIp("127.0.0.1")
                 .setTradeType("MWEB")
-                .setOpenId(openId)
+//                .setOpenId(openId)
                 .setSceneInfo("{\"h5_info\": {\"type\":\"Wap\",\"wap_url\": \"https://xcx.wegoo.cn\",\"wap_name\": \"东遥课堂\"}}")
                 .setAttach("东遥课堂")
-                .setPaternerKey(wxPayKey)
+                .setPaternerKey("612aa0e07599468997974318e654509f")
                 .build();
         //获取微信返回的结果
         log.info("开始发送微信支付xml--->" + PaymentKit.toXml(params));

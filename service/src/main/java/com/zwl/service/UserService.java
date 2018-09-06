@@ -138,6 +138,15 @@ public interface UserService {
     Boolean updateUserPhoneByUserId(String userId, String phone);
 
     /**
+     * 修改用户手机号
+     *
+     * @param userId    用户编号
+     * @param gzhOpenId 用户公众号
+     * @return
+     */
+    Boolean updateUserGzhOpenIdByUserId(String userId, String gzhOpenId);
+
+    /**
      * 小程序登录
      *
      * @param userLoginInfoVo
@@ -153,6 +162,7 @@ public interface UserService {
      * @param code            微信授权code
      * @param merchantId      商户APP编号用于获取APPID APPKEY
      */
+    @Deprecated
     Result h5WeChatAuthorization(UserLoginInfoVo userLoginInfoVo, String code, String merchantId);
 
     /**

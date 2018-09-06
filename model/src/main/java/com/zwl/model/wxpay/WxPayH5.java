@@ -53,7 +53,7 @@ public class WxPayH5 implements Serializable {
         map.put("time_expire", this.getTimeExpire());
         map.put("notify_url", this.getNotifyUrl());
         map.put("trade_type", this.getTradeType());
-        map.put("openid", this.getOpenId());
+//        map.put("openid", this.getOpenId());
         map.put("scene_info", this.getSceneInfo());
         map.put("sign", PaymentKit.createSign(map, this.getPaternerKey()));
         return map;
@@ -230,14 +230,14 @@ public class WxPayH5 implements Serializable {
         }
     }
 
-    public WxPayH5 setOpenId(String openId) {
-        if (StrKit.isBlank(openId)) {
-            throw new IllegalArgumentException("openId 值不能为空");
-        } else {
-            this.openId = openId;
-            return this;
-        }
-    }
+//    public WxPayH5 setOpenId(String openId) {
+//        if (StrKit.isBlank(openId)) {
+//            throw new IllegalArgumentException("openId 值不能为空");
+//        } else {
+//            this.openId = openId;
+//            return this;
+//        }
+//    }
 
     public String getSceneInfo() {
         return this.sceneInfo;
