@@ -207,8 +207,8 @@ public class WxPayServiceImpl implements WxPayService {
         cal.add(Calendar.DAY_OF_MONTH, +5);
         String timeExpire = sdf_yMdHms.format(cal.getTime());
         Map<String, String> params = WxPayH5.New()
-                .setAppId(gzhAppId)
-                .setMchId(mch_id)
+                .setAppId("wx32966989d0bc098d")//先写死
+                .setMchId("1509688041")
                 .setBody("东遥课堂")
                 .setOutTradeNo(orderNo)
                 .setTotalFee(totalFee)
