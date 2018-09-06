@@ -85,7 +85,7 @@ public class GZController {
     public Result getGzhJsApiToken(@RequestBody JSONObject jsonObject) {
         String merchantId = jsonObject.getString("merchantId");
         String url = jsonObject.getString("url");
-        WxJsApiTokenMessage wxJsApiTokenMessage = gzhService.getGzhJsApiToken( merchantId , url );
+        WxJsApiTokenMessage wxJsApiTokenMessage = gzhService.getGzhJsApiToken(merchantId, url);
         return wxJsApiTokenMessage;
     }
 }

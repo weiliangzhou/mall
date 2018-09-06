@@ -1,12 +1,14 @@
 package com.zwl.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.baseresult.ResultCodeEnum;
 import com.zwl.model.exception.BSUtil;
-import com.zwl.model.po.*;
+import com.zwl.model.po.Product;
+import com.zwl.model.po.User;
+import com.zwl.model.po.UserCertification;
+import com.zwl.model.po.UserInfo;
+import com.zwl.model.vo.H5LoginResultVo;
 import com.zwl.model.vo.UserLoginInfoVo;
 import com.zwl.service.*;
 import com.zwl.serviceimpl.RedisTokenManagerImpl;
@@ -14,14 +16,10 @@ import com.zwl.util.CheckUtil;
 import com.zwl.util.ThreadVariable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 用户controller
@@ -57,18 +55,31 @@ public class UserController {
      */
     @PostMapping("/authorization")
     public Result authorization(@RequestBody UserLoginInfoVo userLoginInfoVo) {
-        if( userLoginInfoVo == null ){
-            BSUtil.isTrue(Boolean.FALSE,"参数错误");
+        if (userLoginInfoVo == null) {
+            BSUtil.isTrue(Boolean.FALSE, "参数错误");
         }
-        if( userLoginInfoVo.getBusCode() == null ){
-            BSUtil.isTrue(Boolean.FALSE,"请输入要授权的方式 1:小程序 2:H5页面授权");
+        if (userLoginInfoVo.getBusCode() == null) {
+            BSUtil.isTrue(Boolean.FALSE, "请输入要授权的方式 1:小程序 2:H5页面授权");
         }
         Result result = null;
-        if( userLoginInfoVo.getBusCode() == 1 ){
-             result = userService.miniAppWeChatAuthorization(userLoginInfoVo , userLoginInfoVo.getCode() , userLoginInfoVo.getMerchantId()  );
-        } else if( userLoginInfoVo.getBusCode() == 2) {
-            result = userService.h5WeChatAuthorization(userLoginInfoVo , userLoginInfoVo.getCode() , userLoginInfoVo.getMerchantId()  );
+        if (userLoginInfoVo.getBusCode() == 1) {
+            result = userService.miniAppWeChatAuthorization(userLoginInfoVo, userLoginInfoVo.getCode(), userLoginInfoVo.getMerchantId());
+        } else if (userLoginInfoVo.getBusCode() == 2) {
+            result = userService.h5WeChatAuthorization(userLoginInfoVo, userLoginInfoVo.getCode(), userLoginInfoVo.getMerchantId());
         }
+        return result;
+    }
+
+    @PostMapping("/h5WeChatLogin")
+    public Result h5WeChatLogin(@RequestBody JSONObject jsonObject) {
+        String phone = jsonObject.getString("phone");
+        String msgCode = jsonObject.getString("msgcode");
+        String gzhOpenId = jsonObject.getString("gzhopenid");
+        String merchantId = jsonObject.getString("merchantid");
+        String wxAccreditCode = jsonObject.getString("wxAccreditCode");
+        H5LoginResultVo resultVo = userService.h5WeChatLogin(phone, msgCode, gzhOpenId, merchantId, wxAccreditCode);
+        Result result = new Result();
+        result.setData(resultVo);
         return result;
 
     }
@@ -119,6 +130,7 @@ public class UserController {
         Result result = new Result();
         return result;
     }
+
     @PostMapping("/checkCode")
     public Result checkCode(@RequestBody JSONObject jsonObject) {
         String phone = jsonObject.getString("phone");
@@ -166,7 +178,7 @@ public class UserController {
             levelName = product.getLevelName();
         }
         log.info("memberLevel::" + memberLevel);
-        userLoginInfoVo.setMemberLevel(null==memberLevel?-1:memberLevel);
+        userLoginInfoVo.setMemberLevel(null == memberLevel ? -1 : memberLevel);
         userLoginInfoVo.setLevelName(levelName);
 //        userLoginInfoVo.setIsBindMobile(userInfo.getIsBindMobile()==null?0:1);
         //通过主表获取绑定手机号
@@ -177,7 +189,7 @@ public class UserController {
         UserCertification userCertification = certificationService.getOneByUserId(userId);
         userLoginInfoVo.setCertificationStatus(userCertification.getStatus());
         Integer xiaxianCount = maidInfoService.getMaidInfoCount(userId);
-        userLoginInfoVo.setXiaxianCount(null==xiaxianCount?0:xiaxianCount);
+        userLoginInfoVo.setXiaxianCount(null == xiaxianCount ? 0 : xiaxianCount);
         //账户余额
         Integer balance = userAccountService.getBalanceByUserId(userId);
         //余额：分转元

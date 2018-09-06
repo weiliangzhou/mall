@@ -10,10 +10,10 @@ import java.util.Map;
  */
 public class WxResultSuccessMessage extends Result {
 
-    public WxResultSuccessMessage(String userId, String token) {
+    public WxResultSuccessMessage(String userId , String gzhOpenId) {
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("userId", userId);
-        resultMap.put("token", token);
+        resultMap.put("gzhopenid", gzhOpenId);
         this.setData(resultMap);
     }
 }

@@ -5,6 +5,7 @@
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="user_id" property="userId" jdbcType="VARCHAR"/>
         <result column="wechat_openid" property="wechatOpenid" jdbcType="VARCHAR"/>
+        <result column="gzh_openid" property="gzhOpenid" jdbcType="VARCHAR"/>
         <result column="wechat_union_id" property="wechatUnionId" jdbcType="VARCHAR"/>
         <result column="merchant_id" property="merchantId" jdbcType="VARCHAR"/>
         <result column="register_from" property="registerFrom"/>
@@ -151,6 +152,11 @@
         where user_id = #{userId,jdbcType=VARCHAR}
     </update>
 
+    <update id="updateUserPhoneByUserId">
+        update ss_user s set s.register_mobile = #{phone}
+        where s.user_id = #{userId}
+    </update>
+
     <select id="getUserByUserId" resultMap="BaseResultMap" parameterType="string">
         select
         <include refid="Base_Column_List"/>
@@ -269,10 +275,22 @@
 
     </select>
 
-    <select id="getUserByOpenIdAndMerchantId"  resultMap="BaseResultMap">
-          select
-           <include refid="Base_Column_List"/>
-           from ss_user s where s.wechat_openid = #{openId} and s.merchant_id = #{merchantId}
+    <select id="getUserByPhone" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ss_user s where s.register_mobile = #{phone} and s.available = 1
+    </select>
+
+    <select id="getUserByOpenIdAndMerchantId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ss_user s where s.wechat_openid = #{openId} and s.merchant_id = #{merchantId}
+    </select>
+
+    <select id="getUserByGzhOpenIdAndMerchantId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ss_user s where s.gzh_openid = #{openId} and s.merchant_id = #{merchantId}
     </select>
 
 </mapper>

@@ -3,6 +3,7 @@ package com.zwl.service;
 
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.po.User;
+import com.zwl.model.vo.H5LoginResultVo;
 import com.zwl.model.vo.UserLoginInfoVo;
 import com.zwl.model.vo.UserQueryVo;
 
@@ -105,11 +106,36 @@ public interface UserService {
 
     /**
      * 通过微信openId 跟商户的编号查询用户
-     * @param openId 微信openId
+     *
+     * @param openId     微信openId
      * @param merchantId 商户的编号
      * @return 用户
      */
-    User getUserByOpenIdAndMerchantId( String openId, String merchantId);
+    User getUserByOpenIdAndMerchantId(String openId, String merchantId);
+
+    /**
+     * 根据公众号跟商户编号查询授权用户
+     *
+     * @param gzhOpenId  公众号
+     * @param merchantId 商户编号
+     */
+    User getUserByGzhOpenIdAndMerchantId(String gzhOpenId, String merchantId);
+
+    /**
+     * 根据手机号码查询用户
+     *
+     * @param phone 手机号码
+     */
+    User getUserByPhone(String phone);
+
+    /**
+     * 修改用户手机号
+     *
+     * @param userId 用户编号
+     * @param phone  手机号码
+     * @return
+     */
+    Boolean updateUserPhoneByUserId(String userId, String phone);
 
     /**
      * 小程序登录
@@ -128,4 +154,13 @@ public interface UserService {
      * @param merchantId      商户APP编号用于获取APPID APPKEY
      */
     Result h5WeChatAuthorization(UserLoginInfoVo userLoginInfoVo, String code, String merchantId);
+
+    /**
+     * @param phone          手机号码
+     * @param msgCode        短信验证码
+     * @param gzhOpenId      公众号openid
+     * @param merchantId     商户编号
+     * @param wxAccreditCode h5微信授权code
+     */
+    H5LoginResultVo h5WeChatLogin(String phone, String msgCode, String gzhOpenId, String merchantId, String wxAccreditCode);
 }

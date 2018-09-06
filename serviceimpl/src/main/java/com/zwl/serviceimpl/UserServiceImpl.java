@@ -6,6 +6,7 @@ import com.zwl.dao.mapper.UserMapper;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.constant.UserRegisterType;
 import com.zwl.model.exception.BSUtil;
+import com.zwl.model.exception.BusinessException;
 import com.zwl.model.po.Merchant;
 import com.zwl.model.po.TokenModel;
 import com.zwl.model.po.User;
@@ -44,6 +45,8 @@ public class UserServiceImpl implements UserService {
     private H5AppWeChatService h5AppWeChatService;
     @Autowired
     private UserInfoService userInfoService;
+    @Autowired
+    private MsgSenderService msgSenderService;
 
     @Override
     public void addUser(User user) {
@@ -181,6 +184,37 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUserByGzhOpenIdAndMerchantId(String gzhOpenId, String merchantId) {
+        if (StringUtils.isEmpty(gzhOpenId)) {
+            BSUtil.isTrue(Boolean.FALSE, "请输入公众号");
+        }
+        if (StringUtils.isEmpty(merchantId)) {
+            BSUtil.isTrue(Boolean.FALSE, "商户编号不能为空");
+        }
+        return userMapper.getUserByGzhOpenIdAndMerchantId(gzhOpenId, merchantId);
+    }
+
+    @Override
+    public User getUserByPhone(String phone) {
+        if (StringUtils.isEmpty(phone)) {
+            BSUtil.isTrue(Boolean.FALSE, "请输入要查询的手机号码");
+        }
+        return userMapper.getUserByPhone(phone);
+    }
+
+    @Override
+    public Boolean updateUserPhoneByUserId(String userId, String phone) {
+        if (StringUtils.isEmpty(userId)) {
+            BSUtil.isTrue(Boolean.FALSE, "用户编号不能为空");
+        }
+        if (StringUtils.isEmpty(phone)) {
+            BSUtil.isTrue(Boolean.FALSE, "手机号码不能为");
+        }
+        userMapper.updateUserPhoneByUserId(userId, phone);
+        return Boolean.TRUE;
+    }
+
+    @Override
     public Result miniAppWeChatAuthorization(UserLoginInfoVo userLoginInfoVo, String code, String merchantId) {
         if (null == code) {
             BSUtil.isTrue(Boolean.FALSE, "请输入code");
@@ -248,7 +282,7 @@ public class UserServiceImpl implements UserService {
         }
         if (accessTokenVo.getErrcode() == null) {//微信请求成功
             // 获取微信信息成功
-            User user = getUserByOpenIdAndMerchantId(accessTokenVo.getOpenid(), merchantId);
+            User user = getUserByGzhOpenIdAndMerchantId(accessTokenVo.getOpenid(), merchantId);
             if (user == null) {
                 //创建用户
                 user = h5AccreditCreateUser(accessTokenVo.getOpenid(), merchantId);
@@ -258,13 +292,45 @@ public class UserServiceImpl implements UserService {
             } else {
                 //用户已存在获取微信用户信息更新数据库中的资料
                 WxUserInfoVo userInfoVo = h5AppWeChatService.getWeChatUserInfo(accessTokenVo.getAccess_token(), accessTokenVo.getOpenid());
-                h5AccreditUpdateUserInfo(userInfoVo,user.getUserId());
+                h5AccreditUpdateUserInfo(userInfoVo, user.getUserId());
             }
-            TokenModel model = tokenManager.createToken(user.getUserId());
-            String token = model.getSignToken();
-            return new WxResultSuccessMessage(user.getUserId(), token);
+//            TokenModel model = tokenManager.createToken(user.getUserId());
+//            String token = model.getSignToken();
+            return new WxResultSuccessMessage(user.getUserId(), accessTokenVo.getOpenid());
         }
         return new WxResultErrorMessage(accessTokenVo.getErrcode(), accessTokenVo.getErrmsg());
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, timeout = 36000, rollbackFor = Exception.class)
+    public H5LoginResultVo h5WeChatLogin(String phone, String msgCode, String gzhOpenId, String merchantId , String wxAccreditCode) {
+        if (StringUtils.isEmpty(phone)) {
+            BSUtil.isTrue(Boolean.FALSE, "请输入手机号码");
+        }
+        if (StringUtils.isEmpty(gzhOpenId)) {
+            BSUtil.isTrue(Boolean.FALSE, "请输入公众号open id");
+        }
+        if (StringUtils.isEmpty(merchantId)) {
+            BSUtil.isTrue(Boolean.FALSE, "请输入商户编号");
+        }
+        if( StringUtils.isEmpty(wxAccreditCode) ){
+            BSUtil.isTrue(Boolean.FALSE, "微信授权code不能为空");
+        }
+        boolean msgVerfig = msgSenderService.checkCode(phone, msgCode, "3");
+        if (!msgVerfig) {
+            BSUtil.isTrue(Boolean.FALSE, "验证码错误");
+        }
+        User user = getUserByOpenIdAndMerchantId(gzhOpenId, merchantId);
+        if (null == user) {
+            BSUtil.isTrue(Boolean.FALSE, "公众号未授权");
+        }
+        //设置用户手机号码
+        user.setRegisterMobile(phone);
+        updateUserByUserId(user);
+        //设置token
+        TokenModel model = tokenManager.createToken(user.getUserId());
+        String token = model.getSignToken();
+        return new H5LoginResultVo(token, user.getGzhOpenid(), user.getUserId());
     }
 
     private User h5AccreditCreateUser(String openId, String merchantId) {
@@ -273,7 +339,7 @@ public class UserServiceImpl implements UserService {
         }
         User user = new User();
         user.setUserId(UUIDUtil.getUUID32());
-        user.setWechatOpenid(openId);
+        user.setGzhOpenid(openId);
         user.setMerchantId(merchantId);
         user.setRegisterFrom(UserRegisterType.WECHAT_ACCREDIT.getValue());
         user.setIsBuy(0);
@@ -295,7 +361,7 @@ public class UserServiceImpl implements UserService {
         return userInfo;
     }
 
-    private UserInfo h5AccreditUpdateUserInfo(WxUserInfoVo userInfoVo, String userId){
+    private UserInfo h5AccreditUpdateUserInfo(WxUserInfoVo userInfoVo, String userId) {
         UserInfo userInfo = new UserInfo();
         userInfo.setUserId(userId);
         String nickName = userInfoVo.getNickname();

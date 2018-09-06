@@ -168,12 +168,12 @@ public class GzhServiceImpl implements GZHService {
         JsApiTokenVo apiTokenVo = h5AppWeChatService.getWechatJsApiToken(accessToken);
         Map<String, String> params = new HashMap<>();
         params.put("jsapi_ticket", apiTokenVo.getTicket());
-        params.put("noncestr", HashKit.generateSalt(16));
+        params.put("noncestr", HashKit.generateSalt(16));// "Wm3WZYTPz0wzccnW"
         params.put("timestamp", String.valueOf(new Date().getTime()));
         params.put("url", url);
         String sing = PaymentKit.packageSign(params, false);
         String signature = HashKit.sha1(sing);
-        return new WxJsApiTokenMessage(params.get("jsapi_ticket"), params.get("noncestr"), params.get("timestamp"), params.get("url"), signature);
+        return new WxJsApiTokenMessage(params.get("noncestr"), params.get("jsapi_ticket"), params.get("timestamp"), params.get("url"), signature);
     }
 
     public static List<String> parseOpenidList(String result) {
