@@ -6,10 +6,7 @@ import com.zwl.dao.mapper.UserMapper;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.constant.UserRegisterType;
 import com.zwl.model.exception.BSUtil;
-import com.zwl.model.po.Merchant;
-import com.zwl.model.po.TokenModel;
-import com.zwl.model.po.User;
-import com.zwl.model.po.UserInfo;
+import com.zwl.model.po.*;
 import com.zwl.model.vo.*;
 import com.zwl.service.*;
 import com.zwl.util.CheckUtil;
@@ -304,8 +301,8 @@ public class UserServiceImpl implements UserService {
         Boolean firstLogin = Boolean.FALSE;//验证用户是否是第一次登录
         User user = getUserByPhoneAndMerchantId(phone, merchantId);
         if (null == user) {
-            //注册用户
-            user = h5AccreditCreateUser(accessTokenVo.getOpenid(), merchantId, phone);
+            //注册用户 设置成会员
+            user = h5AccreditCreateUser(accessTokenVo.getOpenid(), merchantId, phone, MemberLevel.HY, "会员");
             firstLogin = Boolean.TRUE;
         } else {
             if (user.getGzhOpenid() == null) {
@@ -346,7 +343,7 @@ public class UserServiceImpl implements UserService {
         return sysUser;
     }
 
-    private User h5AccreditCreateUser(String openId, String merchantId, String phone) {
+    private User h5AccreditCreateUser(String openId, String merchantId, String phone, Integer memberLevel, String memberName) {
         if (null == openId) {
             BSUtil.isTrue(Boolean.FALSE, "opendId不能为空");
         }
@@ -355,6 +352,8 @@ public class UserServiceImpl implements UserService {
         user.setGzhOpenid(openId);
         user.setMerchantId(merchantId);
         user.setRegisterMobile(phone);
+        user.setMemberLevel(memberLevel);
+        user.setLevelName(memberName);
         user.setRegisterFrom(UserRegisterType.WECHAT_ACCREDIT.getValue());
         user.setIsBuy(0);
         addUser(user);
