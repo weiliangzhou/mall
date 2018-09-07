@@ -230,14 +230,14 @@ public class WxPayH5 implements Serializable {
         }
     }
 
-//    public WxPayH5 setOpenId(String openId) {
-//        if (StrKit.isBlank(openId)) {
-//            throw new IllegalArgumentException("openId 值不能为空");
-//        } else {
-//            this.openId = openId;
-//            return this;
-//        }
-//    }
+    public WxPayH5 setOpenId(String openId) {
+        if (StrKit.isBlank(openId)) {
+            throw new IllegalArgumentException("openId 值不能为空");
+        } else {
+            this.openId = openId;
+            return this;
+        }
+    }
 
     public String getSceneInfo() {
         return this.sceneInfo;

@@ -7,7 +7,6 @@ import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.*;
 import com.zwl.model.wxpay.*;
 import com.zwl.service.*;
-import com.zwl.util.ThreadVariable;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +33,7 @@ public class WxPayController {
     private MaidInfoService maidInfoService;
     @Autowired
     private WxPayService wxPayService;
-//    @Autowired
+    //    @Autowired
 //    private WxSenderService wxSenderService;
     @Autowired
     private UserAccountService userAccountService;
@@ -59,7 +58,7 @@ public class WxPayController {
      * 注意：必须再web页面中发起支付且域名已添加到开发配置中
      */
     @PostMapping("/auth/pay.do")
-    public String H5Pay(HttpServletRequest request, @RequestBody(required = false) JSONObject jsonObject) {
+    public String wapPay(HttpServletRequest request, @RequestBody JSONObject jsonObject) {
         String realIp = IpKit.getRealIp(request);
         if (StrKit.isBlank(realIp)) {
             realIp = "127.0.0.1";
@@ -67,47 +66,24 @@ public class WxPayController {
         String orderNo = jsonObject.getString("orderNo");
         String totalFee = jsonObject.getString("totalFee");
         String merchantId = jsonObject.getString("merchantId");
-        String userId_local = ThreadVariable.getUserID();
+        String code = jsonObject.getString("code");
         //merchantId 查询 mch_id appid wxPayKey
         Merchant merchant = merchantService.getMerchantByMerchantId(merchantId);
         String gzhAppId = merchant.getGzAppId();
         String gzhKey = merchant.getGzAppKey();
-        User user=userService.getByUserId(userId_local);
+        String openId = wxAccessTokenService.getGzhOpenId(merchantId, gzhAppId, gzhKey, code);
+        if (StringUtils.isBlank(openId)) {
+            log.error("获取公众号openId错误");
+            BSUtil.isTrue(false, "系统异常，请稍后重试！");
+        }
+
+        log.info(openId);
         String wxPayKey = merchant.getWxPayKey();
-//        WxPayVo wxPayVo = wxPayService.pay(realIp, openId, orderNo, totalFee, gzhAppId, merchantId, wxPayKey);
-//        WxPayVo wxPayVo = wxPayService.H5Pay(realIp, user.getGzhOpenid(), orderNo, totalFee, gzhAppId, merchantId, wxPayKey);
+        WxPayVo wxPayVo = wxPayService.pay(realIp, openId, orderNo, totalFee, gzhAppId, merchantId, wxPayKey);
         Result result_return = new Result();
-//        result_return.setData(wxPayVo);
+        result_return.setData(wxPayVo);
         return JSON.toJSONString(result_return);
     }
-//    public String wapPay(HttpServletRequest request, @RequestBody(required = false) JSONObject jsonObject) {
-//        String realIp = IpKit.getRealIp(request);
-//        if (StrKit.isBlank(realIp)) {
-//            realIp = "127.0.0.1";
-//        }
-//        String orderNo = jsonObject.getString("orderNo");
-//        String totalFee = jsonObject.getString("totalFee");
-//        String merchantId = jsonObject.getString("merchantId");
-//        String code = jsonObject.getString("code");
-//        //merchantId 查询 mch_id appid wxPayKey
-//        Merchant merchant = merchantService.getMerchantByMerchantId(merchantId);
-//        String gzhAppId = merchant.getGzAppId();
-//        String gzhKey = merchant.getGzAppKey();
-//        String openId = wxAccessTokenService.getGzhOpenId(merchantId, gzhAppId, gzhKey, code);
-//        if (StringUtils.isBlank(openId)) {
-//            log.error("获取公众号openId错误");
-//            BSUtil.isTrue(false, "系统异常，请稍后重试！");
-//        }
-//
-//        log.info(openId);
-//        String wxPayKey = merchant.getWxPayKey();
-////        WxPayVo wxPayVo = wxPayService.pay(realIp, openId, orderNo, totalFee, gzhAppId, merchantId, wxPayKey);
-//        WxPayVo wxPayVo = wxPayService.H5Pay(realIp, openId, orderNo, totalFee, gzhAppId, merchantId, wxPayKey);
-//        Result result_return = new Result();
-//        result_return.setData(wxPayVo);
-//        return JSON.toJSONString(result_return);
-//    }
-
 
     /**
      * android支付
@@ -132,7 +108,6 @@ public class WxPayController {
         result_return.setData(wxPayVo);
         return JSON.toJSONString(result_return);
     }
-
 
     @RequestMapping(value = "/pay_notify.do", method = {RequestMethod.POST, RequestMethod.GET})
     @Transactional
@@ -176,10 +151,6 @@ public class WxPayController {
                 String time_end = params.get("time_end");
 
                 // 根据订单号判断是否是线下活动，如果是则不返佣
-
-
-
-
 
 
                 Order order = orderService.findOrderByOrderNo(out_trade_no);
@@ -350,7 +321,7 @@ public class WxPayController {
                                 String referrerPhone = referrerUser.getRegisterMobile();
                                 if (StringUtils.isNotBlank(referrerPhone)) {
                                     String userMobile = user.getRegisterMobile();
-                                    String msg = "【东遥课堂】手机尾号" + userMobile.substring(userMobile.length()-4) + "成功购买" + productName + ", 你将获得奖励" + maidMoney / 100 + "元 ,  尽快查阅小程序~";
+                                    String msg = "【东遥课堂】手机尾号" + userMobile.substring(userMobile.length() - 4) + "成功购买" + productName + ", 你将获得奖励" + maidMoney / 100 + "元 ,  尽快查阅小程序~";
                                     msgSenderService.sendMsg(referrerPhone, msg);
                                 }
 
@@ -397,8 +368,8 @@ public class WxPayController {
     }
 
     public static void main(String[] args) {
-        String ss="1111324325";
-        System.out.println(ss.substring(ss.length()-4));
+        String ss = "1111324325";
+        System.out.println(ss.substring(ss.length() - 4));
     }
 }
 

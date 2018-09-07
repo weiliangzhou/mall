@@ -3,6 +3,7 @@ package com.zwl.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zwl.model.baseresult.Result;
+import com.zwl.model.exception.BSUtil;
 import com.zwl.model.groups.Buy;
 import com.zwl.model.groups.H5Buy;
 import com.zwl.model.po.Merchant;
@@ -66,9 +67,8 @@ public class ProductController {
 //        result = callback + "(" + result +")";
         return JSON.toJSONString(result);
     }
-
     @PostMapping("/H5Buy")
-    public String h5Buy(HttpServletRequest request, @Validated(H5Buy.class) @RequestBody Product product) {
+    public String h5Buy(@Validated(H5Buy.class)@RequestBody Product product) {
         Result result = new Result();
 //        Long id = Long.parseLong(request.getParameter("id"));
 //        String userId = request.getParameter("userId");
@@ -77,19 +77,24 @@ public class ProductController {
 //        product.setId(id);
 //        product.setUserId(userId);
 //        product.setMerchantId(merchantId);
-//        String code =product.getCode();
-//        String phone =product.getPhone();
+        String code =product.getCode();
+        String phone =product.getPhone();
 //        校验验证码
         //  校验验证码
-//        boolean isValidate = msgSenderService.checkCode(phone, code,"2");
-//        if (!isValidate)
-//            BSUtil.isTrue(false, "验证码错误");
+        boolean isValidate = msgSenderService.checkCode(phone, code,"2");
+        if (!isValidate)
+            BSUtil.isTrue(false, "验证码错误");
         BuyResult buyResult = productService.buy(product);
-//        buyResult.setOrderNo(orderNo);
-//        buyResult.setTotalFee(price);
-//        buyResult.setTotalFeeDesc(price / 100 + "");
-//        buyResult.setOpenId(user.getWechatOpenid());
-//        buyResult.setMerchantId(merchantId);
+        result.setData(buyResult);
+//        String result = "{'ret':'true','data':"+JSON.toJSONString(buyResult)+"}";
+        //加上返回参数
+//        result = callback + "(" + result +")";
+        return JSON.toJSONString(result);
+    }
+    @PostMapping("/newH5Buy")
+    public String newH5Buy(HttpServletRequest request, @Validated(H5Buy.class) @RequestBody Product product) {
+        Result result = new Result();
+        BuyResult buyResult = productService.buy(product);
         String orderNo = buyResult.getOrderNo();
         Integer totalFee = buyResult.getTotalFee();
         String merchantId = buyResult.getMerchantId();
@@ -104,12 +109,8 @@ public class ProductController {
         if (StrKit.isBlank(realIp)) {
             realIp = "127.0.0.1";
         }
-//        WxPayVo wxPayVo = wxPayService.pay(realIp, openId, orderNo, totalFee, gzhAppId, merchantId, wxPayKey);
-        WxPayVo wxPayVo = wxPayService.H5Pay("115.206.245.202", user.getWechatOpenid(), orderNo, totalFee.toString(), gzhAppId, merchantId, wxPayKey,redirectUrl);
+        WxPayVo wxPayVo = wxPayService.pay(realIp, user.getGzhOpenid(), orderNo, totalFee.toString(), gzhAppId, merchantId, wxPayKey);
         result.setData(wxPayVo);
-//        String result = "{'ret':'true','data':"+JSON.toJSONString(buyResult)+"}";
-        //加上返回参数
-//        result = callback + "(" + result +")";
         return JSON.toJSONString(result);
     }
 
