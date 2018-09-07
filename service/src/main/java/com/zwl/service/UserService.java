@@ -124,9 +124,10 @@ public interface UserService {
     /**
      * 根据手机号码查询用户
      *
-     * @param phone 手机号码
+     * @param phone      手机号码 手机号码不能为空
+     * @param merchantId 商户号不能为空
      */
-    User getUserByPhone(String phone);
+    User getUserByPhoneAndMerchantId(String phone, String merchantId);
 
     /**
      * 修改用户手机号
@@ -158,7 +159,7 @@ public interface UserService {
     /**
      * @param phone          手机号码
      * @param msgCode        短信验证码
-//     * @param gzhOpenId      公众号openid
+     *                       //     * @param gzhOpenId      公众号openid
      * @param merchantId     商户编号
      * @param wxAccreditCode h5微信授权code
      */

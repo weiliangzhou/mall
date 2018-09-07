@@ -196,14 +196,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByPhone(String phone) {
-        if (StringUtils.isEmpty(phone)) {
-            BSUtil.isTrue(Boolean.FALSE, "请输入要查询的手机号码");
-        }
-        return userMapper.getUserByPhone(phone);
-    }
-
-    @Override
     public Boolean updateUserPhoneByUserId(String userId, String phone) {
         if (StringUtils.isEmpty(userId)) {
             BSUtil.isTrue(Boolean.FALSE, "用户编号不能为空");
@@ -279,7 +271,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, timeout = 36000, rollbackFor = Exception.class)
     public H5LoginResultVo h5WeChatLogin(String phone, String msgCode, String merchantId, String wxAccreditCode) {
-        log.info("h5WeChatLogin:phone->"+phone+"msgCode->"+msgCode+"merchantId->"+merchantId+"wxAccreditCode->"+wxAccreditCode);
+        log.info("h5WeChatLogin:phone->" + phone + "msgCode->" + msgCode + "merchantId->" + merchantId + "wxAccreditCode->" + wxAccreditCode);
         if (StringUtils.isEmpty(phone)) {
             BSUtil.isTrue(Boolean.FALSE, "请输入手机号码");
         }
@@ -310,7 +302,7 @@ public class UserServiceImpl implements UserService {
             BSUtil.isTrue(Boolean.FALSE, "微信授权code无效");
         }
         Boolean firstLogin = Boolean.FALSE;//验证用户是否是第一次登录
-        User user = getUserByPhone(phone);
+        User user = getUserByPhoneAndMerchantId(phone, merchantId);
         if (null == user) {
             //注册用户
             user = h5AccreditCreateUser(accessTokenVo.getOpenid(), merchantId, phone);
@@ -338,6 +330,20 @@ public class UserServiceImpl implements UserService {
         TokenModel model = tokenManager.createToken(user.getUserId());
         String token = model.getSignToken();
         return new H5LoginResultVo(token, user.getGzhOpenid(), user.getUserId(), firstLogin);
+    }
+
+    public User getUserByPhoneAndMerchantId(String phone, String merchantId) {
+        if (StringUtils.isEmpty(phone)) {
+            BSUtil.isTrue(Boolean.FALSE, "请输入要查询的手机号码");
+        }
+        if (merchantId == null) {
+            BSUtil.isTrue(Boolean.FALSE, "请输入要查询的商户号");
+        }
+        User user = new User();
+        user.setRegisterMobile(phone);
+        user.setMerchantId(merchantId);
+        User sysUser = getOneByParams(user);
+        return sysUser;
     }
 
     private User h5AccreditCreateUser(String openId, String merchantId, String phone) {
