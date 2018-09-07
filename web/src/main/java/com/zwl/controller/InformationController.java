@@ -46,7 +46,7 @@ public class InformationController {
         Result result = new Result();
         Information information = new Information();
         information.setId(id);
-        List<Information> informationList = informationService.getInformationList(information);
+        List<Information> informationList = informationService.getInformationInfo(information);
         result.setData(informationList);
         return JSONObject.toJSONString(result);
     }
