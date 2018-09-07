@@ -162,6 +162,8 @@
         from ss_product
         where available=1
         and merchant_id=#{merchantId}
+        order by id
+        limit 4
 
     </select>
     <select id="getAdminProductList" resultMap="BaseResultMap">
