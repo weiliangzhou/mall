@@ -53,6 +53,10 @@ public class TokenFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
+        if (requestURL.contains("/information/getInformationInfo")) {
+            chain.doFilter(request, response);
+            return;
+        }
         if (requestURL.contains("/user/authorization")) {
             chain.doFilter(request, response);
             return;
@@ -106,21 +110,21 @@ public class TokenFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-        //获取观后感列表
-        if (requestURL.contains("/wx/classInfoComment/getClassInfoCommentList")) {
-            chain.doFilter(request, response);
-            return;
-        }
-        //新增观后感
-        if (requestURL.contains("/wx/classInfoComment/add")) {
-            chain.doFilter(request, response);
-            return;
-        }
-        //获取节课下拉框
-        if (requestURL.contains("/wx/classInfoComment/getClassInfoList")) {
-            chain.doFilter(request, response);
-            return;
-        }
+//        //获取观后感列表
+//        if (requestURL.contains("/wx/classInfoComment/getClassInfoCommentList")) {
+//            chain.doFilter(request, response);
+//            return;
+//        }
+//        //新增观后感
+//        if (requestURL.contains("/wx/classInfoComment/add")) {
+//            chain.doFilter(request, response);
+//            return;
+//        }
+//        //获取节课下拉框
+//        if (requestURL.contains("/wx/classInfoComment/getClassInfoList")) {
+//            chain.doFilter(request, response);
+//            return;
+//        }
         //获取图标列表
         if (requestURL.contains("/wx/icon/getIconList")) {
             chain.doFilter(request, response);

@@ -21,4 +21,6 @@ public interface InformationService {
     int deleteInformation(Integer id);
 
     List<Information> getWxInformationList(Information information);
+
+    List<Information> getInformationInfo(Information information);
 }
