@@ -279,6 +279,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, timeout = 36000, rollbackFor = Exception.class)
     public H5LoginResultVo h5WeChatLogin(String phone, String msgCode, String merchantId, String wxAccreditCode) {
+        log.info("h5WeChatLogin:phone->"+phone+"msgCode->"+msgCode+"merchantId->"+merchantId+"wxAccreditCode->"+wxAccreditCode);
         if (StringUtils.isEmpty(phone)) {
             BSUtil.isTrue(Boolean.FALSE, "请输入手机号码");
         }
