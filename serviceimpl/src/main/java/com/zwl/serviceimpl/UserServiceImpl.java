@@ -277,45 +277,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Deprecated
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, timeout = 36000, rollbackFor = Exception.class)
-    public Result h5WeChatAuthorization(UserLoginInfoVo userLoginInfoVo, String code, String merchantId) {
-        if (null == code) {
-            BSUtil.isTrue(Boolean.FALSE, "请输入code");
-        }
-        if (null == merchantId) {
-            BSUtil.isTrue(Boolean.FALSE, "请输入要登录的小程序编号");
-        }
-        Merchant merchant = merchantService.getMerchantByMerchantId(merchantId);
-        if (merchant == null) {
-            BSUtil.isTrue(Boolean.FALSE, "商户不存在");
-        }
-        WxH5AccessTokenVo accessTokenVo = h5AppWeChatService.getH5AccessToken(merchant.getGzAppId(), merchant.getGzAppKey(), code);
-        if (null == accessTokenVo) {
-            BSUtil.isTrue(Boolean.FALSE, "微信没有返回授权信息");
-        }
-        if (accessTokenVo.getErrcode() == null) {//微信请求成功
-            // 获取微信信息成功
-            User user = getUserByGzhOpenIdAndMerchantId(accessTokenVo.getOpenid(), merchantId);
-            if (user == null) {
-                //创建用户
-                user = h5AccreditCreateUser(accessTokenVo.getOpenid(), merchantId, null);
-//                WxUserInfoVo userInfoVo = h5AppWeChatService.getWeChatUserInfo(accessTokenVo.getAccess_token(), accessTokenVo.getOpenid());
-                //创建用户对应的用户信息
-                //                h5AccreditCreateUserInfo(userInfoVo, user.getUserId());
-            } else {
-                //用户已存在获取微信用户信息更新数据库中的资料
-                WxUserInfoVo userInfoVo = h5AppWeChatService.getWeChatUserInfo(accessTokenVo.getAccess_token(), accessTokenVo.getOpenid());
-                h5AccreditUpdateUserInfo(userInfoVo, user.getUserId());
-            }
-//            TokenModel model = tokenManager.createToken(user.getUserId());
-//            String token = model.getSignToken();
-            return new WxResultSuccessMessage(user.getUserId(), accessTokenVo.getOpenid());
-        }
-        return new WxResultErrorMessage(accessTokenVo.getErrcode(), accessTokenVo.getErrmsg());
-    }
-
-    @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, timeout = 36000, rollbackFor = Exception.class)
     public H5LoginResultVo h5WeChatLogin(String phone, String msgCode, String merchantId, String wxAccreditCode) {
         if (StringUtils.isEmpty(phone)) {

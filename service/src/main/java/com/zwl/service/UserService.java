@@ -156,16 +156,6 @@ public interface UserService {
     Result miniAppWeChatAuthorization(UserLoginInfoVo userLoginInfoVo, String code, String merchantId);
 
     /**
-     * h5获取用户使用权限
-     *
-     * @param userLoginInfoVo
-     * @param code            微信授权code
-     * @param merchantId      商户APP编号用于获取APPID APPKEY
-     */
-    @Deprecated
-    Result h5WeChatAuthorization(UserLoginInfoVo userLoginInfoVo, String code, String merchantId);
-
-    /**
      * @param phone          手机号码
      * @param msgCode        短信验证码
 //     * @param gzhOpenId      公众号openid

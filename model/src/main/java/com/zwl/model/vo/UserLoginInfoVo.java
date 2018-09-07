@@ -46,5 +46,22 @@ public class UserLoginInfoVo {
     @ApiComment(value = "授权业务分类", sample = "1小程序 2 H5网页授权")
     private Integer busCode;
 
+    //------------------------------  下面 H5登录时候用到的参数
+    /**
+     * 手机号码
+     */
+    private String phone;
+    /**
+     * 短信验证码
+     */
+    private String msgCode;
+    /**
+     * 商户编号  引用上面
+     */
+    //    private String merchantId;
+    /**
+     * 微信授权code
+     */
+    private String wxAccreditCode;
 
 }

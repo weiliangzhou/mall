@@ -58,32 +58,18 @@ public class UserController {
         if (userLoginInfoVo == null) {
             BSUtil.isTrue(Boolean.FALSE, "参数错误");
         }
-        if (userLoginInfoVo.getBusCode() == null) {
-            BSUtil.isTrue(Boolean.FALSE, "请输入要授权的方式 1:小程序 2:H5页面授权");
-        }
+//        if (userLoginInfoVo.getBusCode() == null) {
+//            BSUtil.isTrue(Boolean.FALSE, "请输入要授权的方式 1:小程序 2:H5页面授权");
+//        }
         Result result = null;
         if (userLoginInfoVo.getBusCode() == null || userLoginInfoVo.getBusCode() == 1) {
             result = userService.miniAppWeChatAuthorization(userLoginInfoVo, userLoginInfoVo.getCode(), userLoginInfoVo.getMerchantId());
         } else if (userLoginInfoVo.getBusCode() == 2) {
-            result = userService.h5WeChatAuthorization(userLoginInfoVo, userLoginInfoVo.getCode(), userLoginInfoVo.getMerchantId());
+            H5LoginResultVo resultVo = userService.h5WeChatLogin(userLoginInfoVo.getPhone(), userLoginInfoVo.getMsgCode(), userLoginInfoVo.getMerchantId(), userLoginInfoVo.getWxAccreditCode());
+            result.setData(resultVo);
         }
         return result;
     }
-
-    @PostMapping("/h5WeChatLogin")
-    public Result h5WeChatLogin(@RequestBody JSONObject jsonObject) {
-        String phone = jsonObject.getString("phone");
-        String msgCode = jsonObject.getString("msgCode");
-//        String gzhOpenId = jsonObject.getString("gzhOpenid");
-        String merchantId = jsonObject.getString("merchantId");
-        String wxAccreditCode = jsonObject.getString("wxAccreditCode");
-        H5LoginResultVo resultVo = userService.h5WeChatLogin(phone, msgCode, merchantId, wxAccreditCode);
-        Result result = new Result();
-        result.setData(resultVo);
-        return result;
-
-    }
-
 
     //购买前绑定手机号
     @PostMapping("/bindingMobile")
