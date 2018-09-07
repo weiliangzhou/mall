@@ -16,34 +16,16 @@ public class H5LoginResultVo {
      * 用户编号
      */
     private String userId;
-    private Integer errorcode;
-    private String errormsg;
+    /**
+     * 是否第一次登录
+     */
+    private Boolean firstLogin;
 
-    public H5LoginResultVo(String tokent, String gzhOpenId, String userId, Integer errorcode, String errorMsg) {
+    public H5LoginResultVo(String tokent, String gzhOpenId, String userId, Boolean firstLogin) {
         this.token = tokent;
         this.gzhOpenId = gzhOpenId;
         this.userId = userId;
-        this.errorcode = errorcode;
-        this.errormsg = errorMsg;
-    }
-
-    public H5LoginResultVo() {
-    }
-
-    public Integer getErrorcode() {
-        return errorcode;
-    }
-
-    public void setErrorcode(Integer errorcode) {
-        this.errorcode = errorcode;
-    }
-
-    public String getErrormsg() {
-        return errormsg;
-    }
-
-    public void setErrormsg(String errormsg) {
-        this.errormsg = errormsg;
+        this.firstLogin = firstLogin;
     }
 
     public String getToken() {
@@ -68,5 +50,13 @@ public class H5LoginResultVo {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public Boolean getFirstLogin() {
+        return firstLogin;
+    }
+
+    public void setFirstLogin(Boolean firstLogin) {
+        this.firstLogin = firstLogin;
     }
 }

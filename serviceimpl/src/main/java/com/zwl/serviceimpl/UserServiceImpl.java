@@ -299,7 +299,7 @@ public class UserServiceImpl implements UserService {
             User user = getUserByGzhOpenIdAndMerchantId(accessTokenVo.getOpenid(), merchantId);
             if (user == null) {
                 //创建用户
-                user = h5AccreditCreateUser(accessTokenVo.getOpenid(), merchantId);
+                user = h5AccreditCreateUser(accessTokenVo.getOpenid(), merchantId, null);
 //                WxUserInfoVo userInfoVo = h5AppWeChatService.getWeChatUserInfo(accessTokenVo.getAccess_token(), accessTokenVo.getOpenid());
                 //创建用户对应的用户信息
                 //                h5AccreditCreateUserInfo(userInfoVo, user.getUserId());
@@ -351,7 +351,7 @@ public class UserServiceImpl implements UserService {
         User user = getUserByPhone(phone);
         if (null == user) {
             //注册用户
-            user = h5AccreditCreateUser(accessTokenVo.getOpenid(), merchantId);
+            user = h5AccreditCreateUser(accessTokenVo.getOpenid(), merchantId, phone);
             firstLogin = Boolean.TRUE;
         } else {
             if (user.getGzhOpenid() == null) {
@@ -375,10 +375,10 @@ public class UserServiceImpl implements UserService {
         //设置token
         TokenModel model = tokenManager.createToken(user.getUserId());
         String token = model.getSignToken();
-        return new H5LoginResultVo(token, user.getGzhOpenid(), user.getUserId(), null, null);
+        return new H5LoginResultVo(token, user.getGzhOpenid(), user.getUserId(), firstLogin);
     }
 
-    private User h5AccreditCreateUser(String openId, String merchantId) {
+    private User h5AccreditCreateUser(String openId, String merchantId, String phone) {
         if (null == openId) {
             BSUtil.isTrue(Boolean.FALSE, "opendId不能为空");
         }
@@ -386,6 +386,7 @@ public class UserServiceImpl implements UserService {
         user.setUserId(UUIDUtil.getUUID32());
         user.setGzhOpenid(openId);
         user.setMerchantId(merchantId);
+        user.setRegisterMobile(phone);
         user.setRegisterFrom(UserRegisterType.WECHAT_ACCREDIT.getValue());
         user.setIsBuy(0);
         addUser(user);
