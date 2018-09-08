@@ -13,6 +13,7 @@ import com.zwl.model.vo.UserLoginInfoVo;
 import com.zwl.service.*;
 import com.zwl.serviceimpl.RedisTokenManagerImpl;
 import com.zwl.util.CheckUtil;
+import com.zwl.util.PhoneUtil;
 import com.zwl.util.ThreadVariable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -169,7 +170,7 @@ public class UserController {
 //        userLoginInfoVo.setIsBindMobile(userInfo.getIsBindMobile()==null?0:1);
         //通过主表获取绑定手机号
         userLoginInfoVo.setIsBindMobile(user.getRegisterMobile() == null ? 0 : 1);
-        userLoginInfoVo.setRegisterMobile(user.getRegisterMobile());
+        userLoginInfoVo.setRegisterMobile(user.getRegisterMobile() == null ? "" : PhoneUtil.replace(user.getRegisterMobile()));
 //        userLoginInfoVo.setIsCertification(userInfo.getIsCertification() == null ? 0 : 1);
         //实名认证状态
         UserCertification userCertification = certificationService.getOneByUserId(userId);
