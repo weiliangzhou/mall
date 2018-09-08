@@ -207,8 +207,8 @@ public class WxPayServiceImpl implements WxPayService {
         cal.add(Calendar.DAY_OF_MONTH, +5);
         String timeExpire = sdf_yMdHms.format(cal.getTime());
         Map<String, String> params = WxPayH5.New()
-                .setAppId("wx32966989d0bc098d")//先写死
-                .setMchId("1509688041")
+                .setAppId(gzhAppId)//先写死"wx32966989d0bc098d"
+                .setMchId(mch_id)//"1509688041"
                 .setBody("东遥课堂")
                 .setOutTradeNo(orderNo)
                 .setTotalFee(totalFee)
@@ -217,10 +217,10 @@ public class WxPayServiceImpl implements WxPayService {
                 .setNotifyUrl(payNotifyProperties.getPayNotifyUrl())
                 .setSpbillCreateIp(realIp)
                 .setTradeType("MWEB")
-//                .setOpenId(openId)
+                .setOpenId(openId)
                 .setSceneInfo("{\"h5_info\": {\"type\":\"Wap\",\"wap_url\": \"https://xcx.wegoo.cn\",\"wap_name\": \"东遥课堂\"}}")
                 .setAttach("东遥课堂")
-                .setPaternerKey("612aa0e07599468997974318e654509f")
+                .setPaternerKey(wxPayKey)//"612aa0e07599468997974318e654509f"
                 .build();
         //获取微信返回的结果
         log.info("开始发送微信支付xml--->" + PaymentKit.toXml(params));

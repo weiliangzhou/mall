@@ -94,7 +94,7 @@ public class ProductController {
     @PostMapping("/newH5Buy")
     public String newH5Buy(HttpServletRequest request, @Validated(H5Buy.class) @RequestBody Product product) {
         Result result = new Result();
-        BuyResult buyResult = productService.buy(product);
+        BuyResult buyResult = productService.newH5Buy(product);
         String orderNo = buyResult.getOrderNo();
         Integer totalFee = buyResult.getTotalFee();
         String merchantId = buyResult.getMerchantId();
