@@ -63,4 +63,6 @@ public class ClassVo {
     private Integer isRecommend;
     @ApiComment(value = "封面", sample = "www.baidu.com")
     private String frontCover;
+    @ApiComment(value = "是否展示", sample = "0 1")
+    private Integer isShow;
 }

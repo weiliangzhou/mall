@@ -65,7 +65,7 @@ public class TokenFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-        if (requestURL.contains("/qr/getQRCode")) {
+        if (requestURL.contains("/qr/getQRCode")||requestURL.contains("/qr/getH5QrCode")) {
             chain.doFilter(request, response);
             return;
         }
