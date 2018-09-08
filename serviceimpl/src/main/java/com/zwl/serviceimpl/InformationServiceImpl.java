@@ -44,4 +44,9 @@ public class InformationServiceImpl implements InformationService {
     public List<Information> getWxInformationList(Information information) {
         return informationMapper.getWxInformationList(information);
     }
+
+    @Override
+    public List<Information> getInformationInfo(Information information) {
+        return informationMapper.getInformationInfo(information);
+    }
 }

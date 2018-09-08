@@ -20,6 +20,7 @@ public interface ProductService {
     void updateProduct(Product product);
 
     BuyResult buy(Product product);
+    BuyResult newH5Buy(Product product);
 
     List<Product> getAdminProductList();
 

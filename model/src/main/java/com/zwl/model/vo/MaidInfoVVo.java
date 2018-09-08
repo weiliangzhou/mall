@@ -23,6 +23,8 @@ public class MaidInfoVVo {
     private Integer totalCount;
     @ApiComment("推荐人的手机号码")
     private String referrerPhone;
+    @ApiComment("用户头像")
+    private String logoUrl;
     @ApiComment(seeClass = MaidInfoVo.class)
     private List<MaidInfoVo> maidInfoVoList;
 }

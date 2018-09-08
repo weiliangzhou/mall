@@ -9,6 +9,7 @@ public class User {
     private Long id;
     private String userId;
     private String wechatOpenid;
+    private String gzhOpenid;
     private String wechatUnionId;
     private String merchantId;
     //    从什么渠道注册。1、wechat 微信注册 2、线下导入

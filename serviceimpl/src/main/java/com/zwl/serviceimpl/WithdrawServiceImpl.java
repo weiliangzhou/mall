@@ -53,7 +53,7 @@ public class WithdrawServiceImpl implements WithdrawService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void approveWithdraw(Integer status, String operator, String withdrawId, String realIp) {
         int count = withdrawMapper.updateWithdrawById(status, operator, withdrawId);
         if (count == 0)
@@ -116,6 +116,7 @@ public class WithdrawServiceImpl implements WithdrawService {
         withdraw.setOpenId(user.getWechatOpenid());
         withdraw.setRealName(user.getRealName());
         withdraw.setMoney(money);
+        withdraw.setBalance(balance-money);
         //status设置为1 审核中
         withdraw.setStatus(1);
         withdrawMapper.insertSelective(withdraw);

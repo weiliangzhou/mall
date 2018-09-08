@@ -87,10 +87,13 @@ public class ClassInfoController {
                 classInfoComment.setClassInfoId(c.getId());
                 classInfoComment.setUserId(userId);
                 classInfoComment.setMerchantId(merchantId);
+                //查该用户该节课有无评论
                 List<ClassInfoComment> classInfoCommentList = classInfoCommentService.getClassInfoCommentListByClassInfoId(classInfoComment);
                 if(CollectionUtils.isEmpty(classInfoCommentList)){
+                    //没有评论返回0，前端显示"课后感"，链接跳添加评论
                     classVo.setCommentType(0);
                 }else {
+                    //已评论返回1，前端显示"已读"，链接跳评论列表
                     classVo.setCommentType(1);
                 }
                 listVo.add(classVo);

@@ -62,6 +62,8 @@ public class Withdraw {
     @NotBlank(message = "商户号不能为空", groups = {ApplyWithdraw.class})
     @ApiComment(value = "商户号", sample = "dy")
     private String merchantId;
+    //提现之后 余额
+    private Integer balance;
 
     public String getMoneyDesc() {
         return this.money / 100 + "";

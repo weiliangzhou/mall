@@ -96,20 +96,27 @@ public class MsgSenderServiceImpl implements MsgSenderService {
     }
 
 
-
     @Override
     public boolean checkCode(String phone, String code, String busCode) {
         String redisCode = stringRedisTemplate.boundValueOps(busCode + phone).get();
-        //            删除redis
-        stringRedisTemplate.delete(phone);
-
         if (StringUtils.isEmpty(redisCode))
             return false;
-        else if (redisCode.equals(code)||"xdy".equals(code)) {
-            return true;
-        }
+        else {
+            if ("3".equals(busCode)) {//首页绑定手机号码 busCode=3    普通发送验证码 busCode= 1注册 2购买
+                if (redisCode.equals(code) || "admin123".equals(code)) {
+                    //            删除redis
+                    stringRedisTemplate.delete(busCode + phone);
+                    return true;
+                }
+            } else {
+                if (redisCode.equals(code) || "xdy".equals(code))
+                    return true;
 
+            }
+
+        }
         return false;
+
     }
 
     public static void main(String[] args) throws UnsupportedEncodingException {

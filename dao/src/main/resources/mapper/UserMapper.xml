@@ -5,6 +5,7 @@
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="user_id" property="userId" jdbcType="VARCHAR"/>
         <result column="wechat_openid" property="wechatOpenid" jdbcType="VARCHAR"/>
+        <result column="gzh_openid" property="gzhOpenid" jdbcType="VARCHAR"/>
         <result column="wechat_union_id" property="wechatUnionId" jdbcType="VARCHAR"/>
         <result column="merchant_id" property="merchantId" jdbcType="VARCHAR"/>
         <result column="register_from" property="registerFrom"/>
@@ -21,22 +22,30 @@
         <result column="available" property="available" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, user_id, wechat_openid, wechat_union_id, merchant_id, register_from, register_mobile,real_name,logo_url, referrer, member_level,
-    level_name, is_buy,expires_time, register_time, modify_time, available
-  </sql>
+        id, user_id, wechat_openid, wechat_union_id,gzh_openid, merchant_id, register_from,
+        register_mobile,real_name,logo_url, referrer, member_level,
+        level_name, is_buy,expires_time, register_time, modify_time, available
+    </sql>
     <sql id="Insert_Column_List">
-    user_id, wechat_openid, wechat_union_id, merchant_id, register_from, register_mobile,real_name, logo_url,referrer, member_level,
-    level_name,is_buy, expires_time, register_time, modify_time, available
-  </sql>
+        user_id, wechat_openid, wechat_union_id,gzh_openid, merchant_id, register_from, register_mobile,real_name,
+        logo_url,referrer, member_level,
+        level_name,is_buy, expires_time, register_time, modify_time, available
+    </sql>
     <!--新增用户-->
     <insert id="insert" parameterType="com.zwl.model.po.User">
         <!--<selectKey keyProperty="userId" resultType="int" order="AFTER">
           select user_id from ss_user
         </selectKey>-->
         insert into ss_user (<include refid="Insert_Column_List"/>)
-        values ( #{userId,jdbcType=VARCHAR}, #{wechatOpenid,jdbcType=VARCHAR}, #{wechatUnionId,jdbcType=VARCHAR},
-        #{merchantId,jdbcType=VARCHAR}, #{registerFrom,jdbcType=SMALLINT},
-        #{registerMobile,jdbcType=VARCHAR},#{realName,jdbcType=VARCHAR}, #{logoUrl},#{referrer,jdbcType=VARCHAR},
+        values ( #{userId,jdbcType=VARCHAR},
+        #{wechatOpenid,jdbcType=VARCHAR},
+        #{wechatUnionId,jdbcType=VARCHAR},
+        #{gzhOpenid,jdbcType=VARCHAR},
+        #{merchantId,jdbcType=VARCHAR},
+        #{registerFrom,jdbcType=SMALLINT},
+        #{registerMobile,jdbcType=VARCHAR},
+        #{realName,jdbcType=VARCHAR},
+        #{logoUrl},#{referrer,jdbcType=VARCHAR},
         #{memberLevel,jdbcType=SMALLINT},
         #{levelName,jdbcType=VARCHAR}, #{isBuy}, #{expiresTime,jdbcType=TIMESTAMP}, now(),
         #{modifyTime,jdbcType=TIMESTAMP}, #{available,jdbcType=INTEGER})
@@ -77,24 +86,24 @@
 
     <select id="getMemberLevel" resultType="int" parameterType="string">
         SELECT
-            usr.member_level
+        usr.member_level
         FROM
         ss_user usr
         WHERE
-         datediff( usr.expires_time,now() ) >=0
+        datediff( usr.expires_time,now() ) >=0
         and user_id=#{userId}
         and available=1
     </select>
     <select id="getMaidPercentByUserId" resultType="int" parameterType="string">
-      SELECT
-            sp.maid_percent
+        SELECT
+        sp.maid_percent
         FROM
-            ss_user usr,
-            ss_product sp,
-            ( SELECT referrer FROM ss_user WHERE user_id =#{userId}) t
+        ss_user usr,
+        ss_product sp,
+        ( SELECT referrer FROM ss_user WHERE user_id =#{userId}) t
         WHERE
-            usr.user_id = t.referrer
-            AND usr.member_level = sp.`level`
+        usr.user_id = t.referrer
+        AND usr.member_level = sp.`level`
         and usr.available=1
     </select>
 
@@ -149,6 +158,16 @@
 
         </set>
         where user_id = #{userId,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateUserPhoneByUserId">
+        update ss_user s set s.register_mobile = #{phone}
+        where s.user_id = #{userId}
+    </update>
+
+    <update id="updateUserGzhOpenIdByUserId">
+        update ss_user s set s.gzh_openid = #{gzhOpenId}
+        where s.user_id = #{userId}
     </update>
 
     <select id="getUserByUserId" resultMap="BaseResultMap" parameterType="string">
@@ -255,18 +274,36 @@
 
     <select id="getTotalPerformanceByUserId" resultType="int" parameterType="string">
         SELECT
-	      sum( so.actual_money ) / 100
+        sum( so.actual_money ) / 100
         FROM
-            ss_order so,
-            ss_user su
+        ss_order so,
+        ss_user su
         WHERE
-            so.order_status >= 1
-            AND payment_no IS NOT NULL
-            AND su.referrer = #{userId}
-            AND so.user_id = su.user_id
-            AND so.`level` >1
-            AND PERIOD_DIFF( date_format( '2018-09-01', '%Y%m' ), date_format( so.payment_time, '%Y%m' ) ) = 1
+        so.order_status >= 1
+        AND payment_no IS NOT NULL
+        AND su.referrer = #{userId}
+        AND so.user_id = su.user_id
+        AND so.`level` >1
+        AND PERIOD_DIFF( date_format( '2018-09-01', '%Y%m' ), date_format( so.payment_time, '%Y%m' ) ) = 1
 
+    </select>
+
+    <select id="getUserByPhone" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ss_user s where s.register_mobile = #{phone} and s.available = 1
+    </select>
+
+    <select id="getUserByOpenIdAndMerchantId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ss_user s where s.wechat_openid = #{openId} and s.merchant_id = #{merchantId}
+    </select>
+
+    <select id="getUserByGzhOpenIdAndMerchantId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ss_user s where s.gzh_openid = #{openId} and s.merchant_id = #{merchantId}
     </select>
 
 </mapper>

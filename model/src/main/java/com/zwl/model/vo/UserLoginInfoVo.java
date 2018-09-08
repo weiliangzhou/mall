@@ -44,5 +44,22 @@ public class UserLoginInfoVo {
     @ApiComment(value = "邀请记录人数（人）", sample = "108")
     private Integer xiaxianCount;
 
+    //------------------------------  下面 H5登录时候用到的参数
+    /**
+     * 手机号码
+     */
+    private String phone;
+    /**
+     * 短信验证码
+     */
+    private String msgCode;
+    /**
+     * 商户编号  引用上面
+     */
+    //    private String merchantId;
+    /**
+     * 微信授权code
+     */
+    private String wxAccreditCode;
 
 }

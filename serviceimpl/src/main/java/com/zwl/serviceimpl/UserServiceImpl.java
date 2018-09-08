@@ -1,21 +1,29 @@
 package com.zwl.serviceimpl;
 
+import com.alibaba.fastjson.JSON;
 import com.zwl.dao.mapper.UserInfoMapper;
 import com.zwl.dao.mapper.UserMapper;
-import com.zwl.model.po.User;
-import com.zwl.model.po.UserInfo;
-import com.zwl.model.vo.UserLoginInfoVo;
-import com.zwl.model.vo.UserQueryVo;
-import com.zwl.service.UserService;
+import com.zwl.model.baseresult.Result;
+import com.zwl.model.constant.UserRegisterType;
+import com.zwl.model.exception.BSUtil;
+import com.zwl.model.po.*;
+import com.zwl.model.vo.*;
+import com.zwl.service.*;
 import com.zwl.util.CheckUtil;
 import com.zwl.util.UUIDUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+@Slf4j
 @SuppressWarnings("all")
 @Service
 public class UserServiceImpl implements UserService {
@@ -23,6 +31,18 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
     @Autowired
     private UserInfoMapper userInfoMapper;
+    @Autowired
+    private MerchantService merchantService;
+    @Autowired
+    private MiniAppWeChatService miniAppWeChatService;
+    @Autowired
+    private RedisTokenManagerImpl tokenManager;
+    @Autowired
+    private H5AppWeChatService h5AppWeChatService;
+    @Autowired
+    private UserInfoService userInfoService;
+    @Autowired
+    private MsgSenderService msgSenderService;
 
     @Override
     public void addUser(User user) {
@@ -70,7 +90,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED,isolation = Isolation.DEFAULT,timeout=36000,rollbackFor=Exception.class)
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, timeout = 36000, rollbackFor = Exception.class)
     public String saveAuthorization(UserLoginInfoVo userLoginInfoVo, String openid) {
         String userId = UUIDUtil.getUUID32();
         User user = new User();
@@ -90,6 +110,8 @@ public class UserServiceImpl implements UserService {
         user.setIsBuy(0);
         //插入用户表
         user.setLogoUrl(userLoginInfoVo.getLogoUrl());
+        user.setMemberLevel(0);
+        user.setLevelName("会员");
         userMapper.insert(user);
         //用户信息（头像、昵称等）
         UserInfo userInfo = new UserInfo();
@@ -107,7 +129,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED,isolation = Isolation.DEFAULT,timeout=36000,rollbackFor=Exception.class)
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, timeout = 36000, rollbackFor = Exception.class)
     public void modifyAuthorization(UserLoginInfoVo userLoginInfoVo, User userQuery) {
         //如果用户还未购买，则可以更新推荐人
         if ((userQuery.getIsBuy() == null || userQuery.getIsBuy() == 0) && CheckUtil.isNotEmpty(userLoginInfoVo.getReferrer())) {
@@ -117,7 +139,7 @@ public class UserServiceImpl implements UserService {
             String referrer = userLoginInfoVo.getReferrer();
             if (CheckUtil.isNotEmpty(referrer)) {
                 User userIsBuy = userMapper.getUserByUserId(referrer);
-                if (userIsBuy.getIsBuy() != null && userIsBuy.getIsBuy()==1) {
+                if (userIsBuy.getIsBuy() != null && userIsBuy.getIsBuy() == 1) {
                     user.setReferrer(userLoginInfoVo.getReferrer());
                     userMapper.updateUserByUserId(user);
                 }
@@ -126,11 +148,11 @@ public class UserServiceImpl implements UserService {
             }
         }
         String userId = userQuery.getUserId();
-        UserInfo userInfo=new UserInfo();
+        UserInfo userInfo = new UserInfo();
         userInfo.setUserId(userId);
         userInfoMapper.updateByParams(userInfo);
         //用户主表头像也更新
-        if(CheckUtil.isNotEmpty(userLoginInfoVo.getLogoUrl())){
+        if (CheckUtil.isNotEmpty(userLoginInfoVo.getLogoUrl())) {
             User user = new User();
             user.setUserId(userQuery.getUserId());
             user.setLogoUrl(userLoginInfoVo.getLogoUrl());
@@ -147,5 +169,229 @@ public class UserServiceImpl implements UserService {
     public Integer getTotalPerformanceByUserId(String userId) {
         return userMapper.getTotalPerformanceByUserId(userId);
     }
+
+    @Override
+    public User getUserByOpenIdAndMerchantId(String openId, String merchantId) {
+        if (null == openId) {
+            BSUtil.isTrue(Boolean.FALSE, "微信openId不能为空");
+        }
+        if (null == merchantId) {
+            BSUtil.isTrue(Boolean.FALSE, "商户编号不能为空");
+        }
+        return userMapper.getUserByOpenIdAndMerchantId(openId, merchantId);
+    }
+
+    @Override
+    public User getUserByGzhOpenIdAndMerchantId(String gzhOpenId, String merchantId) {
+        if (StringUtils.isEmpty(gzhOpenId)) {
+            BSUtil.isTrue(Boolean.FALSE, "请输入公众号");
+        }
+        if (StringUtils.isEmpty(merchantId)) {
+            BSUtil.isTrue(Boolean.FALSE, "商户编号不能为空");
+        }
+        return userMapper.getUserByGzhOpenIdAndMerchantId(gzhOpenId, merchantId);
+    }
+
+    @Override
+    public Boolean updateUserPhoneByUserId(String userId, String phone) {
+        if (StringUtils.isEmpty(userId)) {
+            BSUtil.isTrue(Boolean.FALSE, "用户编号不能为空");
+        }
+        if (StringUtils.isEmpty(phone)) {
+            BSUtil.isTrue(Boolean.FALSE, "手机号码不能为");
+        }
+        userMapper.updateUserPhoneByUserId(userId, phone);
+        return Boolean.TRUE;
+    }
+
+    @Override
+    public Boolean updateUserGzhOpenIdByUserId(String userId, String gzhOpenId) {
+        if (StringUtils.isEmpty(userId)) {
+            BSUtil.isTrue(Boolean.FALSE, "请输入用户编号");
+        }
+        if (StringUtils.isEmpty(gzhOpenId)) {
+            BSUtil.isTrue(Boolean.FALSE, "请输入要修改的公众号");
+        }
+        userMapper.updateUserGzhOpenIdByUserId(userId, gzhOpenId);
+        return Boolean.TRUE;
+    }
+
+    @Override
+    public Result miniAppWeChatAuthorization(UserLoginInfoVo userLoginInfoVo, String code, String merchantId) {
+        if (null == code) {
+            BSUtil.isTrue(Boolean.FALSE, "请输入code");
+        }
+        if (null == merchantId) {
+            BSUtil.isTrue(Boolean.FALSE, "请输入要登录的小程序编号");
+        }
+        log.info("====@@@@进入用户授权@@@@@==========");
+        log.info("====@@@@推荐人传入参数为@@@@@==========：");
+        //根据merchantid获取appid和secret
+        Merchant merchant = merchantService.getMerchantByMerchantId(merchantId);
+        Result result = new Result();
+        if (merchant == null)
+            BSUtil.isTrue(false, "商户不存在");
+        //根据code获取openid 去掉数据库appid和appsecret的空格和换行等
+        String resultStr = miniAppWeChatService.authorizationCode(code, merchant.getAppId(), merchant.getAppSecret());
+        if (StringUtils.isEmpty(resultStr))
+            BSUtil.isTrue(false, "获取不到微信用户信息");
+        Map map = JSON.parseObject(resultStr, Map.class);
+        if (!StringUtils.isEmpty(map.get("errcode"))) {
+            result.setCode(map.get("errcode").toString());
+            result.setMessage("微信返回错误信息：" + map.get("errmsg").toString());
+            return result;
+        }
+        String openid = map.get("openid").toString();
+        //先查询用户之前是否授权登录过
+        User userQuery = new User();
+        userQuery.setWechatOpenid(openid);
+        userQuery.setMerchantId(merchantId);
+        userQuery = getOneByParams(userQuery);
+        String userId;
+        if (userQuery == null) {//用户之前没授权登录过
+            userId = saveAuthorization(userLoginInfoVo, openid);
+        } else {//如果用户还未购买，则可以更新推荐人
+            userId = userQuery.getUserId();
+            log.info("====@@@@用户之前已经授权登录过，userId为：@@@@@==========：" + userId);
+            modifyAuthorization(userLoginInfoVo, userQuery);
+        }
+        //返回用户登录态
+        TokenModel model = tokenManager.createToken(userId);
+        String token = model.getSignToken();
+        Map resultMap = new HashMap<String, Object>();
+        resultMap.put("token", token);
+        resultMap.put("userId", userId);
+        result.setData(resultMap);
+        return result;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, timeout = 36000, rollbackFor = Exception.class)
+    public H5LoginResultVo h5WeChatLogin(String phone, String msgCode, String merchantId, String wxAccreditCode) {
+        log.info("h5WeChatLogin:phone->" + phone + "msgCode->" + msgCode + "merchantId->" + merchantId + "wxAccreditCode->" + wxAccreditCode);
+        if (StringUtils.isEmpty(phone)) {
+            BSUtil.isTrue(Boolean.FALSE, "请输入手机号码");
+        }
+//        if (StringUtils.isEmpty(gzhOpenId)) {
+//            BSUtil.isTrue(Boolean.FALSE, "请输入公众号open id");
+//        }
+        if (StringUtils.isEmpty(merchantId)) {
+            BSUtil.isTrue(Boolean.FALSE, "请输入商户编号");
+        }
+        if (StringUtils.isEmpty(wxAccreditCode)) {
+            BSUtil.isTrue(Boolean.FALSE, "微信授权code不能为空");
+        }
+        boolean msgVerfig = msgSenderService.checkCode(phone, msgCode, "3");
+        if (!msgVerfig) {
+            BSUtil.isTrue(Boolean.FALSE, "短信验证码错误");
+        }
+        Merchant merchant = merchantService.getMerchantByMerchantId(merchantId);
+        if (merchant == null) {
+            BSUtil.isTrue(Boolean.FALSE, "商户不存在");
+        }
+        WxH5AccessTokenVo accessTokenVo = h5AppWeChatService.getH5AccessToken(merchant.getGzAppId(), merchant.getGzAppKey(), wxAccreditCode);
+        if (null == accessTokenVo) {
+            BSUtil.isTrue(Boolean.FALSE, "微信没有返回授权信息");
+        }
+        if (accessTokenVo.getErrcode() != null) {
+//            return new H5LoginResultVo(null, null, null , accessTokenVo.getErrcode() , accessTokenVo.getErrmsg());
+            log.error("通过微信code 获取openid出错 微信code:" + accessTokenVo.getErrcode() + " 微信错误信息:" + accessTokenVo.getErrmsg());
+            BSUtil.isTrue(Boolean.FALSE, "微信授权code无效");
+        }
+        Boolean firstLogin = Boolean.FALSE;//验证用户是否是第一次登录
+        User user = getUserByPhoneAndMerchantId(phone, merchantId);
+        if (null == user) {
+            //注册用户 设置成会员
+            user = h5AccreditCreateUser(accessTokenVo.getOpenid(), merchantId, phone, MemberLevel.HY, "会员");
+            firstLogin = Boolean.TRUE;
+        } else {
+            if (user.getGzhOpenid() == null) {
+                //用户可能在小程序上登录有手机号码   但是gzh openId 为空也算是第一次登录公众号
+                firstLogin = Boolean.TRUE;
+                //设置用户公众号
+                updateUserGzhOpenIdByUserId(user.getUserId(), accessTokenVo.getOpenid());
+            } else {
+                //验证公众号openId 是否一致
+                if (!user.getGzhOpenid().equals(accessTokenVo.getOpenid())) {
+                    BSUtil.isTrue(Boolean.FALSE, String.format("手机号码为:%s 已经在其他公众号上注册过请换个号码", phone));
+                }
+            }
+        }
+        //用户已存在获取微信用户信息更新数据库中的资料
+        WxUserInfoVo userInfoVo = h5AppWeChatService.getWeChatUserInfo(accessTokenVo.getAccess_token(), accessTokenVo.getOpenid());
+        h5AccreditSaveEditUserInfo(userInfoVo, user.getUserId());
+        //设置用户手机号码
+        // user.setRegisterMobile(phone);
+        // updateUserByUserId(user);
+        //设置token
+        TokenModel model = tokenManager.createToken(user.getUserId());
+        String token = model.getSignToken();
+        return new H5LoginResultVo(token, user.getGzhOpenid(), user.getUserId(), firstLogin);
+    }
+
+    public User getUserByPhoneAndMerchantId(String phone, String merchantId) {
+        if (StringUtils.isEmpty(phone)) {
+            BSUtil.isTrue(Boolean.FALSE, "请输入要查询的手机号码");
+        }
+        if (merchantId == null) {
+            BSUtil.isTrue(Boolean.FALSE, "请输入要查询的商户号");
+        }
+        User user = new User();
+        user.setRegisterMobile(phone);
+        user.setMerchantId(merchantId);
+        User sysUser = getOneByParams(user);
+        return sysUser;
+    }
+
+    private User h5AccreditCreateUser(String openId, String merchantId, String phone, Integer memberLevel, String memberName) {
+        if (null == openId) {
+            BSUtil.isTrue(Boolean.FALSE, "opendId不能为空");
+        }
+        User user = new User();
+        user.setUserId(UUIDUtil.getUUID32());
+        user.setGzhOpenid(openId);
+        user.setMerchantId(merchantId);
+        user.setRegisterMobile(phone);
+        user.setMemberLevel(memberLevel);
+        user.setLevelName(memberName);
+        user.setRegisterFrom(UserRegisterType.WECHAT_ACCREDIT.getValue());
+        user.setIsBuy(0);
+        addUser(user);
+        return user;
+    }
+
+    private UserInfo h5AccreditSaveEditUserInfo(WxUserInfoVo userInfoVo, String userId) {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUserId(userId);
+        String nickName = userInfoVo.getNickname();
+        if (nickName != null && nickName.length() > 0) {
+            nickName = nickName.replaceAll("[\ud800\udc00-\udbff\udfff\ud800-\udfff]", "");
+        }
+        userInfo.setNickName(nickName);
+        userInfo.setLogoUrl(userInfoVo.getHeadimgurl());
+        UserInfo sysUserInfo = userInfoService.getByUserId(userId);
+        if (sysUserInfo == null) {//验证数据库中是否有用户信息
+            userInfo.setAvailable(1);
+            userInfoService.add(userInfo);
+        } else {
+            userInfoService.modifyByParams(userInfo);
+        }
+        return userInfo;
+    }
+
+    private UserInfo h5AccreditUpdateUserInfo(WxUserInfoVo userInfoVo, String userId) {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUserId(userId);
+        String nickName = userInfoVo.getNickname();
+        if (nickName != null && nickName.length() > 0) {
+            nickName = nickName.replaceAll("[\ud800\udc00-\udbff\udfff\ud800-\udfff]", "");
+        }
+        userInfo.setNickName(nickName);
+        userInfo.setLogoUrl(userInfoVo.getHeadimgurl());
+        userInfo.setAvailable(1);
+        userInfoService.modifyByParams(userInfo);
+        return userInfo;
+    }
+
 
 }
