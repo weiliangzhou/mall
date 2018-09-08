@@ -78,19 +78,18 @@ public class ProductServiceImpl implements ProductService {
         String phone = product.getPhone();
         String userId = "";
         User user = null;
-//        //根据phone查询userId
-//        if (!StringUtils.isBlank(phone)) {
-//            User queryUser = new User();
-//            queryUser.setRegisterMobile(phone);
-//            user = userService.getOneByParams(queryUser);
-//            if (user == null)
-//                BSUtil.isTrue(false, "请先进入微信小程序授权并绑定手机号");
-//
-//            userId = user.getUserId();
-//        } else {
-        userId = product.getUserId();
-        user = userService.getByUserId(userId);
-//        }
+        //根据phone查询userId
+        if (!StringUtils.isBlank(phone)) {
+            User queryUser = new User();
+            queryUser.setRegisterMobile(phone);
+            user = userService.getOneByParams(queryUser);
+            if (user == null)
+                BSUtil.isTrue(false, "请先进入微信小程序授权并绑定手机号");
+            userId = user.getUserId();
+        } else {
+            userId = product.getUserId();
+            user = userService.getByUserId(userId);
+        }
         Merchant merchant = merchantService.getMerchantByMerchantId(product.getMerchantId());
         if (merchant == null) {
             BSUtil.isTrue(Boolean.FALSE, "商户号不存在:" + user.getMerchantId());
