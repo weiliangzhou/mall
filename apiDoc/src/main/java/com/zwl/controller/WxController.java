@@ -1,13 +1,15 @@
 package com.zwl.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.terran4j.commons.api2doc.annotations.Api2Doc;
 import com.terran4j.commons.api2doc.annotations.ApiComment;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.po.*;
 import com.zwl.model.vo.*;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +28,7 @@ public class WxController {
     @ApiComment("购买")
     @RequestMapping(name = "购买",
             value = "/wx/product/auth/buy", method = RequestMethod.POST)
-    public BuyResult buy(@ApiComment("产品id") String id,@ApiComment("收货地址") String address, @ApiComment("微信商户号") String merchantId, @ApiComment("userId") String userId) {
+    public BuyResult buy(@ApiComment("产品id") String id, @ApiComment("收货地址") String address, @ApiComment("微信商户号") String merchantId, @ApiComment("userId") String userId) {
         BuyResult buyResult = new BuyResult();
         return buyResult;
     }
@@ -117,7 +119,7 @@ public class WxController {
     @ApiComment("分享绑定上下级关系")
     @RequestMapping(name = "分享绑定上下级关系",
             value = "/wx/user/shareRelation", method = RequestMethod.POST)
-    public Result shareRelation(@ApiComment("推荐人userid") String referrer,  @ApiComment("userId") String userId) {
+    public Result shareRelation(@ApiComment("推荐人userid") String referrer, @ApiComment("userId") String userId) {
         Result result = new Result();
         return result;
     }
@@ -226,18 +228,18 @@ public class WxController {
     @ApiComment("发送")
     @RequestMapping(name = "发送验证码",
             value = "/wx/user/sendMsgCode", method = RequestMethod.POST)
-    public Result sendRegisterCode(@ApiComment("phone") String phone,@ApiComment("busCode 1注册  2购买") String busCode) {
-        Result result = new Result();
-        return result;
-    }
-    @ApiComment("校验验证码")
-    @RequestMapping(name = "校验验证码",
-            value = "/wx/user/checkCode", method = RequestMethod.POST)
-    public Result checkCode(@ApiComment("phone") String phone,@ApiComment("busCode 1注册  2购买  3新小程序") String busCode) {
+    public Result sendRegisterCode(@ApiComment("phone") String phone, @ApiComment("busCode 1注册  2购买") String busCode) {
         Result result = new Result();
         return result;
     }
 
+    @ApiComment("校验验证码")
+    @RequestMapping(name = "校验验证码",
+            value = "/wx/user/checkCode", method = RequestMethod.POST)
+    public Result checkCode(@ApiComment("phone") String phone, @ApiComment("busCode 1注册  2购买  3新小程序") String busCode) {
+        Result result = new Result();
+        return result;
+    }
 
 
     @ApiComment("绑定手机")
@@ -265,7 +267,6 @@ public class WxController {
     }
 
 
-
     @ApiComment("获取可用余额")
     @RequestMapping(name = "获取可用余额",
             value = "/wx/useraccount/getBalance", method = RequestMethod.POST)
@@ -288,12 +289,13 @@ public class WxController {
     @ApiComment(value = "获取视频列表", seeClass = Video.class)
     @RequestMapping(name = "获取视频列表", value = "/wx/video/getVideoList", method = RequestMethod.POST)
     public Video getVideoList(@ApiComment("pageNum") Integer pageNum,
-                               @ApiComment("pageSize") Integer pageSize,
-                               @ApiComment("商户号") String merchantId,
-                               @ApiComment(value = "查询条件",sample = "0查询推荐视频 1查询所有视频") Integer queryType) {
+                              @ApiComment("pageSize") Integer pageSize,
+                              @ApiComment("商户号") String merchantId,
+                              @ApiComment(value = "查询条件", sample = "0查询推荐视频 1查询所有视频") Integer queryType) {
         Video video = new Video();
         return video;
     }
+
     @ApiComment(value = "根据id获取视频祥情", seeClass = Video.class)
     @RequestMapping(name = "根据id获取视频祥情", value = "/wx/video/getVideoInfoById", method = RequestMethod.POST)
     public Video getVideoInfoById(@ApiComment("id") Integer id) {
@@ -307,12 +309,14 @@ public class WxController {
         Banner banner = new Banner();
         return banner;
     }
-    @ApiComment(value = "获取图标列表", seeClass =Icon.class)
+
+    @ApiComment(value = "获取图标列表", seeClass = Icon.class)
     @RequestMapping(name = "获取图标列表", value = "/wx/icon/getIconList", method = RequestMethod.POST)
-    public Icon getIconList(@ApiComment("商户号") String merchantId){
+    public Icon getIconList(@ApiComment("商户号") String merchantId) {
         Icon icon = new Icon();
         return icon;
     }
+
     @ApiComment(value = "确认收货", seeClass = Banner.class)
     @RequestMapping(name = "确认收货", value = "/wx/order/confirmReceipt", method = RequestMethod.POST)
     public Result confirmReceipt(@ApiComment("订单号") String orderNo) {
@@ -324,33 +328,42 @@ public class WxController {
     @ApiComment("个人订单列表")
     @RequestMapping(name = "个人订单列表",
             value = "/wx/order/getOrderList", method = RequestMethod.POST)
-    public List<Order> getOrderListByUserId(@ApiComment("商户号") String merchantId,@ApiComment("userId") String userId, @ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize) {
+    public List<Order> getOrderListByUserId(@ApiComment("商户号") String merchantId, @ApiComment("userId") String userId, @ApiComment("pageNum") Integer pageNum, @ApiComment("pageSize") Integer pageSize) {
         List<Order> orderList = new ArrayList<>();
         return orderList;
     }
 
-    @ApiComment(value = "获取观后感列表", seeClass =ClassInfoComment.class)
+    @ApiComment(value = "获取观后感列表", seeClass = ClassInfoComment.class)
     @RequestMapping(name = "获取观后感列表", value = "/wx/classInfoComment/getClassInfoCommentList", method = RequestMethod.POST)
     public ClassInfoComment getClassInfoCommentList(@ApiComment("pageNum") Integer pageNum,
                                                     @ApiComment("pageSize") Integer pageSize,
                                                     @ApiComment("商户号") String merchantId,
-                                                    @ApiComment("节课id") Long classInfoId){
+                                                    @ApiComment("节课id") Long classInfoId) {
         ClassInfoComment classInfoComment = new ClassInfoComment();
         return classInfoComment;
     }
-    @ApiComment(value = "获取节课下拉框列表", seeClass =ClassInfoComment.class)
+
+    @ApiComment(value = "获取节课下拉框列表", seeClass = ClassInfoComment.class)
     @RequestMapping(name = "获取节课下拉框列表", value = "/wx/classInfoComment/getClassInfoList", method = RequestMethod.POST)
-    public Result getClassInfoList(@ApiComment("商户号") String merchantId){
+    public Result getClassInfoList(@ApiComment("商户号") String merchantId) {
         Result result = new Result();
         return result;
     }
-    @ApiComment(value = "新增观后感", seeClass =ClassInfoComment.class)
+
+    @ApiComment(value = "新增观后感", seeClass = ClassInfoComment.class)
     @RequestMapping(name = "新增观后感", value = "/wx/classInfoComment/getClassInfoCommentList", method = RequestMethod.POST)
     public Result addClassInfoComment(@ApiComment("userId") String userId,
                                       @ApiComment("节课id") Long classInfoId,
                                       @ApiComment("微信昵称") String nickname,
                                       @ApiComment("评论内容") String comment,
-                                      @ApiComment("商户号") String merchantId){
+                                      @ApiComment("商户号") String merchantId) {
+        Result result = new Result();
+        return result;
+    }
+
+    @ApiComment(value = "获取H5二维码", seeClass = ClassInfoComment.class)
+    @RequestMapping(name = "获取H5二维码", value = "/getH5QrCode", method = RequestMethod.POST)
+    public Result getH5QrCode(@ApiComment("userId") String userId) {
         Result result = new Result();
         return result;
     }
