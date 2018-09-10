@@ -49,6 +49,8 @@ public class Banner {
     private Integer isShow = 1;
     @ApiComment(value = "跳转类型",sample = "不跳转/应用内跳转/应用外跳转")
     private String hrefTypeDesc;
+    @ApiComment(value = "端口类型",sample = "0小程序 1、H5")
+    private Integer portType;
 
     public String getHrefTypeDesc() {
         switch (this.hrefType == null ? 0 : this.hrefType){

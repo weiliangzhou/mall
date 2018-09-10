@@ -25,6 +25,8 @@ public class Icon {
     @NotNull(message = "跳转类型不能为空", groups = {Update.class})
     @ApiComment(value = "跳转类型",sample = "0不跳转 1应用内跳转 2应用外跳转")
     private Integer hrefType;
+    @ApiComment(value = "端口类型",sample = "0小程序 1、H5")
+    private Integer portType;
     @RestPackIgnore
     @JSONField(serialize = false)
     private Integer available = 1;

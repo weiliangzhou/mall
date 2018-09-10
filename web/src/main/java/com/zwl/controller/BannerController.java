@@ -21,8 +21,14 @@ public class BannerController {
     public String  getBannerList(@RequestBody JSONObject jsonObject){
         Result result = new Result();
         String merchantId = jsonObject.getString("merchantId");
+        Integer portType = jsonObject.getInteger("portType");
         Banner banner=new Banner();
         banner.setMerchantId(merchantId);
+        if(null != portType){
+            banner.setPortType(portType);
+        }else {
+            banner.setPortType(0);
+        }
         List<Banner> bannerList =bannerService.getWxBannerList(banner);
         result.setData(bannerList);
         return JSON.toJSONString(result);
