@@ -160,6 +160,7 @@
 	usr.real_name AS realName,
 	INSERT ( usr.register_mobile, 4, 4, '****' ) AS phone,
 	smi.`LEVEL` AS `LEVEL`,
+	smi.level_name as levelName,
 	smi.maid_money / 100 AS maidMoney,
 	smi.create_time AS createTime
 	FROM
@@ -186,6 +187,7 @@
 		END AS realName,
 		'' AS phone,
 		'' AS `LEVEL`,
+		'' as levelName,
 		maid_money / 100 AS maidMoney,
 		create_time AS createTime
 	FROM

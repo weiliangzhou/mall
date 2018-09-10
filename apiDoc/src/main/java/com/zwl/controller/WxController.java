@@ -351,7 +351,7 @@ public class WxController {
     }
 
     @ApiComment(value = "新增观后感", seeClass = ClassInfoComment.class)
-    @RequestMapping(name = "新增观后感", value = "/wx/classInfoComment/getClassInfoCommentList", method = RequestMethod.POST)
+    @RequestMapping(name = "新增观后感", value = "/wx/classInfoComment/addClassInfoComment", method = RequestMethod.POST)
     public Result addClassInfoComment(@ApiComment("userId") String userId,
                                       @ApiComment("节课id") Long classInfoId,
                                       @ApiComment("微信昵称") String nickname,
