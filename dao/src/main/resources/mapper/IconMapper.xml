@@ -21,7 +21,6 @@
     from ss_icon
     where available=1
     and merchant_id = #{merchantId}
-    order by modify_time desc
   </select>
   <insert id="insertSelective" parameterType="com.zwl.model.po.Icon" >
     insert into ss_icon
