@@ -119,6 +119,7 @@ public class WithdrawServiceImpl implements WithdrawService {
         withdraw.setBalance(balance-money);
         //status设置为1 审核中
         withdraw.setStatus(1);
+        withdraw.setMerchantId(merchantId);
         withdrawMapper.insertSelective(withdraw);
         WithdrawFlow withdrawFlow = new WithdrawFlow();
         withdrawFlow.setWithdrawId(withdraw.getWithdrawId());
