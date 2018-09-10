@@ -11,9 +11,10 @@
     <result column="merchant_id" property="merchantId" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="port_type" property="portType" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, title, picture_url, href_url, href_type, available, merchant_id, create_time, modify_time
+    id, title, picture_url, href_url, href_type, available, merchant_id, create_time, modify_time, port_type
   </sql>
   <select id="getIconList" resultMap="BaseResultMap" parameterType="com.zwl.model.po.Icon" >
     select 
@@ -21,6 +22,7 @@
     from ss_icon
     where available=1
     and merchant_id = #{merchantId}
+    and port_type = #{portType}
   </select>
   <insert id="insertSelective" parameterType="com.zwl.model.po.Icon" >
     insert into ss_icon
