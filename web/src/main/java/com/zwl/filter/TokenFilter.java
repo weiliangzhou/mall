@@ -3,7 +3,6 @@ package com.zwl.filter;
 import com.alibaba.fastjson.JSON;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.baseresult.ResultCodeEnum;
-import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.TokenModel;
 import com.zwl.serviceimpl.RedisTokenManagerImpl;
 import com.zwl.util.ThreadVariable;
@@ -65,7 +64,7 @@ public class TokenFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-        if (requestURL.contains("/qr/getQRCode")||requestURL.contains("/qr/getH5QrCode")) {
+        if (requestURL.contains("/qr/getQRCode") || requestURL.contains("/qr/getH5QrCode")) {
             chain.doFilter(request, response);
             return;
         }
@@ -75,7 +74,7 @@ public class TokenFilter implements Filter {
         }
 
         //测试图片上传
-        if (requestURL.contains("/file/*")) {
+        if (requestURL.contains("/wx/file/upload")) {
             chain.doFilter(request, response);
             return;
         }
