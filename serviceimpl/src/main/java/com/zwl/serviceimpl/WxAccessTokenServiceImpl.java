@@ -1,6 +1,7 @@
 package com.zwl.serviceimpl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.zwl.model.exception.BSUtil;
 import com.zwl.model.wxpay.WxConstans;
 import com.zwl.service.WxAccessTokenService;
 import com.zwl.util.HttpsUtils;
@@ -26,18 +27,22 @@ public class WxAccessTokenServiceImpl implements WxAccessTokenService {
     private StringRedisTemplate stringRedisTemplate;
 
     @Override
-    public String getAccessToken(String merchantId, String gzAppId, String gzAppKey,int type) {
+    public String getAccessToken(String merchantId, String gzAppId, String gzAppKey, int type) {
         //先查询redis是否存在accessToken
         //如果存在则直接返回
         //否则调用api接口获取
         //access_token的有效期目前为2个小时
 //        type 1=公众号 2=微信小程序
-        String accessToken = stringRedisTemplate.boundValueOps("accessToken_" +merchantId+"_"+type).get();
+        String accessToken = stringRedisTemplate.boundValueOps("accessToken_" + merchantId + "_" + type).get();
         if (StringUtils.isBlank(accessToken)) {
             String result = HttpsUtils.sendGet(WxConstans.ACCESS_TOKEN + "&appid=" + gzAppId + "&secret=" + gzAppKey, null);
             JSONObject jsonObject = JSONObject.parseObject(result);
+            if (jsonObject == null || StringUtils.isNotBlank(jsonObject.getString("errcode"))) {
+                log.error(result);
+                BSUtil.isTrue(Boolean.FALSE, "获取微信TOKEN错误");
+            }
             accessToken = jsonObject.getString("access_token");
-            stringRedisTemplate.boundValueOps("accessToken_" +merchantId+"_"+type).set(accessToken, 5, TimeUnit.MINUTES);
+            stringRedisTemplate.boundValueOps("accessToken_" + merchantId + "_" + type).set(accessToken, 5, TimeUnit.MINUTES);
         }
         return accessToken;
     }
@@ -47,7 +52,7 @@ public class WxAccessTokenServiceImpl implements WxAccessTokenService {
 //        String gzhOpenId = stringRedisTemplate.boundValueOps("gzhOpenId_"+code).get();
 //        if (StringUtils.isBlank(gzhOpenId)) {
         String result = HttpsUtils.sendGet(WxConstans.GET_GZH_OPENID + "&appid=" + gzAppId + "&secret=" + gzAppKey + "&code=" + code, null);
-        log.info("获取公众号OpenId"+result);
+        log.info("获取公众号OpenId" + result);
         JSONObject jsonObject = JSONObject.parseObject(result);
         String gzhOpenId = jsonObject.getString("openid");
 //            stringRedisTemplate.boundValueOps("gzhOpenId_"+code).set(gzhOpenId, 5, TimeUnit.MINUTES);

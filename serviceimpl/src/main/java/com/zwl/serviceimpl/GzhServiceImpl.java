@@ -165,15 +165,15 @@ public class GzhServiceImpl implements GZHService {
             BSUtil.isTrue(Boolean.FALSE, "商户不存在:" + merchantId);
         }
         String accessToken = wxAccessTokenService.getAccessToken(merchant.getMerchantId(), merchant.getGzAppId(), merchant.getGzAppKey(), 1);
-        JsApiTokenVo apiTokenVo = h5AppWeChatService.getWechatJsApiToken(accessToken);
+        String jsApiToken = h5AppWeChatService.getWechatJsApiToken(accessToken);
         Map<String, String> params = new HashMap<>();
-        params.put("jsapi_ticket", apiTokenVo.getTicket());
-        params.put("noncestr", HashKit.generateSalt(16));// "Wm3WZYTPz0wzccnW"
-        params.put("timestamp", String.valueOf(new Date().getTime()));
+        params.put("jsapi_ticket", jsApiToken);
+        params.put("noncestr", UUID.randomUUID().toString());
+        params.put("timestamp", String.valueOf(System.currentTimeMillis() / 1000));
         params.put("url", url);
         String sing = PaymentKit.packageSign(params, false);
         String signature = HashKit.sha1(sing);
-        return new WxJsApiTokenMessage(params.get("noncestr"), params.get("jsapi_ticket"), params.get("timestamp"), params.get("url"), signature);
+        return new WxJsApiTokenMessage(params.get("noncestr"), merchant.getGzAppId(), params.get("timestamp"), params.get("url"), signature);
     }
 
     public static List<String> parseOpenidList(String result) {
