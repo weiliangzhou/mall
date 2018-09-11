@@ -71,4 +71,6 @@ public interface UserMapper {
     void updateUserPhoneByUserId(@Param("userId") String userId, @Param("phone") String phone);
 
     void updateUserGzhOpenIdByUserId(@Param("userId") String userId, @Param("gzhOpenId") String gzhOpenId);
+
+    void updateUserWechatOpenidByUserId(@Param("userId") String userId, @Param("wechatOpenId") String wechatOpenId);
 }

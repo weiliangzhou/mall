@@ -12,12 +12,12 @@ import com.zwl.service.*;
 import com.zwl.util.CheckUtil;
 import com.zwl.util.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -218,6 +218,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Boolean updateUserWechatOpenidByUserId(String userId, String wechatOpenId) {
+        if (StringUtils.isBlank(userId)) {
+            BSUtil.isTrue(Boolean.FALSE, "请输入用户编号");
+        }
+        if (StringUtils.isBlank(wechatOpenId)) {
+            BSUtil.isTrue(Boolean.FALSE, "请输入要修改的微信号");
+        }
+        userMapper.updateUserWechatOpenidByUserId(userId, wechatOpenId);
+        return Boolean.TRUE;
+    }
+
+    @Override
     public Result miniAppWeChatAuthorization(UserLoginInfoVo userLoginInfoVo, String code, String merchantId) {
         log.info("====@@@@进入用户授权@@@@@==========");
         log.info("====@@@@推荐人传入参数为@@@@@==========：");
@@ -244,20 +256,31 @@ public class UserServiceImpl implements UserService {
         if (StringUtils.isEmpty(resultStr))
             BSUtil.isTrue(false, "获取不到微信用户信息");
         Map map = JSON.parseObject(resultStr, Map.class);
-        if (!StringUtils.isEmpty(map.get("errcode"))) {
+        if (!(map.get("errcode") == null)) {
             result.setCode(map.get("errcode").toString());
             result.setMessage("微信返回错误信息：" + map.get("errmsg").toString());
             return result;
         }
         String openid = map.get("openid").toString();
+        Boolean firstLogin = Boolean.FALSE;//验证用户是否是第一次登录
         //先查询用户之前是否授权登录过
         User userQuery = new User();
         userQuery.setRegisterMobile(userLoginInfoVo.getPhone());
         userQuery.setMerchantId(merchantId);
         userQuery = getOneByParams(userQuery);
         if (userQuery == null) {//用户之前没授权登录过
+            firstLogin = Boolean.TRUE;
             saveAuthorization(userLoginInfoVo, openid);
         } else {//如果用户还未购买，则可以更新推荐人
+            if (userQuery.getWechatOpenid() == null) {
+                //用户在H5登录过没在小程序登录
+                firstLogin = Boolean.TRUE;
+                updateUserWechatOpenidByUserId(userQuery.getUserId(), openid);
+            } else {
+                if (!userQuery.getWechatOpenid().equals(openid)) {
+                    BSUtil.isTrue(Boolean.FALSE, String.format("手机号码为:%s 已经在其他公众号上注册过请换个号码", userLoginInfoVo.getPhone()));
+                }
+            }
             log.info("====@@@@用户之前已经授权登录过，userId为：@@@@@==========：" + userQuery.getUserId());
             modifyAuthorization(userLoginInfoVo, userQuery);
         }
@@ -267,6 +290,7 @@ public class UserServiceImpl implements UserService {
         Map resultMap = new HashMap<String, Object>();
         resultMap.put("token", token);
         resultMap.put("userId", userQuery.getUserId());
+        resultMap.put("firstLogin", firstLogin);
         result.setData(resultMap);
         return result;
     }
@@ -319,7 +343,7 @@ public class UserServiceImpl implements UserService {
             } else {
                 //验证公众号openId 是否一致
                 if (!user.getGzhOpenid().equals(accessTokenVo.getOpenid())) {
-                    BSUtil.isTrue(Boolean.FALSE, String.format("手机号码为:%s 已经在其他公众号上注册过请换个号码", phone));
+                    BSUtil.isTrue(Boolean.FALSE, String.format("手机号码为:%s 已经在其他页面上注册过请换个号码", phone));
                 }
             }
         }
