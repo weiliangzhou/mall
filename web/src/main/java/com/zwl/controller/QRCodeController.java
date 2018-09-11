@@ -5,12 +5,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.Merchant;
+import com.zwl.model.po.User;
 import com.zwl.service.MerchantService;
 import com.zwl.service.QRCodeService;
 import com.zwl.service.UserService;
 import com.zwl.service.WxAccessTokenService;
 import com.zwl.util.QRCodeUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -67,15 +70,22 @@ public class QRCodeController {
     public Result getH5QrCode(@RequestBody JSONObject jsonObject) {
         String userId = jsonObject.getString("userId");
         if (userId == null)
-            BSUtil.isTrue(false,"系统繁忙请稍后重试!");
-        String qrCode = stringRedisTemplate.boundValueOps(userId + "_h5qrcode").get();
-        if (qrCode == null) {
-            qrCode = QRCodeUtil.createQrCode("http://dy.xc2018.com.cn/mine?referrer=" + userId, null, null);
-            stringRedisTemplate.boundValueOps(userId + "_h5qrcode").set(qrCode, 30, TimeUnit.DAYS);
+            BSUtil.isTrue(false, "系统繁忙请稍后重试!");
+        String qrUrl = stringRedisTemplate.boundValueOps(userId + "_h5qrcode").get();
+        if (StringUtils.isBlank(qrUrl)) {
+            String smallImage = QRCodeUtil.createQrCode("http://dy.xc2018.com.cn/mine?referrer=" + userId, null, null);
+            User user = userService.getByUserId(userId);
+            String userLogo = user.getLogoUrl()==null?"http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/6a989ec302994c6c98c2d4810f9fbcb2.png": user.getLogoUrl();
+            try {
+                qrUrl = QRCodeUtil.mergeImage("http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/48c31d7eaa084fb4bc62ea98b0e1af24.png", smallImage, "310", "380", userLogo, "200", "75");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            stringRedisTemplate.boundValueOps(userId + "_h5qrcode").set(qrUrl, 30, TimeUnit.DAYS);
         }
-        log.info("userId:"+userId+"------二维码"+qrCode);
+        log.info("userId:" + userId + "------二维码" + qrUrl);
         Result result = new Result();
-        result.setData(qrCode);
+        result.setData(qrUrl);
         return result;
     }
 
