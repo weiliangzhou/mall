@@ -252,8 +252,10 @@ ORDER BY t.required_member_level DESC,t.modify_time DESC
     AND scc.available = 1
     AND scs.available = 1
     AND scs.merchant_id =#{merchantId}
-    AND scs.is_recommend = 1
     AND scs.is_show = 1
+    <if test="queryType == 0">
+      AND scs.is_recommend = 1
+    </if>
     ) UNION ALL
     (
     SELECT
@@ -279,10 +281,12 @@ ORDER BY t.required_member_level DESC,t.modify_time DESC
     AND sci.merchant_id = #{merchantId}
     AND scc.available = 1
     AND sci.available = 1
-    AND sci.is_recommend = 1
     AND sci.is_show = 1
+    <if test="queryType == 0">
+      AND sci.is_recommend = 1
+    </if>
     ) ) t
-    ORDER BY t.required_member_level DESC,t.id asc
+    ORDER BY t.required_member_level DESC,t.modify_time DESC
   </select>
 
   <!--搜索-->

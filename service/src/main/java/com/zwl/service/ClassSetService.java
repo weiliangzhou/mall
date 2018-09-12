@@ -47,10 +47,11 @@ public interface ClassSetService {
      * 包括套课程 和 单独的节课程
      * 小程序调用
      * @param merchantId
+     * @param queryType
      * @Parma title 搜索
      * @return
      */
-    List<ClassVo> getAllClassOrderById(String merchantId);
+    List<ClassVo> getAllClassOrderById(String merchantId, Integer queryType);
 
     /**
      * 获取分类下面的套课下拉值
