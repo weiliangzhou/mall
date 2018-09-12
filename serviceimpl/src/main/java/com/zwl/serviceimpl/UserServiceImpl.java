@@ -44,6 +44,10 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private MsgSenderService msgSenderService;
 
+
+    //微信小程序登录的时候目前是静默授权  设置为默认头像
+    private static String WX_DEFAULT_HEAD_IMG = "http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/6a989ec302994c6c98c2d4810f9fbcb2.png";
+
     @Override
     public void addUser(User user) {
         userMapper.insert(user);
@@ -110,7 +114,11 @@ public class UserServiceImpl implements UserService {
         }
         user.setIsBuy(0);
         //插入用户表
-        user.setLogoUrl(userLoginInfoVo.getLogoUrl());
+        if (StringUtils.isBlank(userLoginInfoVo.getLogoUrl())) {
+            user.setLogoUrl(WX_DEFAULT_HEAD_IMG);
+        } else {
+            user.setLogoUrl(userLoginInfoVo.getLogoUrl());
+        }
         user.setMemberLevel(MemberLevel.HY);
         user.setLevelName("会员");
         userMapper.insert(user);
