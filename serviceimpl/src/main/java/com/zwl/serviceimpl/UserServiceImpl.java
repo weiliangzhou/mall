@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
         user.setWechatOpenid(openid);
         user.setUserId(userId);
         user.setMerchantId(userLoginInfoVo.getMerchantId());
-        user.setRegisterMobile(userLoginInfoVo.getRegisterMobile());
+        user.setRegisterMobile(userLoginInfoVo.getPhone());
         //1、微信授权的 2、线下导入的 3、手机号注册的
         user.setRegisterFrom(1);
         //推荐人userId 推荐人必须购买过
