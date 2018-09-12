@@ -240,7 +240,7 @@ public class UserServiceImpl implements UserService {
             BSUtil.isTrue(Boolean.FALSE, "请输入手机号码");
         }
         if (null == merchantId) {
-            BSUtil.isTrue(Boolean.FALSE, "请输入要登录的小程序编号");
+            BSUtil.isTrue(Boolean.FALSE, "请输入要登录的小程序商户号");
         }
         boolean msgVerfig = msgSenderService.checkCode(userLoginInfoVo.getPhone(), userLoginInfoVo.getMsgCode(), "3");
         if (!msgVerfig) {
@@ -270,7 +270,8 @@ public class UserServiceImpl implements UserService {
         userQuery = getOneByParams(userQuery);
         if (userQuery == null) {//用户之前没授权登录过
             firstLogin = Boolean.TRUE;
-            saveAuthorization(userLoginInfoVo, openid);
+            String userId = saveAuthorization(userLoginInfoVo, openid);
+            userQuery = getByUserId(userId);
         } else {//如果用户还未购买，则可以更新推荐人
             if (userQuery.getWechatOpenid() == null) {
                 //用户在H5登录过没在小程序登录
