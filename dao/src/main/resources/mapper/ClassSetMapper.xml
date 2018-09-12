@@ -253,6 +253,7 @@ ORDER BY t.required_member_level DESC,t.modify_time DESC
     AND scs.available = 1
     AND scs.merchant_id =#{merchantId}
     AND scs.is_recommend = 1
+    AND scs.is_show = 1
     ) UNION ALL
     (
     SELECT
@@ -279,6 +280,7 @@ ORDER BY t.required_member_level DESC,t.modify_time DESC
     AND scc.available = 1
     AND sci.available = 1
     AND sci.is_recommend = 1
+    AND sci.is_show = 1
     ) ) t
     ORDER BY t.required_member_level DESC,t.id asc
   </select>

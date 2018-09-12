@@ -171,6 +171,7 @@
     where
       class_set_id = #{classSetId,jdbcType=BIGINT}
     and available = 1
+    and is_show = 1
   </select>
 
 </mapper>
