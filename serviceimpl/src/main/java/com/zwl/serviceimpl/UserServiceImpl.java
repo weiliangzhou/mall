@@ -244,7 +244,11 @@ public class UserServiceImpl implements UserService {
         if (null == code) {
             BSUtil.isTrue(Boolean.FALSE, "请输入微信授权code");
         }
-        if (StringUtils.isEmpty(userLoginInfoVo.getPhone())) {
+        //兼容
+        if (StringUtils.isBlank(userLoginInfoVo.getPhone())) {
+            userLoginInfoVo.setPhone(userLoginInfoVo.getRegisterMobile());
+        }
+        if (StringUtils.isBlank(userLoginInfoVo.getPhone())) {
             BSUtil.isTrue(Boolean.FALSE, "请输入手机号码");
         }
         if (null == merchantId) {
