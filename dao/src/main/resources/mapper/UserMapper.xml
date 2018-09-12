@@ -170,6 +170,11 @@
         where s.user_id = #{userId}
     </update>
 
+    <update id="updateUserWechatOpenidByUserId" >
+        update ss_user s set s.wechat_openid = #{wechatOpenId}
+        where s.user_id = #{userId}
+    </update>
+
     <select id="getUserByUserId" resultMap="BaseResultMap" parameterType="string">
         select
         <include refid="Base_Column_List"/>

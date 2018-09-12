@@ -31,5 +31,5 @@ public interface H5AppWeChatService {
      * @param accessToken 微信全局唯一的 accessToken
      * @return
      */
-    JsApiTokenVo getWechatJsApiToken(String accessToken);
+    String getWechatJsApiToken(String accessToken);
 }

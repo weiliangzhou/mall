@@ -139,13 +139,21 @@ public interface UserService {
     Boolean updateUserPhoneByUserId(String userId, String phone);
 
     /**
-     * 修改用户手机号
+     * 修改用户公众号OptionId
      *
      * @param userId    用户编号
      * @param gzhOpenId 用户公众号
      * @return
      */
     Boolean updateUserGzhOpenIdByUserId(String userId, String gzhOpenId);
+
+    /**
+     * 修改用户微信小程序OPEN ID
+     *
+     * @param userId       用户编号
+     * @param wechatOpenId 微信Open Id
+     */
+    Boolean updateUserWechatOpenidByUserId(String userId, String wechatOpenId);
 
     /**
      * 小程序登录

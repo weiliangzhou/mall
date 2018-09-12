@@ -5,6 +5,7 @@
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="withdraw_id" property="withdrawId" jdbcType="VARCHAR"/>
         <result column="money" property="money" jdbcType="INTEGER"/>
+        <result column="balance" property="balance" jdbcType="INTEGER"/>
         <result column="open_id" property="openId" jdbcType="VARCHAR"/>
         <result column="real_name" property="realName" jdbcType="VARCHAR"/>
         <result column="user_id" property="userId" jdbcType="VARCHAR"/>
@@ -22,7 +23,7 @@
         <result column="available" property="available" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, withdraw_id, money, open_id, real_name, user_id, account, status, pay_way, operator, merchant_id,
+    id, withdraw_id, money,balance, open_id, real_name, user_id, account, status, pay_way, operator, merchant_id,
     remark, success_time, payment_no, payment_time, create_time, modify_time, available
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
@@ -42,6 +43,9 @@
             </if>
             <if test="money != null">
                 money,
+            </if>
+            <if test="balance != null">
+                balance,
             </if>
             <if test="openId != null">
                 open_id,
@@ -94,6 +98,9 @@
             </if>
             <if test="money != null">
                 #{money,jdbcType=INTEGER},
+            </if>
+            <if test="balance != null">
+                #{balance,jdbcType=INTEGER},
             </if>
             <if test="openId != null">
                 #{openId,jdbcType=VARCHAR},

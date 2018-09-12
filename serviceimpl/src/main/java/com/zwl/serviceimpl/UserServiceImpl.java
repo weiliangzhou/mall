@@ -12,12 +12,12 @@ import com.zwl.service.*;
 import com.zwl.util.CheckUtil;
 import com.zwl.util.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +43,10 @@ public class UserServiceImpl implements UserService {
     private UserInfoService userInfoService;
     @Autowired
     private MsgSenderService msgSenderService;
+
+
+    //微信小程序登录的时候目前是静默授权  设置为默认头像
+    private static String WX_DEFAULT_HEAD_IMG = "http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/6a989ec302994c6c98c2d4810f9fbcb2.png";
 
     @Override
     public void addUser(User user) {
@@ -97,6 +101,7 @@ public class UserServiceImpl implements UserService {
         user.setWechatOpenid(openid);
         user.setUserId(userId);
         user.setMerchantId(userLoginInfoVo.getMerchantId());
+        user.setRegisterMobile(userLoginInfoVo.getPhone());
         //1、微信授权的 2、线下导入的 3、手机号注册的
         user.setRegisterFrom(1);
         //推荐人userId 推荐人必须购买过
@@ -109,8 +114,12 @@ public class UserServiceImpl implements UserService {
         }
         user.setIsBuy(0);
         //插入用户表
-        user.setLogoUrl(userLoginInfoVo.getLogoUrl());
-        user.setMemberLevel(0);
+        if (StringUtils.isBlank(userLoginInfoVo.getLogoUrl())) {
+            user.setLogoUrl(WX_DEFAULT_HEAD_IMG);
+        } else {
+            user.setLogoUrl(userLoginInfoVo.getLogoUrl());
+        }
+        user.setMemberLevel(MemberLevel.HY);
         user.setLevelName("会员");
         userMapper.insert(user);
         //用户信息（头像、昵称等）
@@ -217,15 +226,34 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Boolean updateUserWechatOpenidByUserId(String userId, String wechatOpenId) {
+        if (StringUtils.isBlank(userId)) {
+            BSUtil.isTrue(Boolean.FALSE, "请输入用户编号");
+        }
+        if (StringUtils.isBlank(wechatOpenId)) {
+            BSUtil.isTrue(Boolean.FALSE, "请输入要修改的微信号");
+        }
+        userMapper.updateUserWechatOpenidByUserId(userId, wechatOpenId);
+        return Boolean.TRUE;
+    }
+
+    @Override
     public Result miniAppWeChatAuthorization(UserLoginInfoVo userLoginInfoVo, String code, String merchantId) {
-        if (null == code) {
-            BSUtil.isTrue(Boolean.FALSE, "请输入code");
-        }
-        if (null == merchantId) {
-            BSUtil.isTrue(Boolean.FALSE, "请输入要登录的小程序编号");
-        }
         log.info("====@@@@进入用户授权@@@@@==========");
         log.info("====@@@@推荐人传入参数为@@@@@==========：");
+        if (null == code) {
+            BSUtil.isTrue(Boolean.FALSE, "请输入微信授权code");
+        }
+        if (StringUtils.isEmpty(userLoginInfoVo.getPhone())) {
+            BSUtil.isTrue(Boolean.FALSE, "请输入手机号码");
+        }
+        if (null == merchantId) {
+            BSUtil.isTrue(Boolean.FALSE, "请输入要登录的小程序商户号");
+        }
+        boolean msgVerfig = msgSenderService.checkCode(userLoginInfoVo.getPhone(), userLoginInfoVo.getMsgCode(), "3");
+        if (!msgVerfig) {
+            BSUtil.isTrue(Boolean.FALSE, "短信验证码错误");
+        }
         //根据merchantid获取appid和secret
         Merchant merchant = merchantService.getMerchantByMerchantId(merchantId);
         Result result = new Result();
@@ -236,31 +264,42 @@ public class UserServiceImpl implements UserService {
         if (StringUtils.isEmpty(resultStr))
             BSUtil.isTrue(false, "获取不到微信用户信息");
         Map map = JSON.parseObject(resultStr, Map.class);
-        if (!StringUtils.isEmpty(map.get("errcode"))) {
+        if (!(map.get("errcode") == null)) {
             result.setCode(map.get("errcode").toString());
             result.setMessage("微信返回错误信息：" + map.get("errmsg").toString());
             return result;
         }
         String openid = map.get("openid").toString();
+        Boolean firstLogin = Boolean.FALSE;//验证用户是否是第一次登录
         //先查询用户之前是否授权登录过
         User userQuery = new User();
-        userQuery.setWechatOpenid(openid);
+        userQuery.setRegisterMobile(userLoginInfoVo.getPhone());
         userQuery.setMerchantId(merchantId);
         userQuery = getOneByParams(userQuery);
-        String userId;
         if (userQuery == null) {//用户之前没授权登录过
-            userId = saveAuthorization(userLoginInfoVo, openid);
+            firstLogin = Boolean.TRUE;
+            String userId = saveAuthorization(userLoginInfoVo, openid);
+            userQuery = getByUserId(userId);
         } else {//如果用户还未购买，则可以更新推荐人
-            userId = userQuery.getUserId();
-            log.info("====@@@@用户之前已经授权登录过，userId为：@@@@@==========：" + userId);
+            if (userQuery.getWechatOpenid() == null) {
+                //用户在H5登录过没在小程序登录
+                firstLogin = Boolean.TRUE;
+                updateUserWechatOpenidByUserId(userQuery.getUserId(), openid);
+            } else {
+                if (!userQuery.getWechatOpenid().equals(openid)) {
+                    BSUtil.isTrue(Boolean.FALSE, String.format("手机号码为:%s 已经在其他公众号上注册过请换个号码", userLoginInfoVo.getPhone()));
+                }
+            }
+            log.info("====@@@@用户之前已经授权登录过，userId为：@@@@@==========：" + userQuery.getUserId());
             modifyAuthorization(userLoginInfoVo, userQuery);
         }
         //返回用户登录态
-        TokenModel model = tokenManager.createToken(userId);
+        TokenModel model = tokenManager.createToken(userQuery.getUserId());
         String token = model.getSignToken();
         Map resultMap = new HashMap<String, Object>();
         resultMap.put("token", token);
-        resultMap.put("userId", userId);
+        resultMap.put("userId", userQuery.getUserId());
+        resultMap.put("firstLogin", firstLogin);
         result.setData(resultMap);
         return result;
     }
@@ -313,7 +352,7 @@ public class UserServiceImpl implements UserService {
             } else {
                 //验证公众号openId 是否一致
                 if (!user.getGzhOpenid().equals(accessTokenVo.getOpenid())) {
-                    BSUtil.isTrue(Boolean.FALSE, String.format("手机号码为:%s 已经在其他公众号上注册过请换个号码", phone));
+                    BSUtil.isTrue(Boolean.FALSE, String.format("手机号码为:%s 已经在其他页面上注册过请换个号码", phone));
                 }
             }
         }

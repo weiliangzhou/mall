@@ -8,10 +8,20 @@ import com.zwl.model.vo.WxUserInfoVo;
 import com.zwl.model.wxpay.WxConstans;
 import com.zwl.service.H5AppWeChatService;
 import com.zwl.util.HttpsUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.TimeUnit;
+
+@Slf4j
 @Service
 public class H5AppWeChatServiceImpl implements H5AppWeChatService {
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     @Override
     public WxH5AccessTokenVo getH5AccessToken(String appId, String secret, String code) {
@@ -47,21 +57,34 @@ public class H5AppWeChatServiceImpl implements H5AppWeChatService {
         if (null == resultStr) {
             BSUtil.isTrue(Boolean.FALSE, "微信用户信息不存在");
         }
-        WxUserInfoVo userInfoVo = JSON.parseObject(resultStr , WxUserInfoVo.class);
+        WxUserInfoVo userInfoVo = JSON.parseObject(resultStr, WxUserInfoVo.class);
         return userInfoVo;
     }
 
     @Override
-    public JsApiTokenVo getWechatJsApiToken(String accessToken) {
-        if(  null  == accessToken ){
-            BSUtil.isTrue(Boolean.FALSE , "accessToken不能为空");
+    public String getWechatJsApiToken(String accessToken) {
+        if (null == accessToken) {
+            BSUtil.isTrue(Boolean.FALSE, "accessToken不能为空");
+        }
+        String jsTokenKey = String.format("jsapi_%s", accessToken);
+        String jsToken = stringRedisTemplate.boundValueOps(jsTokenKey).get();
+        if (StringUtils.isNotBlank(jsToken)) {
+            return jsToken;
         }
         String args = String.format("?access_token=%s&type=jsapi", accessToken);
         String resultStr = HttpsUtils.sendGet(WxConstans.WECHAT_JSAPI + args, null);
         if (null == resultStr) {
             BSUtil.isTrue(Boolean.FALSE, "微信返回 jsApiToken 为空");
         }
-        JsApiTokenVo tokenVo = JSON.parseObject(resultStr , JsApiTokenVo.class);
-        return tokenVo;
+        JsApiTokenVo tokenVo = JSON.parseObject(resultStr, JsApiTokenVo.class);
+        if (tokenVo.getErrcode() == null || tokenVo.getErrcode() == 0) {
+            //添加到缓存并且返回token
+            stringRedisTemplate.boundValueOps(jsTokenKey).set(tokenVo.getTicket(), 5, TimeUnit.MINUTES);
+            return tokenVo.getTicket();
+        } else {
+            log.error(String.format("微信获取jsapi tokent出错 微信返回信息:%s", resultStr));
+            BSUtil.isTrue(Boolean.FALSE, "获取微信JSAPI Token 出错");
+        }
+        return null;
     }
 }

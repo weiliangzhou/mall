@@ -15,7 +15,7 @@ import java.util.Date;
  */
 @Data
 public class MaidInfoVo {
-    //    -- 用户logo
+//--     用户logo
 //--     realname
 //--     手机号
 //--     等级
