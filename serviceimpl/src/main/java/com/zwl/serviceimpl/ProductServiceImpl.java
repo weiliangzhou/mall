@@ -241,8 +241,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Integer getMaidPercentByLevel(Integer referrerLevel) {
-        return productMapper.getMaidPercentByLevel(referrerLevel);
+    public Integer getMaidPercentByLevel(Integer referrerLevel,String merchantId) {
+        return productMapper.getMaidPercentByLevel(referrerLevel,merchantId);
     }
 
     @Override

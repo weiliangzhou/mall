@@ -26,7 +26,7 @@ public interface ProductService {
 
     List<ProductItemVo> getUserLevelItemsList(String merchantId);
 
-    Integer getMaidPercentByLevel(Integer referrerLevel);
+    Integer getMaidPercentByLevel(Integer referrerLevel,String merchantId);
 
     Product getProductByMemberLevel(Integer memberLevel,String merchantId);
 

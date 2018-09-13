@@ -275,7 +275,7 @@ public class WxPayController {
                             log.info("referrerLevel:" + referrerLevel + "------------memberLevel:" + memberLevel);
                             if (null != referrerLevel && referrerLevel >= memberLevel && referrerLevel >= 4) {
 //                            //通过userId获取推荐人对应的分佣比例
-                                Integer maidPercent_referrer = productService.getMaidPercentByLevel(referrerLevel);
+                                Integer maidPercent_referrer = productService.getMaidPercentByLevel(referrerLevel,merchantId);
                                 MaidInfo maidInfo = new MaidInfo();
                                 maidInfo.setOrderNo(orderNo);
                                 //分佣发送给推荐人

@@ -169,6 +169,11 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    public static void main(String[] args) {
+        String ss="  ";
+        System.out.println(CheckUtil.isNotEmpty(ss));
+    }
+
     @Override
     public User getReferrerByUserId(String userId) {
         return userMapper.getReferrerByUserId(userId);
@@ -295,7 +300,7 @@ public class UserServiceImpl implements UserService {
                 }
             }
             log.info("====@@@@用户之前已经授权登录过，userId为：@@@@@==========：" + userQuery.getUserId());
-            modifyAuthorization(userLoginInfoVo, userQuery);
+            modifyAuthorization(userLoginInfoVo, userQuery);//FIXME 这边涉及到更新推荐人 是否会更新空字符串
         }
         //返回用户登录态
         TokenModel model = tokenManager.createToken(userQuery.getUserId());

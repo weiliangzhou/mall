@@ -26,8 +26,9 @@ public interface ProductMapper {
     @Select("select level ,level_name as levelName from ss_product  where merchant_id=#{merchantId} and available =1")
     List<ProductItemVo> getUserLevelItemsList(@Param("merchantId") String merchantId);
 
-    @Select("select maid_percent from ss_product  where level=#{referrerLevel} and available =1 ")
-    Integer getMaidPercentByLevel(@Param("referrerLevel") Integer referrerLevel);
+    @Select("select maid_percent from ss_product  where level=#{referrerLevel} and available =1  and merchant_id=#{merchantId}")
+    Integer getMaidPercentByLevel(@Param("referrerLevel") Integer referrerLevel, @Param("merchantId") String merchantId);
+
     @Select("select level_name as levelName from ss_product where available=1 and merchant_id=#{merchantId} and `level`=#{memberLevel}")
     Product getProductByMemberLevel(@Param("memberLevel") Integer memberLevel, @Param("merchantId") String merchantId);
 
