@@ -175,7 +175,7 @@ public class QRCodeUtil {
             g.drawImage(small, x_i, y_i, small.getWidth(), small.getHeight(), null);
 //            g.drawImage(userLogo, (big.getWidth() - userLogo.getWidth()) / 2, y_i_t, userLogo.getWidth(), userLogo.getHeight(), null);
             g.drawImage(roundImage(userLogo,130,150), (big.getWidth() - userLogo.getWidth()) / 2, y_i_t, roundImage(userLogo,130,150).getWidth(), roundImage(userLogo,130,150).getHeight(), null);
-            Font font=new Font("黑体", Font.PLAIN, 20);
+            Font font=new Font("宋体", Font.BOLD, 20);
             g.setFont(font);
             g.setColor(Color.BLACK);
             // 抗锯齿
