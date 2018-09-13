@@ -161,7 +161,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional(rollbackFor = Exception.class)
     public BuyResult newH5Buy(Product product) {
         String userId = product.getUserId();
-        log.info("开始生成订单================================>userId::"+userId);
+        log.info("开始生成订单================================>userId::" + userId);
         User user = userService.getByUserId(userId);
         Merchant merchant = merchantService.getMerchantByMerchantId(product.getMerchantId());
         if (merchant == null) {
@@ -256,7 +256,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product getProductByMemberLevel(Integer memberLevel) {
-        return productMapper.getProductByMemberLevel(memberLevel);
+    public Product getProductByMemberLevel(Integer memberLevel, String merchantId) {
+        return productMapper.getProductByMemberLevel(memberLevel, merchantId);
     }
 }

@@ -171,11 +171,12 @@
         from ss_product
         where available=1
     </select>
-    <select id="getProductByMemberLevel" resultMap="BaseResultMap" parameterType="Integer">
-        select
-        <include refid="Base_Column_List"/>
-        from ss_product
-        where available=1
-        and `level`=#{memberLevel}
-    </select>
+    <!--<select id="getProductByMemberLevel" resultMap="BaseResultMap" parameterType="Integer">-->
+        <!--select-->
+        <!--<include refid="Base_Column_List"/>-->
+        <!--from ss_product-->
+        <!--where available=1-->
+        <!--and `level`=#{memberLevel}-->
+        <!--and merchant_id=#{merchantId}-->
+    <!--</select>-->
 </mapper>
