@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -32,12 +33,12 @@ public class QRCodeUtil {
 
 
     public static void main(String[] args) {
-        String url = "http://dy.xc2018.com.cn/mine?referrer=c5530f7e341b4ae9afc5d50cc69a212c";
+        String url = "http://dy.xc2018.com.cn/home?referrer=c5530f7e341b4ae9afc5d50cc69a212c";
 //        String path = FileSystemView.getFileSystemView().getHomeDirectory() + File.separator + "testQrcode";
 //        String fileName = "temp.jpg";
         String smallImage = createQrCode(url, null, null);
         try {
-            String url1 = mergeImage("http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/48c31d7eaa084fb4bc62ea98b0e1af24.png", smallImage, "310", "380","https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eoESgDChRh1CibJojpCiaLZtmUiaa1x5EvbW0zvvOOgBCj2kmsia5xuFCEiczia21ribLic8e3ck7fVtxIqOQ/132", "200", "75");
+            String url1 = mergeImage("http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/48c31d7eaa084fb4bc62ea98b0e1af24.png", smallImage, "310", "380","https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eoESgDChRh1CibJojpCiaLZtmUiaa1x5EvbW0zvvOOgBCj2kmsia5xuFCEiczia21ribLic8e3ck7fVtxIqOQ/132", "200", "75","二师兄");
             System.out.println(url1);
         } catch (IOException e) {
             e.printStackTrace();
@@ -126,7 +127,7 @@ public class QRCodeUtil {
         return "";
     }
 
-    public static String mergeImage(String bigImage, String smallImage, String x, String y, String userLogoUrl, String x1, String y1) throws IOException {
+    public static String mergeImage(String bigImage, String smallImage, String x, String y, String userLogoUrl, String x1, String y1,String nickName) throws IOException {
 
         try {
             BufferedImage small;
@@ -162,7 +163,8 @@ public class QRCodeUtil {
             int x_i_t = (int) fx_t;
             int y_i_t  = (int) fy_t;
             g.drawImage(small, x_i, y_i, small.getWidth(), small.getHeight(), null);
-            g.drawImage(userLogo, x_i_t, y_i_t, userLogo.getWidth(), userLogo.getHeight(), null);
+            g.drawImage(roundImage(userLogo,2,2), x_i_t, y_i_t, userLogo.getWidth(), userLogo.getHeight(), null);
+            g.drawString(nickName, 165, 222);
             g.dispose();
             byte[] imgByte = ImageUtil.imageToBytes(big, "png");
             return AliOSSUtil.uploadFileByte(imgByte);
@@ -172,6 +174,19 @@ public class QRCodeUtil {
             e.printStackTrace();
         }
         return "";
+    }
+
+    private static BufferedImage roundImage(BufferedImage image, int targetSize, int cornerRadius) {
+        BufferedImage outputImage = new BufferedImage(targetSize, targetSize, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = outputImage.createGraphics();
+        g2.setComposite(AlphaComposite.Src);
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setColor(Color.WHITE);
+        g2.fill(new RoundRectangle2D.Float(0, 0, targetSize, targetSize, cornerRadius, cornerRadius));
+        g2.setComposite(AlphaComposite.SrcAtop);
+        g2.drawImage(image, 0, 0, null);
+        g2.dispose();
+        return outputImage;
     }
 
 

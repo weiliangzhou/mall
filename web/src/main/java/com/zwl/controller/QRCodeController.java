@@ -6,10 +6,8 @@ import com.zwl.model.baseresult.Result;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.Merchant;
 import com.zwl.model.po.User;
-import com.zwl.service.MerchantService;
-import com.zwl.service.QRCodeService;
-import com.zwl.service.UserService;
-import com.zwl.service.WxAccessTokenService;
+import com.zwl.model.po.UserInfo;
+import com.zwl.service.*;
 import com.zwl.util.QRCodeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -38,6 +36,8 @@ public class QRCodeController {
     private MerchantService merchantService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserInfoService userInfoService;
     @Autowired
     private QRCodeService qrCodeService;
     @Autowired
@@ -73,11 +73,13 @@ public class QRCodeController {
             BSUtil.isTrue(false, "系统繁忙请稍后重试!");
         String qrUrl = stringRedisTemplate.boundValueOps(userId + "_h5qrcode").get();
         if (StringUtils.isBlank(qrUrl)) {
-            String smallImage = QRCodeUtil.createQrCode("http://dy.xc2018.com.cn/mine?referrer=" + userId, null, null);
+            String smallImage = QRCodeUtil.createQrCode("http://dy.xc2018.com.cn/home?referrer=" + userId, null, null);
             User user = userService.getByUserId(userId);
+            UserInfo userInfo = userInfoService.getByUserId(userId);
             String userLogo = user.getLogoUrl()==null?"http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/6a989ec302994c6c98c2d4810f9fbcb2.png": user.getLogoUrl();
+           String nickNameOrPhone=StringUtils.isBlank(userInfo.getNickName())?user.getRegisterMobile():userInfo.getNickName();
             try {
-                qrUrl = QRCodeUtil.mergeImage("http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/48c31d7eaa084fb4bc62ea98b0e1af24.png", smallImage, "310", "380", userLogo, "200", "75");
+                qrUrl = QRCodeUtil.mergeImage("http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180913/adffdcc641104baeafc9d7276c03aacb.png", smallImage, "310", "380", userLogo, "200", "75",nickNameOrPhone);
             } catch (IOException e) {
                 e.printStackTrace();
             }

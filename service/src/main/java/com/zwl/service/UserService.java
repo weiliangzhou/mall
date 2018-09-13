@@ -170,7 +170,6 @@ public interface UserService {
      *                       //     * @param gzhOpenId      公众号openid
      * @param merchantId     商户编号
      * @param wxAccreditCode h5微信授权code
-     * @param wxAccreditCode busCode
      */
-    H5LoginResultVo h5WeChatLogin(String phone, String msgCode, String merchantId, String wxAccreditCode,String busCode);
+    H5LoginResultVo h5WeChatLogin(String phone, String msgCode, String merchantId, String wxAccreditCode);
 }

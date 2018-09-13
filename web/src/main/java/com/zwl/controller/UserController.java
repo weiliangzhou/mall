@@ -70,7 +70,7 @@ public class UserController {
         if (userLoginInfoVo.getBusCode() == null || userLoginInfoVo.getBusCode() == 1) {
             result = userService.miniAppWeChatAuthorization(userLoginInfoVo, userLoginInfoVo.getCode(), userLoginInfoVo.getMerchantId());
         } else if (userLoginInfoVo.getBusCode() == 2) {
-            H5LoginResultVo resultVo = userService.h5WeChatLogin(userLoginInfoVo.getPhone(), userLoginInfoVo.getMsgCode(), userLoginInfoVo.getMerchantId(), userLoginInfoVo.getWxAccreditCode(), userLoginInfoVo.getBusCode() + "");
+            H5LoginResultVo resultVo = userService.h5WeChatLogin(userLoginInfoVo.getPhone(), userLoginInfoVo.getMsgCode(), userLoginInfoVo.getMerchantId(), userLoginInfoVo.getWxAccreditCode());
             result.setData(resultVo);
         }
         return result;
