@@ -161,7 +161,7 @@ public class UserController {
         } else if (memberLevel == 0) {
             levelName = "会员";
         } else {
-            Product product = productService.getProductByMemberLevel(memberLevel);
+            Product product = productService.getProductByMemberLevel(memberLevel,user.getMerchantId());
             levelName = product.getLevelName();
         }
         log.info("memberLevel::" + memberLevel);
