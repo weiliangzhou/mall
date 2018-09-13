@@ -298,7 +298,7 @@ public class UserServiceImpl implements UserService {
             modifyAuthorization(userLoginInfoVo, userQuery);
         }
         //返回用户登录态
-        TokenModel model = tokenManager.createToken(userQuery.getUserId(), userLoginInfoVo.getBusCode() + "");
+        TokenModel model = tokenManager.createToken(userQuery.getUserId());
         String token = model.getSignToken();
         Map resultMap = new HashMap<String, Object>();
         resultMap.put("token", token);
@@ -310,7 +310,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, timeout = 36000, rollbackFor = Exception.class)
-    public H5LoginResultVo h5WeChatLogin(String phone, String msgCode, String merchantId, String wxAccreditCode, String busCode) {
+    public H5LoginResultVo h5WeChatLogin(String phone, String msgCode, String merchantId, String wxAccreditCode) {
         log.info("h5WeChatLogin:phone->" + phone + "msgCode->" + msgCode + "merchantId->" + merchantId + "wxAccreditCode->" + wxAccreditCode);
         if (StringUtils.isEmpty(phone)) {
             BSUtil.isTrue(Boolean.FALSE, "请输入手机号码");
@@ -367,7 +367,7 @@ public class UserServiceImpl implements UserService {
         // user.setRegisterMobile(phone);
         // updateUserByUserId(user);
         //设置token
-        TokenModel model = tokenManager.createToken(user.getUserId(), busCode);
+        TokenModel model = tokenManager.createToken(user.getUserId());
         String token = model.getSignToken();
         return new H5LoginResultVo(token, user.getGzhOpenid(), user.getUserId(), firstLogin);
     }
