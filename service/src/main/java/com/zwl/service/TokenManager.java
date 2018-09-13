@@ -17,7 +17,7 @@ public interface TokenManager {
      * @param name 指定用户的id
      * @return 生成的token
      */
-    public TokenModel createToken(String name);
+    public TokenModel createToken(String name,String busCode);
 
     /**
      * 检查token是否有效

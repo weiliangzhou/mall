@@ -17,6 +17,7 @@ import com.zwl.util.PhoneUtil;
 import com.zwl.util.ThreadVariable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,6 +50,8 @@ public class UserController {
     private MaidInfoService maidInfoService;
     @Autowired
     private UserAccountService userAccountService;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
 
     /**
@@ -66,9 +69,22 @@ public class UserController {
         if (userLoginInfoVo.getBusCode() == null || userLoginInfoVo.getBusCode() == 1) {
             result = userService.miniAppWeChatAuthorization(userLoginInfoVo, userLoginInfoVo.getCode(), userLoginInfoVo.getMerchantId());
         } else if (userLoginInfoVo.getBusCode() == 2) {
-            H5LoginResultVo resultVo = userService.h5WeChatLogin(userLoginInfoVo.getPhone(), userLoginInfoVo.getMsgCode(), userLoginInfoVo.getMerchantId(), userLoginInfoVo.getWxAccreditCode());
+            H5LoginResultVo resultVo = userService.h5WeChatLogin(userLoginInfoVo.getPhone(), userLoginInfoVo.getMsgCode(), userLoginInfoVo.getMerchantId(), userLoginInfoVo.getWxAccreditCode(), userLoginInfoVo.getBusCode() + "");
             result.setData(resultVo);
         }
+        return result;
+    }
+
+    /**
+     * 用户注销
+     */
+    @PostMapping("/loginOut")
+    public Result loginOut(@RequestBody JSONObject jsonObject) {
+        String userId = jsonObject.getString("userId");
+        String busCode = jsonObject.getString("busCode");
+        Result result = new Result();
+        //删除对应的redis
+        stringRedisTemplate.delete(userId + busCode);
         return result;
     }
 
@@ -161,7 +177,7 @@ public class UserController {
         } else if (memberLevel == 0) {
             levelName = "会员";
         } else {
-            Product product = productService.getProductByMemberLevel(memberLevel,user.getMerchantId());
+            Product product = productService.getProductByMemberLevel(memberLevel, user.getMerchantId());
             levelName = product.getLevelName();
         }
         log.info("memberLevel::" + memberLevel);
