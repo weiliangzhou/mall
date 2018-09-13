@@ -161,11 +161,10 @@ public class UserController {
         UserInfo userInfo = userInfoService.getByUserId(userId);
         UserLoginInfoVo userLoginInfoVo = new UserLoginInfoVo();
         String logoUrl = "";
-        String logoUrl1 = "";
         String defaultLogoUrl = "http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/6a989ec302994c6c98c2d4810f9fbcb2.png";
         if (userInfo != null) {
             userLoginInfoVo.setNickName(userInfo.getNickName());
-            logoUrl1 = userInfo.getLogoUrl();
+            logoUrl = userInfo.getLogoUrl();
         }
 
         User user = userService.getByUserId(userId);
@@ -174,7 +173,7 @@ public class UserController {
             result.setMessage("查无用户，请校验userId");
             return result;
         } else
-            logoUrl = StringUtils.isBlank(logoUrl1) ? (StringUtils.isBlank(user.getLogoUrl()) ? defaultLogoUrl : user.getLogoUrl()) : logoUrl1;
+            logoUrl = StringUtils.isBlank(logoUrl) ? StringUtils.isBlank(user.getLogoUrl()) ? defaultLogoUrl : user.getLogoUrl() : logoUrl;
         userLoginInfoVo.setLogoUrl(logoUrl);
         Integer memberLevel = user.getMemberLevel();
         String levelName;

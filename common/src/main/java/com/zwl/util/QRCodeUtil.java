@@ -32,19 +32,29 @@ public class QRCodeUtil {
     private static final int BGWHITE = 0xFFFFFFFF; // 背景颜色
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         String url = "http://dy.xc2018.com.cn/home?referrer=c5530f7e341b4ae9afc5d50cc69a212c";
 //        String path = FileSystemView.getFileSystemView().getHomeDirectory() + File.separator + "testQrcode";
 //        String fileName = "temp.jpg";
-        String smallImage = createQrCode(url, null, null);
-        try {
-            String url1 = mergeImage("http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/48c31d7eaa084fb4bc62ea98b0e1af24.png", smallImage, "310", "380","https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eoESgDChRh1CibJojpCiaLZtmUiaa1x5EvbW0zvvOOgBCj2kmsia5xuFCEiczia21ribLic8e3ck7fVtxIqOQ/132", "200", "75","二师兄");
-            System.out.println(url1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        String smallImage = createQrCode(url, null, null);
+//        try {
+//            String url1 = mergeImage("http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/48c31d7eaa084fb4bc62ea98b0e1af24.png", smallImage, "310", "380","https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eoESgDChRh1CibJojpCiaLZtmUiaa1x5EvbW0zvvOOgBCj2kmsia5xuFCEiczia21ribLic8e3ck7fVtxIqOQ/132", "200", "75","二师兄");
+//            System.out.println(url1);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+        makeCircularImg("http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83erRYquBqibVusZXLAmBUTk9d4GXk9C4UkWq5RmGJ94CI4s3npxCs5mNNFnYxIYnRYprZtPo8ib03cYw/132","d:/11.jpg",140,150);
 
     }
+    public static String makeCircularImg(String srcFilePath, String circularImgSavePath,int targetSize, int cornerRadius) throws IOException {
+        URL url = new URL(srcFilePath);
+        BufferedImage bufferedImage = ImageIO.read(url);
+        BufferedImage circularBufferImage = roundImage(bufferedImage,targetSize,cornerRadius);
+        ImageIO.write(circularBufferImage, "png", new File(circularImgSavePath));
+        return circularImgSavePath;
+    }
+
 
     public static String createQrCode(String url, String path, String fileName) {
         String imgUrl = "";
@@ -163,11 +173,19 @@ public class QRCodeUtil {
             int x_i_t = (int) fx_t;
             int y_i_t  = (int) fy_t;
             g.drawImage(small, x_i, y_i, small.getWidth(), small.getHeight(), null);
-            g.drawImage(userLogo, x_i_t, y_i_t, userLogo.getWidth(), userLogo.getHeight(), null);
-//            g.drawImage(roundImage(userLogo,2,2), x_i_t, y_i_t, roundImage(userLogo,2,2).getWidth(), roundImage(userLogo,2,2).getHeight(), null);
-            g.setFont(new Font("宋体",Font.BOLD,20));
+//            g.drawImage(userLogo, (big.getWidth() - userLogo.getWidth()) / 2, y_i_t, userLogo.getWidth(), userLogo.getHeight(), null);
+            g.drawImage(roundImage(userLogo,130,150), (big.getWidth() - userLogo.getWidth()) / 2, y_i_t, roundImage(userLogo,130,150).getWidth(), roundImage(userLogo,130,150).getHeight(), null);
+            Font font=new Font("黑体", Font.PLAIN, 20);
+            g.setFont(font);
             g.setColor(Color.BLACK);
-            g.drawString(nickName, 220, 240);
+            // 抗锯齿
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            // 计算文字长度，计算居中的x点坐标
+            FontMetrics fm = g.getFontMetrics(font);
+            int textWidth = fm.stringWidth(nickName);
+            int widthX = (big.getWidth() - textWidth) / 2;
+            // 表示这段文字在图片上的位置(x,y) .第一个是你设置的内容。
+            g.drawString(nickName,widthX,240);
             g.dispose();
             byte[] imgByte = ImageUtil.imageToBytes(big, "png");
             return AliOSSUtil.uploadFileByte(imgByte);
