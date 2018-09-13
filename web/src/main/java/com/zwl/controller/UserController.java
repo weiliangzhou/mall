@@ -16,6 +16,7 @@ import com.zwl.util.CheckUtil;
 import com.zwl.util.PhoneUtil;
 import com.zwl.util.ThreadVariable;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -159,9 +160,12 @@ public class UserController {
         //根据UserId查找用户详情表
         UserInfo userInfo = userInfoService.getByUserId(userId);
         UserLoginInfoVo userLoginInfoVo = new UserLoginInfoVo();
+        String logoUrl = "";
+        String logoUrl1 = "";
+        String defaultLogoUrl = "http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/6a989ec302994c6c98c2d4810f9fbcb2.png";
         if (userInfo != null) {
             userLoginInfoVo.setNickName(userInfo.getNickName());
-            userLoginInfoVo.setLogoUrl(userInfo.getLogoUrl());
+            logoUrl1 = userInfo.getLogoUrl();
         }
 
         User user = userService.getByUserId(userId);
@@ -169,7 +173,9 @@ public class UserController {
             result.setCode(ResultCodeEnum.EXCEPTION);
             result.setMessage("查无用户，请校验userId");
             return result;
-        }
+        } else
+            logoUrl = StringUtils.isBlank(logoUrl1) ? (StringUtils.isBlank(user.getLogoUrl()) ? defaultLogoUrl : user.getLogoUrl()) : logoUrl1;
+        userLoginInfoVo.setLogoUrl(logoUrl);
         Integer memberLevel = user.getMemberLevel();
         String levelName;
         if (null == memberLevel || memberLevel == -1) {
