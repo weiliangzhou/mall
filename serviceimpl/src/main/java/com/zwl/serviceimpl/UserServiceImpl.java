@@ -298,7 +298,7 @@ public class UserServiceImpl implements UserService {
             modifyAuthorization(userLoginInfoVo, userQuery);
         }
         //返回用户登录态
-        TokenModel model = tokenManager.createToken(userQuery.getUserId(),userLoginInfoVo.getBusCode()+"");
+        TokenModel model = tokenManager.createToken(userQuery.getUserId(), userLoginInfoVo.getBusCode() + "");
         String token = model.getSignToken();
         Map resultMap = new HashMap<String, Object>();
         resultMap.put("token", token);
@@ -310,7 +310,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, timeout = 36000, rollbackFor = Exception.class)
-    public H5LoginResultVo h5WeChatLogin(String phone, String msgCode, String merchantId, String wxAccreditCode,String busCode) {
+    public H5LoginResultVo h5WeChatLogin(String phone, String msgCode, String merchantId, String wxAccreditCode, String busCode) {
         log.info("h5WeChatLogin:phone->" + phone + "msgCode->" + msgCode + "merchantId->" + merchantId + "wxAccreditCode->" + wxAccreditCode);
         if (StringUtils.isEmpty(phone)) {
             BSUtil.isTrue(Boolean.FALSE, "请输入手机号码");
@@ -367,7 +367,7 @@ public class UserServiceImpl implements UserService {
         // user.setRegisterMobile(phone);
         // updateUserByUserId(user);
         //设置token
-        TokenModel model = tokenManager.createToken(user.getUserId(),busCode);
+        TokenModel model = tokenManager.createToken(user.getUserId(), busCode);
         String token = model.getSignToken();
         return new H5LoginResultVo(token, user.getGzhOpenid(), user.getUserId(), firstLogin);
     }
@@ -411,7 +411,7 @@ public class UserServiceImpl implements UserService {
             nickName = nickName.replaceAll("[\ud800\udc00-\udbff\udfff\ud800-\udfff]", "");
         }
         userInfo.setNickName(nickName);
-        userInfo.setLogoUrl(userInfoVo.getHeadimgurl());
+        userInfo.setLogoUrl(StringUtils.isBlank(userInfoVo.getHeadimgurl()) ? WX_DEFAULT_HEAD_IMG : userInfoVo.getHeadimgurl());
         UserInfo sysUserInfo = userInfoService.getByUserId(userId);
         if (sysUserInfo == null) {//验证数据库中是否有用户信息
             userInfo.setAvailable(1);
@@ -419,6 +419,11 @@ public class UserServiceImpl implements UserService {
         } else {
             userInfoService.modifyByParams(userInfo);
         }
+        //同步更新用户USER表头像   USER表中做了头像的 冗余存储
+        User user = new User();
+        user.setUserId(userId);
+        user.setLogoUrl(userInfo.getLogoUrl());
+        this.updateUserByUserId(user);
         return userInfo;
     }
 
