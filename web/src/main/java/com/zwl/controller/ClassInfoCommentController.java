@@ -58,7 +58,7 @@ public class ClassInfoCommentController {
     public String getClassInfoList(@RequestBody JSONObject jsonObject){
         Result result = new Result();
         String merchantId = jsonObject.getString("merchantId");
-        List<ClassVo> classVoList = classSetService.getAllClassOrderById(merchantId);
+        List<ClassVo> classVoList = classSetService.getAllClassOrderById(merchantId, 1);
         for (ClassVo c:classVoList) {
             if(c.getClassType()==1){
                 List<ClassInfo> classInfoList = classInfoService.getByClassSetId(c.getId());

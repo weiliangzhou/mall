@@ -59,8 +59,8 @@ public class ClassSetServiceImpl implements ClassSetService {
     }
 
     @Override
-    public List<ClassVo> getAllClassOrderById(String merchantId) {
-        return classSetMapper.selectAllClassOrderById(merchantId);
+    public List<ClassVo> getAllClassOrderById(String merchantId, Integer queryType) {
+        return classSetMapper.selectAllClassOrderById(merchantId,queryType);
     }
 
     @Override
