@@ -163,8 +163,11 @@ public class QRCodeUtil {
             int x_i_t = (int) fx_t;
             int y_i_t  = (int) fy_t;
             g.drawImage(small, x_i, y_i, small.getWidth(), small.getHeight(), null);
-            g.drawImage(roundImage(userLogo,2,2), x_i_t, y_i_t, userLogo.getWidth(), userLogo.getHeight(), null);
-            g.drawString(nickName, 165, 222);
+            g.drawImage(userLogo, x_i_t, y_i_t, userLogo.getWidth(), userLogo.getHeight(), null);
+//            g.drawImage(roundImage(userLogo,2,2), x_i_t, y_i_t, roundImage(userLogo,2,2).getWidth(), roundImage(userLogo,2,2).getHeight(), null);
+            g.setFont(new Font("宋体",Font.BOLD,20));
+            g.setColor(Color.BLACK);
+            g.drawString(nickName, 220, 240);
             g.dispose();
             byte[] imgByte = ImageUtil.imageToBytes(big, "png");
             return AliOSSUtil.uploadFileByte(imgByte);
