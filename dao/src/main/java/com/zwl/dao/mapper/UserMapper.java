@@ -3,6 +3,7 @@ package com.zwl.dao.mapper;
 import com.zwl.model.po.User;
 import com.zwl.model.vo.UserQueryVo;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -73,4 +74,7 @@ public interface UserMapper {
     void updateUserGzhOpenIdByUserId(@Param("userId") String userId, @Param("gzhOpenId") String gzhOpenId);
 
     void updateUserWechatOpenidByUserId(@Param("userId") String userId, @Param("wechatOpenId") String wechatOpenId);
+
+    @Update("update ss_user set register_mobile =#{registerMobile} where wechat_openid=#{openid}")
+    void updateRegisterMobileByWxOpenId(@Param("registerMobile") String registerMobile, @Param("openid") String openid);
 }
