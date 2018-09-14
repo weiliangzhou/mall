@@ -170,7 +170,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public static void main(String[] args) {
-        String ss="  ";
+        String ss = "  ";
         System.out.println(CheckUtil.isNotEmpty(ss));
     }
 
@@ -289,8 +289,14 @@ public class UserServiceImpl implements UserService {
             firstLogin = Boolean.TRUE;
             String userId = saveAuthorization(userLoginInfoVo, openid);
             userQuery = getByUserId(userId);
-        } else {//如果用户还未购买，则可以更新推荐人
+        } else {
             if (userQuery.getWechatOpenid() == null) {
+                User user = this.getUserByOpenIdAndMerchantId(openid, merchantId);
+                if (null != user) {
+                    // 存量用户在H5登录了 创建了新的账号  旧的账号未同步
+                    log.info(String.format("!!!!!!!!!!!!!!!!!!!!!  微信OPENDID:%s    手机号码:%s", openid, userLoginInfoVo.getPhone()));
+                    BSUtil.isTrue(Boolean.FALSE, "账号正在迁移中请先使用H5登录使用页");
+                }
                 //用户在H5登录过没在小程序登录
                 firstLogin = Boolean.TRUE;
                 updateUserWechatOpenidByUserId(userQuery.getUserId(), openid);
