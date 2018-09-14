@@ -294,7 +294,7 @@ public class UserServiceImpl implements UserService {
                 User user = this.getUserByOpenIdAndMerchantId(openid, merchantId);
                 if (null != user) {
                     // 存量用户在H5登录了 创建了新的账号  旧的账号未同步
-                    log.info(String.format("!!!!!!!!!!!!!!!!!!!!!  微信OPENDID:%s    手机号码:%s", openid, userLoginInfoVo.getPhone()));
+                    log.info(String.format("!!!!!!!!!!!!!!!!!!!!! 微信小程序USERID:%s 微信公众号USERID:%s 微信小程序OPENDID:%s  微信公众号OPENDID:%s  手机号码:%s", userQuery.getUserId(), user.getUserId(), openid, userQuery.getGzhOpenid(), userLoginInfoVo.getPhone()));
                     BSUtil.isTrue(Boolean.FALSE, "账号正在迁移中请先使用H5登录使用页");
                 }
                 //用户在H5登录过没在小程序登录
