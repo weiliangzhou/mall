@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
+@SuppressWarnings("all")
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
@@ -265,7 +266,6 @@ public class UserServiceImpl implements UserService {
         //根据merchantid获取appid和secret
         Merchant merchant = merchantService.getMerchantByMerchantId(merchantId);
         Result result = new Result();
-        String registerMobile = userLoginInfoVo.getPhone();
         if (merchant == null)
             BSUtil.isTrue(false, "商户不存在");
         //根据code获取openid 去掉数据库appid和appsecret的空格和换行等
@@ -279,46 +279,27 @@ public class UserServiceImpl implements UserService {
             return result;
         }
         String openid = map.get("openid").toString();
-//        String openid = "oFHyP4vTJdywM_tspmMRjDxQNwus";
-//        String openid = null;
         Boolean firstLogin = Boolean.FALSE;//验证用户是否是第一次登录
         //先查询用户之前是否授权登录过
         User userQuery = new User();
-        userQuery.setWechatOpenid(openid);
+        userQuery.setRegisterMobile(userLoginInfoVo.getPhone());
         userQuery.setMerchantId(merchantId);
         userQuery = getOneByParams(userQuery);
-//        userQuery = null;
-        //通过openid，merchantId获取用户
-        //如果获取到，校验手机号
-        //手机号已经在H5登陆过 则记录日志
-        //如果手机号没有被绑定过 则更新当前用户
-        //如果手机号存在,则比对手机号，不一致 则报错
-        if (userQuery == null) {
-            //查询是否在H5注册过
-            //如果注册，则更新wxOpenId
-            //如果未注册，则insert一个新用户
-            User queryUser = new User();
-            queryUser.setRegisterMobile(registerMobile);
-            queryUser.setMerchantId(merchantId);
-            queryUser = getOneByParams(queryUser);
-            if (queryUser != null) {
-                updateUserWechatOpenidByUserId(queryUser.getUserId(), openid);
-                userQuery = queryUser;
-            } else {
-                //用户之前没授权登录过
-                firstLogin = Boolean.TRUE;
-                String userId = saveAuthorization(userLoginInfoVo, openid);
-                userQuery = getByUserId(userId);
-            }
+        if (userQuery == null) {//用户之前没授权登录过
+            firstLogin = Boolean.TRUE;
+            String userId = saveAuthorization(userLoginInfoVo, openid);
+            userQuery = getByUserId(userId);
         } else {
-            //代表是小程序存量用户存在手机号码为空需要更新手机号
-            if (userQuery.getRegisterMobile() == null) {
-                //校验手机号，
-                //根据手机号，商户号去查询，
-                //如果不存在，则更新
-                //如果存在，判断wxopenid是否一致，一致则继续，不一致则报该手机号被注册过，为null则报如果在H5登陆绑定过，则需要记录日志，手动去处理
-                checkH5User(registerMobile, merchantId, userQuery.getUserId(), openid);
-
+            if (userQuery.getWechatOpenid() == null) {
+                User user = this.getUserByOpenIdAndMerchantId(openid, merchantId);
+                if (null != user) {
+                    // 存量用户在H5登录了 创建了新的账号  旧的账号未同步
+                    log.info(String.format("!!!!!!!!!!!!!!!!!!!!! 微信小程序USERID:%s 微信公众号USERID:%s 微信小程序OPENDID:%s  微信公众号OPENDID:%s  手机号码:%s", userQuery.getUserId(), user.getUserId(), openid, userQuery.getGzhOpenid(), userLoginInfoVo.getPhone()));
+                    BSUtil.isTrue(Boolean.FALSE, "账号正在迁移中请先使用H5登录使用页");
+                }
+                //用户在H5登录过没在小程序登录
+                firstLogin = Boolean.TRUE;
+                updateUserWechatOpenidByUserId(userQuery.getUserId(), openid);
             } else {
                 if (!userQuery.getWechatOpenid().equals(openid)) {
                     BSUtil.isTrue(Boolean.FALSE, String.format("手机号码为:%s 已经在其他公众号上注册过请换个号码", userLoginInfoVo.getPhone()));
@@ -336,44 +317,6 @@ public class UserServiceImpl implements UserService {
         resultMap.put("firstLogin", firstLogin);
         result.setData(resultMap);
         return result;
-    }
-
-    private void checkH5User(String registerMobile, String merchantId, String wxUserId, String wxOpenid) {
-        User queryUser = new User();
-        queryUser.setRegisterMobile(registerMobile);
-        queryUser.setMerchantId(merchantId);
-        User validate_user = getOneByParams(queryUser);
-        if (validate_user != null) {
-            String wxopenid = validate_user.getWechatOpenid();
-            if (StringUtils.isBlank(wxopenid)) {
-                // 存量用户在H5登录了 创建了新的账号  旧的账号未同步
-                log.info(String.format("!!!!!!!!!!!!!!!!!!!!! " +
-                                "微信小程序USERID:%s" +
-                                "微信公众号USERID:%s " +
-                                "微信小程序OPENDID:%s  " +
-                                "微信公众号OPENDID:%s  " +
-                                "手机号码:%s",
-                        wxUserId,
-                        validate_user.getUserId(),
-                        wxOpenid,
-                        validate_user.getGzhOpenid(),
-                        validate_user.getRegisterMobile()));
-                BSUtil.isTrue(Boolean.FALSE, "账号正在迁移中请先使用H5登录使用页");
-            } else {
-                if (!wxopenid.equals(wxOpenid))
-                    BSUtil.isTrue(false, "该手机号被注册过");
-            }
-
-        } else {
-            //通过exopenid更新用户绑定手机
-            updateRegisterMobileByWxOpenId(registerMobile, wxOpenid);
-        }
-
-    }
-
-
-    private void updateRegisterMobileByWxOpenId(String registerMobile, String openid) {
-        userMapper.updateRegisterMobileByWxOpenId(registerMobile, openid);
     }
 
     @Override
@@ -431,7 +374,10 @@ public class UserServiceImpl implements UserService {
         //用户已存在获取微信用户信息更新数据库中的资料
         WxUserInfoVo userInfoVo = h5AppWeChatService.getWeChatUserInfo(accessTokenVo.getAccess_token(), accessTokenVo.getOpenid());
         h5AccreditSaveEditUserInfo(userInfoVo, user.getUserId());
-//        //设置token
+        //设置用户手机号码
+        // user.setRegisterMobile(phone);
+        // updateUserByUserId(user);
+        //设置token
         TokenModel model = tokenManager.createToken(user.getUserId());
         String token = model.getSignToken();
         return new H5LoginResultVo(token, user.getGzhOpenid(), user.getUserId(), firstLogin);
