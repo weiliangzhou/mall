@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@SuppressWarnings("all")
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
@@ -101,7 +100,7 @@ public class UserServiceImpl implements UserService {
         user.setWechatOpenid(openid);
         user.setUserId(userId);
         user.setMerchantId(userLoginInfoVo.getMerchantId());
-        user.setRegisterMobile(userLoginInfoVo.getRegisterMobile());
+        user.setRegisterMobile(userLoginInfoVo.getPhone());
         //1、微信授权的 2、线下导入的 3、手机号注册的
         user.setRegisterFrom(1);
         //推荐人userId 推荐人必须购买过
@@ -249,6 +248,13 @@ public class UserServiceImpl implements UserService {
         if (null == code) {
             BSUtil.isTrue(Boolean.FALSE, "请输入微信授权code");
         }
+        //兼容
+        if (StringUtils.isBlank(userLoginInfoVo.getPhone())) {
+            userLoginInfoVo.setPhone(userLoginInfoVo.getRegisterMobile());
+        }
+        if (StringUtils.isBlank(userLoginInfoVo.getPhone())) {
+            BSUtil.isTrue(Boolean.FALSE, "请输入手机号码");
+        }
         if (null == merchantId) {
             BSUtil.isTrue(Boolean.FALSE, "请输入要登录的小程序商户号");
         }
@@ -259,7 +265,7 @@ public class UserServiceImpl implements UserService {
         //根据merchantid获取appid和secret
         Merchant merchant = merchantService.getMerchantByMerchantId(merchantId);
         Result result = new Result();
-        String registerMobile = userLoginInfoVo.getRegisterMobile();
+        String registerMobile = userLoginInfoVo.getPhone();
         if (merchant == null)
             BSUtil.isTrue(false, "商户不存在");
         //根据code获取openid 去掉数据库appid和appsecret的空格和换行等
@@ -296,7 +302,7 @@ public class UserServiceImpl implements UserService {
             queryUser.setMerchantId(merchantId);
             queryUser = getOneByParams(queryUser);
             if (queryUser != null) {
-                updateUserWechatOpenidByUserId( queryUser.getUserId(),openid);
+                updateUserWechatOpenidByUserId(queryUser.getUserId(), openid);
                 userQuery = queryUser;
             } else {
                 //用户之前没授权登录过
