@@ -63,9 +63,9 @@ public class UserController {
         if (userLoginInfoVo == null) {
             BSUtil.isTrue(Boolean.FALSE, "参数错误");
         }
-//        if (userLoginInfoVo.getBusCode() == null) {
-//            BSUtil.isTrue(Boolean.FALSE, "请输入要授权的方式 1:小程序 2:H5页面授权");
-//        }
+        if (userLoginInfoVo.getBusCode() == null) {
+            BSUtil.isTrue(Boolean.FALSE, "请输入要授权的方式 1:小程序 2:H5页面授权");
+        }
         Result result = new Result();
         if (userLoginInfoVo.getBusCode() == null || userLoginInfoVo.getBusCode() == 1) {
             result = userService.miniAppWeChatAuthorization(userLoginInfoVo, userLoginInfoVo.getCode(), userLoginInfoVo.getMerchantId());
