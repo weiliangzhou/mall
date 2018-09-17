@@ -130,8 +130,8 @@ public class UserController {
     public Result sendRegisterCode(@RequestBody JSONObject jsonObject) {
         String phone = jsonObject.getString("phone");
         String busCode = jsonObject.getString("busCode");
-        msgSenderService.sendCode(phone, busCode);
-        Result result = new Result();
+        Result result = msgSenderService.sendCode(phone, busCode);
+//        Result result = new Result();
         return result;
     }
 

@@ -2,7 +2,8 @@ package com.zwl.serviceimpl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.zwl.model.exception.BSUtil;
+import com.zwl.model.baseresult.Result;
+import com.zwl.model.baseresult.ResultCodeEnum;
 import com.zwl.model.msgsend.MsgSenderConstants;
 import com.zwl.service.MsgSenderService;
 import com.zwl.util.HttpsUtils;
@@ -35,11 +36,12 @@ public class MsgSenderServiceImpl implements MsgSenderService {
 
 
     @Override
-    public void sendCode(String phone, String busCode) {
+    public Result sendCode(String phone, String busCode) {
         try {
             String checkLimit = stringRedisTemplate.boundValueOps(phone + "_limit1").get();
             if (StringUtils.isNotBlank(checkLimit))
-                BSUtil.isTrue(false, "请一分钟之后重发！");
+                return new Result(ResultCodeEnum.SUCCESS,"请一分钟之后重发");
+//                BSUtil.isTrue(false, "请一分钟之后重发！");
             Map map = new HashMap();
             int msgCode = new Random().nextInt(999999);
             if (msgCode < 100000)
@@ -64,10 +66,12 @@ public class MsgSenderServiceImpl implements MsgSenderService {
                 stringRedisTemplate.boundValueOps(busCode + phone).set(msgCode + "", 5, TimeUnit.MINUTES);
             } else
                 log.error("短信发送失败" + "错误原因" + errorMsg);
+            return new Result();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        return null;
     }
 
     @Override
