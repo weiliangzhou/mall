@@ -374,7 +374,7 @@ public class UserServiceImpl implements UserService {
             } else {
                 //验证公众号openId 是否一致
                 if (!user.getGzhOpenid().equals(accessTokenVo.getOpenid())) {
-                    BSUtil.isTrue(Boolean.FALSE, String.format("手机号码为:%s 已经在其他页面上注册过请换个号码", phone));
+                    BSUtil.isTrue(Boolean.FALSE, "该手机绑定的微信与现在的微信不一致");
                 }
             }
         }

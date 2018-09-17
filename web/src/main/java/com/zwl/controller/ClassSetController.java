@@ -81,7 +81,8 @@ public class ClassSetController {
             if(browseCount>=CONSTANT_WAN){
                 classListenCountDesc=MathUtil.changeWan(classListenCountDesc)+"万";
             }
-            classVo.setBrowseCountDesc(classListenCountDesc+ "人收听");
+            classVo.setBrowseCountDesc(classListenCountDesc);
+            classVo.setBrowseCountDesc2("人收听");
         }
 
         PageClassVo pageClassVo = new PageClassVo();
