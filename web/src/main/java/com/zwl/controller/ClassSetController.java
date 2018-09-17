@@ -81,7 +81,8 @@ public class ClassSetController {
             if(browseCount>=CONSTANT_WAN){
                 classListenCountDesc=MathUtil.changeWan(classListenCountDesc)+"万";
             }
-            classVo.setBrowseCountDesc(classListenCountDesc+ "人收听");
+            classVo.setBrowseCountDesc(classListenCountDesc);
+            classVo.setBrowseCountDesc2("人收听");
         }
 
         PageClassVo pageClassVo = new PageClassVo();
@@ -129,6 +130,7 @@ public class ClassSetController {
         classVo.setId(classSet.getId());
         classVo.setTitle(classSet.getTitle());
         classVo.setContent(classSet.getContent());
+        classVo.setContentText(classSet.getContentText());
         classVo.setLogoUrl(classSet.getBannerUrl());
         //浏览人数
         List<ClassInfo> classInfoList = classInfoService.getByClassSetId(id);

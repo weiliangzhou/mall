@@ -21,6 +21,8 @@ public class ProductVo {
     private String productName;
     @ApiComment(value = "购买人数", sample = "123000")
     private Integer buyCount;
-    @ApiComment(value = "购买人数描述", sample = "12.3万人购买")
+    @ApiComment(value = "购买人数描述", sample = "12.3万")
     private String buyCountDesc;
+    @ApiComment(value = "购买人数描述2", sample = "人购买")
+    private String buyCountDesc2;
 }

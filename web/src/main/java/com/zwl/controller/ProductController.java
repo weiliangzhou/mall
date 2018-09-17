@@ -143,9 +143,10 @@ public class ProductController {
             if (buyCount > CONSTANT_WAN) {
                 buyCountDesc = MathUtil.changeWan(buyCountDesc) + "万";
             }
-            buyCountDesc = buyCountDesc + "人购买";
+//            buyCountDesc = buyCountDesc + "人购买";
             productVo.setBuyCount(buyCount);
             productVo.setBuyCountDesc(buyCountDesc);
+            productVo.setBuyCountDesc2("人购买");
             listVo.add(productVo);
         }
         result.setData(listVo);

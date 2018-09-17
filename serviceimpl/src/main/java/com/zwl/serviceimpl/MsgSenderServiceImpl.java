@@ -66,12 +66,10 @@ public class MsgSenderServiceImpl implements MsgSenderService {
                 stringRedisTemplate.boundValueOps(busCode + phone).set(msgCode + "", 5, TimeUnit.MINUTES);
             } else
                 log.error("短信发送失败" + "错误原因" + errorMsg);
-            return new Result();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("发送短信出现未知错误" , e);
         }
-
-        return null;
+        return new Result();
     }
 
     @Override
@@ -94,7 +92,7 @@ public class MsgSenderServiceImpl implements MsgSenderService {
             } else
                 log.error("短信发送失败" + "错误原因" + errorMsg);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("发送短信出现未知错误" , e);
         }
 
     }
