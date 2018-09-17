@@ -306,10 +306,6 @@ public class UserServiceImpl implements UserService {
                 //userQuery.getWechatOpenid()等于现在的openid
                 if (!userQuery.getWechatOpenid().equals(openid)) {
                     BSUtil.isTrue(Boolean.FALSE, String.format("手机号码为:%s 已经在其他公众号上注册过请换个号码", userLoginInfoVo.getPhone()));
-                }else{
-                    log.info("需要更新手机phone"+userLoginInfoVo.getPhone());
-                    log.info("需要更新手机wxOpenId"+openid);
-                    userMapper.updateRegisterMobileByWxOpenId(userLoginInfoVo.getPhone(),openid);
                 }
             }
             log.info("====@@@@用户之前已经授权登录过，userId为：@@@@@==========：" + userQuery.getUserId());
