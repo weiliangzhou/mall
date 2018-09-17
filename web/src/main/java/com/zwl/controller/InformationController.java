@@ -6,6 +6,7 @@ import com.github.pagehelper.PageHelper;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.po.Information;
 import com.zwl.service.InformationService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,6 +38,11 @@ public class InformationController {
         Information information=new Information();
         information.setMerchantId(merchantId);
         List<Information> informationList = informationService.getWxInformationList(information);
+        for(Information information1:informationList){
+            if(StringUtils.isBlank(information1.getAudioUrl())){
+                information1.setAudioUrl("");
+            }
+        }
         result.setData(informationList);
         return JSON.toJSONString(result);
     }
