@@ -129,6 +129,7 @@ public class ClassSetController {
         classVo.setId(classSet.getId());
         classVo.setTitle(classSet.getTitle());
         classVo.setContent(classSet.getContent());
+        classVo.setContentText(classSet.getContentText());
         classVo.setLogoUrl(classSet.getBannerUrl());
         //浏览人数
         List<ClassInfo> classInfoList = classInfoService.getByClassSetId(id);
