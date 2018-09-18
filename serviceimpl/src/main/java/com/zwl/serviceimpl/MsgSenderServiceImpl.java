@@ -63,8 +63,10 @@ public class MsgSenderServiceImpl implements MsgSenderService {
             //存入redis
             //根据busCode 1绑定手机，2购买绑定手机，存储到redis并设置过期时间
             stringRedisTemplate.boundValueOps(busCode + phone).set(msgCode + "", 5, TimeUnit.MINUTES);
-        } else
-            log.error("短信发送失败" + "错误原因" + errorMsg);
+        } else{
+            log.error("短信发送失败错误原因" + errorMsg);
+            stringRedisTemplate.boundValueOps(busCode + phone).set( "xdy", 5, TimeUnit.MINUTES);
+        }
     }
 
     @Override
