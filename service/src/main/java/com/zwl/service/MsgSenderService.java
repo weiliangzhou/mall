@@ -10,7 +10,7 @@ import com.zwl.model.baseresult.Result;
  * @date 2018/7/1413:57
  */
 public interface MsgSenderService {
-    public Result sendCode(String phone, String busCode);
+    public void sendCode(String phone, String busCode);
     public void sendMsg(String phone,String msg);
     public boolean checkCode(String phone,String code,String busCode);
 }
