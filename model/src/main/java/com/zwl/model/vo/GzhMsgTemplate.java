@@ -16,5 +16,8 @@ public class GzhMsgTemplate {
      private Map first;
      private Map keyword1;
      private Map keyword2;
+     private Map keyword3;
+     private Map keyword4;
+     private Map keyword5;
      private Map remark;
 }

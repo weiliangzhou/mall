@@ -6,13 +6,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.Merchant;
 import com.zwl.model.vo.GzhMsgTemplate;
-import com.zwl.model.vo.JsApiTokenVo;
 import com.zwl.model.vo.WxJsApiTokenMessage;
 import com.zwl.model.wxpay.HashKit;
 import com.zwl.model.wxpay.PaymentKit;
 import com.zwl.model.wxpay.WxConstans;
 import com.zwl.service.*;
 import com.zwl.util.HttpsUtils;
+import com.zwl.util.PhoneUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -174,6 +174,66 @@ public class GzhServiceImpl implements GZHService {
         String sing = PaymentKit.packageSign(params, false);
         String signature = HashKit.sha1(sing);
         return new WxJsApiTokenMessage(params.get("noncestr"), merchant.getGzAppId(), params.get("timestamp"), params.get("url"), signature);
+    }
+
+    @Override
+    public void sendBuyGzhMsgByOne(String gzhOpenid, String orderNo, String productName, Integer orderMoney, String registerMobile, String merchantId, String gzAppId, String gzAppKey, String xcxAppId, String templateId, Integer maidMoney) {
+        String accessToken = wxAccessTokenService.getAccessToken(merchantId, gzAppId, gzAppKey, 1);
+        String msgurl = WxConstans.SEND_KC_MSG + accessToken;
+        SimpleDateFormat sdf_yMdHms = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        Map miniprogramMap = new HashMap<>();
+//        miniprogramMap.put("appid", xcxAppId);
+//        miniprogramMap.put("pagepath", WxConstans.PAGEPATH);
+//        String miniprogram = JSON.toJSONString(miniprogramMap);
+//        东遥课堂更新新课程啦！
+//        课程：总裁班
+//        参加人：王小二或者手机号码
+//        欢迎登陆东遥课堂微信小程序收听！
+//        {{first.DATA}}  东遥课堂更新新课程啦！
+//        订单编号：{{keyword1.DATA}}
+//        课程名称：{{keyword2.DATA}}
+//        订单金额：{{keyword3.DATA}}
+//        联系电话：{{keyword4.DATA}}
+//        购买时间：{{keyword5.DATA}}
+//        {{remark.DATA}}   欢迎登陆东遥课堂微信小程序收听！
+        GzhMsgTemplate gzhMsgTemplate = new GzhMsgTemplate();
+        Map first = new HashMap();
+        first.put("value", "恭喜你成功获得返佣" +maidMoney/100+"元");
+        first.put("color", "#173177");
+        Map keyword1 = new HashMap();
+        keyword1.put("value", orderNo);
+        keyword1.put("color", "#173177");
+        Map keyword2 = new HashMap();
+        keyword2.put("value", productName);
+        keyword2.put("color", "#173177");
+        Map keyword3 = new HashMap();
+        keyword3.put("value", orderMoney / 100 + "");
+        keyword3.put("color", "#173177");
+        Map keyword4 = new HashMap();
+        keyword4.put("value", PhoneUtil.replace(registerMobile));
+        keyword4.put("color", "#173177");
+        Map keyword5 = new HashMap();
+        keyword5.put("value", sdf_yMdHms.format(new Date()));
+        keyword5.put("color", "#173177");
+//        Map remark = new HashMap();
+//        remark.put("value", "请点击登录小程序查看");
+//        remark.put("color", "#173177");
+        gzhMsgTemplate.setFirst(first);
+        gzhMsgTemplate.setKeyword1(keyword1);
+        gzhMsgTemplate.setKeyword2(keyword2);
+        gzhMsgTemplate.setKeyword3(keyword3);
+        gzhMsgTemplate.setKeyword4(keyword4);
+        gzhMsgTemplate.setKeyword5(keyword5);
+//        gzhMsgTemplate.setRemark(remark);
+        Map requestMap = new HashMap();
+        requestMap.put("touser", gzhOpenid);
+        requestMap.put("appid", gzAppId);
+        requestMap.put("template_id", templateId);
+//        requestMap.put("miniprogram", miniprogramMap);
+        requestMap.put("data", gzhMsgTemplate);
+        log.info("发送微信模板" + JSON.toJSONString(requestMap));
+        String result = HttpsUtils.sendPost(msgurl, JSON.toJSONString(requestMap));
+        log.info("发送微信模板结果" + result);
     }
 
     public static List<String> parseOpenidList(String result) {

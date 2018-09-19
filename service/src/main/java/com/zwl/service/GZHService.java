@@ -51,4 +51,20 @@ public interface GZHService {
      * @param url        生成签名的参数 由前端提供
      */
     WxJsApiTokenMessage getGzhJsApiToken(String merchantId, String url);
+
+    /**
+     * 发送购买成功，返佣推送消息
+     *
+     * @param gzhOpenid
+     * @param orderNo
+     * @param productName
+     * @param orderMoney
+     * @param registerMobile
+     * @param merchantId
+     * @param gzAppId
+     * @param gzAppKey
+     * @param xcxAppId
+     * @param templateId
+     */
+    void sendBuyGzhMsgByOne(String gzhOpenid, String orderNo, String productName, Integer orderMoney, String registerMobile, String merchantId, String gzAppId, String gzAppKey, String xcxAppId, String templateId, Integer maidMoney);
 }
