@@ -320,18 +320,22 @@ public class WxPayController {
                                     userAccountService.addBanlanceByUserId(referrerId, maidMoney);
                                 log.info("回调支付成功，更新用户余额成功");
 //                                【东遥课堂】尾号7903成功购买99元课程 , 你将获得奖励90元 ,  尽快查阅小程序
-//                                String referrerPhone = referrerUser.getRegisterMobile();
-//                                if (StringUtils.isNotBlank(referrerPhone)) {
-//                                    String userMobile = user.getRegisterMobile();
-//                                    String msg = "【东遥课堂】手机尾号" + userMobile.substring(userMobile.length() - 4) + "成功购买" + productName + ", 你将获得奖励" + maidMoney / 100 + "元 ,  尽快查阅小程序~";
-//                                    msgSenderService.sendMsg(referrerPhone, msg);
-//                                }
+                                String referrerPhone = referrerUser.getRegisterMobile();
+                                if (StringUtils.isNotBlank(referrerPhone)) {
+                                    String userMobile = user.getRegisterMobile();
+                                    String msg = "【东遥课堂】手机尾号" + userMobile.substring(userMobile.length() - 4) + "成功购买" + productName + ", 你将获得奖励" + maidMoney / 100 + "元 ,  尽快查阅小程序~";
+                                    msgSenderService.sendMsg(referrerPhone, msg);
+                                }
                                 //存在referrerUser.getGzhOpenid()==null
-                                String referrerGzhOpenId = referrerUser.getGzhOpenid();
-                                log.info("referrerGzhOpenId is null ，referrerUserId:" + referrerId + ",userId:" + userId);
-                                if (StringUtils.isNotBlank(referrerGzhOpenId))
-                                    gzhService.sendBuyGzhMsgByOne(referrerGzhOpenId, orderNo, productName, orderActualMoney, user.getRegisterMobile(), merchantId, merchant.getGzAppId(), merchant.getGzAppKey(), merchant.getAppId(), "2AT4AIsTNNOJP3YFSUSlyDruKPTdPBgyieyqI0jKmVQ", maidMoney);
+                                //发送公众号推送
+//                                String referrerGzhOpenId = referrerUser.getGzhOpenid();
+//                                log.info("referrerGzhOpenId is null ，referrerUserId:" + referrerId + ",userId:" + userId);
+//                                if (StringUtils.isNotBlank(referrerGzhOpenId))
+//                                    gzhService.sendBuyGzhMsgByOne(referrerGzhOpenId, orderNo, productName, orderActualMoney, user.getRegisterMobile(), merchantId, merchant.getGzAppId(), merchant.getGzAppKey(), merchant.getAppId(), "2AT4AIsTNNOJP3YFSUSlyDruKPTdPBgyieyqI0jKmVQ", maidMoney);
+
+
                             }
+
 //
 
                         }
