@@ -63,5 +63,9 @@ public class UserLoginInfoVo {
      * 微信授权code
      */
     private String wxAccreditCode;
+    /**
+     * 真实姓名
+     */
+    private String realName;
 
 }

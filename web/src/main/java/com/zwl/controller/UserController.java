@@ -203,7 +203,7 @@ public class UserController {
         //余额：分转元
         balance = balance == null ? 0 : balance / 100;
         userLoginInfoVo.setBalance(balance);
-
+        userLoginInfoVo.setRealName(StringUtils.isBlank(user.getRealName()) ? "" : user.getRealName());
         result.setData(userLoginInfoVo);
         return result;
     }
