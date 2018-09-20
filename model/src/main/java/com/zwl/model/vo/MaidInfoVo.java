@@ -36,5 +36,11 @@ public class MaidInfoVo {
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     @ApiComment(value = "时间", sample = "2018-07-05 18:00")
     private Date createTime;
+    @ApiComment(value = "6月份纵向奖", sample = "6月份纵向奖")
+    //类型 不为2的时候  取
+    private String title;
+    //类型  0团队奖  1纵向奖  2普通
+    @ApiComment(value = "0团队奖  1纵向奖  2普通", sample = "0团队奖  1纵向奖  2普通")
+    private String maidType;
 
 }

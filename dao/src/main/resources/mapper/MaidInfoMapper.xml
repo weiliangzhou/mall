@@ -156,6 +156,7 @@
  SELECT * from (
 
 ( SELECT
+    '' as title,
 	case when usr.logo_url is null then "http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/6a989ec302994c6c98c2d4810f9fbcb2.png"
 	 else usr.logo_url end  AS logoUrl,
 	usr.real_name AS realName,
@@ -163,7 +164,8 @@
 	smi.`LEVEL` AS `LEVEL`,
 	smi.level_name as levelName,
 	smi.maid_money / 100 AS maidMoney,
-	smi.create_time AS createTime
+	smi.create_time AS createTime,
+	2 as maidType
 	FROM
 		ss_maid_info smi,
 		ss_user usr
@@ -175,22 +177,24 @@
 	) UNION ALL
 	(
 	SELECT
+	 CASE
+			maid_type
+			WHEN 0 THEN
+			CONCAT( DATE_FORMAT(create_time,'%m'),'月份团队奖') ELSE CONCAT( DATE_FORMAT(create_time,'%m'),'月份纵向奖')
+		END AS title,
 	CASE
 			maid_type
 			WHEN 0 THEN
 			'http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180823/0acd14b3553b4d4c89075b281ca80393.png' ELSE 'http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180823/40e1e20cb5114dbd95ba285f7102d236.png'
 		END
 		 AS logoUrl,
-	CASE
-			maid_type
-			WHEN 0 THEN
-			'团队奖' ELSE '纵向奖'
-		END AS realName,
+		'' as realName,
 		'' AS phone,
 		'' AS `LEVEL`,
 		'' as levelName,
 		maid_money / 100 AS maidMoney,
-		create_time AS createTime
+		create_time AS createTime,
+		maid_type as maidType
 	FROM
 		ss_maid_info_by_month
 	WHERE
