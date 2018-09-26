@@ -386,6 +386,19 @@ public class UserServiceImpl implements UserService {
         return new H5LoginResultVo(token, user.getGzhOpenid(), user.getUserId(), firstLogin);
     }
 
+    @Override
+    public void updateUserToXzByUserId(String userId) {
+        User user =new User();
+        user.setUserId(userId);
+        user.setMemberLevel(MemberLevel.XZ);
+        userMapper.updateUserByUserId(user);
+    }
+
+    @Override
+    public Integer getXzCountByUserId(String userId) {
+        return userMapper.getXzCountByUserId(userId);
+    }
+
     public User getUserByPhoneAndMerchantId(String phone, String merchantId) {
         if (StringUtils.isEmpty(phone)) {
             BSUtil.isTrue(Boolean.FALSE, "请输入要查询的手机号码");

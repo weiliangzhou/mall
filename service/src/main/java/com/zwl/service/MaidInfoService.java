@@ -26,4 +26,6 @@ public interface MaidInfoService {
     Integer getTotalMaidMoneyByUserId(String userId);
 
     Integer getMaidInfoCount(String userId);
+
+    Integer getTotalAmountByMonthByUserId(String userId);
 }

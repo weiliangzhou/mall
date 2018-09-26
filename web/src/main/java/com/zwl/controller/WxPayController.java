@@ -242,6 +242,12 @@ public class WxPayController {
                             break;
                         case 6:
                             userQuotaCountService.saveOrUpdate(userId, 100);
+                            //如果旗下院长数量=10,则升级为校长
+                            log.info("如果旗下院长数量=10,则升级为校长");
+                            Integer xzCount = userService.getXzCountByUserId(referrerId);
+                            log.info("xzCount"+xzCount);
+                            if (xzCount != null)
+                                userService.updateUserToXzByUserId(referrerId);
                             break;
                     }
                     //购买成功之后,更新购买数量
@@ -290,6 +296,7 @@ public class WxPayController {
                                     maidMoney = orderActualMoney * maidPercent / 100;
                                     maidInfo.setMaidPercent(maidPercent);
                                 } else {
+                                    log.info("maidPercent_referrer:"+maidPercent_referrer);
                                     maidMoney = orderActualMoney * maidPercent_referrer / 100;
                                     maidInfo.setMaidPercent(maidPercent_referrer);
                                 }

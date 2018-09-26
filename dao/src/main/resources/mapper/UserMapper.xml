@@ -289,7 +289,7 @@
         AND su.referrer = #{userId}
         AND so.user_id = su.user_id
         AND so.`level` >1
-        AND PERIOD_DIFF( date_format( '2018-09-01', '%Y%m' ), date_format( so.payment_time, '%Y%m' ) ) = 1
+        AND DATE_FORMAT( now(), '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
 
     </select>
 

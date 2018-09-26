@@ -172,4 +172,8 @@ public interface UserService {
      * @param wxAccreditCode h5微信授权code
      */
     H5LoginResultVo h5WeChatLogin(String phone, String msgCode, String merchantId, String wxAccreditCode);
+
+    void updateUserToXzByUserId(String userId);
+
+    Integer getXzCountByUserId(String userId);
 }
