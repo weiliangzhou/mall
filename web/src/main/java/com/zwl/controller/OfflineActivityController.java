@@ -5,8 +5,9 @@ import com.zwl.model.baseresult.Result;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.groups.Buy;
 import com.zwl.model.groups.H5Buy;
+import com.zwl.model.po.OfflineActivity;
 import com.zwl.model.po.OfflineActivityCode;
-import com.zwl.model.po.Product;
+import com.zwl.model.vo.BuyResult;
 import com.zwl.model.vo.SignInVo;
 import com.zwl.service.*;
 import lombok.extern.slf4j.Slf4j;
@@ -41,26 +42,26 @@ public class OfflineActivityController {
     @Autowired
     private OfflineActivityCodeService offlineActivityCodeService;
 
-    @PostMapping("/buy")
-    public String offlineActivityBuy(HttpServletRequest request, @Validated(H5Buy.class) @RequestBody Product product) {
-        Result result = new Result();
-//        BuyResult buyResult = productService.offlineActivityBuy(product);
-//        String orderNo = buyResult.getOrderNo();
-//        Integer totalFee = buyResult.getTotalFee();
-//        String merchantId = buyResult.getMerchantId();
-//        Merchant merchant = merchantService.getMerchantByMerchantId(merchantId);
-//        String gzhAppId = merchant.getGzAppId();
-//        String userId_local = product.getUserId();
-//        User user = userService.getByUserId(userId_local);
-//        String wxPayKey = merchant.getWxPayKey();
-//        String realIp = IpKit.getRealIp(request);
-//        if (StrKit.isBlank(realIp)) {
-//            realIp = "127.0.0.1";
-//        }
-//        WxPayVo wxPayVo = wxPayService.pay(realIp, user.getGzhOpenid(), orderNo, totalFee.toString(), gzhAppId, merchantId, wxPayKey);
-//        result.setData(wxPayVo);
-        return JSON.toJSONString(result);
-    }
+//    @PostMapping("/buy")
+//    public String offlineActivityBuy(HttpServletRequest request, @Validated(Buy.class) @RequestBody OfflineActivityBuy offlineActivityBuy) {
+//        Result result = new Result();
+//        BuyResult buyResult = productService.offlineActivityBuy(offlineActivity);
+////        String orderNo = buyResult.getOrderNo();
+////        Integer totalFee = buyResult.getTotalFee();
+////        String merchantId = buyResult.getMerchantId();
+////        Merchant merchant = merchantService.getMerchantByMerchantId(merchantId);
+////        String gzhAppId = merchant.getGzAppId();
+////        String userId_local = product.getUserId();
+////        User user = userService.getByUserId(userId_local);
+////        String wxPayKey = merchant.getWxPayKey();
+////        String realIp = IpKit.getRealIp(request);
+////        if (StrKit.isBlank(realIp)) {
+////            realIp = "127.0.0.1";
+////        }
+////        WxPayVo wxPayVo = wxPayService.pay(realIp, user.getGzhOpenid(), orderNo, totalFee.toString(), gzhAppId, merchantId, wxPayKey);
+////        result.setData(wxPayVo);
+//        return JSON.toJSONString(result);
+//    }
 
 
     @PostMapping("/signIn")
@@ -76,10 +77,10 @@ public class OfflineActivityController {
         OfflineActivityCode offlineActivity = offlineActivityCodeService.getOneByActivityCode(activityCode);
         if (offlineActivity == null)
             BSUtil.isTrue(false, "非法code!");
-        else{
-            OfflineActivityCode  offlineActivityCode=offlineActivityCodeService.getOneByActivityCode(activityCode);
-            Integer activityId=offlineActivityCode.getActivityId();
-            offlineActivityCodeService.updatePassByActivityCode(activityCode,activityId);
+        else {
+            OfflineActivityCode offlineActivityCode = offlineActivityCodeService.getOneByActivityCode(activityCode);
+            Integer activityId = offlineActivityCode.getActivityId();
+            offlineActivityCodeService.updatePassByActivityCode(activityCode, activityId);
         }
         Result result = new Result();
         return result;

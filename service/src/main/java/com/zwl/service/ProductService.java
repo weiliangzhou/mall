@@ -1,5 +1,6 @@
 package com.zwl.service;
 
+import com.zwl.model.po.OfflineActivity;
 import com.zwl.model.po.Product;
 import com.zwl.model.vo.BuyResult;
 import com.zwl.model.vo.ProductItemVo;
@@ -33,4 +34,6 @@ public interface ProductService {
     Product getProductById(Long id);
 
     int updateBuyCountById(Long productId,String merchantId);
+
+    BuyResult offlineActivityBuy(OfflineActivity offlineActivity);
 }
