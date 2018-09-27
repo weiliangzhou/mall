@@ -4,6 +4,7 @@ import com.zwl.dao.mapper.MaidInfoByMonthMapper;
 import com.zwl.model.po.MaidInfoByMonth;
 import com.zwl.model.po.MemberLevel;
 import com.zwl.model.po.User;
+import com.zwl.service.UserAccountService;
 import com.zwl.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,8 @@ public class XZFenYongTask {
     private UserService userService;
     @Autowired
     private MaidInfoByMonthMapper maidInfoByMonthMapper;
+    @Autowired
+    private UserAccountService userAccountService;
 
     //每个月的最后一天的23点59分
     //@Scheduled(cron = "0 59 23 L * ?")
@@ -86,13 +89,13 @@ public class XZFenYongTask {
             //50万 4%
             //100万 6%
             //300万 8%
-            if (totalPerformanceWithXZ >= 100000 && totalPerformanceWithXZ < 500000)
+            if (totalPerformanceWithXZ >= 10000000 && totalPerformanceWithXZ < 50000000)
                 maidPercent = 2;
-            else if (totalPerformanceWithXZ >= 500000 && totalPerformanceWithXZ < 1000000)
+            else if (totalPerformanceWithXZ >= 50000000 && totalPerformanceWithXZ < 100000000)
                 maidPercent = 4;
-            else if (totalPerformanceWithXZ >= 1000000 && totalPerformanceWithXZ < 3000000)
+            else if (totalPerformanceWithXZ >= 100000000 && totalPerformanceWithXZ < 300000000)
                 maidPercent = 6;
-            else if (totalPerformanceWithXZ >= 3000000)
+            else if (totalPerformanceWithXZ >= 300000000)
                 maidPercent = 8;
             //团队奖
             tdMaidMoney = totalPerformanceWithOutXZ * 5/100;
@@ -124,6 +127,7 @@ public class XZFenYongTask {
                     maidInfoByMonth.setMaidMoney(tdMaidMoney);
                     maidInfoByMonth.setMaidPercent(5);
                     maidInfoByMonthMapper.insertSelective(maidInfoByMonth);
+                    userAccountService.addBanlanceByUserId(xzUserId,tdMaidMoney);
                     log.info("结束校长分佣=======================>团队奖" + tdMaidMoney);
                 }
 
@@ -139,6 +143,7 @@ public class XZFenYongTask {
                     maidInfoByMonth.setMaidMoney(zxMaidMoney);
                     maidInfoByMonth.setMaidPercent(maidPercent);
                     maidInfoByMonthMapper.insertSelective(maidInfoByMonth);
+                    userAccountService.addBanlanceByUserId(xzUserId,zxMaidMoney);
                     log.info("结束校长分佣=======================>纵向奖" + tdMaidMoney);
                 }
             }

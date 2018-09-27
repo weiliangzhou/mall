@@ -45,23 +45,24 @@ public class GZController {
     @Autowired
     private GZHService gzhService;
 
-    @PostMapping("/sendFormId")
-    public Result saveFormIdToRedis(@RequestBody JSONObject jsonObject) {
-        String formId = jsonObject.getString("formId");
-        String userId = jsonObject.getString("userId");
-        stringRedisTemplate.boundValueOps("formId_" + userId).set(formId, 7, TimeUnit.DAYS);
-        Result result = new Result();
-        return result;
-    }
-
-    @PostMapping("/getFormId")
-    public Result getFormIdFromRedis(@RequestBody JSONObject jsonObject) {
-        String userId = jsonObject.getString("userId");
-        String gzOpenId = stringRedisTemplate.boundValueOps("formId_" + userId).get();
-        Result result = new Result();
-        result.setData(StringUtils.isBlank(gzOpenId) ? "true" : "false");
-        return result;
-    }
+//    @PostMapping("/sendFormId")
+//    public Result saveFormIdToRedis(@RequestBody JSONObject jsonObject) {
+//        String formId = jsonObject.getString("formId");
+//        String userId = jsonObject.getString("userId");
+//
+//        stringRedisTemplate.boundValueOps("formId_" + userId).set(formId, 7, TimeUnit.DAYS);
+//        Result result = new Result();
+//        return result;
+//    }
+//
+//    @PostMapping("/getFormId")
+//    public Result getFormIdFromRedis(@RequestBody JSONObject jsonObject) {
+//        String userId = jsonObject.getString("userId");
+//        String gzOpenId = stringRedisTemplate.boundValueOps("formId_" + userId).get();
+//        Result result = new Result();
+//        result.setData(StringUtils.isBlank(gzOpenId) ? "true" : "false");
+//        return result;
+//    }
 
     @PostMapping("/getGzhOpenId")
     public Result getGzhOpenId(@RequestBody JSONObject jsonObject) {
