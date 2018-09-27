@@ -312,7 +312,7 @@ public class ProductServiceImpl implements ProductService {
 //        orderFlow.setMoney(price);
 //        log.info("订单流水数据" + order);
 //        orderFlowMapper.insertSelective(orderFlow);
-//        BuyResult buyResult = new BuyResult();
+        BuyResult buyResult = new BuyResult();
 //        buyResult.setOrderNo(orderNo);
 //        buyResult.setTotalFee(price);
 //        buyResult.setTotalFeeDesc(price / 100 + "");

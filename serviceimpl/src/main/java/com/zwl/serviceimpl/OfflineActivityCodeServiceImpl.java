@@ -29,13 +29,7 @@ public class OfflineActivityCodeServiceImpl implements OfflineActivityCodeServic
     }
 
     @Override
-    public void updatePassByActivityCode(String activityCode, Integer activityId) {
-        //需要判断当前下线活动  是否在活动期间
-        //如果在的话 则更新
-        //如果不在  则报错 签到活动已经到期
-        OfflineActivity offlineActivity = offlineActivityService.getOneByActivityIdAndCheckTime(activityId);
-        if (offlineActivity == null)
-            BSUtil.isTrue(false, "活动已过期！");
+    public void updatePassByActivityCode(String activityCode) {
         int count = offlineActivityCodeMapper.updatePassByActivityCode(activityCode);
         if (count != 1)
             BSUtil.isTrue(false, "签到错误，请重试！");

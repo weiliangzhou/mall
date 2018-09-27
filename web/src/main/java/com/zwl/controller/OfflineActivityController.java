@@ -1,13 +1,10 @@
 package com.zwl.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.groups.Buy;
-import com.zwl.model.groups.H5Buy;
 import com.zwl.model.po.OfflineActivity;
 import com.zwl.model.po.OfflineActivityCode;
-import com.zwl.model.vo.BuyResult;
 import com.zwl.model.vo.SignInVo;
 import com.zwl.service.*;
 import lombok.extern.slf4j.Slf4j;
@@ -17,8 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author 二师兄超级帅
@@ -41,6 +36,8 @@ public class OfflineActivityController {
     private WxPayService wxPayService;
     @Autowired
     private OfflineActivityCodeService offlineActivityCodeService;
+    @Autowired
+    private OfflineActivityService offlineActivityService;
 
 //    @PostMapping("/buy")
 //    public String offlineActivityBuy(HttpServletRequest request, @Validated(Buy.class) @RequestBody OfflineActivityBuy offlineActivityBuy) {
@@ -79,8 +76,17 @@ public class OfflineActivityController {
             BSUtil.isTrue(false, "非法code!");
         else {
             OfflineActivityCode offlineActivityCode = offlineActivityCodeService.getOneByActivityCode(activityCode);
+            if (offlineActivityCode.getIsUsed() == 1)
+                BSUtil.isTrue(false, "签到码已被使用！");
             Integer activityId = offlineActivityCode.getActivityId();
-            offlineActivityCodeService.updatePassByActivityCode(activityCode, activityId);
+            //需要判断当前下线活动  是否在活动期间
+            //如果在的话 则更新
+            //如果不在  则报错 签到活动已经到期
+            OfflineActivity offlineActivityCheckTime = offlineActivityService.getOneByActivityIdAndCheckTime(activityId);
+            if (offlineActivityCheckTime == null)
+                BSUtil.isTrue(false, "活动已过期！");
+
+            offlineActivityCodeService.updatePassByActivityCode(activityCode);
         }
         Result result = new Result();
         return result;

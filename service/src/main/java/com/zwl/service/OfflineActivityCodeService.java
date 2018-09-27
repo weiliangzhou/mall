@@ -12,5 +12,5 @@ import com.zwl.model.po.OfflineActivityCode;
 public interface OfflineActivityCodeService {
     OfflineActivityCode getOneByActivityCode(String activityCode);
 
-    void updatePassByActivityCode(String activityCode, Integer activityId);
+    void updatePassByActivityCode(String activityCode);
 }
