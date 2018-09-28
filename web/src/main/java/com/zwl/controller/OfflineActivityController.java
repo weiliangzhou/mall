@@ -5,10 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.groups.Buy;
-import com.zwl.model.po.Merchant;
-import com.zwl.model.po.OfflineActivity;
-import com.zwl.model.po.OfflineActivityCode;
-import com.zwl.model.po.User;
+import com.zwl.model.po.*;
 import com.zwl.model.vo.BuyResult;
 import com.zwl.model.vo.OfflineActivityBuy;
 import com.zwl.model.vo.SignInVo;
@@ -39,8 +36,6 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/wx/offlineActivity")
 public class OfflineActivityController {
     @Autowired
-    private ProductService productService;
-    @Autowired
     private MerchantService merchantService;
     @Autowired
     private UserService userService;
@@ -52,6 +47,8 @@ public class OfflineActivityController {
     private OfflineActivityService offlineActivityService;
     @Autowired
     private OfflineActivityOrderService offlineActivityOrderService;
+    @Autowired
+    private OfflineActivityOperatorService offlineActivityOperatorService;
 
     @PostMapping("/buy")
     public String offlineActivityBuy(HttpServletRequest request, @RequestBody OfflineActivityBuy offlineActivityBuy) {
@@ -83,7 +80,7 @@ public class OfflineActivityController {
         offlineActivityOperator.setPassword(password);
         offlineActivityOperator.setAvailable(1);
         OfflineActivityOperator offlineActivityOperator1 = offlineActivityOperatorService.selectByOperatorAndPassword(offlineActivityOperator);
-        if(offlineActivityOperator1 == null)BSUtil.isTrue(false, "操作员登陆失败");
+        if (offlineActivityOperator1 == null) BSUtil.isTrue(false, "操作员登陆失败");
         Result result = new Result();
         return result;
 

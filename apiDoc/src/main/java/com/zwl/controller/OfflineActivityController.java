@@ -2,6 +2,7 @@ package com.zwl.controller;
 
 import com.terran4j.commons.api2doc.annotations.ApiComment;
 import com.zwl.model.baseresult.Result;
+import com.zwl.model.vo.OfflineActivityBuy;
 import com.zwl.model.wxpay.WxPayVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +22,7 @@ public class OfflineActivityController {
     @ApiComment(seeClass = WxPayVo.class)
     @RequestMapping(name = "线下报名",
             value = "/wx/offlineActivity/buy", method = RequestMethod.POST)
-    public WxPayVo offlineActivityBuy() {
+    public WxPayVo offlineActivityBuy(@ApiComment(seeClass = OfflineActivityBuy.class) OfflineActivityBuy offlineActivityBuy) {
         WxPayVo wxPayVo = new WxPayVo();
         return wxPayVo;
     }
