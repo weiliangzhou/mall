@@ -169,6 +169,7 @@ public class ProductController {
         productVo.setContentText(p.getContentText());
         productVo.setImageUrl(p.getImageUrl());
         productVo.setPrice(p.getPrice());
+        productVo.setProductName(p.getProductName());
         if (p.getPrice() != null)
             productVo.setPriceDesc(String.valueOf(p.getPrice() / 100));
         result.setData(productVo);

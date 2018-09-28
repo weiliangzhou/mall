@@ -24,8 +24,8 @@ import java.util.List;
  * @Description: TODO
  * @date 2018/8/2015:38
  */
-@Configuration
-@EnableScheduling
+//@Configuration
+//@EnableScheduling
 @Slf4j
 public class XZFenYongTask {
     @Autowired
@@ -39,7 +39,7 @@ public class XZFenYongTask {
     //@Scheduled(cron = "0 59 23 L * ?")
     //每月最后一日的上午10:15触发
     //测试 3分钟执行一次
-    @Scheduled(cron = "0 */3 *  * * * ")
+//    @Scheduled(cron = "0 */3 *  * * * ")
     public void xzfy() throws ParseException {
         log.info("开始校长分佣=======================>");
         //查询等级为校长的userid
