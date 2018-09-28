@@ -279,7 +279,7 @@
 
     <select id="getTotalPerformanceByUserId" resultType="int" parameterType="string">
         SELECT
-        sum( so.actual_money ) / 100
+        sum( so.money ) / 100
         FROM
         ss_order so,
         ss_user su
