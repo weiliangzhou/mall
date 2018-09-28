@@ -6,6 +6,7 @@ import com.zwl.model.exception.BSUtil;
 import com.zwl.model.groups.Buy;
 import com.zwl.model.po.OfflineActivity;
 import com.zwl.model.po.OfflineActivityCode;
+import com.zwl.model.po.OfflineActivityOperator;
 import com.zwl.model.vo.SignInVo;
 import com.zwl.service.*;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +40,8 @@ public class OfflineActivityController {
     private OfflineActivityCodeService offlineActivityCodeService;
     @Autowired
     private OfflineActivityService offlineActivityService;
+    @Autowired
+    private OfflineActivityOperatorService offlineActivityOperatorService;
 
     //    @PostMapping("/buy")
 //    public String offlineActivityBuy(HttpServletRequest request, @Validated(Buy.class) @RequestBody OfflineActivityBuy offlineActivityBuy) {
@@ -62,6 +65,14 @@ public class OfflineActivityController {
 //    }
     @PostMapping("/offlineLogin")
     public Result signIn(@RequestBody JSONObject jsonObject) {
+        String operator = jsonObject.getString("operator");
+        String password = jsonObject.getString("password");
+        OfflineActivityOperator offlineActivityOperator = new OfflineActivityOperator();
+        offlineActivityOperator.setOperator(operator);
+        offlineActivityOperator.setPassword(password);
+        offlineActivityOperator.setAvailable(1);
+        OfflineActivityOperator offlineActivityOperator1 = offlineActivityOperatorService.selectByOperatorAndPassword(offlineActivityOperator);
+        if(offlineActivityOperator1 == null)BSUtil.isTrue(false, "操作员登陆失败");
         Result result = new Result();
         return result;
 
