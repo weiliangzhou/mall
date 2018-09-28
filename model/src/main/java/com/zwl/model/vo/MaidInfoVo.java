@@ -15,7 +15,7 @@ import java.util.Date;
  */
 @Data
 public class MaidInfoVo {
-    //    -- 用户logo
+//--     用户logo
 //--     realname
 //--     手机号
 //--     等级
@@ -29,10 +29,18 @@ public class MaidInfoVo {
     private String phone;
     @ApiComment(value = "等级", sample = "院长")
     private Integer level;
+    @ApiComment(value = "等级", sample = "院长")
+    private String levelName;
     @ApiComment(value = "返佣金额", sample = "9900")
     private Integer maidMoney;
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     @ApiComment(value = "时间", sample = "2018-07-05 18:00")
     private Date createTime;
+    @ApiComment(value = "6月份纵向奖", sample = "6月份纵向奖")
+    //类型 不为2的时候  取
+    private String title;
+    //类型  0团队奖  1纵向奖  2普通
+    @ApiComment(value = "0团队奖  1纵向奖  2普通", sample = "0团队奖  1纵向奖  2普通")
+    private String maidType;
 
 }

@@ -26,11 +26,19 @@ public class RedisTokenManagerImpl implements TokenManager {
     private StringRedisTemplate stringRedisTemplate;
 
     public TokenModel createToken(String userId) {
-        // 使用uuid作为源token
-        String token = UUID.randomUUID().toString().replace("-", "");
-        TokenModel model = new TokenModel(userId, token);
-        // 存储到redis并设置过期时间
-        stringRedisTemplate.boundValueOps(userId).set(token, 30, TimeUnit.DAYS);
+        // 通过userId获取redis缓存
+        // 如果存在则直接获取
+        // 如果不存在则创建一个
+        TokenModel model;
+        String token_redis = stringRedisTemplate.boundValueOps(userId).get();
+        if (StringUtils.isBlank(token_redis)) {
+            // 使用uuid作为源token
+            String token = UUID.randomUUID().toString().replace("-", "");
+            model = new TokenModel(userId, token);
+            // 存储到redis并设置过期时间
+            stringRedisTemplate.boundValueOps(userId).set(token, 30, TimeUnit.DAYS);
+        } else
+            model = new TokenModel(userId, token_redis);
         //使用token作为key 存放User对象
         return model;
     }

@@ -47,7 +47,10 @@ public class MaidInfoController {
         List<MaidInfoVo> maidInfoList = maidInfoService.getMaidInfoList(userId);
         UserQuotaCount userQuotaCount = userQuotaCountService.getByUserId(userId);
         Integer totalAmount = maidInfoService.getTotalMaidMoneyByUserId(userId);
+        Integer totalAmountByMonth=maidInfoService.getTotalAmountByMonthByUserId(userId);
+        Integer totalAmountAll=(totalAmount == null ? 0 : totalAmount)+(totalAmountByMonth == null ? 0 : totalAmountByMonth);
         User referrerUser=userService.getReferrerByUserId(userId);
+        User user=userService.getByUserId(userId);
         MaidInfoVVo maidInfoVVo = new MaidInfoVVo();
         Integer count = 0;
         Integer totalCount = 0;
@@ -56,9 +59,10 @@ public class MaidInfoController {
             totalCount = userQuotaCount.getTotalCount();
         }
         maidInfoVVo.setCount(count);
-        maidInfoVVo.setTotalAmount(totalAmount == null ? 0 : totalAmount/100);
+        maidInfoVVo.setTotalAmount(totalAmountAll == null ? 0 : totalAmountAll/100);
         maidInfoVVo.setMaidInfoVoList(maidInfoList);
         maidInfoVVo.setTotalCount(totalCount);
+        maidInfoVVo.setLogoUrl(user.getLogoUrl()==null?"":user.getLogoUrl());
         maidInfoVVo.setReferrerPhone(referrerUser==null?"":PhoneUtil.replace(referrerUser.getRegisterMobile()));
         result.setData(maidInfoVVo);
         return JSON.toJSONString(result);

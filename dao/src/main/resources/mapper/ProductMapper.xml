@@ -11,8 +11,8 @@
         <result column="price" property="price" jdbcType="INTEGER"/>
         <result column="merchant_id" property="merchantId" jdbcType="VARCHAR"/>
         <result column="image_url" property="imageUrl" jdbcType="VARCHAR"/>
-        <result column="content" property="content" />
-        <result column="content_text" property="contentText" />
+        <result column="content" property="content"/>
+        <result column="content_text" property="contentText"/>
         <result column="buy_count" property="buyCount" jdbcType="INTEGER"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
@@ -162,7 +162,8 @@
         from ss_product
         where available=1
         and merchant_id=#{merchantId}
-
+        and is_show=1
+        order by id
     </select>
     <select id="getAdminProductList" resultMap="BaseResultMap">
         select
@@ -170,11 +171,12 @@
         from ss_product
         where available=1
     </select>
-    <select id="getProductByMemberLevel" resultMap="BaseResultMap" parameterType="Integer">
-        select
-        <include refid="Base_Column_List"/>
-        from ss_product
-        where available=1
-        and `level`=#{memberLevel}
-    </select>
+    <!--<select id="getProductByMemberLevel" resultMap="BaseResultMap" parameterType="Integer">-->
+        <!--select-->
+        <!--<include refid="Base_Column_List"/>-->
+        <!--from ss_product-->
+        <!--where available=1-->
+        <!--and `level`=#{memberLevel}-->
+        <!--and merchant_id=#{merchantId}-->
+    <!--</select>-->
 </mapper>

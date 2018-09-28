@@ -33,7 +33,7 @@ public class WxPayController {
     private MaidInfoService maidInfoService;
     @Autowired
     private WxPayService wxPayService;
-//    @Autowired
+    //    @Autowired
 //    private WxSenderService wxSenderService;
     @Autowired
     private UserAccountService userAccountService;
@@ -51,6 +51,8 @@ public class WxPayController {
     private MsgSenderService msgSenderService;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private GZHService gzhService;
     private SimpleDateFormat sdf_yMdHms = new SimpleDateFormat("yyyyMMddHHmmss");
 
     /**
@@ -85,7 +87,6 @@ public class WxPayController {
         return JSON.toJSONString(result_return);
     }
 
-
     /**
      * android支付
      * 注意：必须再web页面中发起支付且域名已添加到开发配置中
@@ -109,7 +110,6 @@ public class WxPayController {
         result_return.setData(wxPayVo);
         return JSON.toJSONString(result_return);
     }
-
 
     @RequestMapping(value = "/pay_notify.do", method = {RequestMethod.POST, RequestMethod.GET})
     @Transactional
@@ -153,10 +153,6 @@ public class WxPayController {
                 String time_end = params.get("time_end");
 
                 // 根据订单号判断是否是线下活动，如果是则不返佣
-
-
-
-
 
 
                 Order order = orderService.findOrderByOrderNo(out_trade_no);
@@ -246,6 +242,12 @@ public class WxPayController {
                             break;
                         case 6:
                             userQuotaCountService.saveOrUpdate(userId, 100);
+                            //如果旗下院长数量=10,则升级为校长
+                            log.info("如果旗下院长数量=10,则升级为校长");
+                            Integer xzCount = userService.getXzCountByUserId(referrerId);
+                            log.info("xzCount"+xzCount);
+                            if (xzCount != null)
+                                userService.updateUserToXzByUserId(referrerId);
                             break;
                     }
                     //购买成功之后,更新购买数量
@@ -281,7 +283,7 @@ public class WxPayController {
                             log.info("referrerLevel:" + referrerLevel + "------------memberLevel:" + memberLevel);
                             if (null != referrerLevel && referrerLevel >= memberLevel && referrerLevel >= 4) {
 //                            //通过userId获取推荐人对应的分佣比例
-                                Integer maidPercent_referrer = productService.getMaidPercentByLevel(referrerLevel);
+                                Integer maidPercent_referrer = productService.getMaidPercentByLevel(referrerLevel, merchantId);
                                 MaidInfo maidInfo = new MaidInfo();
                                 maidInfo.setOrderNo(orderNo);
                                 //分佣发送给推荐人
@@ -294,6 +296,7 @@ public class WxPayController {
                                     maidMoney = orderActualMoney * maidPercent / 100;
                                     maidInfo.setMaidPercent(maidPercent);
                                 } else {
+                                    log.info("maidPercent_referrer:"+maidPercent_referrer);
                                     maidMoney = orderActualMoney * maidPercent_referrer / 100;
                                     maidInfo.setMaidPercent(maidPercent_referrer);
                                 }
@@ -327,11 +330,19 @@ public class WxPayController {
                                 String referrerPhone = referrerUser.getRegisterMobile();
                                 if (StringUtils.isNotBlank(referrerPhone)) {
                                     String userMobile = user.getRegisterMobile();
-                                    String msg = "【东遥课堂】手机尾号" + userMobile.substring(userMobile.length()-4) + "成功购买" + productName + ", 你将获得奖励" + maidMoney / 100 + "元 ,  尽快查阅小程序~";
+                                    String msg = "【东遥课堂】手机尾号" + userMobile.substring(userMobile.length() - 4) + "成功购买" + productName + ", 你将获得奖励" + maidMoney / 100 + "元 ,  尽快查阅小程序~";
                                     msgSenderService.sendMsg(referrerPhone, msg);
                                 }
+                                //存在referrerUser.getGzhOpenid()==null
+                                //发送公众号推送
+//                                String referrerGzhOpenId = referrerUser.getGzhOpenid();
+//                                log.info("referrerGzhOpenId is null ，referrerUserId:" + referrerId + ",userId:" + userId);
+//                                if (StringUtils.isNotBlank(referrerGzhOpenId))
+//                                    gzhService.sendBuyGzhMsgByOne(referrerGzhOpenId, orderNo, productName, orderActualMoney, user.getRegisterMobile(), merchantId, merchant.getGzAppId(), merchant.getGzAppKey(), merchant.getAppId(), "2AT4AIsTNNOJP3YFSUSlyDruKPTdPBgyieyqI0jKmVQ", maidMoney);
+
 
                             }
+
 //
 
                         }
@@ -374,8 +385,8 @@ public class WxPayController {
     }
 
     public static void main(String[] args) {
-        String ss="1111324325";
-        System.out.println(ss.substring(ss.length()-4));
+        String ss = "1111324325";
+        System.out.println(ss.substring(ss.length() - 4));
     }
 }
 

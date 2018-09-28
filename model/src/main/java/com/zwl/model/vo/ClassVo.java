@@ -35,8 +35,10 @@ public class ClassVo {
     private Integer classType;
     @ApiComment(value = "浏览人数", sample = "858")
     private Long browseCount;
-    @ApiComment(value = "浏览人数描述", sample = "858人收听")
+    @ApiComment(value = "浏览人数描述", sample = "858/1.4万")
     private String browseCountDesc;
+    @ApiComment(value = "浏览人数描述2", sample = "人收听")
+    private String browseCountDesc2;
     @ApiComment(value = "图片", sample = "858")
 //    如果是堂，logo是节的可配置优先级），
 //    按照发布时间倒序
@@ -55,6 +57,14 @@ public class ClassVo {
     private Integer childrenSize;
     @ApiComment(value = "课程时长", sample = "6分10秒")
     private String playTimeDesc;
-    @ApiComment(value = "课程类型", sample = "音频/视频/未选择")
-    private String styleDesc;
+    @ApiComment(value = "课程类型", sample = "0音频/1视频/2未选择")
+    private Integer style;
+    @ApiComment(value = "观后感类型", sample = "0课后感 1已读")
+    private Integer commentType;
+    @ApiComment(value = "是否推荐", sample = "0不推荐/1推荐")
+    private Integer isRecommend;
+    @ApiComment(value = "封面", sample = "www.baidu.com")
+    private String frontCover;
+    @ApiComment(value = "是否展示", sample = "0 1")
+    private Integer isShow;
 }

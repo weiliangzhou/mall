@@ -7,6 +7,7 @@ import lombok.Data;
 import org.apache.ibatis.annotations.Update;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 @Data
 public class Icon {
@@ -18,9 +19,14 @@ public class Icon {
     @NotBlank(message = "图片url不能为空", groups = {Update.class})
     @ApiComment(value = "图片url", sample = "http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/1.png")
     private String pictureUrl;
-    @NotBlank(message = "跳转url不能为空", groups = {Update.class})
+//    @NotBlank(message = "跳转url不能为空", groups = {Update.class})
     @ApiComment(value = "跳转url", sample = "http://www.baidu.com")
     private String hrefUrl;
+    @NotNull(message = "跳转类型不能为空", groups = {Update.class})
+    @ApiComment(value = "跳转类型",sample = "0不跳转 1应用内跳转 2应用外跳转")
+    private Integer hrefType;
+    @ApiComment(value = "端口类型",sample = "0小程序 1、H5")
+    private Integer portType;
     @RestPackIgnore
     @JSONField(serialize = false)
     private Integer available = 1;

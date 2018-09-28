@@ -23,8 +23,8 @@ import java.util.List;
  * @Description: TODO
  * @date 2018/8/2015:38
  */
-@Configuration
-@EnableScheduling
+//@Configuration
+//@EnableScheduling
 @Slf4j
 public class XZFenYongTask {
     @Autowired
@@ -32,8 +32,11 @@ public class XZFenYongTask {
     @Autowired
     private MaidInfoByMonthMapper maidInfoByMonthMapper;
 
-    //每1分钟执行一次
-    @Scheduled(cron = "0 */5 *  * * * ")
+    //每个月的最后一天的23点59分
+    //@Scheduled(cron = "0 59 23 L * ?")
+    //每月最后一日的上午10:15触发
+    //测试 3分钟执行一次
+//    @Scheduled(cron = "0 */3 *  * * * ")
     public void xzfy() throws ParseException {
         log.info("开始校长分佣=======================>");
         //查询等级为校长的userid
@@ -92,11 +95,11 @@ public class XZFenYongTask {
             else if (totalPerformanceWithXZ >= 3000000)
                 maidPercent = 8;
             //团队奖
-            tdMaidMoney = totalPerformanceWithOutXZ * 5;
+            tdMaidMoney = totalPerformanceWithOutXZ * 5/100;
             log.info("开始校长分佣=======================>团队奖总业绩" + totalPerformanceWithOutXZ);
             log.info("开始校长分佣=======================>团队奖" + tdMaidMoney);
             //纵向奖
-            zxMaidMoney = totalPerformanceWithXZ * maidPercent;
+            zxMaidMoney = totalPerformanceWithXZ * maidPercent/100;
             log.info("开始校长分佣=======================>纵向奖总业绩" + totalPerformanceWithXZ);
             log.info("开始校长分佣=======================>纵向奖" + zxMaidMoney);
 

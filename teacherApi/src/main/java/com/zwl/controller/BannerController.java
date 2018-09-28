@@ -59,7 +59,7 @@ public class BannerController {
      * @param banner
      * @return
      */
-    @RequestMapping("/add")
+    @PostMapping("/add")
     public String addBanner(@Validated(Update.class) @RequestBody Banner banner){
         Result result = new Result();
         int count= bannerService.addBanner(banner);
@@ -72,7 +72,7 @@ public class BannerController {
      * @param jsonObject
      * @return
      */
-    @RequestMapping("/delete")
+    @PostMapping("/delete")
     public String deleteBanner(@RequestBody JSONObject jsonObject){
         Integer id = jsonObject.getInteger("id");
         Result result = new Result();

@@ -47,8 +47,9 @@ public class ClassSetController {
         String merchantId = jsonObject.getString("merchantId");
         Integer pageNum = jsonObject.getInteger("pageNum");
         Integer pageSize = jsonObject.getInteger("pageSize");
+        Integer queryType = jsonObject.getInteger("queryType");
         Page page = PageHelper.startPage(pageNum, pageSize);
-        List<ClassVo> list = classSetService.getAllClassOrderById(merchantId);
+        List<ClassVo> list = classSetService.getAllClassOrderById(merchantId,queryType);
         for (ClassVo classVo : list
                 ) {
             Long browseCount = 0L;
@@ -72,13 +73,16 @@ public class ClassSetController {
             if (classVo.getClassType() == 2) {
                 ClassInfoStatistics csi = classInfoStatisticsService.getByClassInfoId(classVo.getId());
                 browseCount = csi==null||csi.getListenCount() == null ? 0L : csi.getListenCount();
+                //节课因没封面，封面设置为它的logo图片
+                classVo.setFrontCover(classVo.getLogoUrl());
             }
             classVo.setBrowseCount(browseCount);
             String classListenCountDesc=String.valueOf(browseCount);
             if(browseCount>=CONSTANT_WAN){
                 classListenCountDesc=MathUtil.changeWan(classListenCountDesc)+"万";
             }
-            classVo.setBrowseCountDesc(classListenCountDesc+ "人收听");
+            classVo.setBrowseCountDesc(classListenCountDesc);
+            classVo.setBrowseCountDesc2("人收听");
         }
 
         PageClassVo pageClassVo = new PageClassVo();
@@ -126,6 +130,7 @@ public class ClassSetController {
         classVo.setId(classSet.getId());
         classVo.setTitle(classSet.getTitle());
         classVo.setContent(classSet.getContent());
+        classVo.setContentText(classSet.getContentText());
         classVo.setLogoUrl(classSet.getBannerUrl());
         //浏览人数
         List<ClassInfo> classInfoList = classInfoService.getByClassSetId(id);

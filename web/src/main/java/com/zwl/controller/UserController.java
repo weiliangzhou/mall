@@ -1,26 +1,28 @@
 package com.zwl.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.baseresult.ResultCodeEnum;
 import com.zwl.model.exception.BSUtil;
-import com.zwl.model.po.*;
+import com.zwl.model.po.Product;
+import com.zwl.model.po.User;
+import com.zwl.model.po.UserCertification;
+import com.zwl.model.po.UserInfo;
+import com.zwl.model.vo.H5LoginResultVo;
 import com.zwl.model.vo.UserLoginInfoVo;
 import com.zwl.service.*;
 import com.zwl.serviceimpl.RedisTokenManagerImpl;
 import com.zwl.util.CheckUtil;
+import com.zwl.util.PhoneUtil;
 import com.zwl.util.ThreadVariable;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 用户controller
@@ -49,6 +51,8 @@ public class UserController {
     private MaidInfoService maidInfoService;
     @Autowired
     private UserAccountService userAccountService;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
 
     /**
@@ -56,47 +60,34 @@ public class UserController {
      */
     @PostMapping("/authorization")
     public Result authorization(@RequestBody UserLoginInfoVo userLoginInfoVo) {
-        log.info("====@@@@进入用户授权@@@@@==========");
-        log.info("====@@@@推荐人传入参数为@@@@@==========：" + userLoginInfoVo.getReferrer());
+        if (userLoginInfoVo == null) {
+            BSUtil.isTrue(Boolean.FALSE, "参数错误");
+        }
+//        if (userLoginInfoVo.getBusCode() == null) {
+//            BSUtil.isTrue(Boolean.FALSE, "请输入要授权的方式 1:小程序 2:H5页面授权");
+//        }
         Result result = new Result();
-        //根据merchantid获取appid和secret
-        Merchant merchant = merchantService.getMerchantByMerchantId(userLoginInfoVo.getMerchantId());
-        if (merchant == null)
-            BSUtil.isTrue(false, "商户不存在");
-        //根据code获取openid 去掉数据库appid和appsecret的空格和换行等
-        String resultStr = miniAppWeChatService.authorizationCode(userLoginInfoVo.getCode(), merchant.getAppId(), merchant.getAppSecret());
-        if (StringUtils.isEmpty(resultStr))
-            BSUtil.isTrue(false, "获取不到微信用户信息");
-        Map map = JSON.parseObject(resultStr, Map.class);
-        if (!StringUtils.isEmpty(map.get("errcode"))) {
-            result.setCode(map.get("errcode").toString());
-            result.setMessage("微信返回错误信息：" + map.get("errmsg").toString());
-            return result;
+        if (userLoginInfoVo.getBusCode() == null || userLoginInfoVo.getBusCode() == 1) {
+            result = userService.miniAppWeChatAuthorization(userLoginInfoVo, userLoginInfoVo.getCode(), userLoginInfoVo.getMerchantId());
+        } else if (userLoginInfoVo.getBusCode() == 2) {
+            H5LoginResultVo resultVo = userService.h5WeChatLogin(userLoginInfoVo.getPhone(), userLoginInfoVo.getMsgCode(), userLoginInfoVo.getMerchantId(), userLoginInfoVo.getWxAccreditCode());
+            result.setData(resultVo);
         }
-        String openid = map.get("openid").toString();
-        //先查询用户之前是否授权登录过
-        User userQuery = new User();
-        userQuery.setWechatOpenid(openid);
-        userQuery.setMerchantId(userLoginInfoVo.getMerchantId());
-        userQuery = userService.getOneByParams(userQuery);
-        String userId;
-        if (userQuery == null) {//用户之前没授权登录过
-            userId = userService.saveAuthorization(userLoginInfoVo, openid);
-        } else {//如果用户还未购买，则可以更新推荐人
-            userId = userQuery.getUserId();
-            log.info("====@@@@用户之前已经授权登录过，userId为：@@@@@==========：" + userId);
-            userService.modifyAuthorization(userLoginInfoVo, userQuery);
-        }
-        //返回用户登录态
-        TokenModel model = tokenManager.createToken(userId);
-        String token = model.getSignToken();
-        Map resultMap = new HashMap<String, Object>();
-        resultMap.put("token", token);
-        resultMap.put("userId", userId);
-        result.setData(resultMap);
         return result;
     }
 
+    /**
+     * 用户注销
+     */
+    @PostMapping("/loginOut")
+    public Result loginOut(@RequestBody JSONObject jsonObject) {
+        String userId = jsonObject.getString("userId");
+        String busCode = jsonObject.getString("busCode");
+        Result result = new Result();
+        //删除对应的redis
+        stringRedisTemplate.delete(userId + busCode);
+        return result;
+    }
 
     //购买前绑定手机号
     @PostMapping("/bindingMobile")
@@ -144,6 +135,18 @@ public class UserController {
         return result;
     }
 
+    @PostMapping("/checkCode")
+    public Result checkCode(@RequestBody JSONObject jsonObject) {
+        String phone = jsonObject.getString("phone");
+        String busCode = jsonObject.getString("busCode");
+        String code = jsonObject.getString("code");
+        boolean flag = msgSenderService.checkCode(phone, code, busCode);
+        if (!flag)
+            BSUtil.isTrue(false, "验证码错误");
+        Result result = new Result();
+        return result;
+    }
+
 
     /**
      * 用户信息展示
@@ -157,9 +160,11 @@ public class UserController {
         //根据UserId查找用户详情表
         UserInfo userInfo = userInfoService.getByUserId(userId);
         UserLoginInfoVo userLoginInfoVo = new UserLoginInfoVo();
+        String logoUrl = "";
+        String defaultLogoUrl = "http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/6a989ec302994c6c98c2d4810f9fbcb2.png";
         if (userInfo != null) {
             userLoginInfoVo.setNickName(userInfo.getNickName());
-            userLoginInfoVo.setLogoUrl(userInfo.getLogoUrl());
+            logoUrl = userInfo.getLogoUrl();
         }
 
         User user = userService.getByUserId(userId);
@@ -167,7 +172,9 @@ public class UserController {
             result.setCode(ResultCodeEnum.EXCEPTION);
             result.setMessage("查无用户，请校验userId");
             return result;
-        }
+        } else
+            logoUrl = StringUtils.isBlank(logoUrl) ? StringUtils.isBlank(user.getLogoUrl()) ? defaultLogoUrl : user.getLogoUrl() : logoUrl;
+        userLoginInfoVo.setLogoUrl(logoUrl);
         Integer memberLevel = user.getMemberLevel();
         String levelName;
         if (null == memberLevel || memberLevel == -1) {
@@ -175,28 +182,28 @@ public class UserController {
         } else if (memberLevel == 0) {
             levelName = "会员";
         } else {
-            Product product = productService.getProductByMemberLevel(memberLevel);
+            Product product = productService.getProductByMemberLevel(memberLevel, user.getMerchantId());
             levelName = product.getLevelName();
         }
         log.info("memberLevel::" + memberLevel);
-        userLoginInfoVo.setMemberLevel(null==memberLevel?-1:memberLevel);
+        userLoginInfoVo.setMemberLevel(null == memberLevel ? -1 : memberLevel);
         userLoginInfoVo.setLevelName(levelName);
 //        userLoginInfoVo.setIsBindMobile(userInfo.getIsBindMobile()==null?0:1);
         //通过主表获取绑定手机号
         userLoginInfoVo.setIsBindMobile(user.getRegisterMobile() == null ? 0 : 1);
-        userLoginInfoVo.setRegisterMobile(user.getRegisterMobile());
+        userLoginInfoVo.setRegisterMobile(user.getRegisterMobile() == null ? "" : PhoneUtil.replace(user.getRegisterMobile()));
 //        userLoginInfoVo.setIsCertification(userInfo.getIsCertification() == null ? 0 : 1);
         //实名认证状态
         UserCertification userCertification = certificationService.getOneByUserId(userId);
         userLoginInfoVo.setCertificationStatus(userCertification.getStatus());
         Integer xiaxianCount = maidInfoService.getMaidInfoCount(userId);
-        userLoginInfoVo.setXiaxianCount(null==xiaxianCount?0:xiaxianCount);
+        userLoginInfoVo.setXiaxianCount(null == xiaxianCount ? 0 : xiaxianCount);
         //账户余额
         Integer balance = userAccountService.getBalanceByUserId(userId);
         //余额：分转元
         balance = balance == null ? 0 : balance / 100;
         userLoginInfoVo.setBalance(balance);
-
+        userLoginInfoVo.setRealName(StringUtils.isBlank(user.getRealName()) ? "" : user.getRealName());
         result.setData(userLoginInfoVo);
         return result;
     }

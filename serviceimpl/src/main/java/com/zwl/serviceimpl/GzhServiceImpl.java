@@ -3,14 +3,16 @@ package com.zwl.serviceimpl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.Merchant;
 import com.zwl.model.vo.GzhMsgTemplate;
+import com.zwl.model.vo.WxJsApiTokenMessage;
+import com.zwl.model.wxpay.HashKit;
+import com.zwl.model.wxpay.PaymentKit;
 import com.zwl.model.wxpay.WxConstans;
-import com.zwl.service.GZHService;
-import com.zwl.service.MerchantService;
-import com.zwl.service.MqSenderService;
-import com.zwl.service.WxAccessTokenService;
+import com.zwl.service.*;
 import com.zwl.util.HttpsUtils;
+import com.zwl.util.PhoneUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +20,7 @@ import org.springframework.stereotype.Service;
 
 import javax.jms.Destination;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author 二师兄超级帅
@@ -40,6 +39,8 @@ public class GzhServiceImpl implements GZHService {
     private MqSenderService mqSenderService;
     @Autowired
     private MerchantService merchantService;
+    @Autowired
+    private H5AppWeChatService h5AppWeChatService;
 
 
     @Override
@@ -65,19 +66,19 @@ public class GzhServiceImpl implements GZHService {
 //        课程：总裁班
 //        参加人：王小二或者手机号码
 //        欢迎登陆东遥课堂微信小程序收听！
-        GzhMsgTemplate gzhMsgTemplate=new GzhMsgTemplate();
-        Map first=new HashMap();
-        first.put("value","微商夜大有新课程啦！");
-        first.put("color","#173177");
-        Map keyword1=new HashMap();
-        keyword1.put("value",className);
-        keyword1.put("color","#173177");
-        Map keyword2=new HashMap();
-        keyword2.put("value","微商夜大");
-        keyword2.put("color","#173177");
-        Map remark=new HashMap();
-        remark.put("value","欢迎登陆东遥课堂微信小程序收听！");
-        remark.put("color","#173177");
+        GzhMsgTemplate gzhMsgTemplate = new GzhMsgTemplate();
+        Map first = new HashMap();
+        first.put("value", "微商夜大有新课程啦！");
+        first.put("color", "#173177");
+        Map keyword1 = new HashMap();
+        keyword1.put("value", className);
+        keyword1.put("color", "#173177");
+        Map keyword2 = new HashMap();
+        keyword2.put("value", "微商夜大");
+        keyword2.put("color", "#173177");
+        Map remark = new HashMap();
+        remark.put("value", "欢迎登陆东遥课堂微信小程序收听！");
+        remark.put("color", "#173177");
         gzhMsgTemplate.setFirst(first);
         gzhMsgTemplate.setKeyword1(keyword1);
         gzhMsgTemplate.setKeyword2(keyword2);
@@ -144,14 +145,95 @@ public class GzhServiceImpl implements GZHService {
         String gzAppId = merchant.getGzAppId();
         String gzAppKey = merchant.getGzAppKey();
         String xcxAppId = merchant.getAppId();
-//        List<String> openidList = getGzhOpenIdList(merchantId, gzAppId, gzAppKey);
-        List<String> openidList = new ArrayList<>();
-        openidList.add("obBoO0yVr8DwoZK47eSidlIFUE7A");
-        openidList.add("obBoO01VBFIZd1S51jEKLnkuzPfQ");
+        List<String> openidList = getGzhOpenIdList(merchantId, gzAppId, gzAppKey);
+//        List<String> openidList = new ArrayList<>();
+//        openidList.add("obBoO0yVr8DwoZK47eSidlIFUE7A");
+//        openidList.add("obBoO01VBFIZd1S51jEKLnkuzPfQ");
         String templateId = "niRn7EQ3Hb7pXD13o2D9JL6YpSWVqX2uV1I30EWmI8s";
         for (String openId : openidList) {
             sendGzhMsgByOne(openId, className, realNameOrPhone, merchantId, gzAppId, gzAppKey, xcxAppId, templateId);
         }
+    }
+
+    @Override
+    public WxJsApiTokenMessage getGzhJsApiToken(String merchantId, String url) {
+        if (null == merchantId) {
+            BSUtil.isTrue(Boolean.FALSE, "商户号不能为空");
+        }
+        Merchant merchant = merchantService.getMerchantByMerchantId(merchantId);
+        if (null == merchant) {
+            BSUtil.isTrue(Boolean.FALSE, "商户不存在:" + merchantId);
+        }
+        String accessToken = wxAccessTokenService.getAccessToken(merchant.getMerchantId(), merchant.getGzAppId(), merchant.getGzAppKey(), 1);
+        String jsApiToken = h5AppWeChatService.getWechatJsApiToken(accessToken);
+        Map<String, String> params = new HashMap<>();
+        params.put("jsapi_ticket", jsApiToken);
+        params.put("noncestr", UUID.randomUUID().toString());
+        params.put("timestamp", String.valueOf(System.currentTimeMillis() / 1000));
+        params.put("url", url);
+        String sing = PaymentKit.packageSign(params, false);
+        String signature = HashKit.sha1(sing);
+        return new WxJsApiTokenMessage(params.get("noncestr"), merchant.getGzAppId(), params.get("timestamp"), params.get("url"), signature);
+    }
+
+    @Override
+    public void sendBuyGzhMsgByOne(String gzhOpenid, String orderNo, String productName, Integer orderMoney, String registerMobile, String merchantId, String gzAppId, String gzAppKey, String xcxAppId, String templateId, Integer maidMoney) {
+        String accessToken = wxAccessTokenService.getAccessToken(merchantId, gzAppId, gzAppKey, 1);
+        String msgurl = WxConstans.SEND_KC_MSG + accessToken;
+        SimpleDateFormat sdf_yMdHms = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        Map miniprogramMap = new HashMap<>();
+//        miniprogramMap.put("appid", xcxAppId);
+//        miniprogramMap.put("pagepath", WxConstans.PAGEPATH);
+//        String miniprogram = JSON.toJSONString(miniprogramMap);
+//        东遥课堂更新新课程啦！
+//        课程：总裁班
+//        参加人：王小二或者手机号码
+//        欢迎登陆东遥课堂微信小程序收听！
+//        {{first.DATA}}  东遥课堂更新新课程啦！
+//        订单编号：{{keyword1.DATA}}
+//        课程名称：{{keyword2.DATA}}
+//        订单金额：{{keyword3.DATA}}
+//        联系电话：{{keyword4.DATA}}
+//        购买时间：{{keyword5.DATA}}
+//        {{remark.DATA}}   欢迎登陆东遥课堂微信小程序收听！
+        GzhMsgTemplate gzhMsgTemplate = new GzhMsgTemplate();
+        Map first = new HashMap();
+        first.put("value", "恭喜你成功获得返佣" +maidMoney/100+"元");
+        first.put("color", "#173177");
+        Map keyword1 = new HashMap();
+        keyword1.put("value", orderNo);
+        keyword1.put("color", "#173177");
+        Map keyword2 = new HashMap();
+        keyword2.put("value", productName);
+        keyword2.put("color", "#173177");
+        Map keyword3 = new HashMap();
+        keyword3.put("value", orderMoney / 100 + "");
+        keyword3.put("color", "#173177");
+        Map keyword4 = new HashMap();
+        keyword4.put("value", PhoneUtil.replace(registerMobile));
+        keyword4.put("color", "#173177");
+        Map keyword5 = new HashMap();
+        keyword5.put("value", sdf_yMdHms.format(new Date()));
+        keyword5.put("color", "#173177");
+//        Map remark = new HashMap();
+//        remark.put("value", "请点击登录小程序查看");
+//        remark.put("color", "#173177");
+        gzhMsgTemplate.setFirst(first);
+        gzhMsgTemplate.setKeyword1(keyword1);
+        gzhMsgTemplate.setKeyword2(keyword2);
+        gzhMsgTemplate.setKeyword3(keyword3);
+        gzhMsgTemplate.setKeyword4(keyword4);
+        gzhMsgTemplate.setKeyword5(keyword5);
+//        gzhMsgTemplate.setRemark(remark);
+        Map requestMap = new HashMap();
+        requestMap.put("touser", gzhOpenid);
+        requestMap.put("appid", gzAppId);
+        requestMap.put("template_id", templateId);
+//        requestMap.put("miniprogram", miniprogramMap);
+        requestMap.put("data", gzhMsgTemplate);
+        log.info("发送微信模板" + JSON.toJSONString(requestMap));
+        String result = HttpsUtils.sendPost(msgurl, JSON.toJSONString(requestMap));
+        log.info("发送微信模板结果" + result);
     }
 
     public static List<String> parseOpenidList(String result) {

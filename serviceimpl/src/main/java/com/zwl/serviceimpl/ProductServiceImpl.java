@@ -11,6 +11,7 @@ import com.zwl.service.MerchantService;
 import com.zwl.service.ProductService;
 import com.zwl.service.UserInfoService;
 import com.zwl.service.UserService;
+import com.zwl.util.ThreadVariable;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,19 +80,94 @@ public class ProductServiceImpl implements ProductService {
         String userId = "";
         User user = null;
         //根据phone查询userId
-        if (!StringUtils.isBlank(phone)) {
+        if (StringUtils.isNotBlank(phone)) {
             User queryUser = new User();
             queryUser.setRegisterMobile(phone);
             user = userService.getOneByParams(queryUser);
             if (user == null)
                 BSUtil.isTrue(false, "请先进入微信小程序授权并绑定手机号");
-
             userId = user.getUserId();
         } else {
             userId = product.getUserId();
             user = userService.getByUserId(userId);
         }
-        Merchant merchant = merchantService.getMerchantByMerchantId(user.getMerchantId());
+        Merchant merchant = merchantService.getMerchantByMerchantId(product.getMerchantId());
+        if (merchant == null) {
+            BSUtil.isTrue(Boolean.FALSE, "商户号不存在:" + user.getMerchantId());
+        }
+        String appid = merchant.getAppId();
+        //查询产品信息
+        //生成订单(订单号使用 年月日时分秒+mch_no+userId（自增的Id）)
+        //生成订单操作日志流水表
+        SimpleDateFormat sdf_yMdHm = new SimpleDateFormat("yyyyMMddHHmm");
+        String merchantId = product.getMerchantId();
+        //获取userId的自增Id
+        Long userLongId = user.getId();
+        Long productId = product.getId();
+        Product localProduct = productMapper.selectByPrimaryKey(productId);
+        Integer level = localProduct.getLevel();
+        String levelName = localProduct.getLevelName();
+        String productName = localProduct.getProductName();
+        Integer maidPercent = localProduct.getMaidPercent();
+        Integer validityTime = localProduct.getValidityTime();
+        Integer price = localProduct.getPrice();
+        //不能购买同类产品，先查询当前购买的未到期的产品，如果存在判断
+        //如果过期时间小于当前时间，则可以购买任何产品
+        //否则判断等级如果等级一致则不可购买
+        Integer alreadyLevel = userService.getMemberLevel(userId);
+
+        if (null != alreadyLevel && alreadyLevel >= level)
+            BSUtil.isTrue(false, "不能重复购买！");
+        String orderNo = sdf_yMdHm.format(new Date()) + merchantId + userLongId + productId;
+        Order order = new Order();
+        order.setOrderNo(orderNo);
+        order.setProductId(productId);
+        order.setLevel(level);
+        order.setLevelName(levelName);
+        order.setProductName(productName);
+        order.setMaidPercent(maidPercent);
+        order.setValidityTime(validityTime);
+        order.setActualMoney(price);
+        order.setMoney(price);
+        order.setUserId(userId);
+        order.setMerchantId(merchantId);
+        order.setRealName(user.getRealName());
+        order.setPhone(user.getRegisterMobile());
+        order.setOrderStatus(0);
+        log.info("订单数据" + order);
+        try {
+            orderMapper.insertSelective(order);
+        } catch (Exception e) {
+            e.printStackTrace();
+            BSUtil.isTrue(false, "系统繁忙,请稍后重试！", e);
+        }
+        OrderFlow orderFlow = new OrderFlow();
+        orderFlow.setOrderNo(orderNo);
+        orderFlow.setOrderStatus(0);
+        orderFlow.setActualMoney(price);
+        orderFlow.setMoney(price);
+        log.info("订单流水数据" + order);
+        orderFlowMapper.insertSelective(orderFlow);
+        BuyResult buyResult = new BuyResult();
+        buyResult.setOrderNo(orderNo);
+        buyResult.setTotalFee(price);
+        buyResult.setTotalFeeDesc(price / 100 + "");
+        buyResult.setOpenId(user.getWechatOpenid());
+        buyResult.setMerchantId(merchantId);
+        log.info("订单完成返回结果" + buyResult);
+        return buyResult;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public BuyResult newH5Buy(Product product) {
+        String userId = product.getUserId();
+        log.info("开始生成订单================================>userId::" + userId);
+        User user = userService.getByUserId(userId);
+        Merchant merchant = merchantService.getMerchantByMerchantId(product.getMerchantId());
+        if (merchant == null) {
+            BSUtil.isTrue(Boolean.FALSE, "商户号不存在:" + user.getMerchantId());
+        }
         String appid = merchant.getAppId();
         //查询产品信息
         //生成订单(订单号使用 年月日时分秒+mch_no+userId（自增的Id）)
@@ -166,8 +242,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Integer getMaidPercentByLevel(Integer referrerLevel) {
-        return productMapper.getMaidPercentByLevel(referrerLevel);
+    public Integer getMaidPercentByLevel(Integer referrerLevel,String merchantId) {
+        return productMapper.getMaidPercentByLevel(referrerLevel,merchantId);
     }
 
     @Override
@@ -177,11 +253,77 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public int updateBuyCountById(Long productId, String merchantId) {
-        return productMapper.updateBuyCountById(productId,merchantId);
+        return productMapper.updateBuyCountById(productId, merchantId);
     }
 
     @Override
-    public Product getProductByMemberLevel(Integer memberLevel) {
-        return productMapper.getProductByMemberLevel(memberLevel);
+    public BuyResult offlineActivityBuy(OfflineActivity offlineActivity) {
+        String userId = ThreadVariable.getUserID();
+        log.info("开始生成订单================================>userId::" + userId);
+        User user = userService.getByUserId(userId);
+        String merchantId=user.getMerchantId();
+        Merchant merchant = merchantService.getMerchantByMerchantId(merchantId);
+        if (merchant == null) {
+            BSUtil.isTrue(Boolean.FALSE, "商户号不存在:" + user.getMerchantId());
+        }
+        String appid = merchant.getAppId();
+        //查询产品信息
+        //生成订单(订单号使用 年月日时分秒+mch_no+userId（自增的Id）)
+        //生成订单操作日志流水表
+        SimpleDateFormat sdf_yMdHm = new SimpleDateFormat("yyyyMMddHHmm");
+        //获取userId的自增Id
+        Long userLongId = user.getId();
+        Integer productId = offlineActivity.getId();
+        //不能购买同类产品，先查询当前购买的未到期的产品，如果存在判断
+        //如果过期时间小于当前时间，则可以购买任何产品
+        //否则判断等级如果等级一致则不可购买
+        Integer alreadyLevel = userService.getMemberLevel(userId);
+        String orderNo = sdf_yMdHm.format(new Date()) + merchantId + userLongId + productId;
+        OfflineActivityOrder offlineActivityOrder=new OfflineActivityOrder();
+//        private String orderNo;
+//        private Integer activityId;
+//        private String activityCode;
+//        private Integer activityPrice;
+//        private String userId;
+//        private String phone;
+//        private String realName;
+//        private String city;
+//        private String paymentNo;
+//        private Date paymentTime;
+//        private String merchantId;
+//        private Date createTime;
+//        private Date modifyTime;
+//        private Integer available;
+        Integer activityId=offlineActivity.getId();
+        offlineActivityOrder.setOrderNo(orderNo);
+        offlineActivityOrder.setActivityId(activityId);
+
+//        log.info("订单数据" + order);
+//        try {
+//            orderMapper.insertSelective(order);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            BSUtil.isTrue(false, "系统繁忙,请稍后重试！", e);
+//        }
+//        OrderFlow orderFlow = new OrderFlow();
+//        orderFlow.setOrderNo(orderNo);
+//        orderFlow.setOrderStatus(0);
+//        orderFlow.setActualMoney(price);
+//        orderFlow.setMoney(price);
+//        log.info("订单流水数据" + order);
+//        orderFlowMapper.insertSelective(orderFlow);
+        BuyResult buyResult = new BuyResult();
+//        buyResult.setOrderNo(orderNo);
+//        buyResult.setTotalFee(price);
+//        buyResult.setTotalFeeDesc(price / 100 + "");
+//        buyResult.setOpenId(user.getWechatOpenid());
+//        buyResult.setMerchantId(merchantId);
+//        log.info("订单完成返回结果" + buyResult);
+        return buyResult;
+    }
+
+    @Override
+    public Product getProductByMemberLevel(Integer memberLevel, String merchantId) {
+        return productMapper.getProductByMemberLevel(memberLevel, merchantId);
     }
 }

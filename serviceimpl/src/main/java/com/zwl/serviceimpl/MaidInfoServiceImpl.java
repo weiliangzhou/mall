@@ -1,5 +1,6 @@
 package com.zwl.serviceimpl;
 
+import com.zwl.dao.mapper.MaidInfoByMonthMapper;
 import com.zwl.dao.mapper.MaidInfoMapper;
 import com.zwl.model.po.MaidInfo;
 import com.zwl.model.vo.MaidInfoVo;
@@ -21,6 +22,8 @@ import java.util.List;
 public class MaidInfoServiceImpl implements MaidInfoService {
     @Autowired
     private MaidInfoMapper maidInfoMapper;
+    @Autowired
+    private MaidInfoByMonthMapper maidInfoByMonthMapper;
 
     @Override
     public int save(MaidInfo maidInfo) {
@@ -50,5 +53,10 @@ public class MaidInfoServiceImpl implements MaidInfoService {
     @Override
     public Integer getMaidInfoCount(String userId) {
         return maidInfoMapper.getMaidInfoCount(userId);
+    }
+
+    @Override
+    public Integer getTotalAmountByMonthByUserId(String userId) {
+        return maidInfoByMonthMapper.getTotalAmountByMonthByUserId(userId);
     }
 }

@@ -162,6 +162,9 @@
     <result column="class_type" property="classType" />
     <result column="required_member_level" property="requiredMemberLevel" />
     <result column="content_text" property="contentText" />
+    <result column="style" property="style" jdbcType="INTEGER" />
+    <result column="is_recommend" property="isRecommend" jdbcType="INTEGER" />
+    <result column="front_cover" property="frontCover" jdbcType="VARCHAR" />
   </resultMap>
   <!--查询所有的套课 和单独的节课程lsit-->
   <select id="selectAllClass" resultMap="AllClassResultMap">
@@ -177,7 +180,10 @@
     '' as logoUrl,
 	1 AS class_type,
 	scs.required_member_level AS required_member_level,
-	scs.content_text AS content_text
+	scs.content_text AS content_text,
+    CASE WHEN scs.style IS NULL THEN 2 ELSE scs.style END AS style,
+    scs.is_recommend AS is_recommend,
+    scs.front_cover AS front_cover
   FROM
     ss_class_category scc,
     ss_class_set scs
@@ -198,7 +204,10 @@
     sci.logo_url as  logoUrl,
 	2 AS class_type,
 	null AS required_member_level,
-	sci.content_text AS  content_text
+	sci.content_text AS  content_text,
+    CASE WHEN sci.style IS NULL THEN 2 ELSE sci.style END AS style,
+    sci.is_recommend AS is_recommend,
+    '' AS front_cover
   FROM
     ss_class_category scc,
     ss_class_info sci
@@ -231,7 +240,10 @@ ORDER BY t.required_member_level DESC,t.modify_time DESC
     '' as logoUrl,
     1 AS class_type,
     scs.required_member_level AS required_member_level,
-    scs.content_text AS content_text
+    scs.content_text AS content_text,
+    CASE WHEN scs.style IS NULL THEN 2 ELSE scs.style END AS style,
+    scs.is_recommend AS is_recommend,
+    scs.front_cover AS front_cover
     FROM
     ss_class_category scc,
     ss_class_set scs
@@ -240,6 +252,10 @@ ORDER BY t.required_member_level DESC,t.modify_time DESC
     AND scc.available = 1
     AND scs.available = 1
     AND scs.merchant_id =#{merchantId}
+    AND scs.is_show = 1
+    <if test="queryType == 0">
+      AND scs.is_recommend = 1
+    </if>
     ) UNION ALL
     (
     SELECT
@@ -252,7 +268,10 @@ ORDER BY t.required_member_level DESC,t.modify_time DESC
     sci.logo_url as  logoUrl,
     2 AS class_type,
     null AS required_member_level,
-    sci.content_text AS  content_text
+    sci.content_text AS  content_text,
+    CASE WHEN sci.style IS NULL THEN 2 ELSE sci.style END AS style,
+    sci.is_recommend AS is_recommend,
+    '' AS front_cover
     FROM
     ss_class_category scc,
     ss_class_info sci
@@ -262,8 +281,12 @@ ORDER BY t.required_member_level DESC,t.modify_time DESC
     AND sci.merchant_id = #{merchantId}
     AND scc.available = 1
     AND sci.available = 1
+    AND sci.is_show = 1
+    <if test="queryType == 0">
+      AND sci.is_recommend = 1
+    </if>
     ) ) t
-    ORDER BY t.required_member_level DESC,t.id asc
+    ORDER BY t.required_member_level DESC,t.modify_time DESC
   </select>
 
   <!--搜索-->
@@ -278,7 +301,10 @@ ORDER BY t.required_member_level DESC,t.modify_time DESC
 	scs.modify_time AS modify_time,
     scs.merchant_id AS merchantId,
     '' as logoUrl,
-	1 AS class_type
+	1 AS class_type,
+	CASE WHEN scs.style IS NULL THEN 2 ELSE scs.style END AS style,
+    scs.is_recommend AS is_recommend,
+    scs.front_cover AS front_cover
   FROM
     ss_class_category scc,
     ss_class_set scs
@@ -297,7 +323,10 @@ ORDER BY t.required_member_level DESC,t.modify_time DESC
 	sci.modify_time AS modify_time,
     sci.merchant_id AS merchantId,
     sci.logo_url as  logoUrl,
-	2 AS class_type
+	2 AS class_type,
+	CASE WHEN sci.style IS NULL THEN 2 ELSE sci.style END AS style,
+    sci.is_recommend AS is_recommend,
+    '' AS front_cover
   FROM
     ss_class_category scc,
     ss_class_info sci

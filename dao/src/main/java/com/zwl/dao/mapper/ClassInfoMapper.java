@@ -4,6 +4,7 @@ import com.zwl.model.po.ClassInfo;
 import com.zwl.model.vo.ParamClassInfoVo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -78,4 +79,6 @@ public interface ClassInfoMapper {
     @Select("select logo_url from ss_class_info where class_set_id=#{id} order by modify_time desc limit 1")
     String getLogoUrlByClassSetId(@Param("id") Long id);
 
+    @Update("update ss_class_info set available =0 where id=#{id}")
+    int deleteClassInfo(@Param("id")Long id);
 }

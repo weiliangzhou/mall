@@ -36,23 +36,19 @@ public class ClassSetController {
     @ApiComment("修改套课程")
     @RequestMapping(name = "修改套课程",
             value = "/teacher/classset/modify", method = RequestMethod.POST)
-    public Result modify(@ApiComment("删除和修改都要传id") Long id,@ApiComment("title") String title, @ApiComment("bannerUrl") String bannerUrl, @ApiComment("categoryId") Long categoryId
-            ,  @ApiComment("requiredMemberLevel") Integer requiredMemberLevel, @ApiComment("content") String content,@ApiComment("删除时传available") String available,
+    public Result modify(@ApiComment("修改都要传id") Long id,@ApiComment("title") String title, @ApiComment("bannerUrl") String bannerUrl, @ApiComment("categoryId") Long categoryId
+            ,  @ApiComment("requiredMemberLevel") Integer requiredMemberLevel, @ApiComment("content") String content,@ApiComment("available") String available,
                          @ApiComment("节课类型 0音频 1视频") Integer style, @ApiComment("是否推荐 0不推荐 1推荐") Integer isRecommend,@ApiComment("套课封面") String frontCover) {
         Result result = new Result();
 
         return result;
     }
-
- /*   @ApiComment("删除套课程")
-    @RequestMapping(name = "修改套课程",
-            value = "/teacher/classset/modify", method = RequestMethod.POST)
-    public Result modify2(@ApiComment("id") Long id,@ApiComment("available") String available) {
+    @ApiComment("删除套课程")
+    @RequestMapping(name = "删除套课程", value = "/teacher/classset/delete", method = RequestMethod.POST)
+    public Result deleteClassSet(@ApiComment("id") Long id) {
         Result result = new Result();
-
         return result;
     }
-*/
 
     @ApiComment("课程列表")
     @RequestMapping(name = "课程列表",

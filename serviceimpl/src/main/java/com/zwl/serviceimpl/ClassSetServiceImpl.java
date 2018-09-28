@@ -1,5 +1,6 @@
 package com.zwl.serviceimpl;
 
+import com.zwl.dao.mapper.ClassInfoMapper;
 import com.zwl.dao.mapper.ClassSetMapper;
 import com.zwl.model.po.ClassInfo;
 import com.zwl.model.po.ClassSet;
@@ -15,6 +16,8 @@ import java.util.List;
 public class ClassSetServiceImpl implements ClassSetService {
     @Autowired
     private ClassSetMapper classSetMapper;
+    @Autowired
+    private ClassInfoMapper classInfoMapper;
     @Override
     public int add(ClassSet classSet) {
         //先查询是否同名
@@ -56,8 +59,8 @@ public class ClassSetServiceImpl implements ClassSetService {
     }
 
     @Override
-    public List<ClassVo> getAllClassOrderById(String merchantId) {
-        return classSetMapper.selectAllClassOrderById(merchantId);
+    public List<ClassVo> getAllClassOrderById(String merchantId, Integer queryType) {
+        return classSetMapper.selectAllClassOrderById(merchantId,queryType);
     }
 
     @Override
@@ -68,5 +71,17 @@ public class ClassSetServiceImpl implements ClassSetService {
     @Override
     public List<ClassVo> search(String merchantId, String title) {
         return classSetMapper.search(merchantId,title);
+    }
+
+    @Override
+    public int deleteClassSet(Long id) {
+        int count = classSetMapper.deleteClassSet(id);
+        //查询套课下所有未删除节课
+        List<ClassInfo> classInfoList = classInfoMapper.selectByClassSetId(id);
+        //删除该套课下未删除节课
+        for(ClassInfo classInfo:classInfoList){
+            classInfoMapper.deleteClassInfo(classInfo.getId());
+        }
+        return count;
     }
 }

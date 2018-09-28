@@ -21,9 +21,15 @@ public class IconController {
     @PostMapping("/getIconList")
     public String getIconList(@RequestBody JSONObject jsonObject){
         String merchantId=jsonObject.getString("merchantId");
+        Integer portType = jsonObject.getInteger("portType");
         Result result = new Result();
         Icon icon = new Icon();
         icon.setMerchantId(merchantId);
+        if(null != portType){
+            icon.setPortType(portType);
+        }else {
+            icon.setPortType(0);
+        }
         List<Icon> iconList = iconService.getIconList(icon);
         result.setData(iconList);
         return JSON.toJSONString(result);

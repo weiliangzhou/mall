@@ -36,7 +36,7 @@ public class Banner {
     private Date createTime = new Date();
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     @ApiComment(value = "更新时间", sample = "2018-07-05 18:00:00")
-    private Date modifyTime;
+    private Date modifyTime = new Date();
     @RestPackIgnore
     @JSONField(serialize = false)
     private Integer available = 1;
@@ -49,6 +49,8 @@ public class Banner {
     private Integer isShow = 1;
     @ApiComment(value = "跳转类型",sample = "不跳转/应用内跳转/应用外跳转")
     private String hrefTypeDesc;
+    @ApiComment(value = "端口类型",sample = "0小程序 1、H5")
+    private Integer portType;
 
     public String getHrefTypeDesc() {
         switch (this.hrefType == null ? 0 : this.hrefType){

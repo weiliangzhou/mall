@@ -14,16 +14,19 @@
     <result column="available" jdbcType="INTEGER" property="available" />
     <result column="merchant_id" jdbcType="VARCHAR" property="merchantId" />
     <result column="is_show" jdbcType="INTEGER" property="isShow" />
+        <result column="port_type" property="portType" jdbcType="INTEGER" />
     </resultMap>
     <sql id="Base_Column_List">
-        id, image_url, href_url, href_type, theme, queue_number, description, create_time, modify_time, available, merchant_id, is_show
+        id, image_url, href_url, href_type, theme, queue_number, description, create_time, modify_time, available, merchant_id, is_show, port_type
     </sql>
 
     <select id="getBannerByQueueNumber" parameterType="com.zwl.model.po.Banner" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
         from ss_banner
-        where queue_number = #{queueNumber,jdbcType=INTEGER}
+        where available=1
+        and merchant_id = #{merchantId,jdbcType = VARCHAR}
+        and queue_number = #{queueNumber,jdbcType=INTEGER}
     </select>
 
     <select id="getWxBannerList" parameterType="com.zwl.model.po.Banner" resultMap="BaseResultMap">
@@ -33,7 +36,8 @@
         where available=1
         and merchant_id = #{merchantId}
         and is_show = 1
-        order by queue_number asc
+        and port_type = #{portType}
+        order by queue_number asc,modify_time desc
     </select>
 
     <select id="getBannerList" parameterType="com.zwl.model.po.Banner" resultMap="BaseResultMap">

@@ -6,16 +6,20 @@ import com.zwl.model.baseresult.Result;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.Merchant;
 import com.zwl.model.po.User;
-import com.zwl.service.MerchantService;
-import com.zwl.service.QRCodeService;
-import com.zwl.service.UserService;
-import com.zwl.service.WxAccessTokenService;
+import com.zwl.model.po.UserInfo;
+import com.zwl.service.*;
+import com.zwl.util.QRCodeUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 二维码
@@ -33,7 +37,11 @@ public class QRCodeController {
     @Autowired
     private UserService userService;
     @Autowired
+    private UserInfoService userInfoService;
+    @Autowired
     private QRCodeService qrCodeService;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     @PostMapping("/getQRCode")
     public String getQRCode(@RequestBody JSONObject jsonObject) {
@@ -51,11 +59,36 @@ public class QRCodeController {
         //type 1=公众号 2=微信小程序
         String accessToken = wxAccessTokenService.getAccessToken(merchantId, appid, appSecret, 2);
         String qrCode = qrCodeService.getQRCode(userId, page, accessToken);
-        log.info("微信小程序accessToken"+accessToken);
+        log.info("微信小程序accessToken" + accessToken);
         Result result = new Result();
         result.setData(qrCode);
         return JSON.toJSONString(result);
 
+    }
+
+    @PostMapping("/getH5QrCode")
+    public Result getH5QrCode(@RequestBody JSONObject jsonObject) {
+        String userId = jsonObject.getString("userId");
+        if (userId == null)
+            BSUtil.isTrue(false, "系统繁忙请稍后重试!");
+        String qrUrl = stringRedisTemplate.boundValueOps(userId + "_h5qrcode").get();
+        if (StringUtils.isBlank(qrUrl)) {
+            String smallImage = QRCodeUtil.createQrCode("http://dy.xc2018.com.cn/home?referrer=" + userId, null, null);
+            User user = userService.getByUserId(userId);
+            UserInfo userInfo = userInfoService.getByUserId(userId);
+            String userLogo = user.getLogoUrl()==null?"http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/6a989ec302994c6c98c2d4810f9fbcb2.png": user.getLogoUrl();
+           String nickNameOrPhone=StringUtils.isBlank(userInfo.getNickName())?user.getRegisterMobile():userInfo.getNickName();
+            try {
+                qrUrl = QRCodeUtil.mergeImage("http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180913/adffdcc641104baeafc9d7276c03aacb.png", smallImage, "310", "380", userLogo, "200", "75",nickNameOrPhone);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            stringRedisTemplate.boundValueOps(userId + "_h5qrcode").set(qrUrl, 30, TimeUnit.DAYS);
+        }
+        log.info("userId:" + userId + "------二维码" + qrUrl);
+        Result result = new Result();
+        result.setData(qrUrl);
+        return result;
     }
 
 }

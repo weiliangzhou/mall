@@ -18,8 +18,8 @@ import java.util.List;
  * @Description: TODO
  * @date 2018/7/2414:02
  */
-@Configuration
-@EnableScheduling
+//@Configuration
+//@EnableScheduling
 @Slf4j
 public class WxPayTask {
     @Autowired
@@ -30,7 +30,7 @@ public class WxPayTask {
     //    每天凌晨2点
 //    10分钟一次，测试数据
 //    @GetMapping("/task")
-    @Scheduled(cron = "0 2 0 * * ?")
+//    @Scheduled(cron = "0 2 0 * * ?")
     //每1分钟执行一次
 //    @Scheduled(cron = "0 */3 *  * * * ")
     public void queryOrderStatus() {
