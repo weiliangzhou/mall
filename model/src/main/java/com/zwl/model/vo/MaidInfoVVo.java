@@ -27,4 +27,6 @@ public class MaidInfoVVo {
     private String logoUrl;
     @ApiComment(seeClass = MaidInfoVo.class)
     private List<MaidInfoVo> maidInfoVoList;
+    @ApiComment("推荐人的真实姓名")
+    private String referrerRealName;
 }

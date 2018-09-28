@@ -64,6 +64,11 @@ public class MaidInfoController {
         maidInfoVVo.setTotalCount(totalCount);
         maidInfoVVo.setLogoUrl(user.getLogoUrl()==null?"":user.getLogoUrl());
         maidInfoVVo.setReferrerPhone(referrerUser==null?"":PhoneUtil.replace(referrerUser.getRegisterMobile()));
+        if(null == referrerUser){
+            maidInfoVVo.setReferrerRealName("");
+        }else{
+            maidInfoVVo.setReferrerRealName(referrerUser.getRealName() == null ? "" :referrerUser.getRealName());
+        }
         result.setData(maidInfoVVo);
         return JSON.toJSONString(result);
     }
