@@ -1,13 +1,22 @@
 package com.zwl.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.groups.Buy;
+import com.zwl.model.po.Merchant;
 import com.zwl.model.po.OfflineActivity;
 import com.zwl.model.po.OfflineActivityCode;
+import com.zwl.model.po.User;
+import com.zwl.model.vo.BuyResult;
+import com.zwl.model.vo.OfflineActivityBuy;
 import com.zwl.model.vo.SignInVo;
+import com.zwl.model.wxpay.IpKit;
+import com.zwl.model.wxpay.StrKit;
+import com.zwl.model.wxpay.WxPayVo;
 import com.zwl.service.*;
+import com.zwl.util.ThreadVariable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -15,6 +24,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author 二师兄超级帅
@@ -39,29 +50,35 @@ public class OfflineActivityController {
     private OfflineActivityCodeService offlineActivityCodeService;
     @Autowired
     private OfflineActivityService offlineActivityService;
+    @Autowired
+    private OfflineActivityOrderService offlineActivityOrderService;
 
-    //    @PostMapping("/buy")
-//    public String offlineActivityBuy(HttpServletRequest request, @Validated(Buy.class) @RequestBody OfflineActivityBuy offlineActivityBuy) {
-//        Result result = new Result();
-//        BuyResult buyResult = productService.offlineActivityBuy(offlineActivity);
-////        String orderNo = buyResult.getOrderNo();
-////        Integer totalFee = buyResult.getTotalFee();
-////        String merchantId = buyResult.getMerchantId();
-////        Merchant merchant = merchantService.getMerchantByMerchantId(merchantId);
-////        String gzhAppId = merchant.getGzAppId();
-////        String userId_local = product.getUserId();
-////        User user = userService.getByUserId(userId_local);
-////        String wxPayKey = merchant.getWxPayKey();
-////        String realIp = IpKit.getRealIp(request);
-////        if (StrKit.isBlank(realIp)) {
-////            realIp = "127.0.0.1";
-////        }
-////        WxPayVo wxPayVo = wxPayService.pay(realIp, user.getGzhOpenid(), orderNo, totalFee.toString(), gzhAppId, merchantId, wxPayKey);
-////        result.setData(wxPayVo);
-//        return JSON.toJSONString(result);
-//    }
+    @PostMapping("/buy")
+    public String offlineActivityBuy(HttpServletRequest request, @RequestBody OfflineActivityBuy offlineActivityBuy) {
+        Result result = new Result();
+        BuyResult buyResult = offlineActivityOrderService.offlineActivityBuy(offlineActivityBuy);
+        String orderNo = buyResult.getOrderNo();
+        Integer totalFee = buyResult.getTotalFee();
+        String merchantId = buyResult.getMerchantId();
+        Merchant merchant = merchantService.getMerchantByMerchantId(merchantId);
+        String gzhAppId = merchant.getGzAppId();
+        String userId = ThreadVariable.getUserID();
+        User user = userService.getByUserId(userId);
+        String wxPayKey = merchant.getWxPayKey();
+        String realIp = IpKit.getRealIp(request);
+        if (StrKit.isBlank(realIp)) {
+            realIp = "127.0.0.1";
+        }
+        WxPayVo wxPayVo = wxPayService.pay(realIp, user.getGzhOpenid(), orderNo, totalFee.toString(), gzhAppId, merchantId, wxPayKey);
+        result.setData(wxPayVo);
+        return JSON.toJSONString(result);
+    }
+
     @PostMapping("/offlineLogin")
     public Result signIn(@RequestBody JSONObject jsonObject) {
+        //
+        //
+
         Result result = new Result();
         return result;
 
