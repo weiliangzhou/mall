@@ -1,5 +1,6 @@
 package com.zwl.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.groups.Buy;
@@ -39,7 +40,7 @@ public class OfflineActivityController {
     @Autowired
     private OfflineActivityService offlineActivityService;
 
-//    @PostMapping("/buy")
+    //    @PostMapping("/buy")
 //    public String offlineActivityBuy(HttpServletRequest request, @Validated(Buy.class) @RequestBody OfflineActivityBuy offlineActivityBuy) {
 //        Result result = new Result();
 //        BuyResult buyResult = productService.offlineActivityBuy(offlineActivity);
@@ -59,14 +60,23 @@ public class OfflineActivityController {
 ////        result.setData(wxPayVo);
 //        return JSON.toJSONString(result);
 //    }
+    @PostMapping("/offlineLogin")
+    public Result signIn(@RequestBody JSONObject jsonObject) {
+        Result result = new Result();
+        return result;
 
+    }
 
     @PostMapping("/signIn")
     public Result signIn(@Validated(Buy.class) @RequestBody SignInVo signInVo) {
         //获取操作员
         String operator = signInVo.getOperator();
+        //通过操作员匹配
+        //ss_offline_activity_operator
+
         if (!"weigu".equals(operator))
             BSUtil.isTrue(false, "非法操作!");
+
         //获取code
         String activityCode = signInVo.getActivityCode();
         //通过code 做一个比对
@@ -84,7 +94,7 @@ public class OfflineActivityController {
             //如果不在  则报错 签到活动已经到期
             OfflineActivity offlineActivityCheckTime = offlineActivityService.getOneByActivityIdAndCheckTime(activityId);
             if (offlineActivityCheckTime == null)
-                BSUtil.isTrue(false, "活动已过期！");
+                BSUtil.isTrue(false, "活动未开始或者已过期！");
 
             offlineActivityCodeService.updatePassByActivityCode(activityCode);
         }

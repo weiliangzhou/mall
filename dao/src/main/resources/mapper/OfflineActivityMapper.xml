@@ -31,6 +31,7 @@
     <include refid="Base_Column_List" />
     from ss_offline_activity
     where id = #{id,jdbcType=INTEGER}
+    <![CDATA[ and activity_start_time <= DATE_FORMAT( now(),'%Y-%m-%d 00:00:00')]]>
     <![CDATA[ and activity_end_time >= now()]]>
   </select>
 
