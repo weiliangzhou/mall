@@ -76,9 +76,14 @@ public class OfflineActivityController {
 
     @PostMapping("/offlineLogin")
     public Result signIn(@RequestBody JSONObject jsonObject) {
-        //
-        //
-
+        String operator = jsonObject.getString("operator");
+        String password = jsonObject.getString("password");
+        OfflineActivityOperator offlineActivityOperator = new OfflineActivityOperator();
+        offlineActivityOperator.setOperator(operator);
+        offlineActivityOperator.setPassword(password);
+        offlineActivityOperator.setAvailable(1);
+        OfflineActivityOperator offlineActivityOperator1 = offlineActivityOperatorService.selectByOperatorAndPassword(offlineActivityOperator);
+        if(offlineActivityOperator1 == null)BSUtil.isTrue(false, "操作员登陆失败");
         Result result = new Result();
         return result;
 
