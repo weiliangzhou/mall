@@ -34,7 +34,7 @@ public class OfflineActivityController {
 
     @RequestMapping(name = "操作员签到",
             value = "/wx/offlineActivity/offlineLogin", method = RequestMethod.POST)
-    public Result operatorSignIn(@ApiComment("操作员") String operator,@ApiComment("密码") Integer password) {
+    public Result operatorSignIn(@ApiComment("操作员") String operator,@ApiComment("密码") Integer password,@ApiComment("商户号") String merchantId) {
         Result result = new Result();
         return result;
 

@@ -21,6 +21,7 @@
     from ss_offline_activity_operator
     where operator = #{operator}
     and password = #{password}
+    and merchant_id = #{merchantId}
     and available = #{available}
   </select>
   <!--<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >-->

@@ -75,9 +75,11 @@ public class OfflineActivityController {
     public Result operatorSignIn(@RequestBody JSONObject jsonObject) {
         String operator = jsonObject.getString("operator");
         String password = jsonObject.getString("password");
+        String merchantId = jsonObject.getString("merchantId");
         OfflineActivityOperator offlineActivityOperator = new OfflineActivityOperator();
         offlineActivityOperator.setOperator(operator);
         offlineActivityOperator.setPassword(password);
+        offlineActivityOperator.setMerchantId(merchantId);
         offlineActivityOperator.setAvailable(1);
         OfflineActivityOperator offlineActivityOperator1 = offlineActivityOperatorService.selectByOperatorAndPassword(offlineActivityOperator);
         if (offlineActivityOperator1 == null) BSUtil.isTrue(false, "操作员登陆失败");
