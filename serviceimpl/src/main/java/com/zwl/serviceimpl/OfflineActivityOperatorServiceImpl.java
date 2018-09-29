@@ -14,4 +14,9 @@ public class OfflineActivityOperatorServiceImpl implements OfflineActivityOperat
     public OfflineActivityOperator selectByOperatorAndPassword(OfflineActivityOperator offlineActivityOperator) {
         return offlineActivityOperatorMapper.selectByOperatorAndPassword(offlineActivityOperator);
     }
+
+    @Override
+    public OfflineActivityOperator getOneByOperator(String operator) {
+        return offlineActivityOperatorMapper.getOneByOperator(operator);
+    }
 }

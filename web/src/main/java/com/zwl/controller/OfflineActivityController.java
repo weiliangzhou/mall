@@ -3,7 +3,6 @@ package com.zwl.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
-import com.terran4j.commons.api2doc.annotations.ApiComment;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.groups.Buy;
@@ -104,6 +103,7 @@ public class OfflineActivityController {
         result.setData(offlineActivityThemeList);
         return JSON.toJSONString(result);
     }
+
     @PostMapping("/getOfflineActivityThemeDetailByThemeId")
     public String getOfflineActivityThemeDetailByThemeId(@RequestBody JSONObject jsonObject) {
         String merchantId = jsonObject.getString("merchantId");
@@ -130,10 +130,13 @@ public class OfflineActivityController {
         String operator = signInVo.getOperator();
         //通过操作员匹配
         //ss_offline_activity_operator
-
-        if (!"weigu".equals(operator))
-            BSUtil.isTrue(false, "非法操作!");
-
+        OfflineActivityOperator offlineActivityOperator = offlineActivityOperatorService.getOneByOperator(operator);
+        if (null == offlineActivityOperator) {
+            Result result = new Result();
+            result.setCode("800");
+            result.setMessage("非法操作！");
+            return result;
+        }
         //获取code
         String activityCode = signInVo.getActivityCode();
         //通过code 做一个比对

@@ -5,4 +5,6 @@ import com.zwl.model.po.OfflineActivityOperator;
 public interface OfflineActivityOperatorService {
 
     OfflineActivityOperator selectByOperatorAndPassword(OfflineActivityOperator offlineActivityOperator);
+
+    OfflineActivityOperator getOneByOperator(String operator);
 }
