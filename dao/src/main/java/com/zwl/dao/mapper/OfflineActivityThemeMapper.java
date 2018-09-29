@@ -13,4 +13,6 @@ public interface OfflineActivityThemeMapper {
     int updateByPrimaryKeySelective(OfflineActivityTheme record);
 
     List<OfflineActivityTheme> getOfflineActivityThemeListByQueryType(@Param("merchantId") String merchantId, @Param("queryType") String queryType);
+
+    OfflineActivityTheme getOfflineActivityThemeDetailByThemeId(@Param("merchantId") String merchantId, @Param("themeId") String themeId);
 }

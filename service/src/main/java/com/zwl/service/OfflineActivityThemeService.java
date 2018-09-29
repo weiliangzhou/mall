@@ -13,4 +13,6 @@ import java.util.List;
  */
 public interface OfflineActivityThemeService {
     List<OfflineActivityTheme> getOfflineActivityThemeListByQueryType(String merchantId, String queryType);
+
+    OfflineActivityTheme getOfflineActivityThemeDetailByThemeId(String merchantId, String themeId);
 }

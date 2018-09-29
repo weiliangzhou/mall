@@ -19,8 +19,14 @@ import java.util.List;
 public class OfflineActivityThemeServiceImpl implements OfflineActivityThemeService {
     @Autowired
     private OfflineActivityThemeMapper offlineActivityThemeMapper;
+
     @Override
     public List<OfflineActivityTheme> getOfflineActivityThemeListByQueryType(String merchantId, String queryType) {
-        return offlineActivityThemeMapper.getOfflineActivityThemeListByQueryType(merchantId,queryType);
+        return offlineActivityThemeMapper.getOfflineActivityThemeListByQueryType(merchantId, queryType);
+    }
+
+    @Override
+    public OfflineActivityTheme getOfflineActivityThemeDetailByThemeId(String merchantId, String themeId) {
+        return offlineActivityThemeMapper.getOfflineActivityThemeDetailByThemeId(merchantId, themeId);
     }
 }

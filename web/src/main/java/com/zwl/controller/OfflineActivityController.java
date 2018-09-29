@@ -103,6 +103,15 @@ public class OfflineActivityController {
         result.setData(offlineActivityThemeList);
         return JSON.toJSONString(result);
     }
+    @PostMapping("/getOfflineActivityThemeDetailByThemeId")
+    public String getOfflineActivityThemeDetailByThemeId(@RequestBody JSONObject jsonObject) {
+        String merchantId = jsonObject.getString("merchantId");
+        String themeId = jsonObject.getString("themeId");
+        OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(merchantId, themeId);
+        Result result = new Result();
+        result.setData(offlineActivityTheme);
+        return JSON.toJSONString(result);
+    }
 
     @PostMapping("/getOfflineActivityListByThemeId")
     public String getOfflineActivityListByThemeId(@RequestBody JSONObject jsonObject) {

@@ -50,8 +50,10 @@ public class OfflineActivity {
     @JSONField(serialize = false)
     private String merchantId;
     @ApiComment(value = "创建时间", sample = "2018-09-30 11:00:00")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     @ApiComment(value = "更新时间", sample = "2018-09-30 11:00:00")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date modifyTime;
     @RestPackIgnore
     @JSONField(serialize = false)

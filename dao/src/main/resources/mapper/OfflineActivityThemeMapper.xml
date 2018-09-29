@@ -4,7 +4,7 @@
     <resultMap id="BaseResultMap" type="com.zwl.model.po.OfflineActivityTheme">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="theme_name" property="themeName" jdbcType="VARCHAR"/>
-        <result column="theme_href_url" property="themeHrefUrl" jdbcType="INTEGER"/>
+        <result column="theme_href_url" property="themeHrefUrl" jdbcType="VARCHAR"/>
         <result column="theme_type" property="themeType" jdbcType="INTEGER"/>
         <result column="content" property="content" jdbcType="VARCHAR"/>
         <result column="content_text" property="contentText" jdbcType="VARCHAR"/>
@@ -35,6 +35,15 @@
         <if test="queryType ==0">
             and is_recommend =1
         </if>
+    </select>
+    <select id="getOfflineActivityThemeDetailByThemeId" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from ss_offline_activity_theme
+        where merchant_id = #{merchantId,jdbcType=VARCHAR}
+        and is_show=1
+        and available= 1
+        and id= #{themeId}
     </select>
 
     <insert id="insertSelective" parameterType="com.zwl.model.po.OfflineActivityTheme">
@@ -85,7 +94,7 @@
                 #{themeName,jdbcType=VARCHAR},
             </if>
             <if test="themeHrefUrl != null">
-                #{themeHrefUrl,jdbcType=INTEGER},
+                #{themeHrefUrl,jdbcType=VARCHAR},
             </if>
             <if test="themeType != null">
                 #{themeType,jdbcType=INTEGER},
@@ -123,7 +132,7 @@
                 theme_name = #{themeName,jdbcType=VARCHAR},
             </if>
             <if test="themeHrefUrl != null">
-                theme_href_url = #{themeHrefUrl,jdbcType=INTEGER},
+                theme_href_url = #{themeHrefUrl,jdbcType=VARCHAR},
             </if>
             <if test="themeType != null">
                 theme_type = #{themeType,jdbcType=INTEGER},

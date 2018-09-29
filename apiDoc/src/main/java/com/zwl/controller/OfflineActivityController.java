@@ -1,17 +1,14 @@
 package com.zwl.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.terran4j.commons.api2doc.annotations.Api2Doc;
 import com.terran4j.commons.api2doc.annotations.ApiComment;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.po.OfflineActivity;
 import com.zwl.model.po.OfflineActivityTheme;
 import com.zwl.model.wxpay.WxPayVo;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author 二师兄超级帅
@@ -39,7 +36,7 @@ public class OfflineActivityController {
 
     @RequestMapping(name = "操作员签到",
             value = "/wx/offlineActivity/offlineLogin", method = RequestMethod.POST)
-    public Result operatorSignIn(@ApiComment("操作员") String operator,@ApiComment("密码") Integer password,@ApiComment("商户号") String merchantId) {
+    public Result operatorSignIn(@ApiComment("操作员") String operator, @ApiComment("密码") Integer password, @ApiComment("商户号") String merchantId) {
         Result result = new Result();
         return result;
 
@@ -56,23 +53,30 @@ public class OfflineActivityController {
 
     @RequestMapping(name = "线下活动主题列表",
             value = "/wx/offlineActivity/getOfflineActivityThemeList", method = RequestMethod.POST)
-    public List getOfflineActivityThemeList(@ApiComment("merchantId") String merchantId,
-                                            @ApiComment("queryType  0查询推荐列表 其他查询全部") String queryType,
-                                            @ApiComment("pageSize") String pageSize,
-                                            @ApiComment("pageNum") String pageNum
+    public OfflineActivityTheme getOfflineActivityThemeList(@ApiComment("merchantId") String merchantId,
+                                                            @ApiComment("queryType  0查询推荐列表 其他查询全部") String queryType,
+                                                            @ApiComment("pageSize") String pageSize,
+                                                            @ApiComment("pageNum") String pageNum
     ) {
-        List<OfflineActivityTheme> offlineActivityThemeList = new ArrayList<>();
-        return offlineActivityThemeList;
+        OfflineActivityTheme offlineActivityTheme = new OfflineActivityTheme();
+        return offlineActivityTheme;
     }
 
-    @RequestMapping(name = "线下活动主题详情",
+    @RequestMapping(name = "线下活动主题详情购买",
             value = "/wx/offlineActivity/getOfflineActivityListByThemeId", method = RequestMethod.POST)
-    public List getOfflineActivityListByThemeId(@ApiComment("merchantId") String merchantId,
-                                                @ApiComment("主题id") String themeId
+    public OfflineActivity getOfflineActivityListByThemeId(@ApiComment("merchantId") String merchantId,
+                                                           @ApiComment("主题id") String themeId
     ) {
-        List<OfflineActivity> offlineActivityList = new ArrayList<>();
-        return offlineActivityList;
+        OfflineActivity offlineActivity = new OfflineActivity();
+        return offlineActivity;
     }
-
+    @RequestMapping(name = "线下活动主题详情介绍页",
+            value = "/wx/offlineActivity/getOfflineActivityThemeDetailByThemeId", method = RequestMethod.POST)
+    public OfflineActivityTheme getOfflineActivityThemeDetailByThemeId(@ApiComment("merchantId") String merchantId,
+                                                           @ApiComment("主题id") String themeId
+    ) {
+        OfflineActivityTheme offlineActivityTheme = new OfflineActivityTheme();
+        return offlineActivityTheme;
+    }
 
 }
