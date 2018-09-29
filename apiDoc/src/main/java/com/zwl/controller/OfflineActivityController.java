@@ -32,6 +32,13 @@ public class OfflineActivityController {
         return wxPayVo;
     }
 
+    @RequestMapping(name = "操作员签到",
+            value = "/wx/offlineActivity/offlineLogin", method = RequestMethod.POST)
+    public Result operatorSignIn(@ApiComment("操作员") String operator,@ApiComment("密码") Integer password) {
+        Result result = new Result();
+        return result;
+
+    }
 
     @RequestMapping(name = "线下活动签到",
             value = "/wx/offlineActivity/signIn", method = RequestMethod.POST)

@@ -72,7 +72,7 @@ public class OfflineActivityController {
     }
 
     @PostMapping("/offlineLogin")
-    public Result signIn(@RequestBody JSONObject jsonObject) {
+    public Result operatorSignIn(@RequestBody JSONObject jsonObject) {
         String operator = jsonObject.getString("operator");
         String password = jsonObject.getString("password");
         OfflineActivityOperator offlineActivityOperator = new OfflineActivityOperator();
