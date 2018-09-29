@@ -2,6 +2,8 @@ package com.zwl.service;
 
 import com.zwl.model.po.OfflineActivity;
 
+import java.util.List;
+
 /**
  * @author 二师兄超级帅
  * @Title: OfflineActivityService
@@ -18,4 +20,12 @@ public interface OfflineActivityService {
      * @return
      */
     OfflineActivity getOneByActivityIdAndCheckTime(Integer activityId);
+
+    /**
+     * 根据活动主题获取详情
+     * @param merchantId
+     * @param themeId
+     * @return
+     */
+    List<OfflineActivity> getOfflineActivityListByThemeId(String merchantId, String themeId);
 }

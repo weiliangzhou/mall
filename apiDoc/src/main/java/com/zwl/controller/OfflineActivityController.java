@@ -3,10 +3,15 @@ package com.zwl.controller;
 import com.terran4j.commons.api2doc.annotations.Api2Doc;
 import com.terran4j.commons.api2doc.annotations.ApiComment;
 import com.zwl.model.baseresult.Result;
+import com.zwl.model.po.OfflineActivity;
+import com.zwl.model.po.OfflineActivityTheme;
 import com.zwl.model.wxpay.WxPayVo;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author 二师兄超级帅
@@ -34,7 +39,7 @@ public class OfflineActivityController {
 
     @RequestMapping(name = "操作员签到",
             value = "/wx/offlineActivity/offlineLogin", method = RequestMethod.POST)
-    public Result operatorSignIn(@ApiComment("操作员") String operator,@ApiComment("密码") Integer password) {
+    public Result operatorSignIn(@ApiComment("操作员") String operator, @ApiComment("密码") Integer password) {
         Result result = new Result();
         return result;
 
@@ -47,6 +52,26 @@ public class OfflineActivityController {
         Result result = new Result();
         return result;
 
+    }
+
+    @RequestMapping(name = "线下活动主题列表",
+            value = "/wx/offlineActivity/getOfflineActivityThemeList", method = RequestMethod.POST)
+    public List getOfflineActivityThemeList(@ApiComment("merchantId") String merchantId,
+                                            @ApiComment("queryType  0查询推荐列表 其他查询全部") String queryType,
+                                            @ApiComment("pageSize") String pageSize,
+                                            @ApiComment("pageNum") String pageNum
+    ) {
+        List<OfflineActivityTheme> offlineActivityThemeList = new ArrayList<>();
+        return offlineActivityThemeList;
+    }
+
+    @RequestMapping(name = "线下活动主题详情",
+            value = "/wx/offlineActivity/getOfflineActivityListByThemeId", method = RequestMethod.POST)
+    public List getOfflineActivityListByThemeId(@ApiComment("merchantId") String merchantId,
+                                                @ApiComment("主题id") String themeId
+    ) {
+        List<OfflineActivity> offlineActivityList = new ArrayList<>();
+        return offlineActivityList;
     }
 
 

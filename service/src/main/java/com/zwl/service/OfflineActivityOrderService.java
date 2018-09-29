@@ -1,5 +1,6 @@
 package com.zwl.service;
 
+import com.zwl.model.po.OfflineActivityOrder;
 import com.zwl.model.vo.BuyResult;
 import com.zwl.model.vo.OfflineActivityBuy;
 
@@ -12,4 +13,6 @@ import com.zwl.model.vo.OfflineActivityBuy;
  */
 public interface OfflineActivityOrderService {
     BuyResult offlineActivityBuy(OfflineActivityBuy offlineActivityBuy);
+
+    OfflineActivityOrder findOrderByOrderNo(String orderNo);
 }

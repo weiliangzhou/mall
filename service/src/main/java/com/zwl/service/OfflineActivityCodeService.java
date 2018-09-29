@@ -13,4 +13,6 @@ public interface OfflineActivityCodeService {
     OfflineActivityCode getOneByActivityCode(String activityCode);
 
     void updatePassByActivityCode(String activityCode);
+
+    OfflineActivityCode getOneByUserIdAndOfflineActivityId(String userId, Integer offlineActivityId);
 }

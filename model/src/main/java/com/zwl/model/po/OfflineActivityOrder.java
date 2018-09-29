@@ -3,12 +3,15 @@ package com.zwl.model.po;
 import lombok.Data;
 
 import java.util.Date;
+
 @Data
 public class OfflineActivityOrder {
     private String orderNo;
     private Integer activityId;
     private String activityCode;
     private Integer activityPrice;
+    private Integer actualMoney;
+    private Integer orderStatus;
     private String userId;
     private String phone;
     private String realName;

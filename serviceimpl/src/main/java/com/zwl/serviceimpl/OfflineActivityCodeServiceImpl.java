@@ -34,4 +34,9 @@ public class OfflineActivityCodeServiceImpl implements OfflineActivityCodeServic
         if (count != 1)
             BSUtil.isTrue(false, "签到错误，请重试！");
     }
+
+    @Override
+    public OfflineActivityCode getOneByUserIdAndOfflineActivityId(String userId, Integer offlineActivityId) {
+        return offlineActivityCodeMapper.getOneByUserIdAndOfflineActivityId(userId,offlineActivityId);
+    }
 }

@@ -1,6 +1,9 @@
 package com.zwl.dao.mapper;
 
 import com.zwl.model.po.OfflineActivity;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface OfflineActivityMapper {
 
@@ -9,5 +12,8 @@ public interface OfflineActivityMapper {
     OfflineActivity selectByPrimaryKey(Integer id);
 
     int updateByPrimaryKeySelective(OfflineActivity record);
+
     OfflineActivity getOneByActivityIdAndCheckTime(Integer activityId);
+
+    List<OfflineActivity> getOfflineActivityListByThemeId(@Param("merchantId") String merchantId, @Param("themeId") String themeId);
 }

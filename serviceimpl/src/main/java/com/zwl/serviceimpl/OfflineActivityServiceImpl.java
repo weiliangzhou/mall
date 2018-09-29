@@ -6,6 +6,8 @@ import com.zwl.service.OfflineActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author 二师兄超级帅
  * @Title: OfflineActivityServiceImpl
@@ -26,5 +28,10 @@ public class OfflineActivityServiceImpl implements OfflineActivityService {
     @Override
     public OfflineActivity getOneByActivityIdAndCheckTime(Integer activityId) {
         return offlineActivityMapper.getOneByActivityIdAndCheckTime(activityId);
+    }
+
+    @Override
+    public List<OfflineActivity> getOfflineActivityListByThemeId(String merchantId, String themeId) {
+        return offlineActivityMapper.getOfflineActivityListByThemeId(merchantId,themeId);
     }
 }
