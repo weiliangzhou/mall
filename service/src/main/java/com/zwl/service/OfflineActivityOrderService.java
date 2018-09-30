@@ -15,4 +15,6 @@ public interface OfflineActivityOrderService {
     BuyResult offlineActivityBuy(OfflineActivityBuy offlineActivityBuy);
 
     OfflineActivityOrder findOrderByOrderNo(String orderNo);
+
+    OfflineActivityOrder findOrderByActivityCode(String activityCode);
 }

@@ -15,4 +15,6 @@ public interface OfflineActivityCodeService {
     void updatePassByActivityCode(String activityCode);
 
     OfflineActivityCode getOneByUserIdAndOfflineActivityId(String userId, Integer offlineActivityId);
+
+    Integer getBuyCountByUserIdAndThemeId(String userId, Integer themeId);
 }

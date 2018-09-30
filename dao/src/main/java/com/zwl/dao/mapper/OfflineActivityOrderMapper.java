@@ -7,4 +7,6 @@ public interface OfflineActivityOrderMapper {
     int insertSelective(OfflineActivityOrder record);
     OfflineActivityOrder selectByPrimaryKey(String orderNo);
     int updateByPrimaryKeySelective(OfflineActivityOrder record);
+
+    OfflineActivityOrder findOrderByActivityCode(String activityCode);
 }

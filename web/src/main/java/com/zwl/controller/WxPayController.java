@@ -151,120 +151,120 @@ public class WxPayController {
                 String out_trade_no = params.get("out_trade_no");
                 // 支付完成时间，格式为yyyyMMddHHmmss
                 String time_end = params.get("time_end");
-
-                // 根据订单号判断是否是线下活动，如果是则不返佣
-
-
-                Order order = orderService.findOrderByOrderNo(out_trade_no);
-                //如果order状态为支付成功，则不更新
-                Integer status = order.getOrderStatus();
-                //判断支付金额是否与订单实际支付金额一致，不一致则返回错误，防止被恶意刷单攻击
-                //判断支付回调签名是否跟发送的签名一致，不一致则返回错误，防止被恶意刷单攻击
-                log.info("回调订单签名--------->" + sign);
+                //根据订单号（ac） 区分 是否是线下活动
+                if (!out_trade_no.contains("ac")) {
+                    Order order = orderService.findOrderByOrderNo(out_trade_no);
+                    //如果order状态为支付成功，则不更新
+                    Integer status = order.getOrderStatus();
+                    //判断支付金额是否与订单实际支付金额一致，不一致则返回错误，防止被恶意刷单攻击
+                    //判断支付回调签名是否跟发送的签名一致，不一致则返回错误，防止被恶意刷单攻击
+                    log.info("回调订单签名--------->" + sign);
 //                根据商户号获取支付key
-                Merchant merchant = merchantService.getMerchantByMerchantId(mch_id);
-                boolean checkSign = PaymentKit.isWechatSign(params, merchant.getWxPayKey());
-                if (!checkSign) {
-                    BSUtil.isTrue(false, "签名错误!");
-                    //发送通知等
-                    Map<String, String> xml = new HashMap<>();
-                    xml.put("return_code", "ERROR");
-                    xml.put("return_msg", "ERROR");
-                    return PaymentKit.toXml(xml);
-                }
-                Integer orderActualMoney_temp = order.getActualMoney();
-                if (Integer.parseInt(total_fee) < orderActualMoney_temp)
-                    BSUtil.isTrue(false, "支付失败");
-                if (null == status || 1 != status) {
-                    Order order_t = new Order();
-                    order_t.setOrderNo(out_trade_no);
-                    order_t.setPaymentTime(sdf_yMdHms.parse(time_end));
-                    order_t.setPaymentNo(transaction_id);
-                    order_t.setOrderStatus(1);
-                    order_t.setPayWay(1);
-                    //更新订单信息
-                    int count = orderService.updateOrder(order_t);
-                    if (count != 1)
-                        BSUtil.isTrue(false, "异步支付更新失败");
-                    //                    支付完成时间，格式为yyyyMMddHHmmss
-                    Date paymentTime = null;
-                    try {
-                        paymentTime = sdf_yMdHms.parse(time_end);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                    Merchant merchant = merchantService.getMerchantByMerchantId(mch_id);
+                    boolean checkSign = PaymentKit.isWechatSign(params, merchant.getWxPayKey());
+                    if (!checkSign) {
+                        BSUtil.isTrue(false, "签名错误!");
+                        //发送通知等
+                        Map<String, String> xml = new HashMap<>();
+                        xml.put("return_code", "ERROR");
+                        xml.put("return_msg", "ERROR");
+                        return PaymentKit.toXml(xml);
                     }
-                    log.info("回调支付成功，开始插入订单流水表");
-                    OrderFlow orderFlow = new OrderFlow();
-                    orderFlow.setOrderNo(out_trade_no);
-                    orderFlow.setOrderStatus(1);
-                    orderFlow.setActualMoney(Integer.parseInt(total_fee));
-                    orderFlow.setMoney(orderActualMoney_temp);
-                    orderFlow.setPaymentNo(transaction_id);
-                    orderFlow.setPaymentTime(paymentTime);
-                    orderFlowService.save(orderFlow);
-                    log.info("回调支付成功，开始插入订单流水表结束" + orderFlow);
-                    //购买成功之后，更新用户会员等级，等级名称，会员到期时间
-                    String userId = order.getUserId();
-                    Integer validityTime = order.getValidityTime();
-                    User user = userService.getByUserId(userId);
-                    try {
-                        String memberValidityTime = sdf_yMdHms.format(paymentTime.getTime() + (long) validityTime * 24 * 60 * 60 * 1000);
-                        user.setExpiresTime(sdf_yMdHms.parse(memberValidityTime));
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    Integer memberLevel = order.getLevel();
-                    user.setMemberLevel(memberLevel);
-                    user.setLevelName(order.getLevelName());
-                    user.setIsBuy(1);
-                    //更新是否购买
-                    log.info("回调支付成功开始更新用户等级" + user);
-                    userService.updateUserByUserId(user);
-                    //订单支付成功，返佣给推荐人
-                    //后期加入MQ
-                    log.info("回调支付成功，开始分佣");
-                    String merchantId = order.getMerchantId();
-                    String orderNo = order.getOrderNo();
-                    Integer orderActualMoney = order.getActualMoney();
-                    Integer maidPercent = order.getMaidPercent();
-                    Long productId = order.getProductId();
-                    String productName = order.getProductName();
-                    Integer level = order.getLevel();
-                    String levelName = order.getLevelName();
-                    String referrerId = user.getReferrer();
-                    //                             增加小班次数,可能是第一次购买需要insert，也可能是update
-                    switch (memberLevel) {
-                        case 4:
-                            userQuotaCountService.saveOrUpdate(userId, 10);
-                            break;
-                        case 5:
-                            userQuotaCountService.saveOrUpdate(userId, 50);
-                            break;
-                        case 6:
-                            userQuotaCountService.saveOrUpdate(userId, 100);
-                            //如果旗下院长数量=10,则升级为校长
-                            log.info("如果旗下院长数量=10,则升级为校长");
-                            Integer xzCount = userService.getXzCountByUserId(referrerId);
-                            log.info("xzCount"+xzCount);
-                            if (xzCount != null)
-                                userService.updateUserToXzByUserId(referrerId);
-                            break;
-                    }
-                    //购买成功之后,更新购买数量
-                    productService.updateBuyCountById(productId, merchantId);
+                    Integer orderActualMoney_temp = order.getActualMoney();
+                    if (Integer.parseInt(total_fee) < orderActualMoney_temp)
+                        BSUtil.isTrue(false, "支付失败");
 
-                    if (StringUtils.isNotBlank(referrerId)) {
-                        User referrerUser = userService.getByUserId(referrerId);
-                        if (null != referrerUser) {
-                            //返佣规则：同级或者下级，高于当前级别是不返佣
+
+                    if (null == status || 1 != status) {
+                        Order order_t = new Order();
+                        order_t.setOrderNo(out_trade_no);
+                        order_t.setPaymentTime(sdf_yMdHms.parse(time_end));
+                        order_t.setPaymentNo(transaction_id);
+                        order_t.setOrderStatus(1);
+                        order_t.setPayWay(1);
+                        //更新订单信息
+                        int count = orderService.updateOrder(order_t);
+                        if (count != 1)
+                            BSUtil.isTrue(false, "异步支付更新失败");
+                        //                    支付完成时间，格式为yyyyMMddHHmmss
+                        Date paymentTime = null;
+                        try {
+                            paymentTime = sdf_yMdHms.parse(time_end);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        log.info("回调支付成功，开始插入订单流水表");
+                        OrderFlow orderFlow = new OrderFlow();
+                        orderFlow.setOrderNo(out_trade_no);
+                        orderFlow.setOrderStatus(1);
+                        orderFlow.setActualMoney(Integer.parseInt(total_fee));
+                        orderFlow.setMoney(orderActualMoney_temp);
+                        orderFlow.setPaymentNo(transaction_id);
+                        orderFlow.setPaymentTime(paymentTime);
+                        orderFlowService.save(orderFlow);
+                        log.info("回调支付成功，开始插入订单流水表结束" + orderFlow);
+                        //购买成功之后，更新用户会员等级，等级名称，会员到期时间
+                        String userId = order.getUserId();
+                        Integer validityTime = order.getValidityTime();
+                        User user = userService.getByUserId(userId);
+                        try {
+                            String memberValidityTime = sdf_yMdHms.format(paymentTime.getTime() + (long) validityTime * 24 * 60 * 60 * 1000);
+                            user.setExpiresTime(sdf_yMdHms.parse(memberValidityTime));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        Integer memberLevel = order.getLevel();
+                        user.setMemberLevel(memberLevel);
+                        user.setLevelName(order.getLevelName());
+                        user.setIsBuy(1);
+                        //更新是否购买
+                        log.info("回调支付成功开始更新用户等级" + user);
+                        userService.updateUserByUserId(user);
+                        //订单支付成功，返佣给推荐人
+                        //后期加入MQ
+                        log.info("回调支付成功，开始分佣");
+                        String merchantId = order.getMerchantId();
+                        String orderNo = order.getOrderNo();
+                        Integer orderActualMoney = order.getActualMoney();
+                        Integer maidPercent = order.getMaidPercent();
+                        Long productId = order.getProductId();
+                        String productName = order.getProductName();
+                        Integer level = order.getLevel();
+                        String levelName = order.getLevelName();
+                        String referrerId = user.getReferrer();
+                        //                             增加小班次数,可能是第一次购买需要insert，也可能是update
+                        switch (memberLevel) {
+                            case 4:
+                                userQuotaCountService.saveOrUpdate(userId, 10);
+                                break;
+                            case 5:
+                                userQuotaCountService.saveOrUpdate(userId, 50);
+                                break;
+                            case 6:
+                                userQuotaCountService.saveOrUpdate(userId, 100);
+                                //如果旗下院长数量=10,则升级为校长
+                                log.info("如果旗下院长数量=10,则升级为校长");
+                                Integer xzCount = userService.getXzCountByUserId(referrerId);
+                                log.info("xzCount" + xzCount);
+                                if (xzCount != null)
+                                    userService.updateUserToXzByUserId(referrerId);
+                                break;
+                        }
+                        //购买成功之后,更新购买数量
+                        productService.updateBuyCountById(productId, merchantId);
+
+                        if (StringUtils.isNotBlank(referrerId)) {
+                            User referrerUser = userService.getByUserId(referrerId);
+                            if (null != referrerUser) {
+                                //返佣规则：同级或者下级，高于当前级别是不返佣
 //                如果产品的等级是1，分佣比列按照产品的分佣百分比计算
 //                并且还要满足推荐人的邀请名额限定 院长 100 班长 50 学员10
 //                新增一张名额限定表 ss_quota_count
 //                如果产品等级为1，(则先判断推荐人的邀请名额是否满足，如果不满足则直接跳过 )
 //                如果产品等级为 456 则相应添加邀请名额
-                            if (1 == memberLevel) {
-                                Integer userQuotaCount = userQuotaCountService.updateCountByUserId(referrerId);
-                                //存在数据异常  userQuotaCount null
+                                if (1 == memberLevel) {
+                                    Integer userQuotaCount = userQuotaCountService.updateCountByUserId(referrerId);
+                                    //存在数据异常  userQuotaCount null
 //                                if (userQuotaCount == 0 || userQuotaCount == null) {
 //                                    log.info("邀请小班名额已满，不返分佣");
 //                                    //发送通知等
@@ -273,80 +273,80 @@ public class WxPayController {
 //                                    xml.put("return_msg", "OK");
 //                                    return PaymentKit.toXml(xml);
 //                                } else {
-                                log.info("邀请小班名额成功-1");
+                                    log.info("邀请小班名额成功-1");
 //                                }
-                            }
+                                }
 
-                            //在不是试听课的时候，查询当前用户有效会员等级并且小于等于推荐人的有效会员等级才可以返佣(小班不返佣！！！！！)
+                                //在不是试听课的时候，查询当前用户有效会员等级并且小于等于推荐人的有效会员等级才可以返佣(小班不返佣！！！！！)
 //                            Integer memberLevel=userService.getMemberLevel(userId);
-                            Integer referrerLevel = userService.getMemberLevel(referrerId);
-                            log.info("referrerLevel:" + referrerLevel + "------------memberLevel:" + memberLevel);
-                            if (null != referrerLevel && referrerLevel >= memberLevel && referrerLevel >= 4) {
+                                Integer referrerLevel = userService.getMemberLevel(referrerId);
+                                log.info("referrerLevel:" + referrerLevel + "------------memberLevel:" + memberLevel);
+                                if (null != referrerLevel && referrerLevel >= memberLevel && referrerLevel >= 4) {
 //                            //通过userId获取推荐人对应的分佣比例
-                                Integer maidPercent_referrer = productService.getMaidPercentByLevel(referrerLevel, merchantId);
-                                MaidInfo maidInfo = new MaidInfo();
-                                maidInfo.setOrderNo(orderNo);
-                                //分佣发送给推荐人
-                                maidInfo.setUserId(referrerUser.getUserId());
-                                maidInfo.setMaidUserId(userId);
-                                //根据推荐的的分佣百分比返佣
-                                //如果产品的等级是1，分佣比列按照产品的分佣百分比计算
-                                Integer maidMoney = 0;
-                                if (level == 1) {
-                                    maidMoney = orderActualMoney * maidPercent / 100;
-                                    maidInfo.setMaidPercent(maidPercent);
-                                } else {
-                                    log.info("maidPercent_referrer:"+maidPercent_referrer);
-                                    maidMoney = orderActualMoney * maidPercent_referrer / 100;
-                                    maidInfo.setMaidPercent(maidPercent_referrer);
-                                }
-                                maidInfo.setMaidMoney(maidMoney);
-                                maidInfo.setOrderActualMoney(orderActualMoney);
-                                maidInfo.setMerchantId(merchantId);
-                                maidInfo.setProductId(productId);
-                                maidInfo.setProductName(productName);
-                                maidInfo.setLevel(level);
-                                maidInfo.setLevelName(levelName);
-                                log.info("回调支付成功，分佣信息" + maidInfo);
-                                int madiInfoCount = maidInfoService.save(maidInfo);
-                                if (madiInfoCount == 0)
-                                    BSUtil.isTrue(false, "分佣失败");
-                                log.info("回调支付成功，结束分佣");
-                                //分佣完成之后，更新用户账户表ss_user_account
-                                //存在未开户 直接开户
-                                log.info("回调支付成功，更新用户余额userId" + userId + "--->" + "maidMoney--->" + maidMoney);
-                                UserAccount userAccount = userAccountService.getUserAccountByUserId(referrerId);
-                                if (userAccount == null) {
-                                    log.info("创建用户余额表开始");
-                                    UserAccount userAccount_t = new UserAccount();
-                                    userAccount_t.setUserId(referrerId);
-                                    userAccount_t.setBalance(maidMoney);
-                                    userAccountService.save(userAccount_t);
-                                    log.info("创建用户余额表结束");
-                                } else
-                                    userAccountService.addBanlanceByUserId(referrerId, maidMoney);
-                                log.info("回调支付成功，更新用户余额成功");
+                                    Integer maidPercent_referrer = productService.getMaidPercentByLevel(referrerLevel, merchantId);
+                                    MaidInfo maidInfo = new MaidInfo();
+                                    maidInfo.setOrderNo(orderNo);
+                                    //分佣发送给推荐人
+                                    maidInfo.setUserId(referrerUser.getUserId());
+                                    maidInfo.setMaidUserId(userId);
+                                    //根据推荐的的分佣百分比返佣
+                                    //如果产品的等级是1，分佣比列按照产品的分佣百分比计算
+                                    Integer maidMoney = 0;
+                                    if (level == 1) {
+                                        maidMoney = orderActualMoney * maidPercent / 100;
+                                        maidInfo.setMaidPercent(maidPercent);
+                                    } else {
+                                        log.info("maidPercent_referrer:" + maidPercent_referrer);
+                                        maidMoney = orderActualMoney * maidPercent_referrer / 100;
+                                        maidInfo.setMaidPercent(maidPercent_referrer);
+                                    }
+                                    maidInfo.setMaidMoney(maidMoney);
+                                    maidInfo.setOrderActualMoney(orderActualMoney);
+                                    maidInfo.setMerchantId(merchantId);
+                                    maidInfo.setProductId(productId);
+                                    maidInfo.setProductName(productName);
+                                    maidInfo.setLevel(level);
+                                    maidInfo.setLevelName(levelName);
+                                    log.info("回调支付成功，分佣信息" + maidInfo);
+                                    int madiInfoCount = maidInfoService.save(maidInfo);
+                                    if (madiInfoCount == 0)
+                                        BSUtil.isTrue(false, "分佣失败");
+                                    log.info("回调支付成功，结束分佣");
+                                    //分佣完成之后，更新用户账户表ss_user_account
+                                    //存在未开户 直接开户
+                                    log.info("回调支付成功，更新用户余额userId" + userId + "--->" + "maidMoney--->" + maidMoney);
+                                    UserAccount userAccount = userAccountService.getUserAccountByUserId(referrerId);
+                                    if (userAccount == null) {
+                                        log.info("创建用户余额表开始");
+                                        UserAccount userAccount_t = new UserAccount();
+                                        userAccount_t.setUserId(referrerId);
+                                        userAccount_t.setBalance(maidMoney);
+                                        userAccountService.save(userAccount_t);
+                                        log.info("创建用户余额表结束");
+                                    } else
+                                        userAccountService.addBanlanceByUserId(referrerId, maidMoney);
+                                    log.info("回调支付成功，更新用户余额成功");
 //                                【东遥课堂】尾号7903成功购买99元课程 , 你将获得奖励90元 ,  尽快查阅小程序
-                                String referrerPhone = referrerUser.getRegisterMobile();
-                                if (StringUtils.isNotBlank(referrerPhone)) {
-                                    String userMobile = user.getRegisterMobile();
-                                    String msg = "【东遥课堂】手机尾号" + userMobile.substring(userMobile.length() - 4) + "成功购买" + productName + ", 你将获得奖励" + maidMoney / 100 + "元 ,  尽快查阅小程序~";
-                                    msgSenderService.sendMsg(referrerPhone, msg);
-                                }
-                                //存在referrerUser.getGzhOpenid()==null
-                                //发送公众号推送
+                                    String referrerPhone = referrerUser.getRegisterMobile();
+                                    if (StringUtils.isNotBlank(referrerPhone)) {
+                                        String userMobile = user.getRegisterMobile();
+                                        String msg = "【东遥课堂】手机尾号" + userMobile.substring(userMobile.length() - 4) + "成功购买" + productName + ", 你将获得奖励" + maidMoney / 100 + "元 ,  尽快查阅小程序~";
+                                        msgSenderService.sendMsg(referrerPhone, msg);
+                                    }
+                                    //存在referrerUser.getGzhOpenid()==null
+                                    //发送公众号推送
 //                                String referrerGzhOpenId = referrerUser.getGzhOpenid();
 //                                log.info("referrerGzhOpenId is null ，referrerUserId:" + referrerId + ",userId:" + userId);
 //                                if (StringUtils.isNotBlank(referrerGzhOpenId))
 //                                    gzhService.sendBuyGzhMsgByOne(referrerGzhOpenId, orderNo, productName, orderActualMoney, user.getRegisterMobile(), merchantId, merchant.getGzAppId(), merchant.getGzAppKey(), merchant.getAppId(), "2AT4AIsTNNOJP3YFSUSlyDruKPTdPBgyieyqI0jKmVQ", maidMoney);
 
 
-                            }
+                                }
 
 //
 
+                            }
                         }
-                    }
 
 //                    根据商户号 获取购买模版 formId ,appSecret
 //                    log.info("开始发送购买模版");
@@ -360,12 +360,19 @@ public class WxPayController {
 //                        wxSenderService.sendBuyMsg(gzOpenId, productName, Integer.parseInt(total_fee), merchantId, appid, appSecret, buyTemplateId);
 //                    }
 
-                    //发送通知等
-                    Map<String, String> xml = new HashMap<String, String>();
-                    xml.put("return_code", "SUCCESS");
-                    xml.put("return_msg", "OK");
-                    return PaymentKit.toXml(xml);
+                        //发送通知等
+                        Map<String, String> xml = new HashMap<String, String>();
+                        xml.put("return_code", "SUCCESS");
+                        xml.put("return_msg", "OK");
+                        return PaymentKit.toXml(xml);
+                    }
+                } else {
+                    //--------------------------------------------线下活动----------------------------------------
+
+
                 }
+
+
             }
         } catch (Exception e) {
             e.printStackTrace();

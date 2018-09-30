@@ -39,4 +39,9 @@ public class OfflineActivityCodeServiceImpl implements OfflineActivityCodeServic
     public OfflineActivityCode getOneByUserIdAndOfflineActivityId(String userId, Integer offlineActivityId) {
         return offlineActivityCodeMapper.getOneByUserIdAndOfflineActivityId(userId,offlineActivityId);
     }
+
+    @Override
+    public Integer getBuyCountByUserIdAndThemeId(String userId, Integer themeId) {
+        return offlineActivityCodeMapper.getBuyCountByUserIdAndThemeId(userId,themeId);
+    }
 }

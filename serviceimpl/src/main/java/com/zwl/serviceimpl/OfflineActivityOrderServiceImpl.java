@@ -72,7 +72,7 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
             if (offlineActivityCode != null)
                 BSUtil.isTrue(false, "不能重复购买！");
         }
-        String orderNo = sdf_yMdHm.format(new Date()) + merchantId + userLongId + productId;
+        String orderNo = "ac"+sdf_yMdHm.format(new Date()) + merchantId + userLongId + productId;
         OfflineActivityOrder offlineActivityOrder = new OfflineActivityOrder();
         Integer activityId = offlineActivity.getId();
         Integer activityPrice = offlineActivity.getActivityPrice();
@@ -107,5 +107,10 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
     @Override
     public OfflineActivityOrder findOrderByOrderNo(String orderNo) {
         return offlineActivityOrderMapper.selectByPrimaryKey(orderNo);
+    }
+
+    @Override
+    public OfflineActivityOrder findOrderByActivityCode(String activityCode) {
+        return offlineActivityOrderMapper.findOrderByActivityCode(activityCode);
     }
 }

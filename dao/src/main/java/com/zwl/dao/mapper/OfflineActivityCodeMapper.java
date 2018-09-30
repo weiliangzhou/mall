@@ -17,4 +17,7 @@ public interface OfflineActivityCodeMapper {
 
     @Select("select * from ss_offline_activity_code where user_id =#{userId} and activity_id=#{offlineActivityId}")
     OfflineActivityCode getOneByUserIdAndOfflineActivityId(@Param("userId") String userId, @Param("offlineActivityId") Integer offlineActivityId);
+
+    @Select("select count(*) from ss_offline_activity_code where  user_id =#{userId} and activity_theme_id=#{themeId} ")
+    Integer getBuyCountByUserIdAndThemeId(@Param("userId") String userId, @Param("themeId") Integer themeId);
 }
