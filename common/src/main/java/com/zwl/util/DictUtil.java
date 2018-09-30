@@ -2,13 +2,12 @@ package com.zwl.util;
 
 /**
  * @author 二师兄超级帅
- * @Title: MemberLevelUtil
+ * @Title: 字典
  * @ProjectName parent
  * @Description: TODO
- * @date 2018/9/3010:33
+ * @date 2018/9/3011:43
  */
-public class MemberLevelUtil {
-
+public class DictUtil {
     public static String getMemberLevelStr(Integer memberLevel) {
         switch (memberLevel) {
             case 99:
@@ -26,4 +25,15 @@ public class MemberLevelUtil {
         }
         return "";
     }
+    public static String getSexStr(Integer sex) {
+        switch (sex) {
+            case 0:
+                return "男";
+            case 1:
+                return "女";
+
+        }
+        return "";
+    }
+
 }

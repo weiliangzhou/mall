@@ -15,7 +15,7 @@ import com.zwl.model.wxpay.IpKit;
 import com.zwl.model.wxpay.StrKit;
 import com.zwl.model.wxpay.WxPayVo;
 import com.zwl.service.*;
-import com.zwl.util.MemberLevelUtil;
+import com.zwl.util.DictUtil;
 import com.zwl.util.ThreadVariable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -184,8 +184,8 @@ public class OfflineActivityController {
                 activityCodeDetail.setRealName(offlineActivityOrder.getRealName());
                 User user = userService.getByUserId(offlineActivityOrder.getUserId());
                 Integer memberLevel = user.getMemberLevel();
-                activityCodeDetail.setMemberLevel(MemberLevelUtil.getMemberLevelStr(memberLevel));
-                activityCodeDetail.setSex(offlineActivityOrder.getSex());
+                activityCodeDetail.setMemberLevel(DictUtil.getMemberLevelStr(memberLevel));
+                activityCodeDetail.setSex(DictUtil.getSexStr(offlineActivityOrder.getSex()));
                 activityCodeDetail.setPhone(offlineActivityOrder.getPhone());
                 activityCodeDetail.setIdCardNum(offlineActivityOrder.getIdCardNum());
                 //第一次购买则显示初次

@@ -16,7 +16,7 @@ import java.util.Date;
 @Data
 public class ActivityCodeDetail {
     @ApiComment(value = "性别", sample = "0男1女")
-    private Integer sex;
+    private String sex;
     @ApiComment(value = "手机", sample = "1325564646")
     private String phone;
     @ApiComment(value = "真实姓名", sample = "张三")
