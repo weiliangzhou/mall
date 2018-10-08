@@ -61,8 +61,10 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         //根据购买规则 判断是否拥有购买权限
         //自然人 99 980 5000 校长
         Integer minRequirement = offlineActivity.getMinRequirement();
-        if (memberLevel < minRequirement)
-            BSUtil.isTrue(false, "未获得购买线下课程的资格！");
+        if (minRequirement != null) {
+            if (memberLevel < minRequirement)
+                BSUtil.isTrue(false, "未获得购买线下课程的资格！");
+        }
         Integer isRebuy = offlineActivity.getIsRebuy();
         //不能重复购买
         //则判断该用户是否购买过
@@ -72,7 +74,7 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
             if (offlineActivityCode != null)
                 BSUtil.isTrue(false, "不能重复购买！");
         }
-        String orderNo = "ac"+sdf_yMdHm.format(new Date()) + merchantId + userLongId + productId;
+        String orderNo = "ac" + sdf_yMdHm.format(new Date()) + merchantId + userLongId + productId;
         OfflineActivityOrder offlineActivityOrder = new OfflineActivityOrder();
         Integer activityId = offlineActivity.getId();
         Integer activityPrice = offlineActivity.getActivityPrice();

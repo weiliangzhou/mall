@@ -27,6 +27,13 @@
     activity_theme_id, activity_parent_id, limit_count, buy_count, is_recommend, is_show,
     is_rebuy, is_maid, min_requirement, create_time, modify_time, available, merchant_id
   </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from ss_offline_activity
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
     <select id="getOneByActivityIdAndCheckTime" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>

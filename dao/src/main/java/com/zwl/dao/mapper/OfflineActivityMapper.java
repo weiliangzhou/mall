@@ -13,7 +13,7 @@ public interface OfflineActivityMapper {
 
     int updateByPrimaryKeySelective(OfflineActivity record);
 
-    OfflineActivity getOneByActivityIdAndCheckTime(Integer activityId);
+    OfflineActivity getOneByActivityIdAndCheckTime(Integer id);
 
     List<OfflineActivity> getOfflineActivityListByThemeId(@Param("merchantId") String merchantId, @Param("themeId") String themeId);
 }
