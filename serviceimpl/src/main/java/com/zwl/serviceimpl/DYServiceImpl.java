@@ -5,6 +5,8 @@ import com.zwl.model.po.*;
 import com.zwl.model.wxpay.PaymentKit;
 import com.zwl.service.*;
 import com.zwl.util.BigDecimalUtil;
+import com.zwl.util.QRCodeUtil;
+import com.zwl.util.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +50,8 @@ public class DYServiceImpl implements DYService {
     private OfflineActivityThemeService offlineActivityThemeService;
     @Autowired
     private OfflineActivityOrderService offlineActivityOrderService;
+    @Autowired
+    private OfflineActivityCodeService offlineActivityCodeService;
 
     private SimpleDateFormat sdf_yMdHms = new SimpleDateFormat("yyyyMMddHHmmss");
 
@@ -273,14 +277,14 @@ public class DYServiceImpl implements DYService {
     public String xxPayNotify(Map<String, String> params, String out_trade_no, String sign, String mch_id, String total_fee, String time_end, String transaction_id) {
         //线下活动回调通知
         //是否返佣
-        //否 直接生成二维码
+        //否
         //是  是否复训
         //是 结束
         //否 分佣
         //自然人 99 结束
         //980 课程类型1980 才能返佣30%
         //5000  校长   课程类型1980  返佣40%    20000元返佣30%
-
+        //生成二维码
 //        通过订单号 获取产品是否返佣
         OfflineActivityOrder offlineActivityOrder = offlineActivityOrderService.findOrderByOrderNo(out_trade_no);
         Integer activityId = offlineActivityOrder.getActivityId();
@@ -349,15 +353,16 @@ public class DYServiceImpl implements DYService {
                         //存在未开户 直接开户
                         log.info("回调支付成功，更新用户余额userId" + userId + "--->" + "maidMoney--->" + maidMoney);
                         UserAccount userAccount = userAccountService.getUserAccountByUserId(referrerId);
-                        if (userAccount == null) {
+                        if (userAccount == null){
                             log.info("创建用户余额表开始");
                             UserAccount userAccount_t = new UserAccount();
                             userAccount_t.setUserId(referrerId);
                             userAccount_t.setBalance(maidMoney);
                             userAccountService.save(userAccount_t);
                             log.info("创建用户余额表结束");
-                        } else
+                        } else{
                             userAccountService.addBanlanceByUserId(referrerId, maidMoney);
+                        }
                         log.info("回调支付成功，更新用户余额成功");
 
                     }
@@ -367,7 +372,23 @@ public class DYServiceImpl implements DYService {
 
             }
 
-
+            OfflineActivityCode offlineActivityCode=new OfflineActivityCode();
+            String activityCode=UUIDUtil.getUUID32();
+            offlineActivityCode.setActivityCode(activityCode);
+            String qrCodeUrl = QRCodeUtil.createQrCode("http://dy.xc2018.com.cn/adminlogin/checkout?activityCode=" + activityCode, null, null);
+            offlineActivityCode.setActivityId(offlineActivity.getId());
+            offlineActivityCode.setActivityThemeId(offlineActivity.getActivityThemeId());
+            offlineActivityCode.setAvailable(1);
+            offlineActivityCode.setMerchantId(mch_id);
+            offlineActivityCode.setUserId(userId);
+            offlineActivityCode.setCreateTime(new Date());
+            offlineActivityCode.setQrCodeUrl(qrCodeUrl);
+            offlineActivityCodeService.insert(offlineActivityCode);
+            //发送通知等
+            Map<String, String> xml = new HashMap<String, String>();
+            xml.put("return_code", "SUCCESS");
+            xml.put("return_msg", "OK");
+            return PaymentKit.toXml(xml);
         }
 
 

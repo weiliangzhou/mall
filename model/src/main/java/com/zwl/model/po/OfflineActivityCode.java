@@ -7,19 +7,14 @@ import java.util.Date;
 @Data
 public class OfflineActivityCode {
     private Integer id;
-
     private String userId;
-
     private String activityCode;
-
     private Integer isUsed;
-
-    private Date createTime = new Date();
-
-    private Date modifyTime;
-
-    private Integer available = 1;
-
+    private Integer activityThemeId;
     private Integer activityId;
-
+    private String merchantId;
+    private Date createTime;
+    private Date modifyTime;
+    private Integer available;
+    private String qrCodeUrl;
 }
