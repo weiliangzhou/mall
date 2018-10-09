@@ -89,6 +89,8 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         offlineActivityOrder.setCity(offlineActivityBuy.getCity());
         offlineActivityOrder.setCreateTime(new Date());
         offlineActivityOrder.setAvailable(1);
+        offlineActivityOrder.setMerchantId(merchantId);
+        offlineActivityOrder.setOrderStatus(0);
         log.info("订单数据" + offlineActivityOrder);
         try {
             offlineActivityOrderMapper.insertSelective(offlineActivityOrder);
