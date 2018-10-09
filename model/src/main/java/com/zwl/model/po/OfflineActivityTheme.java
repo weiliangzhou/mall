@@ -45,23 +45,23 @@ public class OfflineActivityTheme {
     @ApiComment(value = "收听人数描述", sample = "万 人收听")
     private String buyCountDesc;
     @ApiComment(value = "收听人数前端显示", sample = "2.5")
-    private Double buyCountShow;
+    private String buyCountShow;
     @ApiComment(value = "时长", sample = "时长 3天2夜")
     private String activityTime;
     @ApiComment(value = "图标地址", sample = "sdgs")
     private String imgUrl;
 
-    public Double getBuyCountShow() {
+    public String getBuyCountShow() {
         if (buyCount == null)
-            return 0D;
+            return "0";
         else if (buyCount > 10000) {
-            return BigDecimalUtil.div(10000, buyCount, 2);
+            return BigDecimalUtil.div(10000, buyCount, 2)+"万";
         } else
-            return Double.parseDouble(buyCount + "");
+            return Double.parseDouble(buyCount + "")+"万";
     }
 
     public String getBuyCountDesc() {
-        return "万 人收听";
+        return "人收听";
     }
 
 }
