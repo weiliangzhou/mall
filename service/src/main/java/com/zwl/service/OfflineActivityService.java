@@ -28,4 +28,10 @@ public interface OfflineActivityService {
      * @return
      */
     List<OfflineActivity> getOfflineActivityListByThemeId(String merchantId, String themeId);
+
+    /**
+     * 根据活动id更新已购买人数
+     * @param activityId
+     */
+    void updateBuyCountById(Integer activityId);
 }

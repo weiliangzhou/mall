@@ -34,4 +34,9 @@ public class OfflineActivityServiceImpl implements OfflineActivityService {
     public List<OfflineActivity> getOfflineActivityListByThemeId(String merchantId, String themeId) {
         return offlineActivityMapper.getOfflineActivityListByThemeId(merchantId,themeId);
     }
+
+    @Override
+    public void updateBuyCountById(Integer activityId) {
+        offlineActivityMapper.updateBuyCountById(activityId);
+    }
 }

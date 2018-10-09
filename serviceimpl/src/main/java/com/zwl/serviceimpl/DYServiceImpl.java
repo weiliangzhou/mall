@@ -296,6 +296,8 @@ public class DYServiceImpl implements DYService {
             Integer offlineType = offlineActivity.getActivityType();
             String userId = offlineActivityOrder.getUserId();
             Integer price = offlineActivityOrder.getActivityPrice();
+            //更新购买人数
+            offlineActivityService.updateBuyCountById(activityId);
             if (isMaid == 1) {
                 //1返佣
                 if (isRetraining == 0) {

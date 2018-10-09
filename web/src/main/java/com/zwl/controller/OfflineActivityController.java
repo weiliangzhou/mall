@@ -123,6 +123,7 @@ public class OfflineActivityController {
         String merchantId = jsonObject.getString("merchantId");
         String themeId = jsonObject.getString("themeId");
         List<OfflineActivity> offlineActivityList = offlineActivityService.getOfflineActivityListByThemeId(merchantId, themeId);
+        //还剩多少名额=已购买人数-容纳人数
         Result result = new Result();
         result.setData(offlineActivityList);
         return JSON.toJSONString(result);
