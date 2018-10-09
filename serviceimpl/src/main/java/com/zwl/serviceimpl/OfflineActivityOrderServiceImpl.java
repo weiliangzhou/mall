@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author 二师兄超级帅
@@ -114,5 +115,10 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
     @Override
     public OfflineActivityOrder findOrderByActivityCode(String activityCode) {
         return offlineActivityOrderMapper.findOrderByActivityCode(activityCode);
+    }
+
+    @Override
+    public List<OfflineActivityOrder> findOrderByUserId(String userId, String merchantId) {
+        return offlineActivityOrderMapper.findOrderByUserId(userId,merchantId);
     }
 }

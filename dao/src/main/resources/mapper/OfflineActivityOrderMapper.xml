@@ -28,6 +28,15 @@
     user_id, sex, phone, real_name, city, id_card_num, payment_no, payment_time, merchant_id,
     create_time, modify_time, available, is_maid, is_retraining
   </sql>
+  <select id="findOrderByUserId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from ss_offline_activity_order
+    where user_id = #{userId,jdbcType=VARCHAR}
+    and available =1
+    and order_status = 1
+    and merchant_id = #{merchantId,jdbcType=VARCHAR}
+  </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select
     <include refid="Base_Column_List" />
