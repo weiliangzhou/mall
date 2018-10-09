@@ -8,5 +8,5 @@ import java.util.List;
 public interface OfflineActivityThemeMapper {
     OfflineActivityTheme selectByPrimaryKey(Integer id);
     List<OfflineActivityTheme> getOfflineActivityThemeListByQueryType(@Param("merchantId") String merchantId, @Param("queryType") String queryType);
-    OfflineActivityTheme getOfflineActivityThemeDetailByThemeId(@Param("merchantId") String merchantId, @Param("themeId") String themeId);
+    OfflineActivityTheme getOfflineActivityThemeDetailByThemeId(@Param("merchantId") String merchantId, @Param("themeId") Integer themeId);
 }

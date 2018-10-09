@@ -111,7 +111,7 @@ public class OfflineActivityController {
     @PostMapping("/getOfflineActivityThemeDetailByThemeId")
     public String getOfflineActivityThemeDetailByThemeId(@RequestBody JSONObject jsonObject) {
         String merchantId = jsonObject.getString("merchantId");
-        String themeId = jsonObject.getString("themeId");
+        Integer themeId = jsonObject.getInteger("themeId");
         OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(merchantId, themeId);
         Result result = new Result();
         result.setData(offlineActivityTheme);
