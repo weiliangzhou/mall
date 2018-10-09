@@ -92,6 +92,12 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         offlineActivityOrder.setAvailable(1);
         offlineActivityOrder.setMerchantId(merchantId);
         offlineActivityOrder.setOrderStatus(0);
+        offlineActivityOrder.setIsRetraining(offlineActivity.getIsRetraining());
+        offlineActivityOrder.setIsMaid(offlineActivity.getIsMaid());
+        offlineActivityOrder.setSex(offlineActivityBuy.getSex());
+        offlineActivityOrder.setRealName(offlineActivityBuy.getRealName());
+        offlineActivityOrder.setIdCardNum(offlineActivityBuy.getIdCardNum());
+        offlineActivityOrder.setActualMoney(offlineActivity.getActivityPrice());
         log.info("订单数据" + offlineActivityOrder);
         try {
             offlineActivityOrderMapper.insertSelective(offlineActivityOrder);

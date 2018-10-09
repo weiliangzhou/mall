@@ -46,6 +46,4 @@ public class OfflineActivityOrder {
 
     private Integer isRetraining;
 
-    private String qrCodeUrl;
-
 }
