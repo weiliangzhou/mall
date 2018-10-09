@@ -213,5 +213,27 @@ public class OfflineActivityController {
 
     }
 
+    @PostMapping("/getActivityOrderList")
+    public String getActivityOrderList(@RequestBody JSONObject jsonObject){
+        String merchantId = jsonObject.getString("merchantId");
+        String userId = ThreadVariable.getUserID();
+        List<OfflineActivityOrder> offlineActivityOrderList = offlineActivityOrderService.findOrderByUserId(userId,merchantId);
+        Result result = new Result();
+        result.setData(offlineActivityOrderList);
+        return JSON.toJSONString(result);
+    }
+
+    @PostMapping("/getActivityOrderDetail")
+    public String getActivityOrderDetail(@RequestBody JSONObject jsonObject){
+        String userId = ThreadVariable.getUserID();
+        String orderNo = jsonObject.getString("orderNo");
+        Integer activityId = jsonObject.getInteger("activityId");
+        OfflineActivityOrder offlineActivityOrder = offlineActivityOrderService.findOrderByOrderNo(orderNo);
+        OfflineActivityCode offlineActivityCode = offlineActivityCodeService.getOneByUserIdAndOfflineActivityId(userId,activityId);
+        offlineActivityOrder.setQrCodeUrl(offlineActivityCode.getQrCodeUrl());
+        Result result = new Result();
+        result.setData(offlineActivityOrder);
+        return JSON.toJSONString(result);
+    }
 
 }
