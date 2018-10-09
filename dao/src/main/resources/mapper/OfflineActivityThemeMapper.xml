@@ -39,14 +39,14 @@
             and is_recommend =1
         </if>
     </select>
-    <select id="getOfflineActivityThemeDetailByThemeId" resultMap="BaseResultMap" parameterType="java.lang.String">
+    <select id="getOfflineActivityThemeDetailByThemeId" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from ss_offline_activity_theme
         where merchant_id = #{merchantId,jdbcType=VARCHAR}
         and is_show=1
         and available= 1
-        and id= #{themeId}
+        and id= #{themeId,jdbcType=INTEGER}
     </select>
 
 
