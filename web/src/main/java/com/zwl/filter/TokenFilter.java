@@ -171,6 +171,11 @@ public class TokenFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
+        //线下活动签到
+        if (requestURL.contains("/wx/offlineActivity/getOfflineActivityThemeDetailByThemeId")) {
+            chain.doFilter(request, response);
+            return;
+        }
         //操作员登陆
         if (requestURL.contains("/wx/offlineActivity/offlineLogin")) {
             chain.doFilter(request, response);
