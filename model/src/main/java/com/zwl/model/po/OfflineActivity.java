@@ -62,4 +62,22 @@ public class OfflineActivity {
     @RestPackIgnore
     @JSONField(serialize = false)
     private Integer available;
+    @ApiComment(value = "还剩多少名额", sample = "还剩多少名额")
+    private String buyCountDesc;
+    @ApiComment(value = "是否已满", sample = "0未满 1已满")
+    private Integer isFull;
+
+    public String getBuyCountDesc() {
+        Integer count = limitCount - buyCount;
+        if (count == 0)
+            return "名额已满";
+        return "还剩" + count + "名额";
+    }
+
+    public Integer getIsFull() {
+        Integer count = limitCount - buyCount;
+        if (count == 0)
+            return 1;
+        return 0;
+    }
 }
