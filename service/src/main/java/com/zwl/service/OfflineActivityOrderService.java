@@ -3,6 +3,7 @@ package com.zwl.service;
 import com.zwl.model.po.OfflineActivityOrder;
 import com.zwl.model.vo.BuyResult;
 import com.zwl.model.vo.OfflineActivityBuy;
+import com.zwl.model.vo.OfflineActivityOrderVo;
 
 import java.util.List;
 
@@ -20,7 +21,9 @@ public interface OfflineActivityOrderService {
 
     OfflineActivityOrder findOrderByActivityCode(String activityCode);
 
-    List<OfflineActivityOrder> findOrderByUserId(String userId, String merchantId);
+    List<OfflineActivityOrderVo> findOrderByUserId(String userId, String merchantId);
 
     void updateStatusByOrderNo(String out_trade_no);
+
+    OfflineActivityOrderVo findOrderDetailByOrderNo(String orderNo);
 }

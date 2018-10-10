@@ -7,10 +7,7 @@ import com.zwl.model.baseresult.Result;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.groups.Buy;
 import com.zwl.model.po.*;
-import com.zwl.model.vo.ActivityCodeDetail;
-import com.zwl.model.vo.BuyResult;
-import com.zwl.model.vo.OfflineActivityBuy;
-import com.zwl.model.vo.SignInVo;
+import com.zwl.model.vo.*;
 import com.zwl.model.wxpay.IpKit;
 import com.zwl.model.wxpay.StrKit;
 import com.zwl.model.wxpay.WxPayVo;
@@ -217,9 +214,9 @@ public class OfflineActivityController {
     public String getActivityOrderList(@RequestBody JSONObject jsonObject){
         String merchantId = jsonObject.getString("merchantId");
         String userId = ThreadVariable.getUserID();
-        List<OfflineActivityOrder> offlineActivityOrderList = offlineActivityOrderService.findOrderByUserId(userId,merchantId);
+        List<OfflineActivityOrderVo> offlineActivityOrderVoList = offlineActivityOrderService.findOrderByUserId(userId,merchantId);
         Result result = new Result();
-        result.setData(offlineActivityOrderList);
+        result.setData(offlineActivityOrderVoList);
         return JSON.toJSONString(result);
     }
 
@@ -228,11 +225,11 @@ public class OfflineActivityController {
         String userId = ThreadVariable.getUserID();
         String orderNo = jsonObject.getString("orderNo");
         Integer activityId = jsonObject.getInteger("activityId");
-        OfflineActivityOrder offlineActivityOrder = offlineActivityOrderService.findOrderByOrderNo(orderNo);
+        OfflineActivityOrderVo offlineActivityOrderVo = offlineActivityOrderService.findOrderDetailByOrderNo(orderNo);
         OfflineActivityCode offlineActivityCode = offlineActivityCodeService.getOneByUserIdAndOfflineActivityId(userId,activityId);
-        offlineActivityOrder.setQrCodeUrl(offlineActivityCode.getQrCodeUrl());
+        offlineActivityOrderVo.setQrCodeUrl(offlineActivityCode.getQrCodeUrl());
         Result result = new Result();
-        result.setData(offlineActivityOrder);
+        result.setData(offlineActivityOrderVo);
         return JSON.toJSONString(result);
     }
 
