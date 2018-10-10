@@ -167,10 +167,10 @@ public class TokenFilter implements Filter {
             return;
         }
         //线下活动签到
-        if (requestURL.contains("/wx/offlineActivity/getOfflineActivityListByThemeId")) {
-            chain.doFilter(request, response);
-            return;
-        }
+//        if (requestURL.contains("/wx/offlineActivity/getOfflineActivityListByThemeId")) {
+//            chain.doFilter(request, response);
+//            return;
+//        }
         //线下活动签到
         if (requestURL.contains("/wx/offlineActivity/getOfflineActivityThemeDetailByThemeId")) {
             chain.doFilter(request, response);

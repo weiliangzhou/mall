@@ -2,6 +2,7 @@ package com.zwl.dao.mapper;
 
 import com.zwl.model.po.OfflineActivityOrder;
 import com.zwl.model.po.Order;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -12,5 +13,5 @@ public interface OfflineActivityOrderMapper {
 
     OfflineActivityOrder findOrderByActivityCode(String activityCode);
 
-    List<OfflineActivityOrder> findOrderByUserId(String userId, String merchantId);
+    List<OfflineActivityOrder> findOrderByUserId(@Param("userId") String userId, @Param("merchantId") String merchantId);
 }
