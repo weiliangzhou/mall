@@ -39,7 +39,7 @@
         <include refid="Base_Column_List"/>
         from ss_offline_activity
         where id = #{id,jdbcType=INTEGER}
-        <![CDATA[ and activity_start_time <= DATE_FORMAT( now(),'%Y-%m-%d 00:00:00')]]>
+        <![CDATA[ AND  DATE_FORMAT(activity_start_time, '%Y-%m-%d 00:00:00' ) <=now()]]>
         <![CDATA[ and activity_end_time >= now()]]>
     </select>
     <select id="getOfflineActivityListByThemeId" resultMap="BaseResultMap" parameterType="java.lang.String">
