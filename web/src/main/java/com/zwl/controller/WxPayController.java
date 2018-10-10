@@ -148,6 +148,7 @@ public class WxPayController {
             Map<String, String> xml = new HashMap<String, String>();
             xml.put("return_code", "ERROR");
             xml.put("return_msg", "ERROR");
+            log.error("微信回调失败" , e);
             return PaymentKit.toXml(xml);
         }
 
@@ -156,6 +157,7 @@ public class WxPayController {
         Map<String, String> xml = new HashMap<String, String>();
         xml.put("return_code", "SUCCESS");
         xml.put("return_msg", "OK");
+        log.info("微信回调成功");
         return PaymentKit.toXml(xml);
     }
 
