@@ -131,6 +131,7 @@ public class WxPayController {
                 String out_trade_no = params.get("out_trade_no");
                 // 支付完成时间，格式为yyyyMMddHHmmss
                 String time_end = params.get("time_end");
+                log.info("商户订单号："+out_trade_no);
                 //根据订单号（xx） 区分 是否是线下活动
                 if (!out_trade_no.contains("xx")) {
                     dyService.payNotify(params, out_trade_no, sign, mch_id, total_fee, time_end, transaction_id);
