@@ -286,108 +286,110 @@ public class DYServiceImpl implements DYService {
         //5000  校长   课程类型1980  返佣40%    20000元返佣30%
         //生成二维码
 //        通过订单号 获取产品是否返佣
+
+
         OfflineActivityOrder offlineActivityOrder = offlineActivityOrderService.findOrderByOrderNo(out_trade_no);
         Integer activityId = offlineActivityOrder.getActivityId();
-        if (activityId != null) {
-            OfflineActivity offlineActivity = offlineActivityService.getOneByActivityId(activityId);
-            OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(offlineActivity.getMerchantId(), offlineActivity.getActivityThemeId());
-            Integer isMaid = offlineActivity.getIsMaid();
-            Integer isRetraining = offlineActivity.getIsRetraining();
-            Integer offlineType = offlineActivity.getActivityType();
-            String userId = offlineActivityOrder.getUserId();
-            Integer price = offlineActivityOrder.getActivityPrice();
-            //更新订单状态
-            offlineActivityOrderService.updateStatusByOrderNo(out_trade_no);
-            //更新购买人数
-            offlineActivityService.updateBuyCountById(activityId);
-            if (isMaid == 1) {
-                //1返佣
-                if (isRetraining == 0) {
-                    //不是复训 开始分佣
-                    //判断购买人的推荐人等级
-                    User user = userService.getByUserId(userId);
-                    String referrerId = user.getReferrer();
-                    if (referrerId != null) {
-                        User referrer = userService.getByUserId(referrerId);
-                        Integer memberLevel = referrer.getMemberLevel();
-                        Integer maidMoney = 0;
-                        //课程类型
-                        switch (offlineType) {
-                            case 1980:
-                                if (memberLevel >= 6) {
-                                    //课程类型1980  返佣40%
-                                    maidMoney = Integer.parseInt(BigDecimalUtil.mul(price, 0.4) + "");
-                                } else if (memberLevel == 4) {
-                                    //课程类型1980  返佣30%
-                                    maidMoney = Integer.parseInt(BigDecimalUtil.mul(price, 0.3) + "");
-                                } else {
-                                    //不返佣
-                                }
-                                break;
-                            case 20000:
-                                if (memberLevel >= 6) {
-                                    //返佣30%
-                                    maidMoney = Integer.parseInt(BigDecimalUtil.mul(price, 0.3) + "");
-                                } else {
-                                    //不返佣
-                                }
-                                break;
-                            default:
-                                break;
-                        }
-                        //开始更新账户余额
-                        MaidInfo maidInfo = new MaidInfo();
-                        maidInfo.setOrderNo(out_trade_no);
-                        //分佣发送给推荐人
-                        maidInfo.setUserId(referrer.getUserId());
-                        maidInfo.setMaidUserId(userId);
-                        maidInfo.setMaidMoney(maidMoney);
-                        maidInfo.setOrderActualMoney(offlineActivityOrder.getActualMoney());
-                        maidInfo.setMerchantId(offlineActivityOrder.getMerchantId());
-                        maidInfo.setProductId(Long.parseLong(offlineActivity.getId() + ""));
-                        maidInfo.setProductName(offlineActivityTheme.getThemeName());
-                        maidInfo.setLevel(user.getMemberLevel());
-                        maidInfo.setLevelName(user.getLevelName());
-                        log.info("回调支付成功，分佣信息" + maidInfo);
-                        int madiInfoCount = maidInfoService.save(maidInfo);
-                        if (madiInfoCount == 0)
-                            BSUtil.isTrue(false, "分佣失败");
-                        log.info("回调支付成功，结束分佣");
-                        //分佣完成之后，更新用户账户表ss_user_account
-                        //存在未开户 直接开户
-                        log.info("回调支付成功，更新用户余额userId" + userId + "--->" + "maidMoney--->" + maidMoney);
-                        UserAccount userAccount = userAccountService.getUserAccountByUserId(referrerId);
-                        if (userAccount == null){
-                            log.info("创建用户余额表开始");
-                            UserAccount userAccount_t = new UserAccount();
-                            userAccount_t.setUserId(referrerId);
-                            userAccount_t.setBalance(maidMoney);
-                            userAccountService.save(userAccount_t);
-                            log.info("创建用户余额表结束");
-                        } else{
-                            userAccountService.addBanlanceByUserId(referrerId, maidMoney);
-                        }
-                        log.info("回调支付成功，更新用户余额成功");
+        OfflineActivity offlineActivity = offlineActivityService.getOneByActivityId(activityId);
+        Integer isMaid = offlineActivity.getIsMaid();
+        Integer isRetraining = offlineActivity.getIsRetraining();
+        Integer offlineType = offlineActivity.getActivityType();
+        String userId = offlineActivityOrder.getUserId();
+        Integer price = offlineActivityOrder.getActivityPrice();
+        //生成二维码
+        OfflineActivityCode offlineActivityCode = new OfflineActivityCode();
+        String activityCode = UUIDUtil.getUUID32();
+        offlineActivityCode.setActivityCode(activityCode);
+        String qrCodeUrl = QRCodeUtil.createQrCode("http://dy.xc2018.com.cn/adminlogin/checkout?activityCode=" + activityCode, null, null);
+        offlineActivityCode.setActivityId(offlineActivity.getId());
+        offlineActivityCode.setActivityThemeId(offlineActivity.getActivityThemeId());
+        offlineActivityCode.setAvailable(1);
+        offlineActivityCode.setMerchantId(mch_id);
+        offlineActivityCode.setUserId(userId);
+        offlineActivityCode.setCreateTime(new Date());
+        offlineActivityCode.setQrCodeUrl(qrCodeUrl);
+        offlineActivityCodeService.insert(offlineActivityCode);
 
+        OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(offlineActivity.getMerchantId(), offlineActivity.getActivityThemeId());
+        //更新订单状态
+        offlineActivityOrderService.updateStatusByOrderNo(out_trade_no);
+        //更新购买人数
+        offlineActivityService.updateBuyCountById(activityId);
+        if (isMaid == 1) {
+            //1返佣
+            if (isRetraining == 0) {
+                //不是复训 开始分佣
+                //判断购买人的推荐人等级
+                User user = userService.getByUserId(userId);
+                String referrerId = user.getReferrer();
+                if (referrerId != null) {
+                    User referrer = userService.getByUserId(referrerId);
+                    Integer memberLevel = referrer.getMemberLevel();
+                    Integer maidMoney = 0;
+                    //课程类型
+                    switch (offlineType) {
+                        case 1980:
+                            if (memberLevel >= 6) {
+                                //课程类型1980  返佣40%
+                                maidMoney = Integer.parseInt(BigDecimalUtil.mul(price, 0.4) + "");
+                            } else if (memberLevel == 4) {
+                                //课程类型1980  返佣30%
+                                maidMoney = Integer.parseInt(BigDecimalUtil.mul(price, 0.3) + "");
+                            } else {
+                                //不返佣
+                            }
+                            break;
+                        case 20000:
+                            if (memberLevel >= 6) {
+                                //返佣30%
+                                maidMoney = Integer.parseInt(BigDecimalUtil.mul(price, 0.3) + "");
+                            } else {
+                                //不返佣
+                            }
+                            break;
+                        default:
+                            break;
                     }
+                    //开始更新账户余额
+                    MaidInfo maidInfo = new MaidInfo();
+                    maidInfo.setOrderNo(out_trade_no);
+                    //分佣发送给推荐人
+                    maidInfo.setUserId(referrer.getUserId());
+                    maidInfo.setMaidUserId(userId);
+                    maidInfo.setMaidMoney(maidMoney);
+                    maidInfo.setOrderActualMoney(offlineActivityOrder.getActualMoney());
+                    maidInfo.setMerchantId(offlineActivityOrder.getMerchantId());
+                    maidInfo.setProductId(Long.parseLong(offlineActivity.getId() + ""));
+                    maidInfo.setProductName(offlineActivityTheme.getThemeName());
+                    maidInfo.setLevel(user.getMemberLevel());
+                    maidInfo.setLevelName(user.getLevelName());
+                    log.info("回调支付成功，分佣信息" + maidInfo);
+                    int madiInfoCount = maidInfoService.save(maidInfo);
+                    if (madiInfoCount == 0)
+                        BSUtil.isTrue(false, "分佣失败");
+                    log.info("回调支付成功，结束分佣");
+                    //分佣完成之后，更新用户账户表ss_user_account
+                    //存在未开户 直接开户
+                    log.info("回调支付成功，更新用户余额userId" + userId + "--->" + "maidMoney--->" + maidMoney);
+                    UserAccount userAccount = userAccountService.getUserAccountByUserId(referrerId);
+                    if (userAccount == null) {
+                        log.info("创建用户余额表开始");
+                        UserAccount userAccount_t = new UserAccount();
+                        userAccount_t.setUserId(referrerId);
+                        userAccount_t.setBalance(maidMoney);
+                        userAccountService.save(userAccount_t);
+                        log.info("创建用户余额表结束");
+                    } else {
+                        userAccountService.addBanlanceByUserId(referrerId, maidMoney);
+                    }
+                    log.info("回调支付成功，更新用户余额成功");
 
                 }
 
 
             }
 
-            OfflineActivityCode offlineActivityCode=new OfflineActivityCode();
-            String activityCode=UUIDUtil.getUUID32();
-            offlineActivityCode.setActivityCode(activityCode);
-            String qrCodeUrl = QRCodeUtil.createQrCode("http://dy.xc2018.com.cn/adminlogin/checkout?activityCode=" + activityCode, null, null);
-            offlineActivityCode.setActivityId(offlineActivity.getId());
-            offlineActivityCode.setActivityThemeId(offlineActivity.getActivityThemeId());
-            offlineActivityCode.setAvailable(1);
-            offlineActivityCode.setMerchantId(mch_id);
-            offlineActivityCode.setUserId(userId);
-            offlineActivityCode.setCreateTime(new Date());
-            offlineActivityCode.setQrCodeUrl(qrCodeUrl);
-            offlineActivityCodeService.insert(offlineActivityCode);
+
             //发送通知等
             Map<String, String> xml = new HashMap<String, String>();
             xml.put("return_code", "SUCCESS");
