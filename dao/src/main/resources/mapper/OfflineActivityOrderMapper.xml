@@ -22,11 +22,12 @@
     <result column="available" property="available" jdbcType="INTEGER" />
     <result column="is_maid" property="isMaid" jdbcType="INTEGER" />
     <result column="is_retraining" property="isRetraining" jdbcType="INTEGER" />
+    <result column="activity_theme_id" property="activityThemeId" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     order_no, activity_id, activity_code, activity_price, actual_money, order_status,
     user_id, sex, phone, real_name, city, id_card_num, payment_no, payment_time, merchant_id,
-    create_time, modify_time, available, is_maid, is_retraining
+    create_time, modify_time, available, is_maid, is_retraining, activity_theme_id
   </sql>
   <select id="findOrderByUserId" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select
@@ -114,6 +115,9 @@
       <if test="isRetraining != null" >
         is_retraining,
       </if>
+      <if test="activityThemeId != null" >
+        activity_theme_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orderNo != null" >
@@ -176,6 +180,9 @@
       <if test="isRetraining != null" >
         #{isRetraining,jdbcType=INTEGER},
       </if>
+      <if test="activityThemeId != null" >
+        #{activityThemeId,jdbcType=INTEGER},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.zwl.model.po.OfflineActivityOrder" >
@@ -237,6 +244,9 @@
       </if>
       <if test="isRetraining != null" >
         is_retraining = #{isRetraining,jdbcType=INTEGER},
+      </if>
+      <if test="activityThemeId != null" >
+        activity_theme_id = #{activityThemeId,jdbcType=INTEGER},
       </if>
     </set>
     where order_no = #{orderNo,jdbcType=VARCHAR}

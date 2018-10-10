@@ -276,6 +276,7 @@ public class DYServiceImpl implements DYService {
     @Override
     public String xxPayNotify(Map<String, String> params, String out_trade_no, String sign, String mch_id, String total_fee, String time_end, String transaction_id) {
         //线下活动回调通知
+        //生成二维码
         //是否返佣
         //否
         //是  是否复训
@@ -284,7 +285,6 @@ public class DYServiceImpl implements DYService {
         //自然人 99 结束
         //980 课程类型1980 才能返佣30%
         //5000  校长   课程类型1980  返佣40%    20000元返佣30%
-        //生成二维码
 //        通过订单号 获取产品是否返佣
 
 
@@ -297,8 +297,9 @@ public class DYServiceImpl implements DYService {
         String userId = offlineActivityOrder.getUserId();
         Integer price = offlineActivityOrder.getActivityPrice();
         //生成二维码
+        log.info("开始生成二维码");
         OfflineActivityCode offlineActivityCode = new OfflineActivityCode();
-        String activityCode = UUIDUtil.getUUID32();
+        String activityCode = offlineActivityOrder.getActivityCode();
         offlineActivityCode.setActivityCode(activityCode);
         String qrCodeUrl = QRCodeUtil.createQrCode("http://dy.xc2018.com.cn/adminlogin/checkout?activityCode=" + activityCode, null, null);
         offlineActivityCode.setActivityId(offlineActivity.getId());
@@ -308,7 +309,9 @@ public class DYServiceImpl implements DYService {
         offlineActivityCode.setUserId(userId);
         offlineActivityCode.setCreateTime(new Date());
         offlineActivityCode.setQrCodeUrl(qrCodeUrl);
+        offlineActivityCode.setIsUsed(0);
         offlineActivityCodeService.insert(offlineActivityCode);
+        log.info("二维码生成成功:"+qrCodeUrl);
 
         OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(offlineActivity.getMerchantId(), offlineActivity.getActivityThemeId());
         //更新订单状态
@@ -327,6 +330,7 @@ public class DYServiceImpl implements DYService {
                     Integer memberLevel = referrer.getMemberLevel();
                     Integer maidMoney = 0;
                     //课程类型
+                    log.info("开始返佣");
                     switch (offlineType) {
                         case 1980:
                             if (memberLevel >= 6) {
@@ -350,6 +354,7 @@ public class DYServiceImpl implements DYService {
                         default:
                             break;
                     }
+                    log.info("结束返佣，返佣金额："+maidMoney);
                     //开始更新账户余额
                     MaidInfo maidInfo = new MaidInfo();
                     maidInfo.setOrderNo(out_trade_no);

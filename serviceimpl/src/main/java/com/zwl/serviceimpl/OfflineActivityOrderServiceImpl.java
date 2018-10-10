@@ -5,6 +5,7 @@ import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.*;
 import com.zwl.model.vo.BuyResult;
 import com.zwl.model.vo.OfflineActivityBuy;
+import com.zwl.model.vo.OfflineActivityOrderVo;
 import com.zwl.service.*;
 import com.zwl.util.ThreadVariable;
 import com.zwl.util.UUIDUtil;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -37,6 +39,8 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
     private OfflineActivityOrderMapper offlineActivityOrderMapper;
     @Autowired
     private OfflineActivityCodeService offlineActivityCodeService;
+    @Autowired
+    private OfflineActivityThemeService offlineActivityThemeService;
 
     @Override
     public BuyResult offlineActivityBuy(OfflineActivityBuy offlineActivityBuy) {
@@ -98,6 +102,7 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         offlineActivityOrder.setRealName(offlineActivityBuy.getRealName());
         offlineActivityOrder.setIdCardNum(offlineActivityBuy.getIdCardNum());
         offlineActivityOrder.setActualMoney(offlineActivity.getActivityPrice());
+        offlineActivityOrder.setActivityThemeId(offlineActivity.getActivityThemeId());
         log.info("订单数据" + offlineActivityOrder);
         try {
             offlineActivityOrderMapper.insertSelective(offlineActivityOrder);
@@ -126,12 +131,47 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
     }
 
     @Override
-    public List<OfflineActivityOrder> findOrderByUserId(String userId, String merchantId) {
-        return offlineActivityOrderMapper.findOrderByUserId(userId,merchantId);
+    public List<OfflineActivityOrderVo> findOrderByUserId(String userId, String merchantId) {
+        List<OfflineActivityOrder> offlineActivityOrderList = offlineActivityOrderMapper.findOrderByUserId(userId,merchantId);
+        List<OfflineActivityOrderVo> offlineActivityOrderVoList = new ArrayList<>();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        for(OfflineActivityOrder offlineActivityOrder:offlineActivityOrderList){
+            OfflineActivityOrderVo offlineActivityOrderVo = new OfflineActivityOrderVo();
+            OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(offlineActivityOrder.getMerchantId(),offlineActivityOrder.getActivityThemeId());
+            offlineActivityOrderVo.setImgUrl(offlineActivityTheme.getImgUrl());
+            offlineActivityOrderVo.setThemeName(offlineActivityTheme.getThemeName());
+            OfflineActivity offlineActivity = offlineActivityService.getOneByActivityId(offlineActivityOrder.getActivityId());
+            offlineActivityOrderVo.setActivityAddress(offlineActivity.getActivityAddress());
+            OfflineActivityCode offlineActivityCode = offlineActivityCodeService.getOneByActivityCode(offlineActivityOrder.getActivityCode());
+            offlineActivityOrderVo.setIsUsed(offlineActivityCode.getIsUsed());
+            offlineActivityOrderVo.setCreateTimeDesc(simpleDateFormat.format(offlineActivityOrder.getCreateTime()));
+            offlineActivityOrderVo.setActivityPrice(offlineActivityOrder.getActivityPrice());
+            offlineActivityOrderVo.setOrderNo(offlineActivityOrder.getOrderNo());
+            offlineActivityOrderVo.setActivityId(offlineActivityOrder.getActivityId());
+            offlineActivityOrderVo.setAmount(1);
+            offlineActivityOrderVoList.add(offlineActivityOrderVo);
+        }
+        return offlineActivityOrderVoList;
     }
 
     @Override
     public void updateStatusByOrderNo(String out_trade_no) {
         offlineActivityOrderMapper.updateStatusByOrderNo(out_trade_no);
+    }
+
+    @Override
+    public OfflineActivityOrderVo findOrderDetailByOrderNo(String orderNo) {
+        OfflineActivityOrder offlineActivityOrder = offlineActivityOrderMapper.selectByPrimaryKey(orderNo);
+        OfflineActivityOrderVo offlineActivityOrderVo = new OfflineActivityOrderVo();
+        offlineActivityOrderVo.setRealName(offlineActivityOrder.getRealName());
+        OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(offlineActivityOrder.getMerchantId(),offlineActivityOrder.getActivityThemeId());
+        offlineActivityOrderVo.setThemeName(offlineActivityTheme.getThemeName());
+        OfflineActivity offlineActivity = offlineActivityService.getOneByActivityId(offlineActivityOrder.getActivityId());
+        offlineActivityOrderVo.setActivityAddress(offlineActivity.getActivityAddress());
+        offlineActivityOrderVo.setActivityStartTime(offlineActivity.getActivityStartTime());
+        offlineActivityOrderVo.setActivityEndTime(offlineActivity.getActivityEndTime());
+        offlineActivityOrderVo.setActivityPrice(offlineActivityOrder.getActivityPrice());
+        offlineActivityOrderVo.setAmount(1);
+        return offlineActivityOrderVo;
     }
 }
