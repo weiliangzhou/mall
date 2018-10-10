@@ -129,4 +129,9 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
     public List<OfflineActivityOrder> findOrderByUserId(String userId, String merchantId) {
         return offlineActivityOrderMapper.findOrderByUserId(userId,merchantId);
     }
+
+    @Override
+    public void updateStatusByOrderNo(String out_trade_no) {
+        offlineActivityOrderMapper.updateStatusByOrderNo(out_trade_no);
+    }
 }

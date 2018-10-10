@@ -21,4 +21,6 @@ public interface OfflineActivityOrderService {
     OfflineActivityOrder findOrderByActivityCode(String activityCode);
 
     List<OfflineActivityOrder> findOrderByUserId(String userId, String merchantId);
+
+    void updateStatusByOrderNo(String out_trade_no);
 }
