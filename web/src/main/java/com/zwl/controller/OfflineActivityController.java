@@ -139,11 +139,16 @@ public class OfflineActivityController {
             result.setMessage("非法操作！");
             return result;
         }
+        Integer themeId=offlineActivityOperator.getActivityThemeId();
+
         //获取code
         String activityCode = signInVo.getActivityCode();
         //通过code 做一个比对
         //如果正确则更新ss_offline_activity_code
         OfflineActivityCode offlineActivityCode = offlineActivityCodeService.getOneByActivityCode(activityCode);
+        Integer themeId_code=offlineActivityCode.getActivityThemeId();
+        if (themeId!=themeId_code)
+            BSUtil.isTrue(false, "没有本次活动操作权限!");
         if (offlineActivityCode == null)
             BSUtil.isTrue(false, "非法code!");
         else {
