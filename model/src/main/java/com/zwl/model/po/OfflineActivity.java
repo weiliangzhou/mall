@@ -82,6 +82,8 @@ public class OfflineActivity {
     private String imgUrl;
     @ApiComment(value = "活动地点", sample = "义乌")
     private String activityAddressDesc;
+    @ApiComment(value = "线下课程名称", sample = "微商夜大 20180920期")
+    private String themeName;
 
     public String getBuyCountDesc() {
         Integer count = limitCount - buyCount;

@@ -49,27 +49,32 @@ public class OfflineActivityServiceImpl implements OfflineActivityService {
         if(null == offlineActivityOrderList || offlineActivityOrderList.isEmpty()){
             for(OfflineActivity offlineActivity:offlineActivityList){
                 offlineActivity.setActivityPriceDesc(div(100,offlineActivity.getActivityPrice(),2)+"");
-                if(null !=offlineActivity.getRetrainingPrice()){
-                    offlineActivity.setRetrainingPriceDesc(div(100,offlineActivity.getRetrainingPrice(),2)+"");
-                }else {
-                    offlineActivity.setRetrainingPriceDesc("");
-                }
+//                if(null !=offlineActivity.getRetrainingPrice()){
+//                    offlineActivity.setRetrainingPriceDesc(div(100,offlineActivity.getRetrainingPrice(),2)+"");
+//                }else {
+//                    offlineActivity.setRetrainingPriceDesc("");
+//                }
                 OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(merchantId,offlineActivity.getActivityThemeId());
                 offlineActivity.setImgUrl(offlineActivityTheme.getImgUrl());
+                offlineActivity.setThemeName(offlineActivityTheme.getThemeName());
                 offlineActivity.setActivityAddressDesc(offlineActivity.getActivityAddress());
             }
         }else{
-
             for(OfflineActivity offlineActivity:offlineActivityList){
-                offlineActivity.setActivityPriceDesc(div(100,offlineActivity.getActivityPrice(),2)+"");
-                if(null !=offlineActivity.getRetrainingPrice()){
-                    offlineActivity.setRetrainingPriceDesc(div(100,offlineActivity.getRetrainingPrice(),2)+"");
-                }else {
-                    offlineActivity.setRetrainingPriceDesc("");
-                }
                 OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(merchantId,offlineActivity.getActivityThemeId());
-                offlineActivity.setImgUrl(offlineActivityTheme.getImgUrl());
-                offlineActivity.setActivityAddressDesc(offlineActivity.getActivityAddress()+"-复训");
+                if(null !=offlineActivity.getRetrainingPrice()){
+                    offlineActivity.setActivityPriceDesc(div(100,offlineActivity.getRetrainingPrice(),2)+"");
+//                    offlineActivity.setRetrainingPriceDesc(div(100,offlineActivity.getRetrainingPrice(),2)+"");
+                    offlineActivity.setImgUrl(offlineActivityTheme.getImgUrl());
+                    offlineActivity.setThemeName(offlineActivityTheme.getThemeName());
+                    offlineActivity.setActivityAddressDesc(offlineActivity.getActivityAddress()+"-复训");
+                }else {
+                    offlineActivity.setActivityPriceDesc(div(100,offlineActivity.getActivityPrice(),2)+"");
+//                    offlineActivity.setRetrainingPriceDesc("");
+                    offlineActivity.setImgUrl(offlineActivityTheme.getImgUrl());
+                    offlineActivity.setThemeName(offlineActivityTheme.getThemeName());
+                    offlineActivity.setActivityAddressDesc(offlineActivity.getActivityAddress());
+                }
             }
         }
         return offlineActivityList;
