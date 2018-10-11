@@ -29,4 +29,6 @@ public class OfflineActivityOrderVo extends OfflineActivityOrder {
     private Integer amount;
     @ApiComment(value = "创建时间", sample = "2018-09-30")
     private String createTimeDesc;
+    @ApiComment(value = "活动价格", sample = "100")
+    private String activityPriceDesc;
 }

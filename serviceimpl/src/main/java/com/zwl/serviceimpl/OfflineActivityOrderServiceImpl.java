@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.zwl.util.BigDecimalUtil.div;
+
 /**
  * @author 二师兄超级帅
  * @Title: OfflineActivityOrderServiceImpl
@@ -147,6 +149,7 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
             offlineActivityOrderVo.setIsUsed(offlineActivityCode.getIsUsed());
             offlineActivityOrderVo.setCreateTimeDesc(simpleDateFormat.format(offlineActivityOrder.getCreateTime()));
             offlineActivityOrderVo.setActivityPrice(offlineActivityOrder.getActivityPrice());
+            offlineActivityOrderVo.setActivityPriceDesc(div(100,offlineActivityOrder.getActivityPrice(),2)+"");
             offlineActivityOrderVo.setOrderNo(offlineActivityOrder.getOrderNo());
             offlineActivityOrderVo.setActivityId(offlineActivityOrder.getActivityId());
             offlineActivityOrderVo.setAmount(1);
@@ -172,6 +175,7 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         offlineActivityOrderVo.setActivityStartTime(offlineActivity.getActivityStartTime());
         offlineActivityOrderVo.setActivityEndTime(offlineActivity.getActivityEndTime());
         offlineActivityOrderVo.setActivityPrice(offlineActivityOrder.getActivityPrice());
+        offlineActivityOrderVo.setActivityPriceDesc(div(100,offlineActivityOrder.getActivityPrice(),2)+"");
         offlineActivityOrderVo.setAmount(1);
         return offlineActivityOrderVo;
     }
