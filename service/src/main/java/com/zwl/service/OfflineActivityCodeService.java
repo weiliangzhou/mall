@@ -19,4 +19,6 @@ public interface OfflineActivityCodeService {
     Integer getBuyCountByUserIdAndThemeId(String userId, Integer themeId);
 
     void insert(OfflineActivityCode offlineActivityCode);
+
+    Integer getAlreadyBuyCountByUserIdAndThemeId(String userId, Integer activityThemeId, String merchantId);
 }

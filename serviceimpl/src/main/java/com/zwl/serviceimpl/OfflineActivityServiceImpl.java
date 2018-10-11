@@ -4,6 +4,7 @@ import com.zwl.dao.mapper.OfflineActivityMapper;
 import com.zwl.model.po.OfflineActivity;
 import com.zwl.model.po.OfflineActivityOrder;
 import com.zwl.model.po.OfflineActivityTheme;
+import com.zwl.service.OfflineActivityCodeService;
 import com.zwl.service.OfflineActivityOrderService;
 import com.zwl.service.OfflineActivityService;
 import com.zwl.service.OfflineActivityThemeService;
@@ -28,9 +29,9 @@ public class OfflineActivityServiceImpl implements OfflineActivityService {
     @Autowired
     private OfflineActivityMapper offlineActivityMapper;
     @Autowired
-    private OfflineActivityOrderService offlineActivityOrderService;
-    @Autowired
     private OfflineActivityThemeService offlineActivityThemeService;
+    @Autowired
+    private OfflineActivityCodeService offlineActivityCodeService;
 
     @Override
     public OfflineActivity getOneByActivityId(Integer activityId) {
@@ -45,15 +46,10 @@ public class OfflineActivityServiceImpl implements OfflineActivityService {
     @Override
     public List<OfflineActivity> getOfflineActivityListByThemeId(String merchantId, Integer activityThemeId, String userId) {
         List<OfflineActivity> offlineActivityList = offlineActivityMapper.getOfflineActivityListByThemeId(merchantId,activityThemeId);
-        List<OfflineActivityOrder> offlineActivityOrderList = offlineActivityOrderService.findOrderByUserIdAndThemeId(userId,activityThemeId,merchantId);
-        if(null == offlineActivityOrderList || offlineActivityOrderList.isEmpty()){
+        Integer count = offlineActivityCodeService.getAlreadyBuyCountByUserIdAndThemeId(userId,activityThemeId,merchantId);
+        if(0==count){
             for(OfflineActivity offlineActivity:offlineActivityList){
                 offlineActivity.setActivityPriceDesc(div(100,offlineActivity.getActivityPrice(),2)+"");
-//                if(null !=offlineActivity.getRetrainingPrice()){
-//                    offlineActivity.setRetrainingPriceDesc(div(100,offlineActivity.getRetrainingPrice(),2)+"");
-//                }else {
-//                    offlineActivity.setRetrainingPriceDesc("");
-//                }
                 OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(merchantId,offlineActivity.getActivityThemeId());
                 offlineActivity.setImgUrl(offlineActivityTheme.getImgUrl());
                 offlineActivity.setThemeName(offlineActivityTheme.getThemeName());
@@ -64,13 +60,11 @@ public class OfflineActivityServiceImpl implements OfflineActivityService {
                 OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(merchantId,offlineActivity.getActivityThemeId());
                 if(null !=offlineActivity.getRetrainingPrice()){
                     offlineActivity.setActivityPriceDesc(div(100,offlineActivity.getRetrainingPrice(),2)+"");
-//                    offlineActivity.setRetrainingPriceDesc(div(100,offlineActivity.getRetrainingPrice(),2)+"");
                     offlineActivity.setImgUrl(offlineActivityTheme.getImgUrl());
                     offlineActivity.setThemeName(offlineActivityTheme.getThemeName());
                     offlineActivity.setActivityAddressDesc(offlineActivity.getActivityAddress()+"-复训");
                 }else {
                     offlineActivity.setActivityPriceDesc(div(100,offlineActivity.getActivityPrice(),2)+"");
-//                    offlineActivity.setRetrainingPriceDesc("");
                     offlineActivity.setImgUrl(offlineActivityTheme.getImgUrl());
                     offlineActivity.setThemeName(offlineActivityTheme.getThemeName());
                     offlineActivity.setActivityAddressDesc(offlineActivity.getActivityAddress());

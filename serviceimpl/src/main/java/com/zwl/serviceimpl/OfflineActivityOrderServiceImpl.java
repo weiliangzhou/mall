@@ -101,7 +101,8 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         offlineActivityOrder.setSex(offlineActivityBuy.getSex());
         offlineActivityOrder.setRealName(offlineActivityBuy.getRealName());
         offlineActivityOrder.setIdCardNum(offlineActivityBuy.getIdCardNum());
-        offlineActivityOrder.setActualMoney(offlineActivity.getActivityPrice());
+        Integer count = offlineActivityCodeService.getAlreadyBuyCountByUserIdAndThemeId(userId,offlineActivity.getActivityThemeId(),merchantId);
+        offlineActivityOrder.setActualMoney(count == 0 ? offlineActivity.getActivityPrice():offlineActivity.getRetrainingPrice());
         offlineActivityOrder.setActivityThemeId(offlineActivity.getActivityThemeId());
         log.info("订单数据" + offlineActivityOrder);
         try {
@@ -175,8 +176,4 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         return offlineActivityOrderVo;
     }
 
-    @Override
-    public List<OfflineActivityOrder> findOrderByUserIdAndThemeId(String userId, Integer activityThemeId, String merchantId) {
-        return offlineActivityOrderMapper.findOrderByUserIdAndThemeId(userId,activityThemeId,merchantId);
-    }
 }
