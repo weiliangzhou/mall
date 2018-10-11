@@ -57,7 +57,7 @@ public class OfflineActivityTheme {
         else if (buyCount > 10000) {
             return BigDecimalUtil.div(10000, buyCount, 2)+"万";
         } else
-            return Double.parseDouble(buyCount + "")+"";
+            return buyCount+"";
     }
 
     public String getBuyCountDesc() {
