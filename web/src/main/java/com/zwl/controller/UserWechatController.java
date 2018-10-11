@@ -18,7 +18,7 @@ public class UserWechatController {
     /**
      * 查询用户绑定的微信帐号
      */
-    @GetMapping("/getUserBindWechat")
+    @PostMapping("/getUserBindWechat")
     public Result getUserBindWechat() {
         String userId = ThreadVariable.getUserID();
         UserWechat userWechat = userWechatService.getUserWechatByUserId(userId);

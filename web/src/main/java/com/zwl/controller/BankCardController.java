@@ -1,12 +1,14 @@
 package com.zwl.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.po.BankCard;
 import com.zwl.service.BankCardService;
 import com.zwl.util.ThreadVariable;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/wx/bankCard")
@@ -18,7 +20,7 @@ public class BankCardController {
     /**
      * 获取当前用户银行卡绑定信息
      */
-    @GetMapping("/getUserBankCard")
+    @PostMapping("/getUserBankCard")
     public Result getUserBankCard() {
         String userId = ThreadVariable.getUserID();
         BankCard bankCard = bankCardService.getBankCardBaseInfoUserId(userId);

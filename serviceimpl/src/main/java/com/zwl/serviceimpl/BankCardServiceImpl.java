@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+
 @Service
 public class BankCardServiceImpl implements BankCardService {
 
@@ -40,7 +42,7 @@ public class BankCardServiceImpl implements BankCardService {
             User user = userService.getByUserId(userId);
             bankCard.setBankName(user.getRealName());
         }
-        return null;
+        return bankCard;
     }
 
     @Override
@@ -53,9 +55,11 @@ public class BankCardServiceImpl implements BankCardService {
         bankCard.setUserId(userId);
         if (null == sysBankCard || null == sysBankCard.getId()) {
             //用户没有银行卡信息 新增
+            bankCard.setCreateTime(new Date());
             bankCardMapper.insertSelective(bankCard);
         } else {
             // 执行到这里说明已有银行卡信息  修改银行卡信息为最新
+            bankCard.setModifyTime(new Date());
             this.bankCardMapper.updateByPrimaryKeySelective(bankCard);
         }
         return bankCard;

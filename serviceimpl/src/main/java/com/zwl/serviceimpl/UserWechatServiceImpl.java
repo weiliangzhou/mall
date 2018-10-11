@@ -9,6 +9,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class UserWechatServiceImpl implements UserWechatService {
 
@@ -27,6 +29,7 @@ public class UserWechatServiceImpl implements UserWechatService {
     @Override
     public UserWechat addUserWechat(UserWechat userWechat) {
         verfiy(userWechat);
+        userWechat.setCreateTime(new Date());
         userWechatMapper.insertSelective(userWechat);
         return userWechat;
     }
