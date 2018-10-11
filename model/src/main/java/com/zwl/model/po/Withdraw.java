@@ -32,11 +32,11 @@ public class Withdraw {
     @NotBlank(message = "收款账号不能为空", groups = {ApplyWithdraw.class})
     @ApiComment(value = "收款账号", sample = "139****0001")
     private String account;
-//    @ApiComment(value = "状态", sample = " 0审核中 1审核通过(前端显示到款中) 2未通过  3成功")
+    //    @ApiComment(value = "状态", sample = " 0审核中 1审核通过(前端显示到款中) 2未通过  3成功")
     @ApiComment(value = "状态", sample = " 0未提交 1 审核中 2审核通过(前端显示到款中) 3未通过 4成功（到账）")
     private Integer status;
     @NotNull(message = "收款方式不能为空", groups = {ApplyWithdraw.class})
-    @ApiComment(value = "收款方式", sample = "微信1")
+    @ApiComment(value = "收款方式", sample = "微信1 余额2 银行卡 3")
     private Integer payWay;
     @ApiComment(value = "操作人", sample = "马云")
     private String operator;
@@ -64,6 +64,16 @@ public class Withdraw {
     private String merchantId;
     //提现之后 余额
     private Integer balance;
+    // 银行卡用户名
+    private String bankName;
+    //银行卡 省
+    private String bankProvince;
+    //银行卡 市
+    private String bankCity;
+    //银行卡 区
+    private String bankArea;
+    //银行卡 支行
+    private String bankBranch;
 
     public String getMoneyDesc() {
         return this.money / 100 + "";
