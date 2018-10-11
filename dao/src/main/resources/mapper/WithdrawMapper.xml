@@ -40,9 +40,9 @@
     <insert id="insertSelective" keyProperty="id" useGeneratedKeys="true" parameterType="com.zwl.model.po.Withdraw">
         insert into ss_withdraw
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                id,
-            </if>
+            <!--<if test="id != null">-->
+                <!--id,-->
+            <!--</if>-->
             <if test="withdrawId != null">
                 withdraw_id,
             </if>
@@ -108,9 +108,9 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                #{id,jdbcType=BIGINT},
-            </if>
+            <!--<if test="id != null">-->
+                <!--#{id,jdbcType=BIGINT},-->
+            <!--</if>-->
             <if test="withdrawId != null">
                 #{withdrawId,jdbcType=VARCHAR},
             </if>
@@ -157,7 +157,7 @@
                 #{paymentTime,jdbcType=TIMESTAMP},
             </if>
             <if test="createTime != null">
-                now()
+                now(),
             </if>
             <if test="bankName != null">
                 #{bankName},

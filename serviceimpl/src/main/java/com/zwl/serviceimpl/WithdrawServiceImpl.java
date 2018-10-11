@@ -83,7 +83,10 @@ public class WithdrawServiceImpl implements WithdrawService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public synchronized void apply(Withdraw withdraw) {
-        Integer money = withdraw.getMoney()*100;
+        if (null == withdraw.getMoney() || withdraw.getMoney() < 0) {
+            BSUtil.isTrue(false, "无效金额");
+        }
+        Integer money = withdraw.getMoney() * 100;
         if (money == 0)
             BSUtil.isTrue(false, "提现金额不能为0");
 
@@ -116,7 +119,7 @@ public class WithdrawServiceImpl implements WithdrawService {
         withdraw.setOpenId(user.getWechatOpenid());
         withdraw.setRealName(user.getRealName());
         withdraw.setMoney(money);
-        withdraw.setBalance(balance-money);
+        withdraw.setBalance(balance - money);
         //status设置为1 审核中
         withdraw.setStatus(1);
         withdraw.setMerchantId(merchantId);

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserWechatController {
 
     @ApiComment("查询用户绑定的微信帐号")
-    @RequestMapping(name = "查询用户绑定的微信帐号", value = "/wx/userWechat/getUserBindWechat", method = RequestMethod.GET)
+    @RequestMapping(name = "查询用户绑定的微信帐号", value = "/wx/userWechat/getUserBindWechat", method = RequestMethod.POST)
     public Result getUserBindWechat() {
         Result result = new Result();
         return result;

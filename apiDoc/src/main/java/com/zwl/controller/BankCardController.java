@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class BankCardController {
 
     @ApiComment("查询用户绑定的银行卡信息")
-    @RequestMapping(name = "查询用户绑定的银行卡信息", value = "/wx/bankCard/getUserBankCard", method = RequestMethod.GET)
+    @RequestMapping(name = "查询用户绑定的银行卡信息", value = "/wx/bankCard/getUserBankCard", method = RequestMethod.POST)
     public Result getUserBankCard() {
         Result result = new Result();
         return result;
