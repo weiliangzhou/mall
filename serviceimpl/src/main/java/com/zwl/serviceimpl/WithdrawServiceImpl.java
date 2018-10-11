@@ -162,9 +162,9 @@ public class WithdrawServiceImpl implements WithdrawService {
                 if (StringUtils.isBlank(withdraw.getBankArea())) {
                     BSUtil.isTrue(false, "银行卡所属地址缺失(区)");
                 }
-                if (StringUtils.isBlank(withdraw.getBankBranch())) {
-                    BSUtil.isTrue(false, "银行卡支行不能为空");
-                }
+//                if (StringUtils.isBlank(withdraw.getBankBranch())) {
+//                    BSUtil.isTrue(false, "银行卡支行不能为空");
+//                }
                 break;
         }
     }
