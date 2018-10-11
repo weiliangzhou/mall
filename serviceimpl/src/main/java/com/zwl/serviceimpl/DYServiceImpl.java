@@ -328,8 +328,10 @@ public class DYServiceImpl implements DYService {
         OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(offlineActivity.getMerchantId(), offlineActivity.getActivityThemeId());
         //更新订单状态、支付流水号、支付时间
         offlineActivityOrderService.updateStatusByOrderNo(out_trade_no,transaction_id,time_end);
-        //更新购买人数
+        //更新活动购买人数
         offlineActivityService.updateBuyCountById(activityId);
+        //更新活动主题购买人数
+        offlineActivityThemeService.updateBuyCountById(offlineActivity.getActivityThemeId());
         if (isMaid == 1) {
             //1返佣
             if (isRetraining == 0) {
