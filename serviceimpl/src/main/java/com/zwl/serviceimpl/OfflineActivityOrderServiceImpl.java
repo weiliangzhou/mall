@@ -155,8 +155,8 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
     }
 
     @Override
-    public void updateStatusByOrderNo(String out_trade_no) {
-        offlineActivityOrderMapper.updateStatusByOrderNo(out_trade_no);
+    public void updateStatusByOrderNo(String out_trade_no,String payment_no,String paymentTime) {
+        offlineActivityOrderMapper.updateStatusByOrderNo(out_trade_no,payment_no,paymentTime);
     }
 
     @Override

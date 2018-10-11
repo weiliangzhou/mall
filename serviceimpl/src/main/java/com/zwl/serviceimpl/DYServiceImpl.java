@@ -326,8 +326,8 @@ public class DYServiceImpl implements DYService {
         log.info("二维码生成成功:"+qrCodeUrl);
 
         OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(offlineActivity.getMerchantId(), offlineActivity.getActivityThemeId());
-        //更新订单状态
-        offlineActivityOrderService.updateStatusByOrderNo(out_trade_no);
+        //更新订单状态、支付流水号、支付时间
+        offlineActivityOrderService.updateStatusByOrderNo(out_trade_no,transaction_id,time_end);
         //更新购买人数
         offlineActivityService.updateBuyCountById(activityId);
         if (isMaid == 1) {

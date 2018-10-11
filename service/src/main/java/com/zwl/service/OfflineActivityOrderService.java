@@ -23,7 +23,7 @@ public interface OfflineActivityOrderService {
 
     List<OfflineActivityOrderVo> findOrderByUserId(String userId, String merchantId);
 
-    void updateStatusByOrderNo(String out_trade_no);
+    void updateStatusByOrderNo(String out_trade_no,String payment_no,String paymentTime);
 
     OfflineActivityOrderVo findOrderDetailByOrderNo(String orderNo);
 }
