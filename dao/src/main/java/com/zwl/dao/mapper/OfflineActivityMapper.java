@@ -16,7 +16,7 @@ public interface OfflineActivityMapper {
 
     OfflineActivity getOneByActivityIdAndCheckTime(Integer id);
 
-    List<OfflineActivity> getOfflineActivityListByThemeId(@Param("merchantId") String merchantId, @Param("themeId") String themeId);
+    List<OfflineActivity> getOfflineActivityListByThemeId(@Param("merchantId") String merchantId, @Param("activityThemeId") Integer activityThemeId);
 
     @Update(" update ss_offline_activity set buy_count=buy_count+1 where id=#{activityId}")
     void updateBuyCountById(Integer activityId);

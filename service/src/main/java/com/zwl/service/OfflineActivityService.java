@@ -24,10 +24,10 @@ public interface OfflineActivityService {
     /**
      * 根据活动主题获取详情
      * @param merchantId
-     * @param themeId
+     * @param activityThemeId
      * @return
      */
-    List<OfflineActivity> getOfflineActivityListByThemeId(String merchantId, String themeId);
+    List<OfflineActivity> getOfflineActivityListByThemeId(String merchantId, Integer activityThemeId, String userId);
 
     /**
      * 根据活动id更新已购买人数

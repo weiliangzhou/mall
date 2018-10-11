@@ -29,9 +29,9 @@ public class OfflineActivity {
     @RestPackIgnore
     @JSONField(serialize = false)
     private Integer activityThemeId;
-    @RestPackIgnore
-    @JSONField(serialize = false)
-    private Integer activityParentId;
+//    @RestPackIgnore
+//    @JSONField(serialize = false)
+//    private Integer activityParentId;
     @ApiComment(value = "容纳人数", sample = "100")
     private Integer limitCount;
     @ApiComment(value = "已购买人数", sample = "65")
@@ -66,6 +66,22 @@ public class OfflineActivity {
     private String buyCountDesc;
     @ApiComment(value = "是否已满", sample = "0未满 1已满")
     private Integer isFull;
+    @ApiComment(value = "报名开始时间", sample = "2018-09-29 11:00:00")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    private Date applyStartTime;
+    @ApiComment(value = "报名结束时间", sample = "2018-09-30 11:00:00")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    private Date applyEndTime;
+    @ApiComment(value = "复训价格", sample = "5000")
+    private Integer retrainingPrice;
+    @ApiComment(value = "活动价格", sample = "5000")
+    private String activityPriceDesc;
+    @ApiComment(value = "复训价格", sample = "5000")
+    private String retrainingPriceDesc;
+    @ApiComment(value = "logo图片", sample = "hangzhou.aliyuncs.com/upload/qrCodeImage/20181011/4fd769b161b542eaab4bf89371051f36.jpg")
+    private String imgUrl;
+    @ApiComment(value = "活动地点", sample = "义乌")
+    private String activityAddressDesc;
 
     public String getBuyCountDesc() {
         Integer count = limitCount - buyCount;

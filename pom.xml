@@ -182,7 +182,7 @@
         <module>adminApi</module>
         <module>teacherApi</module>
         <module>web</module>
-        <module>mybatisGen</module>
+
     </modules>
 
 
