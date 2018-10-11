@@ -5,6 +5,7 @@ import com.zwl.model.po.*;
 import com.zwl.model.wxpay.PaymentKit;
 import com.zwl.service.*;
 import com.zwl.util.BigDecimalUtil;
+import com.zwl.util.PayNotifyProperties;
 import com.zwl.util.QRCodeUtil;
 import com.zwl.util.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -52,6 +53,8 @@ public class DYServiceImpl implements DYService {
     private OfflineActivityOrderService offlineActivityOrderService;
     @Autowired
     private OfflineActivityCodeService offlineActivityCodeService;
+    @Autowired
+    private PayNotifyProperties payNotifyProperties;
 
     private SimpleDateFormat sdf_yMdHms = new SimpleDateFormat("yyyyMMddHHmmss");
 
@@ -310,7 +313,7 @@ public class DYServiceImpl implements DYService {
         OfflineActivityCode offlineActivityCode = new OfflineActivityCode();
         String activityCode = offlineActivityOrder.getActivityCode();
         offlineActivityCode.setActivityCode(activityCode);
-        String qrCodeUrl = QRCodeUtil.createQrCode("http://dy.xc2018.com.cn/adminlogin/checkout?activityCode=" + activityCode, null, null);
+        String qrCodeUrl = QRCodeUtil.createQrCode(payNotifyProperties.getQrCodeUrl() + activityCode, null, null);
         offlineActivityCode.setActivityId(offlineActivity.getId());
         offlineActivityCode.setActivityThemeId(offlineActivity.getActivityThemeId());
         offlineActivityCode.setAvailable(1);
