@@ -53,4 +53,9 @@ public class OfflineActivityCodeServiceImpl implements OfflineActivityCodeServic
 
 
     }
+
+    @Override
+    public Integer getAlreadyBuyCountByUserIdAndThemeId(String userId, Integer activityThemeId, String merchantId) {
+        return offlineActivityCodeMapper.getAlreadyBuyCountByUserIdAndThemeId(userId,activityThemeId,merchantId);
+    }
 }
