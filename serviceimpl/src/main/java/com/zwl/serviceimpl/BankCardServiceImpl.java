@@ -36,12 +36,13 @@ public class BankCardServiceImpl implements BankCardService {
         if (StringUtils.isBlank(userId)) {
             BSUtil.isTrue(Boolean.FALSE, "请输入要查询的用户编号");
         }
+        User user = userService.getByUserId(userId);
         BankCard bankCard = bankCardMapper.getBankCardByUserId(userId);
         if (null == bankCard) {
             bankCard = new BankCard();
-            User user = userService.getByUserId(userId);
-            bankCard.setBankName(user.getRealName());
         }
+        //永远从数据库中拿取真实名称 避免 实名认证重复认证后真实名称 新旧不一致
+        bankCard.setBankName(user.getRealName());
         return bankCard;
     }
 
