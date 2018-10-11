@@ -82,13 +82,13 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         String orderNo = "xx" + sdf_yMdHm.format(new Date()) + merchantId + userLongId + productId;
         OfflineActivityOrder offlineActivityOrder = new OfflineActivityOrder();
         Integer activityId = offlineActivity.getId();
-        Integer activityPrice = offlineActivity.getActivityPrice();
+        Integer count = offlineActivityCodeService.getAlreadyBuyCountByUserIdAndThemeId(userId,offlineActivity.getActivityThemeId(),merchantId);
+        Integer activityPrice = count == 0 ? offlineActivity.getActivityPrice():offlineActivity.getRetrainingPrice();
         offlineActivityOrder.setOrderNo(orderNo);
         offlineActivityOrder.setActivityId(activityId);
         //活动兑换码生成规则
         String activityCode = UUIDUtil.getUUID32();
         offlineActivityOrder.setActivityCode(activityCode);
-        offlineActivityOrder.setActivityPrice(activityPrice);
         offlineActivityOrder.setUserId(userId);
         offlineActivityOrder.setPhone(offlineActivityBuy.getPhone());
         offlineActivityOrder.setCity(offlineActivityBuy.getCity());
@@ -101,8 +101,8 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         offlineActivityOrder.setSex(offlineActivityBuy.getSex());
         offlineActivityOrder.setRealName(offlineActivityBuy.getRealName());
         offlineActivityOrder.setIdCardNum(offlineActivityBuy.getIdCardNum());
-        Integer count = offlineActivityCodeService.getAlreadyBuyCountByUserIdAndThemeId(userId,offlineActivity.getActivityThemeId(),merchantId);
-        offlineActivityOrder.setActualMoney(count == 0 ? offlineActivity.getActivityPrice():offlineActivity.getRetrainingPrice());
+        offlineActivityOrder.setActualMoney(activityPrice);
+        offlineActivityOrder.setActivityPrice(activityPrice);
         offlineActivityOrder.setActivityThemeId(offlineActivity.getActivityThemeId());
         log.info("订单数据" + offlineActivityOrder);
         try {
