@@ -10,12 +10,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.regex.Pattern;
 
 @Service
 public class UserWechatServiceImpl implements UserWechatService {
 
     @Autowired
     private UserWechatMapper userWechatMapper;
+    /**
+     * 微信账号命名规则
+     */
+    private String WECHAT_RULE = "^[a-zA-Z\\d_]{5,}$";
 
     @Override
     public UserWechat getUserWechatByUserId(String userId) {
@@ -56,10 +61,15 @@ public class UserWechatServiceImpl implements UserWechatService {
         if (StringUtils.isBlank(userWechat.getWechatAccount())) {
             BSUtil.isTrue(Boolean.FALSE, "请输入微信账号");
         }
+        boolean isMatch = Pattern.matches(WECHAT_RULE, userWechat.getWechatAccount());
+        if (!isMatch) {
+            BSUtil.isTrue(Boolean.FALSE, "微信账号无效");
+        }
         UserWechat sysUserWechat = this.getUserWechatByUserId(userWechat.getUserId());
         if (null != sysUserWechat) {
             BSUtil.isTrue(Boolean.FALSE, "账号已有绑定的微信号");
         }
 
     }
+
 }
