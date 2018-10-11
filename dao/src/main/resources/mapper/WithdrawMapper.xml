@@ -235,5 +235,6 @@
         from ss_withdraw
         where available=1
         and user_id=#{userId}
+        order by create_time desc
     </select>
 </mapper>
