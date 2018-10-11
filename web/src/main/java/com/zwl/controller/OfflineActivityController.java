@@ -152,7 +152,7 @@ public class OfflineActivityController {
         if (themeId!=themeId_code){
             Result result = new Result();
             result.setCode("800");
-            result.setMessage("没有本次活动操作权限！");
+            result.setMessage("请切换账号！");
             return result;
         }
 
