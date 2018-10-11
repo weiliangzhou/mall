@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.zwl.util.BigDecimalUtil.div;
+
 /**
  * @author 二师兄超级帅
  * @Title: OfflineActivityOrderServiceImpl
@@ -82,13 +84,13 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         String orderNo = "xx" + sdf_yMdHm.format(new Date()) + merchantId + userLongId + productId;
         OfflineActivityOrder offlineActivityOrder = new OfflineActivityOrder();
         Integer activityId = offlineActivity.getId();
-        Integer activityPrice = offlineActivity.getActivityPrice();
+        Integer count = offlineActivityCodeService.getAlreadyBuyCountByUserIdAndThemeId(userId,offlineActivity.getActivityThemeId(),merchantId);
+        Integer activityPrice = count == 0 ? offlineActivity.getActivityPrice():offlineActivity.getRetrainingPrice();
         offlineActivityOrder.setOrderNo(orderNo);
         offlineActivityOrder.setActivityId(activityId);
         //活动兑换码生成规则
         String activityCode = UUIDUtil.getUUID32();
         offlineActivityOrder.setActivityCode(activityCode);
-        offlineActivityOrder.setActivityPrice(activityPrice);
         offlineActivityOrder.setUserId(userId);
         offlineActivityOrder.setPhone(offlineActivityBuy.getPhone());
         offlineActivityOrder.setCity(offlineActivityBuy.getCity());
@@ -101,7 +103,8 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         offlineActivityOrder.setSex(offlineActivityBuy.getSex());
         offlineActivityOrder.setRealName(offlineActivityBuy.getRealName());
         offlineActivityOrder.setIdCardNum(offlineActivityBuy.getIdCardNum());
-        offlineActivityOrder.setActualMoney(offlineActivity.getActivityPrice());
+        offlineActivityOrder.setActualMoney(activityPrice);
+        offlineActivityOrder.setActivityPrice(activityPrice);
         offlineActivityOrder.setActivityThemeId(offlineActivity.getActivityThemeId());
         log.info("订单数据" + offlineActivityOrder);
         try {
@@ -146,6 +149,7 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
             offlineActivityOrderVo.setIsUsed(offlineActivityCode.getIsUsed());
             offlineActivityOrderVo.setCreateTimeDesc(simpleDateFormat.format(offlineActivityOrder.getCreateTime()));
             offlineActivityOrderVo.setActivityPrice(offlineActivityOrder.getActivityPrice());
+            offlineActivityOrderVo.setActivityPriceDesc(div(100,offlineActivityOrder.getActivityPrice(),2)+"");
             offlineActivityOrderVo.setOrderNo(offlineActivityOrder.getOrderNo());
             offlineActivityOrderVo.setActivityId(offlineActivityOrder.getActivityId());
             offlineActivityOrderVo.setAmount(1);
@@ -171,12 +175,9 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         offlineActivityOrderVo.setActivityStartTime(offlineActivity.getActivityStartTime());
         offlineActivityOrderVo.setActivityEndTime(offlineActivity.getActivityEndTime());
         offlineActivityOrderVo.setActivityPrice(offlineActivityOrder.getActivityPrice());
+        offlineActivityOrderVo.setActivityPriceDesc(div(100,offlineActivityOrder.getActivityPrice(),2)+"");
         offlineActivityOrderVo.setAmount(1);
         return offlineActivityOrderVo;
     }
 
-    @Override
-    public List<OfflineActivityOrder> findOrderByUserIdAndThemeId(String userId, Integer activityThemeId, String merchantId) {
-        return offlineActivityOrderMapper.findOrderByUserIdAndThemeId(userId,activityThemeId,merchantId);
-    }
 }
