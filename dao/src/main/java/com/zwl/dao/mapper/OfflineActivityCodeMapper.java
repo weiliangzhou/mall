@@ -21,6 +21,6 @@ public interface OfflineActivityCodeMapper {
     @Select("select count(*) from ss_offline_activity_code where  user_id =#{userId} and activity_theme_id=#{themeId} ")
     Integer getBuyCountByUserIdAndThemeId(@Param("userId") String userId, @Param("themeId") Integer themeId);
 
-    @Select("select count(*) from ss_offline_activity_order where user_id = #{userId} and available = 1 and activity_theme_id = #{activityThemeId} and merchant_id = #{merchantId}")
+    @Select("select count(*) from ss_offline_activity_code where user_id = #{userId} and available = 1 and activity_theme_id = #{activityThemeId} and merchant_id = #{merchantId}")
     Integer getAlreadyBuyCountByUserIdAndThemeId(@Param("userId") String userId, @Param("activityThemeId") Integer activityThemeId, @Param("merchantId") String merchantId);
 }
