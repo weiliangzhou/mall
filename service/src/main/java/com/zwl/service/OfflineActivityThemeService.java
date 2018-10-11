@@ -16,4 +16,5 @@ public interface OfflineActivityThemeService {
 
     OfflineActivityTheme getOfflineActivityThemeDetailByThemeId(String merchantId, Integer themeId);
 
+    void updateBuyCountById(Integer activityThemeId);
 }

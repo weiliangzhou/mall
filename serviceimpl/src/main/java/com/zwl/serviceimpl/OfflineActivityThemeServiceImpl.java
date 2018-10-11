@@ -1,6 +1,7 @@
 package com.zwl.serviceimpl;
 
 import com.zwl.dao.mapper.OfflineActivityThemeMapper;
+import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.OfflineActivityTheme;
 import com.zwl.service.OfflineActivityThemeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,12 @@ public class OfflineActivityThemeServiceImpl implements OfflineActivityThemeServ
     @Override
     public OfflineActivityTheme getOfflineActivityThemeDetailByThemeId(String merchantId, Integer themeId) {
         return offlineActivityThemeMapper.getOfflineActivityThemeDetailByThemeId(merchantId, themeId);
+    }
+
+    @Override
+    public void updateBuyCountById(Integer activityThemeId) {
+        offlineActivityThemeMapper.updateBuyCountById(activityThemeId);
+
     }
 
 }
