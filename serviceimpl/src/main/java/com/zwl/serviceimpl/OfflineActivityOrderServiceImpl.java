@@ -84,8 +84,13 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         String orderNo = "xx" + sdf_yMdHm.format(new Date()) + merchantId + userLongId + productId;
         OfflineActivityOrder offlineActivityOrder = new OfflineActivityOrder();
         Integer activityId = offlineActivity.getId();
-        Integer count = offlineActivityCodeService.getAlreadyBuyCountByUserIdAndThemeId(userId,offlineActivity.getActivityThemeId(),merchantId);
-        Integer activityPrice = count == 0 ? offlineActivity.getActivityPrice():offlineActivity.getRetrainingPrice();
+        Integer isRetraining = offlineActivity.getIsRetraining();
+        Integer activityPrice = offlineActivity.getActivityPrice();
+        if (isRetraining == 1) {
+            Integer count = offlineActivityCodeService.getAlreadyBuyCountByUserIdAndThemeId(userId, offlineActivity.getActivityThemeId(), merchantId);
+            activityPrice = count == 0 ? activityPrice : offlineActivity.getRetrainingPrice();
+        }
+
         offlineActivityOrder.setOrderNo(orderNo);
         offlineActivityOrder.setActivityId(activityId);
         //活动兑换码生成规则
@@ -135,12 +140,12 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
 
     @Override
     public List<OfflineActivityOrderVo> findOrderByUserId(String userId, String merchantId) {
-        List<OfflineActivityOrder> offlineActivityOrderList = offlineActivityOrderMapper.findOrderByUserId(userId,merchantId);
+        List<OfflineActivityOrder> offlineActivityOrderList = offlineActivityOrderMapper.findOrderByUserId(userId, merchantId);
         List<OfflineActivityOrderVo> offlineActivityOrderVoList = new ArrayList<>();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        for(OfflineActivityOrder offlineActivityOrder:offlineActivityOrderList){
+        for (OfflineActivityOrder offlineActivityOrder : offlineActivityOrderList) {
             OfflineActivityOrderVo offlineActivityOrderVo = new OfflineActivityOrderVo();
-            OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(offlineActivityOrder.getMerchantId(),offlineActivityOrder.getActivityThemeId());
+            OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(offlineActivityOrder.getMerchantId(), offlineActivityOrder.getActivityThemeId());
             offlineActivityOrderVo.setImgUrl(offlineActivityTheme.getImgUrl());
             offlineActivityOrderVo.setThemeName(offlineActivityTheme.getThemeName());
             OfflineActivity offlineActivity = offlineActivityService.getOneByActivityId(offlineActivityOrder.getActivityId());
@@ -149,7 +154,7 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
             offlineActivityOrderVo.setIsUsed(offlineActivityCode.getIsUsed());
             offlineActivityOrderVo.setCreateTimeDesc(simpleDateFormat.format(offlineActivityOrder.getCreateTime()));
             offlineActivityOrderVo.setActivityPrice(offlineActivityOrder.getActivityPrice());
-            offlineActivityOrderVo.setActivityPriceDesc(div(100,offlineActivityOrder.getActivityPrice(),2)+"");
+            offlineActivityOrderVo.setActivityPriceDesc(div(100, offlineActivityOrder.getActivityPrice(), 2) + "");
             offlineActivityOrderVo.setOrderNo(offlineActivityOrder.getOrderNo());
             offlineActivityOrderVo.setActivityId(offlineActivityOrder.getActivityId());
             offlineActivityOrderVo.setAmount(1);
@@ -159,8 +164,8 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
     }
 
     @Override
-    public void updateStatusByOrderNo(String out_trade_no,String payment_no,String paymentTime) {
-        offlineActivityOrderMapper.updateStatusByOrderNo(out_trade_no,payment_no,paymentTime);
+    public void updateStatusByOrderNo(String out_trade_no, String payment_no, String paymentTime) {
+        offlineActivityOrderMapper.updateStatusByOrderNo(out_trade_no, payment_no, paymentTime);
     }
 
     @Override
@@ -168,14 +173,14 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         OfflineActivityOrder offlineActivityOrder = offlineActivityOrderMapper.selectByPrimaryKey(orderNo);
         OfflineActivityOrderVo offlineActivityOrderVo = new OfflineActivityOrderVo();
         offlineActivityOrderVo.setRealName(offlineActivityOrder.getRealName());
-        OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(offlineActivityOrder.getMerchantId(),offlineActivityOrder.getActivityThemeId());
+        OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(offlineActivityOrder.getMerchantId(), offlineActivityOrder.getActivityThemeId());
         offlineActivityOrderVo.setThemeName(offlineActivityTheme.getThemeName());
         OfflineActivity offlineActivity = offlineActivityService.getOneByActivityId(offlineActivityOrder.getActivityId());
         offlineActivityOrderVo.setActivityAddress(offlineActivity.getActivityAddress());
         offlineActivityOrderVo.setActivityStartTime(offlineActivity.getActivityStartTime());
         offlineActivityOrderVo.setActivityEndTime(offlineActivity.getActivityEndTime());
         offlineActivityOrderVo.setActivityPrice(offlineActivityOrder.getActivityPrice());
-        offlineActivityOrderVo.setActivityPriceDesc(div(100,offlineActivityOrder.getActivityPrice(),2)+"");
+        offlineActivityOrderVo.setActivityPriceDesc(div(100, offlineActivityOrder.getActivityPrice(), 2) + "");
         offlineActivityOrderVo.setAmount(1);
         return offlineActivityOrderVo;
     }
