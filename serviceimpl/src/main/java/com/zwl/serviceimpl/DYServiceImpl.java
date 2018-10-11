@@ -289,10 +289,19 @@ public class DYServiceImpl implements DYService {
 
 
         OfflineActivityOrder offlineActivityOrder = offlineActivityOrderService.findOrderByOrderNo(out_trade_no);
+        //如果order状态为支付成功，则不更新
+        Integer status = offlineActivityOrder.getOrderStatus();
+        if(1==status ||-1==status){
+            //发送通知等
+            Map<String, String> xml = new HashMap<String, String>();
+            xml.put("return_code", "SUCCESS");
+            xml.put("return_msg", "OK");
+            return PaymentKit.toXml(xml);
+        }
         Integer activityId = offlineActivityOrder.getActivityId();
         OfflineActivity offlineActivity = offlineActivityService.getOneByActivityId(activityId);
-        Integer isMaid = offlineActivity.getIsMaid();
-        Integer isRetraining = offlineActivity.getIsRetraining();
+        Integer isMaid = offlineActivity.getIsMaid()==null?0:1;
+        Integer isRetraining = offlineActivity.getIsRetraining()==null?0:1;
         Integer offlineType = offlineActivity.getActivityType();
         String userId = offlineActivityOrder.getUserId();
         Integer price = offlineActivityOrder.getActivityPrice();
