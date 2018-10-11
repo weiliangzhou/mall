@@ -67,7 +67,7 @@ public class OfflineActivityController {
     @RequestMapping(name = "线下活动主题详情购买",
             value = "/wx/offlineActivity/getOfflineActivityListByThemeId", method = RequestMethod.POST)
     public OfflineActivity getOfflineActivityListByThemeId(@ApiComment("merchantId") String merchantId,
-                                                           @ApiComment("主题id") String themeId
+                                                           @ApiComment("主题id") Integer activityThemeId
     ) {
         OfflineActivity offlineActivity = new OfflineActivity();
         return offlineActivity;

@@ -29,6 +29,16 @@
     user_id, sex, phone, real_name, city, id_card_num, payment_no, payment_time, merchant_id,
     create_time, modify_time, available, is_maid, is_retraining, activity_theme_id
   </sql>
+  <select id="findOrderByUserIdAndThemeId" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from ss_offline_activity_order
+    where user_id = #{userId,jdbcType=VARCHAR}
+    and available =1
+    and order_status = 1
+    and merchant_id = #{merchantId,jdbcType=VARCHAR}
+    and activity_theme_id = #{activityThemeId,jdbcType=INTEGER}
+  </select>
   <select id="findOrderByUserId" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select
     <include refid="Base_Column_List" />

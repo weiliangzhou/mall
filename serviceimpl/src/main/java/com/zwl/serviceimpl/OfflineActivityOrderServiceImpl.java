@@ -174,4 +174,9 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         offlineActivityOrderVo.setAmount(1);
         return offlineActivityOrderVo;
     }
+
+    @Override
+    public List<OfflineActivityOrder> findOrderByUserIdAndThemeId(String userId, Integer activityThemeId, String merchantId) {
+        return offlineActivityOrderMapper.findOrderByUserIdAndThemeId(userId,activityThemeId,merchantId);
+    }
 }

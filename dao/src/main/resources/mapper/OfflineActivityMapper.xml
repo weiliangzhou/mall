@@ -9,7 +9,7 @@
         <result column="activity_price" property="activityPrice" jdbcType="INTEGER"/>
         <result column="is_retraining" property="isRetraining" jdbcType="INTEGER"/>
         <result column="activity_theme_id" property="activityThemeId" jdbcType="INTEGER"/>
-        <result column="activity_parent_id" property="activityParentId" jdbcType="INTEGER"/>
+        <!--<result column="activity_parent_id" property="activityParentId" jdbcType="INTEGER"/>-->
         <result column="limit_count" property="limitCount" jdbcType="INTEGER"/>
         <result column="buy_count" property="buyCount" jdbcType="INTEGER"/>
         <result column="is_recommend" property="isRecommend" jdbcType="INTEGER"/>
@@ -21,11 +21,14 @@
         <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
         <result column="available" property="available" jdbcType="INTEGER"/>
         <result column="merchant_id" property="merchantId" jdbcType="VARCHAR"/>
+        <result column="apply_start_time" property="applyStartTime" jdbcType="TIMESTAMP"/>
+        <result column="apply_end_time" property="applyEndTime" jdbcType="TIMESTAMP"/>
+        <result column="retraining_price" property="retrainingPrice" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
     id, activity_address, activity_start_time, activity_end_time, activity_price, is_retraining,
-    activity_theme_id, activity_parent_id, limit_count, buy_count, is_recommend, is_show,
-    is_rebuy, is_maid, min_requirement, create_time, modify_time, available, merchant_id
+    activity_theme_id, limit_count, buy_count, is_recommend, is_show,
+    is_rebuy, is_maid, min_requirement, create_time, modify_time, available, merchant_id, apply_start_time, apply_end_time, retraining_price
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -42,13 +45,15 @@
         <![CDATA[ AND  DATE_FORMAT(activity_start_time, '%Y-%m-%d 00:00:00' ) <=now()]]>
         <![CDATA[ and activity_end_time >= now()]]>
     </select>
-    <select id="getOfflineActivityListByThemeId" resultMap="BaseResultMap" parameterType="java.lang.String">
+    <select id="getOfflineActivityListByThemeId" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from ss_offline_activity
         where merchant_id = #{merchantId,jdbcType=VARCHAR}
-        and activity_theme_id=#{themeId}
+        and activity_theme_id=#{activityThemeId,jdbcType=INTEGER}
         and available =1
+        <![CDATA[ and apply_start_time <= now()]]>
+        <![CDATA[ and apply_end_time >= now()]]>
     </select>
 
 
@@ -112,6 +117,15 @@
             <if test="merchantId != null">
                 merchant_id,
             </if>
+            <if test="applyStartTime != null">
+                apply_start_time,
+            </if>
+            <if test="applyEndTime != null">
+                apply_end_time,
+            </if>
+            <if test="retrainingPrice != null">
+                retraining_price,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -171,6 +185,15 @@
             <if test="merchantId != null">
                 #{merchantId,jdbcType=VARCHAR},
             </if>
+            <if test="applyStartTime != null">
+                #{applyStartTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="applyEndTime != null">
+                #{applyEndTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="retrainingPrice != null">
+                #{retrainingPrice,jdbcType=INTEGER},
+            </if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.zwl.model.po.OfflineActivity">
@@ -229,6 +252,15 @@
             </if>
             <if test="merchantId != null">
                 merchant_id = #{merchantId,jdbcType=VARCHAR},
+            </if>
+            <if test="applyStartTime != null">
+                apply_start_time = #{applyStartTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="applyEndTime != null">
+                apply_end_time = #{applyEndTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="retrainingPrice != null">
+                retraining_price = #{retrainingPrice,jdbcType=INTEGER},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
