@@ -146,9 +146,9 @@ public class WithdrawServiceImpl implements WithdrawService {
         }
         switch (payWayType) {
             case WECHAT:
-                if (StringUtils.isBlank(withdraw.getOpenId())) {
-                    BSUtil.isTrue(false, "OPENID不能为空");
-                }
+//                if (StringUtils.isBlank(withdraw.getOpenId())) {
+//                    BSUtil.isTrue(false, "OPENID不能为空");
+//                }
                 break;
             case BALANCE:
                 break;
