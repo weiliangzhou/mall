@@ -58,7 +58,7 @@ public class OfflineActivityServiceImpl implements OfflineActivityService {
         }else{
             for(OfflineActivity offlineActivity:offlineActivityList){
                 OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(merchantId,offlineActivity.getActivityThemeId());
-                if(null !=offlineActivity.getRetrainingPrice()){
+                if(1 == offlineActivity.getIsRetraining()){
                     offlineActivity.setActivityPriceDesc(div(100,offlineActivity.getRetrainingPrice(),2)+"");
                     offlineActivity.setImgUrl(offlineActivityTheme.getImgUrl());
                     offlineActivity.setThemeName(offlineActivityTheme.getThemeName());
