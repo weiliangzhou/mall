@@ -61,7 +61,7 @@ public class QRCodeUtil {
         try {
             Map<EncodeHintType, String> hints = new HashMap<>();
             hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
-            BitMatrix bitMatrix = new MultiFormatWriter().encode(url, BarcodeFormat.QR_CODE, 230, 230, hints);
+            BitMatrix bitMatrix = new MultiFormatWriter().encode(url, BarcodeFormat.QR_CODE, 120, 120, hints);
             BufferedImage image = toBufferedImage(bitMatrix);
             byte[] imgByte = ImageUtil.imageToBytes(image, "png");
             imgUrl = AliOSSUtil.uploadFileByte(imgByte);
@@ -185,7 +185,7 @@ public class QRCodeUtil {
             int textWidth = fm.stringWidth(nickName);
             int widthX = (big.getWidth() - textWidth) / 2;
             // 表示这段文字在图片上的位置(x,y) .第一个是你设置的内容。
-            g.drawString(nickName,widthX,355);
+            g.drawString(nickName,widthX,235);
             g.dispose();
             byte[] imgByte = ImageUtil.imageToBytes(big, "png");
             return AliOSSUtil.uploadFileByte(imgByte);
