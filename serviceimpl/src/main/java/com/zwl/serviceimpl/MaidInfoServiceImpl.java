@@ -4,8 +4,10 @@ import com.zwl.dao.mapper.MaidInfoByMonthMapper;
 import com.zwl.dao.mapper.MaidInfoMapper;
 import com.zwl.model.po.MaidInfo;
 import com.zwl.model.vo.MaidInfoVo;
+import com.zwl.model.vo.MyMaidInfoVVo;
 import com.zwl.model.vo.XiaXianVo;
 import com.zwl.service.MaidInfoService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,4 +61,17 @@ public class MaidInfoServiceImpl implements MaidInfoService {
     public Integer getTotalAmountByMonthByUserId(String userId) {
         return maidInfoByMonthMapper.getTotalAmountByMonthByUserId(userId);
     }
+    @Override
+    public List<MyMaidInfoVVo> getMaidInfoListByLevel(@Param(value="userId")String userId, @Param(value="level")Integer level){
+        return maidInfoMapper.getMaidInfoListByLevel(userId, level);
+    };
+    @Override
+    public List<MaidInfoVo> getMaidInfoByMonth(String userId){
+        return maidInfoMapper.getMaidInfoByMonth(userId);
+    };
+    @Override
+    public Integer getBalance(String userId){
+        return maidInfoMapper.getBalance(userId);
+    };
+
 }

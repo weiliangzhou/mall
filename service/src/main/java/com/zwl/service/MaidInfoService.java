@@ -2,7 +2,9 @@ package com.zwl.service;
 
 import com.zwl.model.po.MaidInfo;
 import com.zwl.model.vo.MaidInfoVo;
+import com.zwl.model.vo.MyMaidInfoVVo;
 import com.zwl.model.vo.XiaXianVo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -28,4 +30,10 @@ public interface MaidInfoService {
     Integer getMaidInfoCount(String userId);
 
     Integer getTotalAmountByMonthByUserId(String userId);
+
+    List<MyMaidInfoVVo> getMaidInfoListByLevel(@Param(value="userId")String userId, @Param(value="level")Integer level);
+
+    List<MaidInfoVo> getMaidInfoByMonth(String userId);
+
+    Integer getBalance(String userId);
 }

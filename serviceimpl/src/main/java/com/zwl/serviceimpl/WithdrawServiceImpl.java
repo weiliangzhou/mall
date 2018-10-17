@@ -168,4 +168,8 @@ public class WithdrawServiceImpl implements WithdrawService {
                 break;
         }
     }
+    @Override
+    public Integer getTotalMoneyByUserId(String userId) {
+        return withdrawMapper.getTotalMoneyByUserId(userId);
+    }
 }

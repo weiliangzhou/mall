@@ -376,4 +376,38 @@ public class WxController {
         Result result = new Result();
         return result;
     }
+    @ApiComment("获取我的邀请列表")
+    @RequestMapping(name = "获取我的邀请列表",
+            value = "/wx/maidInfo/auth/getMyMaidInfoList", method = RequestMethod.POST)
+    public MyMaidInfoVo getMyMaidInfoList(@ApiComment("userId") String userId) {
+        MyMaidInfoVo myMaidInfoVo = new MyMaidInfoVo();
+        return myMaidInfoVo ;
+
+    }
+
+    @ApiComment("根据等级获取我我的邀请列表")
+    @RequestMapping(name = "根据等级获取我的邀请列表",
+            value = "/wx/maidInfo/auth/getMyMaidInfoListByLevel", method = RequestMethod.POST)
+    public MaidInfoVVo getMyMaidInfoListByLevel(@ApiComment("userId") String userId,@ApiComment("等级") Integer level) {
+        MaidInfoVVo maidInfoVVo = new MaidInfoVVo();
+        return maidInfoVVo;
+
+    }
+
+    @ApiComment("获取月度奖励")
+    @RequestMapping(name = "获取月度奖励",
+            value = "/wx/maidInfo/auth/getMaidInfoByMonth", method = RequestMethod.POST)
+    public MaidInfoVVo getMaidInfoByMonth(@ApiComment("userId") String userId) {
+        MaidInfoVVo maidInfoVVo = new MaidInfoVVo();
+        return maidInfoVVo;
+
+    }
+    @ApiComment("获取奖励金信息")
+    @RequestMapping(name = "获取奖励金信息",
+            value = "/wx/maidInfo/auth/getEncourageInfo", method = RequestMethod.POST)
+    public EncourageInfoVo getEncourageInfo(@ApiComment("userId") String userId) {
+        EncourageInfoVo encourageInfoVo = new EncourageInfoVo();
+        return encourageInfoVo;
+
+    }
 }
