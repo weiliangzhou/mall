@@ -9,12 +9,13 @@
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
         <result column="available" property="available" jdbcType="INTEGER"/>
-        <result column="activity_id" property="activityId" jdbcType="VARCHAR"/>
+        <result column="activity_id" property="activityId" jdbcType="INTEGER"/>
         <result column="qr_code_url" property="qrCodeUrl" jdbcType="VARCHAR"/>
-        <result column="activity_theme_id" property="activityThemeId" jdbcType="VARCHAR"/>
+        <result column="activity_theme_id" property="activityThemeId" jdbcType="INTEGER"/>
+        <result column="merchant_id" property="merchantId" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, user_id, activity_code, is_used, create_time, modify_time, available, activity_id,qr_code_url,activity_theme_id
+    id, user_id, activity_code, is_used, create_time, modify_time, available, activity_id,qr_code_url,activity_theme_id, merchant_id
   </sql>
     <select id="getOneByUserIdAndOfflineActivityId" resultMap="BaseResultMap">
         select
