@@ -61,7 +61,7 @@ public class QRCodeUtil {
         try {
             Map<EncodeHintType, String> hints = new HashMap<>();
             hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
-            BitMatrix bitMatrix = new MultiFormatWriter().encode(url, BarcodeFormat.QR_CODE, 180, 180, hints);
+            BitMatrix bitMatrix = new MultiFormatWriter().encode(url, BarcodeFormat.QR_CODE, 230, 230, hints);
             BufferedImage image = toBufferedImage(bitMatrix);
             byte[] imgByte = ImageUtil.imageToBytes(image, "png");
             imgUrl = AliOSSUtil.uploadFileByte(imgByte);
