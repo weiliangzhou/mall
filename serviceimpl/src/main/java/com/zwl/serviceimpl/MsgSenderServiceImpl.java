@@ -41,8 +41,8 @@ public class MsgSenderServiceImpl implements MsgSenderService {
             BSUtil.isTrue(false, "请一分钟之后重发！");
         Map map = new HashMap();
         int msgCode = new Random().nextInt(9999);
-        if (msgCode < 10000)
-            msgCode += 10000;
+        if (msgCode < 1000)
+            msgCode += 1000;
         map.put("account", MsgSenderConstants.UN);
         map.put("password", MsgSenderConstants.PW);
         map.put("msg", MsgSenderConstants.TEMPLATE + msgCode);
