@@ -231,7 +231,7 @@ public class DYServiceImpl implements DYService {
                         String referrerPhone = referrerUser.getRegisterMobile();
                         if (StringUtils.isNotBlank(referrerPhone)) {
                             String userMobile = user.getRegisterMobile();
-                            String msg = "【东遥课堂】手机尾号" + userMobile.substring(userMobile.length() - 4) + "成功购买" + productName + ", 你将获得奖励" + maidMoney / 100 + "元 ,  尽快查阅小程序~";
+                            String msg = "【东遥课堂】手机尾号" + userMobile.substring(userMobile.length() - 4) + "成功购买" + productName + ", 你将获得奖励" + maidMoney / 100 + "元 ,  尽快查阅~";
                             msgSenderService.sendMsg(referrerPhone, msg);
                         }
                         //存在referrerUser.getGzhOpenid()==null
