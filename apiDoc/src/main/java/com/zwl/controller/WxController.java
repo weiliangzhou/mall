@@ -53,7 +53,16 @@ public class WxController {
     @ApiComment("提现")
     @RequestMapping(name = "提现",
             value = "/wx/withdraw/auth/apply", method = RequestMethod.POST)
-    public Result apply(@ApiComment("收款方式 微信1") Integer payWay, @ApiComment("收款账号") String account, @ApiComment("提现金额") Integer money, @ApiComment("userId") String userId, @ApiComment("商户号") String merchantId) {
+    public Result apply(@ApiComment("收款方式 微信1 银行卡3") Integer payWay,
+                        @ApiComment(value = "收款账号",sample = "payWay 为3时 是银行卡账户") String account,
+                        @ApiComment("提现金额") Integer money,
+                        @ApiComment("userId") String userId,
+                        @ApiComment(value = "商户号", sample = "payWay 为1时必填") String merchantId,
+                        @ApiComment(value = "银行卡用户名", sample = "payWay 为3时必填") String bankName,
+                        @ApiComment(value = "银行卡省", sample = "payWay 为3时必填") String bankProvince,
+                        @ApiComment(value = "银行卡市", sample = "payWay 为3时必填") String bankCity,
+                        @ApiComment(value = "银行卡区", sample = "payWay 为3时必填") String bankArea,
+                        @ApiComment(value = "银行卡支行", sample = "payWay 为3时必填") String bankBranch) {
         //       收款方式不能为空 -1
 //        收款账号不能为空 -2
 //        提现金额不能为空 -3

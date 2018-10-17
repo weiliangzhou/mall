@@ -3,6 +3,7 @@ package com.zwl.serviceimpl;
 import com.zwl.dao.mapper.UserAccountMapper;
 import com.zwl.dao.mapper.WithdrawFlowMapper;
 import com.zwl.dao.mapper.WithdrawMapper;
+import com.zwl.model.constant.PayWayType;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.User;
 import com.zwl.model.po.Withdraw;
@@ -83,7 +84,8 @@ public class WithdrawServiceImpl implements WithdrawService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public synchronized void apply(Withdraw withdraw) {
-        Integer money = withdraw.getMoney()*100;
+        verfiy(withdraw);
+        Integer money = withdraw.getMoney() * 100;
         if (money == 0)
             BSUtil.isTrue(false, "提现金额不能为0");
 
@@ -116,7 +118,7 @@ public class WithdrawServiceImpl implements WithdrawService {
         withdraw.setOpenId(user.getWechatOpenid());
         withdraw.setRealName(user.getRealName());
         withdraw.setMoney(money);
-        withdraw.setBalance(balance-money);
+        withdraw.setBalance(balance - money);
         //status设置为1 审核中
         withdraw.setStatus(1);
         withdraw.setMerchantId(merchantId);
@@ -126,5 +128,44 @@ public class WithdrawServiceImpl implements WithdrawService {
         withdrawFlow.setStatus(1);
         withdrawFlow.setMerchantId(merchantId);
         withdrawFlowMapper.insertSelective(withdrawFlow);
+    }
+
+    private void verfiy(Withdraw withdraw) {
+        if (null == withdraw) {
+            BSUtil.isTrue(false, "无效参数");
+        }
+        if (null == withdraw.getMoney() || withdraw.getMoney() < 0) {
+            BSUtil.isTrue(false, "无效金额");
+        }
+        PayWayType payWayType = PayWayType.getPayWayTypeByCode(withdraw.getPayWay());
+        if (null == payWayType) {
+            BSUtil.isTrue(false, "无效提现类型");
+        }
+        if (StringUtils.isBlank(withdraw.getAccount())) {
+            BSUtil.isTrue(false, "请输入要提现的账号");
+        }
+        switch (payWayType) {
+            case WECHAT:
+//                if (StringUtils.isBlank(withdraw.getOpenId())) {
+//                    BSUtil.isTrue(false, "OPENID不能为空");
+//                }
+                break;
+            case BALANCE:
+                break;
+            case BANKCARD:
+                if (StringUtils.isBlank(withdraw.getBankProvince())) {
+                    BSUtil.isTrue(false, "银行卡所属地址缺失(省)");
+                }
+                if (StringUtils.isBlank(withdraw.getBankCity())) {
+                    BSUtil.isTrue(false, "银行卡所属地址缺失(市)");
+                }
+                if (StringUtils.isBlank(withdraw.getBankArea())) {
+                    BSUtil.isTrue(false, "银行卡所属地址缺失(区)");
+                }
+//                if (StringUtils.isBlank(withdraw.getBankBranch())) {
+//                    BSUtil.isTrue(false, "银行卡支行不能为空");
+//                }
+                break;
+        }
     }
 }

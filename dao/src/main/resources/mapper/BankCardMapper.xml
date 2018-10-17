@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zwl.dao.mapper.BankCardMapper">
+  <resultMap id="BaseResultMap" type="com.zwl.model.po.BankCard">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="bank_name" jdbcType="VARCHAR" property="bankName" />
+    <result column="bank_no" jdbcType="VARCHAR" property="bankNo" />
+    <result column="bank_province" jdbcType="VARCHAR" property="bankProvince" />
+    <result column="bank_branch" jdbcType="VARCHAR" property="bankBranch" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="bank_city" jdbcType="VARCHAR" property="bankCity" />
+    <result column="bank_area" jdbcType="VARCHAR" property="bankArea" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, bank_name, bank_no, bank_province, bank_branch, user_id, bank_city, bank_area, 
+    create_time, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ss_bank_card
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ss_bank_card
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insertSelective" parameterType="com.zwl.model.po.BankCard">
+    insert into ss_bank_card
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="bankName != null">
+        bank_name,
+      </if>
+      <if test="bankNo != null">
+        bank_no,
+      </if>
+      <if test="bankProvince != null">
+        bank_province,
+      </if>
+      <if test="bankBranch != null">
+        bank_branch,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="bankCity != null">
+        bank_city,
+      </if>
+      <if test="bankArea != null">
+        bank_area,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="bankName != null">
+        #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankNo != null">
+        #{bankNo,jdbcType=VARCHAR},
+      </if>
+      <if test="bankProvince != null">
+        #{bankProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="bankBranch != null">
+        #{bankBranch,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="bankCity != null">
+        #{bankCity,jdbcType=VARCHAR},
+      </if>
+      <if test="bankArea != null">
+        #{bankArea,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zwl.model.po.BankCard">
+    update ss_bank_card
+    <set>
+      <if test="bankName != null">
+        bank_name = #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankNo != null">
+        bank_no = #{bankNo,jdbcType=VARCHAR},
+      </if>
+      <if test="bankProvince != null">
+        bank_province = #{bankProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="bankBranch != null">
+        bank_branch = #{bankBranch,jdbcType=VARCHAR},
+      </if>
+      <!--<if test="userId != null">-->
+        <!--user_id = #{userId,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <if test="bankCity != null">
+        bank_city = #{bankCity,jdbcType=VARCHAR},
+      </if>
+      <if test="bankArea != null">
+        bank_area = #{bankArea,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zwl.model.po.BankCard">
+    update ss_bank_card
+    set bank_name = #{bankName,jdbcType=VARCHAR},
+      bank_no = #{bankNo,jdbcType=VARCHAR},
+      bank_province = #{bankProvince,jdbcType=VARCHAR},
+      bank_branch = #{bankBranch,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=VARCHAR},
+      bank_city = #{bankCity,jdbcType=VARCHAR},
+      bank_area = #{bankArea,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getBankCardByUserId" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from ss_bank_card s where s.user_id = #{userId}
+  </select>
+</mapper>

@@ -20,17 +20,19 @@ public interface ProductService {
     void updateProduct(Product product);
 
     BuyResult buy(Product product);
+
     BuyResult newH5Buy(Product product);
 
     List<Product> getAdminProductList();
 
     List<ProductItemVo> getUserLevelItemsList(String merchantId);
 
-    Integer getMaidPercentByLevel(Integer referrerLevel,String merchantId);
+    Integer getMaidPercentByLevel(Integer referrerLevel, String merchantId);
 
-    Product getProductByMemberLevel(Integer memberLevel,String merchantId);
+    Product getProductByMemberLevel(Integer memberLevel, String merchantId);
 
     Product getProductById(Long id);
 
-    int updateBuyCountById(Long productId,String merchantId);
+    int updateBuyCountById(Long productId, String merchantId);
+
 }

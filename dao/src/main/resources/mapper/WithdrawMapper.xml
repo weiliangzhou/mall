@@ -20,11 +20,16 @@
         <result column="payment_time" property="paymentTime" jdbcType="TIMESTAMP"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
+        <result column="bank_name" property="bankName" />
+        <result column="bank_province" property="bankProvince"/>
+        <result column="bank_city" property="bankCity"/>
+        <result column="bank_area" property="bankArea"/>
+        <result column="bank_branch" property="bankBranch"/>
         <result column="available" property="available" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
     id, withdraw_id, money,balance, open_id, real_name, user_id, account, status, pay_way, operator, merchant_id,
-    remark, success_time, payment_no, payment_time, create_time, modify_time, available
+    remark, success_time, payment_no, payment_time, create_time, modify_time,bank_name, bank_province ,bank_city, bank_area,bank_branch ,available
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
@@ -35,9 +40,9 @@
     <insert id="insertSelective" keyProperty="id" useGeneratedKeys="true" parameterType="com.zwl.model.po.Withdraw">
         insert into ss_withdraw
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                id,
-            </if>
+            <!--<if test="id != null">-->
+                <!--id,-->
+            <!--</if>-->
             <if test="withdrawId != null">
                 withdraw_id,
             </if>
@@ -86,13 +91,26 @@
             <if test="createTime != null">
                 create_time,
             </if>
-
-
+            <if test="bankName != null">
+                bank_name,
+            </if>
+            <if test="bankProvince != null">
+                bank_province,
+            </if>
+            <if test="bankCity != null">
+                bank_city,
+            </if>
+            <if test="bankArea != null">
+                bank_area,
+            </if>
+            <if test="bankBranch != null">
+                bank_branch,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                #{id,jdbcType=BIGINT},
-            </if>
+            <!--<if test="id != null">-->
+                <!--#{id,jdbcType=BIGINT},-->
+            <!--</if>-->
             <if test="withdrawId != null">
                 #{withdrawId,jdbcType=VARCHAR},
             </if>
@@ -139,7 +157,22 @@
                 #{paymentTime,jdbcType=TIMESTAMP},
             </if>
             <if test="createTime != null">
-                now()
+                now(),
+            </if>
+            <if test="bankName != null">
+                #{bankName},
+            </if>
+            <if test="bankProvince != null">
+                #{bankProvince},
+            </if>
+            <if test="bankCity != null">
+                #{bankCity},
+            </if>
+            <if test="bankArea != null">
+                #{bankArea},
+            </if>
+            <if test="bankBranch != null">
+                #{bankBranch},
             </if>
         </trim>
     </insert>
@@ -202,5 +235,6 @@
         from ss_withdraw
         where available=1
         and user_id=#{userId}
+        order by create_time desc
     </select>
 </mapper>

@@ -11,6 +11,7 @@ import com.zwl.service.MerchantService;
 import com.zwl.service.ProductService;
 import com.zwl.service.UserInfoService;
 import com.zwl.service.UserService;
+import com.zwl.util.ThreadVariable;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -254,6 +255,8 @@ public class ProductServiceImpl implements ProductService {
     public int updateBuyCountById(Long productId, String merchantId) {
         return productMapper.updateBuyCountById(productId, merchantId);
     }
+
+
 
     @Override
     public Product getProductByMemberLevel(Integer memberLevel, String merchantId) {

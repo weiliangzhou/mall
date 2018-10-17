@@ -156,8 +156,33 @@ public class TokenFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-        //线下签到
+        //线下活动签到
         if (requestURL.contains("/wx/offlineActivity/signIn")) {
+            chain.doFilter(request, response);
+            return;
+        }
+        //线下活动签到
+        if (requestURL.contains("/wx/offlineActivity/getOfflineActivityThemeList")) {
+            chain.doFilter(request, response);
+            return;
+        }
+        //线下活动签到
+//        if (requestURL.contains("/wx/offlineActivity/getOfflineActivityListByThemeId")) {
+//            chain.doFilter(request, response);
+//            return;
+//        }
+        //线下活动签到
+        if (requestURL.contains("/wx/offlineActivity/getOfflineActivityThemeDetailByThemeId")) {
+            chain.doFilter(request, response);
+            return;
+        }
+        //操作员登陆
+        if (requestURL.contains("/wx/offlineActivity/offlineLogin")) {
+            chain.doFilter(request, response);
+            return;
+        }
+        //线下签到详情页
+        if (requestURL.contains("/wx/offlineActivity/getActivityCodeDetail")) {
             chain.doFilter(request, response);
             return;
         }

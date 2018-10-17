@@ -76,3 +76,4 @@ mapper:
     config-location: /mapper/*.xml
 pay:
     pay-notify_url: https://xcx.wegoo.cn/wx/pay/pay_notify.do
+    qr-code-url: http://dy.xc2018.com.cn/adminlogin/checkout?activityCode=

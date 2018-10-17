@@ -279,7 +279,7 @@
 
     <select id="getTotalPerformanceByUserId" resultType="int" parameterType="string">
         SELECT
-        sum( so.money ) / 100
+        sum( so.money)
         FROM
         ss_order so,
         ss_user su
@@ -289,7 +289,7 @@
         AND su.referrer = #{userId}
         AND so.user_id = su.user_id
         AND so.`level` >1
-        AND DATE_FORMAT( now(), '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+        AND DATE_FORMAT( now(), '%Y%m' ) = DATE_FORMAT( so.payment_time , '%Y%m' )
 
     </select>
 

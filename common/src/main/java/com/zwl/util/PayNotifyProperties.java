@@ -16,4 +16,5 @@ import org.springframework.stereotype.Component;
 @Data
 public class PayNotifyProperties {
     private String payNotifyUrl;
+    private String qrCodeUrl;
 }
