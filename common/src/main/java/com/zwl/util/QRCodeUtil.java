@@ -185,7 +185,7 @@ public class QRCodeUtil {
             int textWidth = fm.stringWidth(nickName);
             int widthX = (big.getWidth() - textWidth) / 2;
             // 表示这段文字在图片上的位置(x,y) .第一个是你设置的内容。
-            g.drawString(nickName,widthX,235);
+            g.drawString(nickName,widthX,185);
             g.dispose();
             byte[] imgByte = ImageUtil.imageToBytes(big, "png");
             return AliOSSUtil.uploadFileByte(imgByte);

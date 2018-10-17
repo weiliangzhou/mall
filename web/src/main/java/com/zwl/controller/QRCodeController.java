@@ -79,7 +79,7 @@ public class QRCodeController {
             String userLogo = user.getLogoUrl()==null?"http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/6a989ec302994c6c98c2d4810f9fbcb2.png": user.getLogoUrl();
             String nickNameOrPhone=StringUtils.isBlank(userInfo.getNickName())?user.getRegisterMobile():userInfo.getNickName();
             try {
-                qrUrl = QRCodeUtil.mergeImage("http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20181017/161994ed0fe64e4a862f5fc8d678d2a2.png", smallImage, "380", "688", userLogo, "200", "80",nickNameOrPhone);
+                qrUrl = QRCodeUtil.mergeImage("http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20181017/006174286bc34c2aacbc7303b354d36e.png", smallImage, "380", "576", userLogo, "200", "25",nickNameOrPhone);
             } catch (IOException e) {
                 e.printStackTrace();
             }
