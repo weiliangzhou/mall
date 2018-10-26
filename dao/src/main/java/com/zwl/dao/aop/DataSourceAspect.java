@@ -19,40 +19,40 @@ import java.util.List;
  * author 二师兄超级帅
  * create 2018-06-29 13:43
  **/
-@Aspect
-@Component
-@EnableAspectJAutoProxy(proxyTargetClass = true)
-@Slf4j
-public class DataSourceAspect {
-
-
-
-    @Pointcut("execution(* com.zwl.dao.mapper.*.*(..))")//切点
-    public void aspect() {
-
-    }
-
-
-    @Before("aspect()")
-    public void before(JoinPoint point) { //在指定切点的方法之前执行
-        String className = point.getTarget().getClass().getName();
-        String method = point.getSignature().getName();
-        String args = StringUtils.join(point.getArgs(), ",");
-//        log.info("className:{}, method:{}, args:{} ", className, method, args);
-        try {
-            for (DatabaseType type : DatabaseType.values()) {
-                List<String> values = DynamicDataSource.METHOD_TYPE_MAP.get(type);
-                for (String key : values) {
-                    if (method.startsWith(key)) {
-//                        log.info(">>{} 方法使用的数据源为:{}<<", method, key);
-                        DatabaseContextHolder.setDatabaseType(type);
-                        DatabaseType types = DatabaseContextHolder.getDatabaseType();
-//                        log.info(">>{}方法使用的数据源为:{}<<", method, types);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
-    }
-}
+//@Aspect
+//@Component
+//@EnableAspectJAutoProxy(proxyTargetClass = true)
+//@Slf4j
+//public class DataSourceAspect {
+//
+//
+//
+//    @Pointcut("execution(* com.zwl.dao.mapper.*.*(..))")//切点
+//    public void aspect() {
+//
+//    }
+//
+//
+//    @Before("aspect()")
+//    public void before(JoinPoint point) { //在指定切点的方法之前执行
+//        String className = point.getTarget().getClass().getName();
+//        String method = point.getSignature().getName();
+//        String args = StringUtils.join(point.getArgs(), ",");
+////        log.info("className:{}, method:{}, args:{} ", className, method, args);
+//        try {
+//            for (DatabaseType type : DatabaseType.values()) {
+//                List<String> values = DynamicDataSource.METHOD_TYPE_MAP.get(type);
+//                for (String key : values) {
+//                    if (method.startsWith(key)) {
+////                        log.info(">>{} 方法使用的数据源为:{}<<", method, key);
+//                        DatabaseContextHolder.setDatabaseType(type);
+//                        DatabaseType types = DatabaseContextHolder.getDatabaseType();
+////                        log.info(">>{}方法使用的数据源为:{}<<", method, types);
+//                    }
+//                }
+//            }
+//        } catch (Exception e) {
+//            log.error(e.getMessage(), e);
+//        }
+//    }
+//}
