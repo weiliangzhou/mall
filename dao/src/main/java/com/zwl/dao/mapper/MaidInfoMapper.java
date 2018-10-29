@@ -1,6 +1,7 @@
 package com.zwl.dao.mapper;
 
 import com.zwl.model.po.MaidInfo;
+import com.zwl.model.vo.EncourageDetailVo;
 import com.zwl.model.vo.MaidInfoVo;
 import com.zwl.model.vo.MyMaidInfoVVo;
 import com.zwl.model.vo.XiaXianVo;
@@ -21,6 +22,7 @@ public interface MaidInfoMapper {
     @Select("select count(*) from ss_maid_info where user_id=#{userId}")
     Integer getMaidInfoCount(String userId);
     List<MyMaidInfoVVo> getMaidInfoListByLevel(@Param(value="userId")String userId, @Param(value="level")Integer level);
+    List<MyMaidInfoVVo> getEncourageDetail(EncourageDetailVo encourageDetailVo);
     List<MaidInfoVo> getMaidInfoByMonth(String userId);
     @Select("select balance from ss_user_account where user_id=#{userId}")
     Integer getBalance(String userId);

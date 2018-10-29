@@ -12,14 +12,14 @@ import com.zwl.service.UserQuotaCountService;
 import com.zwl.service.UserService;
 import com.zwl.service.WithdrawService;
 import com.zwl.util.PhoneUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author 二师兄超级帅
@@ -192,13 +192,37 @@ public class MaidInfoController {
 
     @PostMapping("/auth/getMyMaidInfoListByLevel")
     public String getMyMaidInfoListByLevel(@RequestBody JSONObject jsonObject) {
-        String userId = jsonObject.getString("userId");
+        String userId = jsonObject.getString("userNum");
         Integer level = jsonObject.getInteger("level");
         Integer pageNum = jsonObject.getInteger("pageNum");
         Integer pageSize = jsonObject.getInteger("pageSize");
         PageHelper.startPage(pageNum, pageSize);
         Result result = new Result();
         List<MyMaidInfoVVo> maidInfoList = maidInfoService.getMaidInfoListByLevel(userId,level);
+        result.setData(maidInfoList);
+        return JSON.toJSONString(result);
+    }
+
+    @PostMapping("/auth/getEncourageDetail")
+    public String getEncourageDetail(@RequestBody JSONObject jsonObject) {
+        EncourageDetailVo encourageDetailVo = new EncourageDetailVo();
+        String userId = jsonObject.getString("userId");
+        encourageDetailVo.setUserId(userId);
+        if (StringUtils.isNotBlank(jsonObject.getString("startTime"))){
+            Date startTime = jsonObject.getDate("startTime");
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(startTime);
+            calendar.add(Calendar.MONTH, 1);
+            Date endTime = calendar.getTime();
+            encourageDetailVo.setStartTime(startTime);
+            encourageDetailVo.setEndTime(endTime);
+        }
+
+        Integer pageNum = jsonObject.getInteger("pageNum");
+        Integer pageSize = jsonObject.getInteger("pageSize");
+        PageHelper.startPage(pageNum, pageSize);
+        Result result = new Result();
+        List<MyMaidInfoVVo> maidInfoList = maidInfoService.getEncourageDetail(encourageDetailVo);
         result.setData(maidInfoList);
         return JSON.toJSONString(result);
     }
