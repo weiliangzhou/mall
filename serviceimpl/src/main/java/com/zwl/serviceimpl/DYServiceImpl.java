@@ -56,7 +56,6 @@ public class DYServiceImpl implements DYService {
     private PayNotifyProperties payNotifyProperties;
     @Autowired
     private UserMaidPercentService userMaidPercentService;
-
     private SimpleDateFormat sdf_yMdHms = new SimpleDateFormat("yyyyMMddHHmmss");
 
     @Override
@@ -134,7 +133,16 @@ public class DYServiceImpl implements DYService {
             Integer level = order.getLevel();
             String levelName = order.getLevelName();
             String referrerId = user.getReferrer();
-            //                             增加小班次数,可能是第一次购买需要insert，也可能是update
+            //fixme 推荐人关联沙龙活动
+            //根据推荐人是否死绑推荐人
+            //如果是0 或者为null
+            //则先查询当天当天是否存在沙龙订单，如果存在 判断推荐人是否存在，存在 则获取  不存在则取user.getReferrer();
+            Integer isBuy=user.getIsBuy();
+            if (null == isBuy ||isBuy == 0) {
+
+
+            }
+            //增加小班次数,可能是第一次购买需要insert，也可能是update
             switch (memberLevel) {
                 case 4:
                     userQuotaCountService.saveOrUpdate(userId, 10);
