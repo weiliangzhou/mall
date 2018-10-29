@@ -98,9 +98,10 @@ public class OfflineActivityController {
         String queryType = jsonObject.getString("queryType");
         Integer pageSize = jsonObject.getInteger("pageSize");
         Integer pageNum = jsonObject.getInteger("pageNum");
+        Integer activityType = jsonObject.getInteger("activityType");
         if (pageSize != null && pageNum != null)
             PageHelper.startPage(pageNum, pageSize);
-        List<OfflineActivityTheme> offlineActivityThemeList = offlineActivityThemeService.getOfflineActivityThemeListByQueryType(merchantId, queryType);
+        List<OfflineActivityTheme> offlineActivityThemeList = offlineActivityThemeService.getOfflineActivityThemeListByQueryType(merchantId, queryType,activityType);
         Result result = new Result();
         result.setData(offlineActivityThemeList);
         return JSON.toJSONString(result);
