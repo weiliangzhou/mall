@@ -18,10 +18,10 @@ public class SalonController {
     @RequestMapping(name = "沙龙主题列表",
             value = "/wx/salon/getSalonThemeList", method = RequestMethod.POST)
     public OfflineActivityTheme getSalonThemeList(@ApiComment("merchantId") String merchantId,
-                                                            @ApiComment("queryType  0查询推荐列表 其他查询全部") String queryType,
-                                                            @ApiComment("pageSize") String pageSize,
-                                                            @ApiComment("pageNum") String pageNum,
-                                                            @ApiComment("activityType 0线下课程 1沙龙") Integer activityType
+                                                  @ApiComment("queryType  0查询推荐列表 其他查询全部") String queryType,
+                                                  @ApiComment("pageSize") String pageSize,
+                                                  @ApiComment("pageNum") String pageNum,
+                                                  @ApiComment("activityType 0线下课程 1沙龙") Integer activityType
     ) {
         OfflineActivityTheme offlineActivityTheme = new OfflineActivityTheme();
         return offlineActivityTheme;
@@ -30,7 +30,7 @@ public class SalonController {
     @RequestMapping(name = "沙龙主题详情介绍页",
             value = "/wx/salon/getSalonThemeDetailByThemeId", method = RequestMethod.POST)
     public OfflineActivityTheme getSalonThemeDetailByThemeId(@ApiComment("merchantId") String merchantId,
-                                                                       @ApiComment("主题id") String themeId
+                                                             @ApiComment("主题id") String themeId
     ) {
         OfflineActivityTheme offlineActivityTheme = new OfflineActivityTheme();
         return offlineActivityTheme;
@@ -39,7 +39,7 @@ public class SalonController {
     @RequestMapping(name = "沙龙主题详情购买",
             value = "/wx/salon/getSalonListByThemeId", method = RequestMethod.POST)
     public OfflineActivity getSalonListByThemeId(@ApiComment("merchantId") String merchantId,
-                                                           @ApiComment("主题id") Integer activityThemeId
+                                                 @ApiComment("主题id") Integer activityThemeId
     ) {
         OfflineActivity offlineActivity = new OfflineActivity();
         return offlineActivity;
@@ -67,5 +67,21 @@ public class SalonController {
         Result result = new Result();
         return result;
 
+    }
+
+    @RequestMapping(name = "沙龙线下报名",
+            value = "/wx/salon/buy", method = RequestMethod.POST)
+    public WxPayVo offlineActivityBuy(
+            @ApiComment("activityId") Integer activityId,
+            @ApiComment("realName") String realName,
+            @ApiComment("0 男 1女") Integer sex,
+            @ApiComment("city") String city,
+            @ApiComment("phone") String phone,
+            @ApiComment("idCardNum") String idCardNum,
+            @ApiComment(value = "slSeferrer", sample = "线下沙龙推荐人") String slSeferrer,
+            @ApiComment(value = "wechatNo", sample = "纯文本输入没什么意思") String wechatNo
+    ) {
+        WxPayVo wxPayVo = new WxPayVo();
+        return wxPayVo;
     }
 }

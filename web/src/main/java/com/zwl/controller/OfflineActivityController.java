@@ -57,6 +57,7 @@ public class OfflineActivityController {
     @PostMapping("/buy")
     public String offlineActivityBuy(HttpServletRequest request, @RequestBody OfflineActivityBuy offlineActivityBuy) {
         Result result = new Result();
+        offlineActivityBuy.setOrderType(0);
         BuyResult buyResult = offlineActivityOrderService.offlineActivityBuy(offlineActivityBuy);
         String orderNo = buyResult.getOrderNo();
         Integer totalFee = buyResult.getTotalFee();

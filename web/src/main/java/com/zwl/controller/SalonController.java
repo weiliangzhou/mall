@@ -8,7 +8,12 @@ import com.zwl.model.exception.BSUtil;
 import com.zwl.model.groups.Buy;
 import com.zwl.model.po.*;
 import com.zwl.model.vo.ActivityCodeDetail;
+import com.zwl.model.vo.BuyResult;
+import com.zwl.model.vo.OfflineActivityBuy;
 import com.zwl.model.vo.SignInVo;
+import com.zwl.model.wxpay.IpKit;
+import com.zwl.model.wxpay.StrKit;
+import com.zwl.model.wxpay.WxPayVo;
 import com.zwl.service.*;
 import com.zwl.util.DictUtil;
 import com.zwl.util.ThreadVariable;
@@ -20,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -38,6 +44,32 @@ public class SalonController {
     private OfflineActivityOrderService offlineActivityOrderService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private MerchantService merchantService;
+    @Autowired
+    private WxPayService wxPayService;
+
+    @PostMapping("/buy")
+    public String offlineActivityBuy(HttpServletRequest request, @RequestBody OfflineActivityBuy offlineActivityBuy) {
+        Result result = new Result();
+        offlineActivityBuy.setOrderType(1);
+        BuyResult buyResult = offlineActivityOrderService.offlineActivityBuy(offlineActivityBuy);
+        String orderNo = buyResult.getOrderNo();
+        Integer totalFee = buyResult.getTotalFee();
+        String merchantId = buyResult.getMerchantId();
+        Merchant merchant = merchantService.getMerchantByMerchantId(merchantId);
+        String gzhAppId = merchant.getGzAppId();
+        String userId = ThreadVariable.getUserID();
+        User user = userService.getByUserId(userId);
+        String wxPayKey = merchant.getWxPayKey();
+        String realIp = IpKit.getRealIp(request);
+        if (StrKit.isBlank(realIp)) {
+            realIp = "127.0.0.1";
+        }
+        WxPayVo wxPayVo = wxPayService.pay(realIp, user.getGzhOpenid(), orderNo, totalFee.toString(), gzhAppId, merchantId, wxPayKey);
+        result.setData(wxPayVo);
+        return JSON.toJSONString(result);
+    }
 
     @PostMapping("/getSalonThemeList")
     public String getSalonThemeList(@RequestBody JSONObject jsonObject) {
@@ -126,7 +158,7 @@ public class SalonController {
                 activityCodeDetail.setActivityAddress(offlineActivityCheckTime.getActivityAddress());
                 activityCodeDetail.setActivityStartTime(offlineActivityCheckTime.getActivityStartTime());
                 activityCodeDetail.setActivityEndTime(offlineActivityCheckTime.getActivityEndTime());
-                activityCodeDetail.setLogoUrl(user.getLogoUrl()==null?"http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180930/be406a40059343eb8e4952300e063149.jpg":user.getLogoUrl());
+                activityCodeDetail.setLogoUrl(user.getLogoUrl() == null ? "http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180930/be406a40059343eb8e4952300e063149.jpg" : user.getLogoUrl());
                 Result result = new Result();
                 result.setData(activityCodeDetail);
                 return JSON.toJSONString(result);
@@ -139,7 +171,7 @@ public class SalonController {
     public Result signIn(@Validated(Buy.class) @RequestBody SignInVo signInVo) {
         //获取操作员
         String operator = signInVo.getOperator();
-        if(null == operator){
+        if (null == operator) {
             Result result = new Result();
             result.setCode("800");
             result.setMessage("重新登录！");
@@ -154,16 +186,16 @@ public class SalonController {
             result.setMessage("非法操作！");
             return result;
         }
-        Integer themeId=offlineActivityOperator.getActivityThemeId();
-        log.info("操作员主题"+themeId);
+        Integer themeId = offlineActivityOperator.getActivityThemeId();
+        log.info("操作员主题" + themeId);
         //获取code
         String activityCode = signInVo.getActivityCode();
         //通过code 做一个比对
         //如果正确则更新ss_offline_activity_code
         OfflineActivityCode offlineActivityCode = offlineActivityCodeService.getOneByActivityCode(activityCode);
-        Integer themeId_code=offlineActivityCode.getActivityThemeId();
-        log.info("操作员主题"+themeId_code);
-        if (themeId!=themeId_code){
+        Integer themeId_code = offlineActivityCode.getActivityThemeId();
+        log.info("操作员主题" + themeId_code);
+        if (themeId != themeId_code) {
             Result result = new Result();
             result.setCode("800");
             result.setMessage("无权核销该场沙龙 , 请切换正确账户登入！");
