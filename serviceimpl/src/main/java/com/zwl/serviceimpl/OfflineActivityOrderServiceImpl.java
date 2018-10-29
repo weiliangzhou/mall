@@ -69,8 +69,9 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         //自然人 99 980 5000 校长
         Integer minRequirement = offlineActivity.getMinRequirement();
         if (minRequirement != null) {
-            if (memberLevel < minRequirement)
+            if (memberLevel < minRequirement) {
                 BSUtil.isTrue(false, "未获得购买线下课程的资格！");
+            }
         }
         Integer isRebuy = offlineActivity.getIsRebuy();
         //不能重复购买
@@ -111,11 +112,13 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         offlineActivityOrder.setActualMoney(activityPrice);
         offlineActivityOrder.setActivityPrice(activityPrice);
         offlineActivityOrder.setActivityThemeId(offlineActivity.getActivityThemeId());
+        offlineActivityOrder.setSlReferrer(offlineActivityBuy.getSlSeferrer());
+        offlineActivityOrder.setOrderType(offlineActivityBuy.getOrderType());
+        offlineActivityOrder.setWechatNo(offlineActivityBuy.getWechatNo());
         log.info("订单数据" + offlineActivityOrder);
         try {
             offlineActivityOrderMapper.insertSelective(offlineActivityOrder);
         } catch (Exception e) {
-//            e.printStackTrace();
             BSUtil.isTrue(false, "操作频繁，请在一分钟后重试", e);
         }
         BuyResult buyResult = new BuyResult();

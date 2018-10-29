@@ -23,6 +23,9 @@
     <result column="is_maid" property="isMaid" jdbcType="INTEGER" />
     <result column="is_retraining" property="isRetraining" jdbcType="INTEGER" />
     <result column="activity_theme_id" property="activityThemeId" jdbcType="INTEGER" />
+    <result column="sl_referrer" property="slReferrer" jdbcType="VARCHAR"/>
+    <result column="order_type" property="orderType" jdbcType="INTEGER"/>
+    <result column="wechat_no" property="wechatNo" jdbcType="VARCHAR"/>
   </resultMap>
   <sql id="Base_Column_List" >
     order_no, activity_id, activity_code, activity_price, actual_money, order_status,
@@ -118,6 +121,15 @@
       <if test="activityThemeId != null" >
         activity_theme_id,
       </if>
+      <if test="slReferrer != null" >
+        sl_referrer,
+      </if>
+      <if test="orderType != null" >
+        order_type,
+      </if>
+      <if test="wechatNo != null" >
+        wechat_no,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orderNo != null" >
@@ -182,6 +194,15 @@
       </if>
       <if test="activityThemeId != null" >
         #{activityThemeId,jdbcType=INTEGER},
+      </if>
+      <if test="slReferrer != null" >
+        #{slReferrer,jdbcType=VARCHAR},
+      </if>
+      <if test="orderType != null" >
+        #{orderType,jdbcType=INTEGER},
+      </if>
+      <if test="wechatNo != null" >
+        #{wechatNo,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
