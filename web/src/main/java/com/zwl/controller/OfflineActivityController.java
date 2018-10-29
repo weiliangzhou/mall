@@ -141,16 +141,16 @@ public class OfflineActivityController {
             return result;
         }
 
-        Integer themeId=offlineActivityOperator.getActivityThemeId();
-        log.info("操作员主题"+themeId);
+        Integer themeId = offlineActivityOperator.getActivityThemeId();
+        log.info("操作员主题" + themeId);
         //获取code
         String activityCode = signInVo.getActivityCode();
         //通过code 做一个比对
         //如果正确则更新ss_offline_activity_code
         OfflineActivityCode offlineActivityCode = offlineActivityCodeService.getOneByActivityCode(activityCode);
-        Integer themeId_code=offlineActivityCode.getActivityThemeId();
-        log.info("操作员主题"+themeId_code);
-        if (themeId!=themeId_code){
+        Integer themeId_code = offlineActivityCode.getActivityThemeId();
+        log.info("操作员主题" + themeId_code);
+        if (themeId != themeId_code) {
             Result result = new Result();
             result.setCode("800");
             result.setMessage("请切换账号！");
@@ -205,14 +205,15 @@ public class OfflineActivityController {
                 Integer themeId = offlineActivityCheckTime.getActivityThemeId();
                 String userId = offlineActivityCode.getUserId();
                 Integer userBuyCount = offlineActivityCodeService.getBuyCountByUserIdAndThemeId(userId, themeId);
-                if (userBuyCount == 1)
+                if (userBuyCount == 1) {
                     activityCodeDetail.setStatus("初次");
-                else
+                } else {
                     activityCodeDetail.setStatus("复训");
+                }
                 activityCodeDetail.setActivityAddress(offlineActivityCheckTime.getActivityAddress());
                 activityCodeDetail.setActivityStartTime(offlineActivityCheckTime.getActivityStartTime());
                 activityCodeDetail.setActivityEndTime(offlineActivityCheckTime.getActivityEndTime());
-                activityCodeDetail.setLogoUrl(user.getLogoUrl()==null?"http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180930/be406a40059343eb8e4952300e063149.jpg":user.getLogoUrl());
+                activityCodeDetail.setLogoUrl(user.getLogoUrl() == null ? "http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180930/be406a40059343eb8e4952300e063149.jpg" : user.getLogoUrl());
                 Result result = new Result();
                 result.setData(activityCodeDetail);
                 return JSON.toJSONString(result);
@@ -225,22 +226,22 @@ public class OfflineActivityController {
     }
 
     @PostMapping("/getActivityOrderList")
-    public String getActivityOrderList(@RequestBody JSONObject jsonObject){
+    public String getActivityOrderList(@RequestBody JSONObject jsonObject) {
         String merchantId = jsonObject.getString("merchantId");
         String userId = ThreadVariable.getUserID();
-        List<OfflineActivityOrderVo> offlineActivityOrderVoList = offlineActivityOrderService.findOrderByUserId(userId,merchantId);
+        List<OfflineActivityOrderVo> offlineActivityOrderVoList = offlineActivityOrderService.findOrderByUserId(userId, merchantId);
         Result result = new Result();
         result.setData(offlineActivityOrderVoList);
         return JSON.toJSONString(result);
     }
 
     @PostMapping("/getActivityOrderDetail")
-    public String getActivityOrderDetail(@RequestBody JSONObject jsonObject){
+    public String getActivityOrderDetail(@RequestBody JSONObject jsonObject) {
         String userId = ThreadVariable.getUserID();
         String orderNo = jsonObject.getString("orderNo");
         Integer activityId = jsonObject.getInteger("activityId");
         OfflineActivityOrderVo offlineActivityOrderVo = offlineActivityOrderService.findOrderDetailByOrderNo(orderNo);
-        OfflineActivityCode offlineActivityCode = offlineActivityCodeService.getOneByUserIdAndOfflineActivityId(userId,activityId);
+        OfflineActivityCode offlineActivityCode = offlineActivityCodeService.getOneByUserIdAndOfflineActivityId(userId, activityId);
         offlineActivityOrderVo.setQrCodeUrl(offlineActivityCode.getQrCodeUrl());
         Result result = new Result();
         result.setData(offlineActivityOrderVo);

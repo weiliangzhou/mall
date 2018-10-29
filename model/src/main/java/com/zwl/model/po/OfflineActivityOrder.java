@@ -61,4 +61,8 @@ public class OfflineActivityOrder {
     private Integer orderType;
     @ApiComment(value = "微信号", sample = "文本输入没什么意思")
     private String wechatNo;
+    /**
+     * 线下活动时间
+     */
+    private Date activityDate;
 }
