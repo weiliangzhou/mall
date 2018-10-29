@@ -28,7 +28,7 @@
         from ss_offline_activity_theme
         where id = #{id,jdbcType=INTEGER}
     </select>
-    <select id="getOfflineActivityThemeListByQueryType" resultMap="BaseResultMap" parameterType="java.lang.String">
+    <select id="getOfflineActivityThemeListByQueryType" resultMap="BaseResultMap" >
         select
         <include refid="Base_Column_List"/>
         from ss_offline_activity_theme
@@ -38,6 +38,7 @@
         <if test="queryType ==0">
             and is_recommend =1
         </if>
+        and activity_type = #{activityType,jdbcType=INTEGER}
     </select>
     <select id="getOfflineActivityThemeDetailByThemeId" resultMap="BaseResultMap">
         select
