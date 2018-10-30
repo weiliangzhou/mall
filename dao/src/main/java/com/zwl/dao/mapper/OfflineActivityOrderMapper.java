@@ -22,4 +22,6 @@ public interface OfflineActivityOrderMapper {
     int updateStatusByOrderNo(@Param("out_trade_no") String out_trade_no, @Param("payment_no") String payment_no, @Param("paymentTime") String paymentTime);
 
     OfflineActivityOrder getOfflineActivityOrderByActivityDate(@Param("userId") String userId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+
+    List<OfflineActivityOrder> findSLOrderByUserId(@Param("userId") String userId, @Param("merchantId") String merchantId);
 }

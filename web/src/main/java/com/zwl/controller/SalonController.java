@@ -7,10 +7,7 @@ import com.zwl.model.baseresult.Result;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.groups.Buy;
 import com.zwl.model.po.*;
-import com.zwl.model.vo.ActivityCodeDetail;
-import com.zwl.model.vo.BuyResult;
-import com.zwl.model.vo.OfflineActivityBuy;
-import com.zwl.model.vo.SignInVo;
+import com.zwl.model.vo.*;
 import com.zwl.model.wxpay.IpKit;
 import com.zwl.model.wxpay.StrKit;
 import com.zwl.model.wxpay.WxPayVo;
@@ -218,5 +215,16 @@ public class SalonController {
         }
         Result result = new Result();
         return result;
+    }
+
+    @PostMapping("/getMySLActivityOrderList")
+    public String getMySLActivityOrderList(@RequestBody JSONObject jsonObject) {
+        String merchantId = jsonObject.getString("merchantId");
+        String slReferrer = jsonObject.getString("slReferrer");
+        String userId = ThreadVariable.getUserID();
+        List<OfflineActivityOrderVo> offlineActivityOrderVoList = offlineActivityOrderService.getMySLActivityOrderList(userId, merchantId);
+        Result result = new Result();
+        result.setData(offlineActivityOrderVoList);
+        return JSON.toJSONString(result);
     }
 }

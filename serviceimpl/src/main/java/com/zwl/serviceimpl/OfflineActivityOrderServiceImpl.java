@@ -207,4 +207,30 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         return offlineActivityOrder;
     }
 
+    @Override
+    public List<OfflineActivityOrderVo> getMySLActivityOrderList(String userId, String merchantId) {
+        List<OfflineActivityOrder> offlineActivityOrderList = offlineActivityOrderMapper.findSLOrderByUserId(userId, merchantId);
+        List<OfflineActivityOrderVo> offlineActivityOrderVoList = new ArrayList<>();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        for (OfflineActivityOrder offlineActivityOrder : offlineActivityOrderList) {
+            Integer orderType = offlineActivityOrder.getOrderType();
+            OfflineActivityOrderVo offlineActivityOrderVo = new OfflineActivityOrderVo();
+            OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(offlineActivityOrder.getMerchantId(), offlineActivityOrder.getActivityThemeId());
+            offlineActivityOrderVo.setImgUrl(offlineActivityTheme.getImgUrl());
+            offlineActivityOrderVo.setThemeName(offlineActivityTheme.getThemeName());
+            OfflineActivity offlineActivity = offlineActivityService.getOneByActivityId(offlineActivityOrder.getActivityId());
+            offlineActivityOrderVo.setActivityAddress(offlineActivity.getActivityAddress());
+            OfflineActivityCode offlineActivityCode = offlineActivityCodeService.getOneByActivityCode(offlineActivityOrder.getActivityCode());
+            offlineActivityOrderVo.setIsUsed(offlineActivityCode.getIsUsed());
+            offlineActivityOrderVo.setCreateTimeDesc(simpleDateFormat.format(offlineActivityOrder.getCreateTime()));
+            offlineActivityOrderVo.setActivityPrice(offlineActivityOrder.getActivityPrice());
+            offlineActivityOrderVo.setActivityPriceDesc(div(100, offlineActivityOrder.getActivityPrice(), 2) + "");
+            offlineActivityOrderVo.setOrderNo(offlineActivityOrder.getOrderNo());
+            offlineActivityOrderVo.setActivityId(offlineActivityOrder.getActivityId());
+            offlineActivityOrderVo.setAmount(1);
+            offlineActivityOrderVoList.add(offlineActivityOrderVo);
+        }
+        return offlineActivityOrderVoList;
+    }
+
 }

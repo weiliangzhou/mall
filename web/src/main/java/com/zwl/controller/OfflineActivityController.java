@@ -237,6 +237,8 @@ public class OfflineActivityController {
         return JSON.toJSONString(result);
     }
 
+
+
     @PostMapping("/getActivityOrderDetail")
     public String getActivityOrderDetail(@RequestBody JSONObject jsonObject) {
         String userId = ThreadVariable.getUserID();
