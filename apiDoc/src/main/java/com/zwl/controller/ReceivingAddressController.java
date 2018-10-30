@@ -28,8 +28,6 @@ public class ReceivingAddressController {
                                @ApiComment("详细地址") String address,
                                @ApiComment("商户号") String merchantId,
                                @ApiComment("是否默认地址 0不是 1是") String isDefault
-
-
     ) {
         return new Result();
     }
