@@ -5,6 +5,7 @@ import com.zwl.model.vo.BuyResult;
 import com.zwl.model.vo.OfflineActivityBuy;
 import com.zwl.model.vo.OfflineActivityOrderVo;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,7 +24,15 @@ public interface OfflineActivityOrderService {
 
     List<OfflineActivityOrderVo> findOrderByUserId(String userId, String merchantId);
 
-    void updateStatusByOrderNo(String out_trade_no,String payment_no,String paymentTime);
+    void updateStatusByOrderNo(String out_trade_no, String payment_no, String paymentTime);
 
     OfflineActivityOrderVo findOrderDetailByOrderNo(String orderNo);
+
+    /**
+     * 根据线下活动时间查询订单
+     *
+     * @param userId       用户订单
+     * @param activityDate 线下活动 时间
+     */
+    OfflineActivityOrder getOfflineActivityOrderByActivityDate(String userId, Date activityDate);
 }

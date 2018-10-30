@@ -12,7 +12,7 @@ import java.util.List;
  * @date 2018/9/2911:30
  */
 public interface OfflineActivityThemeService {
-    List<OfflineActivityTheme> getOfflineActivityThemeListByQueryType(String merchantId, String queryType);
+    List<OfflineActivityTheme> getOfflineActivityThemeListByQueryType(String merchantId, String queryType, Integer activityType);
 
     OfflineActivityTheme getOfflineActivityThemeDetailByThemeId(String merchantId, Integer themeId);
 

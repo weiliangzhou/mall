@@ -58,7 +58,8 @@ public class OfflineActivityController {
     public OfflineActivityTheme getOfflineActivityThemeList(@ApiComment("merchantId") String merchantId,
                                                             @ApiComment("queryType  0查询推荐列表 其他查询全部") String queryType,
                                                             @ApiComment("pageSize") String pageSize,
-                                                            @ApiComment("pageNum") String pageNum
+                                                            @ApiComment("pageNum") String pageNum,
+                                                            @ApiComment("activityType 0线下课程 1沙龙") Integer activityType
     ) {
         OfflineActivityTheme offlineActivityTheme = new OfflineActivityTheme();
         return offlineActivityTheme;

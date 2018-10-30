@@ -5,6 +5,7 @@ import com.zwl.model.po.*;
 import com.zwl.model.wxpay.PaymentKit;
 import com.zwl.service.*;
 import com.zwl.util.BigDecimalUtil;
+import com.zwl.util.DateUtil;
 import com.zwl.util.PayNotifyProperties;
 import com.zwl.util.QRCodeUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -56,7 +57,6 @@ public class DYServiceImpl implements DYService {
     private PayNotifyProperties payNotifyProperties;
     @Autowired
     private UserMaidPercentService userMaidPercentService;
-
     private SimpleDateFormat sdf_yMdHms = new SimpleDateFormat("yyyyMMddHHmmss");
 
     @Override
@@ -133,8 +133,26 @@ public class DYServiceImpl implements DYService {
             String productName = order.getProductName();
             Integer level = order.getLevel();
             String levelName = order.getLevelName();
-            String referrerId = user.getReferrer();
-            //                             增加小班次数,可能是第一次购买需要insert，也可能是update
+            String referrerId = null;
+            //fixme 推荐人关联沙龙活动
+            //根据推荐人是否死绑推荐人
+            //如果是0 或者为null
+            //则先查询当天当天是否存在沙龙订单，如果存在 判断推荐人是否存在，存在 则获取  不存在则取user.getReferrer();
+            Integer isBuy = user.getIsBuy();
+            if (null == isBuy || isBuy == 0) {
+                Date currentDate = new Date();
+                OfflineActivityOrder offlineActivityOrder = offlineActivityOrderService.getOfflineActivityOrderByActivityDate(userId, currentDate);
+                if( null != offlineActivityOrder){
+                    referrerId = offlineActivityOrder.getSlReferrer();
+                }
+            } else if (isBuy == 1) {
+                referrerId = user.getReferrer();
+            } else {
+                log.error("返佣出错无效的isBuy:" + isBuy);
+                throw new RuntimeException("返佣出错无效的isBuy:" + isBuy);
+            }
+
+            //增加小班次数,可能是第一次购买需要insert，也可能是update
             switch (memberLevel) {
                 case 4:
                     userQuotaCountService.saveOrUpdate(userId, 10);
@@ -148,8 +166,11 @@ public class DYServiceImpl implements DYService {
                     log.info("如果旗下院长数量=10,则升级为校长");
                     Integer xzCount = userService.getXzCountByUserId(referrerId);
                     log.info("xzCount" + xzCount);
-                    if (xzCount != null)
+                    if (xzCount != null) {
                         userService.updateUserToXzByUserId(referrerId);
+                    }
+                    break;
+                default:
                     break;
             }
             //购买成功之后,更新购买数量

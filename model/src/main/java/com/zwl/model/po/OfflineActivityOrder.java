@@ -55,4 +55,14 @@ public class OfflineActivityOrder {
     private Integer isRetraining;
     @ApiComment(value = "主题id", sample = "1")
     private Integer activityThemeId;
+    @ApiComment(value = "沙龙推荐人", sample = "线下沙龙推荐人的UUID")
+    private String slReferrer;
+    @ApiComment(value = "订单类型", sample = "订单类型 0:线下活动 1:线下沙龙")
+    private Integer orderType;
+    @ApiComment(value = "微信号", sample = "文本输入没什么意思")
+    private String wechatNo;
+    /**
+     * 线下活动时间
+     */
+    private Date activityDate;
 }

@@ -7,7 +7,10 @@ import com.zwl.model.baseresult.Result;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.groups.Buy;
 import com.zwl.model.po.*;
-import com.zwl.model.vo.*;
+import com.zwl.model.vo.ActivityCodeDetail;
+import com.zwl.model.vo.BuyResult;
+import com.zwl.model.vo.OfflineActivityBuy;
+import com.zwl.model.vo.SignInVo;
 import com.zwl.model.wxpay.IpKit;
 import com.zwl.model.wxpay.StrKit;
 import com.zwl.model.wxpay.WxPayVo;
@@ -23,41 +26,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.util.List;
 
-/**
- * @author 二师兄超级帅
- * @Title: 线下活动
- * @ProjectName parent
- * @Description: TODO
- * @date 2018/9/2617:14
- */
 @RestController
 @Slf4j
-@RequestMapping("/wx/offlineActivity")
-public class OfflineActivityController {
+@RequestMapping("/wx/salon")
+public class SalonController {
     @Autowired
-    private MerchantService merchantService;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private WxPayService wxPayService;
-    @Autowired
-    private OfflineActivityCodeService offlineActivityCodeService;
+    private OfflineActivityThemeService offlineActivityThemeService;
     @Autowired
     private OfflineActivityService offlineActivityService;
     @Autowired
-    private OfflineActivityOrderService offlineActivityOrderService;
-    @Autowired
     private OfflineActivityOperatorService offlineActivityOperatorService;
     @Autowired
-    private OfflineActivityThemeService offlineActivityThemeService;
+    private OfflineActivityCodeService offlineActivityCodeService;
+    @Autowired
+    private OfflineActivityOrderService offlineActivityOrderService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private MerchantService merchantService;
+    @Autowired
+    private WxPayService wxPayService;
 
     @PostMapping("/buy")
     public String offlineActivityBuy(HttpServletRequest request, @RequestBody OfflineActivityBuy offlineActivityBuy) {
         Result result = new Result();
-        offlineActivityBuy.setOrderType(0);
+        offlineActivityBuy.setOrderType(1);
         BuyResult buyResult = offlineActivityOrderService.offlineActivityBuy(offlineActivityBuy);
         String orderNo = buyResult.getOrderNo();
         Integer totalFee = buyResult.getTotalFee();
@@ -76,6 +71,42 @@ public class OfflineActivityController {
         return JSON.toJSONString(result);
     }
 
+    @PostMapping("/getSalonThemeList")
+    public String getSalonThemeList(@RequestBody JSONObject jsonObject) {
+        String merchantId = jsonObject.getString("merchantId");
+        String queryType = jsonObject.getString("queryType");
+        Integer pageSize = jsonObject.getInteger("pageSize");
+        Integer pageNum = jsonObject.getInteger("pageNum");
+        Integer activityType = jsonObject.getInteger("activityType");
+        if (pageSize != null && pageNum != null)
+            PageHelper.startPage(pageNum, pageSize);
+        List<OfflineActivityTheme> offlineActivityThemeList = offlineActivityThemeService.getOfflineActivityThemeListByQueryType(merchantId, queryType, activityType);
+        Result result = new Result();
+        result.setData(offlineActivityThemeList);
+        return JSON.toJSONString(result);
+    }
+
+    @PostMapping("/getSalonThemeDetailByThemeId")
+    public String getSalonThemeDetailByThemeId(@RequestBody JSONObject jsonObject) {
+        String merchantId = jsonObject.getString("merchantId");
+        Integer themeId = jsonObject.getInteger("themeId");
+        OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(merchantId, themeId);
+        Result result = new Result();
+        result.setData(offlineActivityTheme);
+        return JSON.toJSONString(result);
+    }
+
+    @PostMapping("/getSalonListByThemeId")
+    public String getSalonListByThemeId(@RequestBody JSONObject jsonObject) {
+        String userId = ThreadVariable.getUserID();
+        String merchantId = jsonObject.getString("merchantId");
+        Integer activityThemeId = jsonObject.getInteger("activityThemeId");
+        List<OfflineActivity> offlineActivityList = offlineActivityService.getOfflineActivityListByThemeId(merchantId, activityThemeId, userId);
+        Result result = new Result();
+        result.setData(offlineActivityList);
+        return JSON.toJSONString(result);
+    }
+
     @PostMapping("/offlineLogin")
     public Result operatorSignIn(@RequestBody JSONObject jsonObject) {
         String operator = jsonObject.getString("operator");
@@ -90,93 +121,6 @@ public class OfflineActivityController {
         if (offlineActivityOperator1 == null) BSUtil.isTrue(false, "操作员登陆失败");
         Result result = new Result();
         return result;
-
-    }
-
-    @PostMapping("/getOfflineActivityThemeList")
-    public String getOfflineActivityThemeList(@RequestBody JSONObject jsonObject) {
-        String merchantId = jsonObject.getString("merchantId");
-        String queryType = jsonObject.getString("queryType");
-        Integer pageSize = jsonObject.getInteger("pageSize");
-        Integer pageNum = jsonObject.getInteger("pageNum");
-        Integer activityType = jsonObject.getInteger("activityType");
-        if (pageSize != null && pageNum != null)
-            PageHelper.startPage(pageNum, pageSize);
-        List<OfflineActivityTheme> offlineActivityThemeList = offlineActivityThemeService.getOfflineActivityThemeListByQueryType(merchantId, queryType,activityType);
-        Result result = new Result();
-        result.setData(offlineActivityThemeList);
-        return JSON.toJSONString(result);
-    }
-
-    @PostMapping("/getOfflineActivityThemeDetailByThemeId")
-    public String getOfflineActivityThemeDetailByThemeId(@RequestBody JSONObject jsonObject) {
-        String merchantId = jsonObject.getString("merchantId");
-        Integer themeId = jsonObject.getInteger("themeId");
-        OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(merchantId, themeId);
-        Result result = new Result();
-        result.setData(offlineActivityTheme);
-        return JSON.toJSONString(result);
-    }
-
-    @PostMapping("/getOfflineActivityListByThemeId")
-    public String getOfflineActivityListByThemeId(@RequestBody JSONObject jsonObject) {
-        String userId = ThreadVariable.getUserID();
-        String merchantId = jsonObject.getString("merchantId");
-        Integer activityThemeId = jsonObject.getInteger("activityThemeId");
-        List<OfflineActivity> offlineActivityList = offlineActivityService.getOfflineActivityListByThemeId(merchantId, activityThemeId, userId);
-        Result result = new Result();
-        result.setData(offlineActivityList);
-        return JSON.toJSONString(result);
-    }
-
-    @PostMapping("/signIn")
-    public Result signIn(@Validated(Buy.class) @RequestBody SignInVo signInVo) {
-        //获取操作员
-        String operator = signInVo.getOperator();
-        //通过操作员匹配
-        //ss_offline_activity_operator
-        OfflineActivityOperator offlineActivityOperator = offlineActivityOperatorService.getOneByOperator(operator);
-        if (null == offlineActivityOperator) {
-            Result result = new Result();
-            result.setCode("800");
-            result.setMessage("非法操作！");
-            return result;
-        }
-
-        Integer themeId = offlineActivityOperator.getActivityThemeId();
-        log.info("操作员主题" + themeId);
-        //获取code
-        String activityCode = signInVo.getActivityCode();
-        //通过code 做一个比对
-        //如果正确则更新ss_offline_activity_code
-        OfflineActivityCode offlineActivityCode = offlineActivityCodeService.getOneByActivityCode(activityCode);
-        Integer themeId_code = offlineActivityCode.getActivityThemeId();
-        log.info("操作员主题" + themeId_code);
-        if (themeId != themeId_code) {
-            Result result = new Result();
-            result.setCode("800");
-            result.setMessage("请切换账号！");
-            return result;
-        }
-
-        if (offlineActivityCode == null)
-            BSUtil.isTrue(false, "非法code!");
-        else {
-            if (offlineActivityCode.getIsUsed() == 1)
-                BSUtil.isTrue(false, "签到码已被使用！");
-            Integer activityId = offlineActivityCode.getActivityId();
-            //需要判断当前下线活动  是否在活动期间
-            //如果在的话 则更新
-            //如果不在  则报错 签到活动已经到期
-            OfflineActivity offlineActivityCheckTime = offlineActivityService.getOneByActivityIdAndCheckTime(activityId);
-            if (offlineActivityCheckTime == null)
-                BSUtil.isTrue(false, "活动未开始或者已过期！");
-
-            offlineActivityCodeService.updatePassByActivityCode(activityCode);
-        }
-        Result result = new Result();
-        return result;
-
     }
 
     @PostMapping("/getActivityCodeDetail")
@@ -207,11 +151,10 @@ public class OfflineActivityController {
                 Integer themeId = offlineActivityCheckTime.getActivityThemeId();
                 String userId = offlineActivityCode.getUserId();
                 Integer userBuyCount = offlineActivityCodeService.getBuyCountByUserIdAndThemeId(userId, themeId);
-                if (userBuyCount == 1) {
+                if (userBuyCount == 1)
                     activityCodeDetail.setStatus("初次");
-                } else {
+                else
                     activityCodeDetail.setStatus("复训");
-                }
                 activityCodeDetail.setActivityAddress(offlineActivityCheckTime.getActivityAddress());
                 activityCodeDetail.setActivityStartTime(offlineActivityCheckTime.getActivityStartTime());
                 activityCodeDetail.setActivityEndTime(offlineActivityCheckTime.getActivityEndTime());
@@ -220,34 +163,60 @@ public class OfflineActivityController {
                 result.setData(activityCodeDetail);
                 return JSON.toJSONString(result);
             }
-
-
         }
         return "";
-
     }
 
-    @PostMapping("/getActivityOrderList")
-    public String getActivityOrderList(@RequestBody JSONObject jsonObject) {
-        String merchantId = jsonObject.getString("merchantId");
-        String userId = ThreadVariable.getUserID();
-        List<OfflineActivityOrderVo> offlineActivityOrderVoList = offlineActivityOrderService.findOrderByUserId(userId, merchantId);
+    @PostMapping("/signIn")
+    public Result signIn(@Validated(Buy.class) @RequestBody SignInVo signInVo) {
+        //获取操作员
+        String operator = signInVo.getOperator();
+        if (null == operator) {
+            Result result = new Result();
+            result.setCode("800");
+            result.setMessage("重新登录！");
+            return result;
+        }
+        //通过操作员匹配
+        //ss_offline_activity_operator
+        OfflineActivityOperator offlineActivityOperator = offlineActivityOperatorService.getOneByOperator(operator);
+        if (null == offlineActivityOperator) {
+            Result result = new Result();
+            result.setCode("800");
+            result.setMessage("非法操作！");
+            return result;
+        }
+        Integer themeId = offlineActivityOperator.getActivityThemeId();
+        log.info("操作员主题" + themeId);
+        //获取code
+        String activityCode = signInVo.getActivityCode();
+        //通过code 做一个比对
+        //如果正确则更新ss_offline_activity_code
+        OfflineActivityCode offlineActivityCode = offlineActivityCodeService.getOneByActivityCode(activityCode);
+        Integer themeId_code = offlineActivityCode.getActivityThemeId();
+        log.info("操作员主题" + themeId_code);
+        if (themeId != themeId_code) {
+            Result result = new Result();
+            result.setCode("800");
+            result.setMessage("无权核销该场沙龙 , 请切换正确账户登入！");
+            return result;
+        }
+        if (offlineActivityCode == null)
+            BSUtil.isTrue(false, "非法code!");
+        else {
+            if (offlineActivityCode.getIsUsed() == 1)
+                BSUtil.isTrue(false, "签到码已被使用！");
+            Integer activityId = offlineActivityCode.getActivityId();
+            //需要判断当前下线活动  是否在活动期间
+            //如果在的话 则更新
+            //如果不在  则报错 签到活动已经到期
+            OfflineActivity offlineActivityCheckTime = offlineActivityService.getOneByActivityIdAndCheckTime(activityId);
+            if (offlineActivityCheckTime == null)
+                BSUtil.isTrue(false, "活动未开始或者已过期！");
+
+            offlineActivityCodeService.updatePassByActivityCode(activityCode);
+        }
         Result result = new Result();
-        result.setData(offlineActivityOrderVoList);
-        return JSON.toJSONString(result);
+        return result;
     }
-
-    @PostMapping("/getActivityOrderDetail")
-    public String getActivityOrderDetail(@RequestBody JSONObject jsonObject) {
-        String userId = ThreadVariable.getUserID();
-        String orderNo = jsonObject.getString("orderNo");
-        Integer activityId = jsonObject.getInteger("activityId");
-        OfflineActivityOrderVo offlineActivityOrderVo = offlineActivityOrderService.findOrderDetailByOrderNo(orderNo);
-        OfflineActivityCode offlineActivityCode = offlineActivityCodeService.getOneByUserIdAndOfflineActivityId(userId, activityId);
-        offlineActivityOrderVo.setQrCodeUrl(offlineActivityCode.getQrCodeUrl());
-        Result result = new Result();
-        result.setData(offlineActivityOrderVo);
-        return JSON.toJSONString(result);
-    }
-
 }
