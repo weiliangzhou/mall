@@ -8,6 +8,7 @@ import com.zwl.model.po.OfflineActivityOrder;
 import com.zwl.model.po.OfflineActivityTheme;
 import com.zwl.model.vo.ActivityCodeDetail;
 import com.zwl.model.vo.OfflineActivityOrderVo;
+import com.zwl.model.vo.UserVo;
 import com.zwl.model.wxpay.WxPayVo;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -86,12 +87,27 @@ public class SalonController {
         return wxPayVo;
     }
 
-    @RequestMapping(name = "我的邀约",
+    @RequestMapping(name = "我的邀约人",
             value = "/wx/offlineActivity/getMySLActivityOrderList", method = RequestMethod.POST)
-    public OfflineActivityOrderVo getActivityOrderList(@ApiComment("merchantId") String merchantId
+    public OfflineActivityOrderVo getActivityOrderList(@ApiComment("merchantId") String merchantId,@ApiComment("pageSize") String pageSize,
+                                                       @ApiComment("pageNum") String pageNum
     ) {
         OfflineActivityOrderVo offlineActivityOrder = new OfflineActivityOrderVo();
         return offlineActivityOrder;
     }
 
+    @RequestMapping(name = "我的邀约详情",
+            value = "/wx/offlineActivity/getSLActivityOrderDetail", method = RequestMethod.POST)
+    public OfflineActivityOrderVo getSLActivityOrderDetail(@ApiComment("orderNo") String orderNo
+    ) {
+        OfflineActivityOrderVo offlineActivityOrder = new OfflineActivityOrderVo();
+        return offlineActivityOrder;
+    }
+    @RequestMapping(name = "线下沙龙报名信息",
+            value = "/wx/offlineActivity/getSLUserInfo", method = RequestMethod.POST)
+    public UserVo getSLUserInfo(@ApiComment("merchantId") String merchantId, @ApiComment("slReferrer") String slReferrer
+    ) {
+        UserVo userVo = new UserVo();
+        return userVo;
+    }
 }

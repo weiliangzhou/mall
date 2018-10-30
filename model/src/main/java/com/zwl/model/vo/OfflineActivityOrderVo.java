@@ -35,4 +35,6 @@ public class OfflineActivityOrderVo extends OfflineActivityOrder {
     private String slReferrerName;
     @ApiComment(value = "沙龙邀约人电话", sample = "110")
     private String slReferrerPhone;
+    @ApiComment(value = "沙龙状态", sample = "已结束")
+    private String slStatus;
 }

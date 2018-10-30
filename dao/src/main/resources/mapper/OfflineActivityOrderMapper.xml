@@ -33,7 +33,7 @@
     user_id, sex, phone, real_name, city, id_card_num, payment_no, payment_time, merchant_id,
     create_time, modify_time, available, is_maid, is_retraining, activity_theme_id, sl_referrer, order_type, wechat_no, activity_date
   </sql>
-  <select id="findOrderByUserId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  <select id="getActivityOrderListByUserId" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select
     <include refid="Base_Column_List" />
     from ss_offline_activity_order

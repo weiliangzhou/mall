@@ -147,8 +147,8 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
     }
 
     @Override
-    public List<OfflineActivityOrderVo> findOrderByUserId(String userId, String merchantId) {
-        List<OfflineActivityOrder> offlineActivityOrderList = offlineActivityOrderMapper.findOrderByUserId(userId, merchantId);
+    public List<OfflineActivityOrderVo> getActivityOrderListByUserId(String userId, String merchantId) {
+        List<OfflineActivityOrder> offlineActivityOrderList = offlineActivityOrderMapper.getActivityOrderListByUserId(userId, merchantId);
         List<OfflineActivityOrderVo> offlineActivityOrderVoList = new ArrayList<>();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         for (OfflineActivityOrder offlineActivityOrder : offlineActivityOrderList) {
@@ -168,12 +168,19 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
             offlineActivityOrderVo.setActivityPriceDesc(div(100, offlineActivityOrder.getActivityPrice(), 2) + "");
             offlineActivityOrderVo.setOrderNo(offlineActivityOrder.getOrderNo());
             offlineActivityOrderVo.setActivityId(offlineActivityOrder.getActivityId());
-
+            offlineActivityOrderVo.setCreateTime(offlineActivityOrder.getCreateTime());
             if(null != orderType && orderType.equals(1)){
                 User user = userService.getByUserId(offlineActivityOrder.getSlReferrer());
+                offlineActivityOrderVo.setOrderType(1);
                 offlineActivityOrderVo.setSlReferrerName(user.getRealName());
                 offlineActivityOrderVo.setSlReferrerPhone(user.getRegisterMobile());
+                if(offlineActivity.getActivityStartTime().getTime()-System.currentTimeMillis()>0){
+                    offlineActivityOrderVo.setSlStatus("报名成功");
+                }else{
+                    offlineActivityOrderVo.setSlStatus("已结束");
+                }
             }else{
+                offlineActivityOrderVo.setOrderType(0);
                 offlineActivityOrderVo.setAmount(1);
             }
             offlineActivityOrderVoList.add(offlineActivityOrderVo);
@@ -259,7 +266,7 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         return offlineActivityOrderVoList;
     }
 
-    /*@Override
+    @Override
     public OfflineActivityOrderVo getSLActivityOrderDetail(String orderNo) {
         OfflineActivityOrder offlineActivityOrder = offlineActivityOrderMapper.selectByPrimaryKey(orderNo);
         OfflineActivityOrderVo offlineActivityOrderVo = new OfflineActivityOrderVo();
@@ -275,10 +282,16 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         offlineActivityOrderVo.setActivityAddress(offlineActivity.getActivityAddress());
         offlineActivityOrderVo.setActivityStartTime(offlineActivity.getActivityStartTime());
         offlineActivityOrderVo.setActivityEndTime(offlineActivity.getActivityEndTime());
-        OfflineActivityCode offlineActivityCode = offlineActivityCodeService.getOneByActivityCode(offlineActivityOrder.getActivityCode());
-        offlineActivityOrderVo.setIsUsed(offlineActivityCode.getIsUsed());
+        offlineActivityOrderVo.setActivityPrice(offlineActivityOrder.getActivityPrice());
+        offlineActivityOrderVo.setActivityPriceDesc(div(100, offlineActivityOrder.getActivityPrice(), 2) + "");
+        //OfflineActivityCode offlineActivityCode = offlineActivityCodeService.getOneByActivityCode(offlineActivityOrder.getActivityCode());
+        if(offlineActivity.getActivityStartTime().getTime()-System.currentTimeMillis()>0){
+            offlineActivityOrderVo.setSlStatus("报名成功");
+        }else{
+            offlineActivityOrderVo.setSlStatus("已结束");
+        }
 
         return offlineActivityOrderVo;
-    }*/
+    }
 
 }

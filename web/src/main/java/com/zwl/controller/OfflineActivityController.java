@@ -230,8 +230,14 @@ public class OfflineActivityController {
     @PostMapping("/getActivityOrderList")
     public String getActivityOrderList(@RequestBody JSONObject jsonObject) {
         String merchantId = jsonObject.getString("merchantId");
+        Integer pageSize = jsonObject.getInteger("pageSize");
+        Integer pageNum = jsonObject.getInteger("pageNum");
+        if (pageSize != null && pageNum != null) {
+            PageHelper.startPage(pageNum, pageSize);
+        }
         String userId = ThreadVariable.getUserID();
-        List<OfflineActivityOrderVo> offlineActivityOrderVoList = offlineActivityOrderService.findOrderByUserId(userId, merchantId);
+        //String userId = "de3c5bf3d8004a06b5bb22c94f63c7e4";
+        List<OfflineActivityOrderVo> offlineActivityOrderVoList = offlineActivityOrderService.getActivityOrderListByUserId(userId, merchantId);
         Result result = new Result();
         result.setData(offlineActivityOrderVoList);
         return JSON.toJSONString(result);

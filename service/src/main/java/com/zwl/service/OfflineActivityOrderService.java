@@ -22,7 +22,7 @@ public interface OfflineActivityOrderService {
 
     OfflineActivityOrder findOrderByActivityCode(String activityCode);
 
-    List<OfflineActivityOrderVo> findOrderByUserId(String userId, String merchantId);
+    List<OfflineActivityOrderVo> getActivityOrderListByUserId(String userId, String merchantId);
 
     void updateStatusByOrderNo(String out_trade_no, String payment_no, String paymentTime);
 
@@ -38,10 +38,18 @@ public interface OfflineActivityOrderService {
 
     /**
      *
-     * @param userId     用户订单
+     * @param userId     用户id
      * @param merchantId 商户号
      * @return
      */
     List<OfflineActivityOrderVo> getMySLActivityOrderList(String userId, String merchantId);
+
+    /**
+     *
+     * @param orderNo     订单id
+     * @return
+     */
+    OfflineActivityOrderVo getSLActivityOrderDetail(String orderNo);
+
 
 }

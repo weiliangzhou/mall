@@ -94,7 +94,9 @@ public class OfflineActivityController {
 
     @RequestMapping(name = "获取订单列表",
             value = "/wx/offlineActivity/getActivityOrderList", method = RequestMethod.POST)
-    public OfflineActivityOrderVo getActivityOrderList(@ApiComment("merchantId") String merchantId
+    public OfflineActivityOrderVo getActivityOrderList(@ApiComment("pageSize") String pageSize,
+                                                       @ApiComment("pageNum") String pageNum,
+                                                        @ApiComment("merchantId") String merchantId
     ) {
         OfflineActivityOrderVo offlineActivityOrder = new OfflineActivityOrderVo();
         return offlineActivityOrder;
