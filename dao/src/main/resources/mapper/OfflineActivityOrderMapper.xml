@@ -313,7 +313,7 @@
     select
     <include refid="Base_Column_List" />
     from ss_offline_activity_order
-    and available =1
+    where available =1
     and order_status = 1
     and order_type = 1
     and merchant_id = #{merchantId,jdbcType=VARCHAR}

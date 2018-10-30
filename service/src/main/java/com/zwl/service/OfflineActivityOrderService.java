@@ -26,7 +26,7 @@ public interface OfflineActivityOrderService {
 
     void updateStatusByOrderNo(String out_trade_no, String payment_no, String paymentTime);
 
-    OfflineActivityOrderVo findOrderDetailByOrderNo(String orderNo);
+    OfflineActivityOrderVo findOrderDetailByOrderNo(String orderNo, String userId);
 
     /**
      * 根据线下活动时间查询订单
@@ -43,4 +43,5 @@ public interface OfflineActivityOrderService {
      * @return
      */
     List<OfflineActivityOrderVo> getMySLActivityOrderList(String userId, String merchantId);
+
 }

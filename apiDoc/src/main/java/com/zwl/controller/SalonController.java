@@ -7,6 +7,7 @@ import com.zwl.model.po.OfflineActivity;
 import com.zwl.model.po.OfflineActivityOrder;
 import com.zwl.model.po.OfflineActivityTheme;
 import com.zwl.model.vo.ActivityCodeDetail;
+import com.zwl.model.vo.OfflineActivityOrderVo;
 import com.zwl.model.wxpay.WxPayVo;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -84,4 +85,13 @@ public class SalonController {
         WxPayVo wxPayVo = new WxPayVo();
         return wxPayVo;
     }
+
+    @RequestMapping(name = "我的邀约",
+            value = "/wx/offlineActivity/getMySLActivityOrderList", method = RequestMethod.POST)
+    public OfflineActivityOrderVo getActivityOrderList(@ApiComment("merchantId") String merchantId
+    ) {
+        OfflineActivityOrderVo offlineActivityOrder = new OfflineActivityOrderVo();
+        return offlineActivityOrder;
+    }
+
 }

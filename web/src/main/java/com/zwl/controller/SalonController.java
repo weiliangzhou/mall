@@ -220,11 +220,12 @@ public class SalonController {
     @PostMapping("/getMySLActivityOrderList")
     public String getMySLActivityOrderList(@RequestBody JSONObject jsonObject) {
         String merchantId = jsonObject.getString("merchantId");
-        String slReferrer = jsonObject.getString("slReferrer");
         String userId = ThreadVariable.getUserID();
+        //String userId = "123";
         List<OfflineActivityOrderVo> offlineActivityOrderVoList = offlineActivityOrderService.getMySLActivityOrderList(userId, merchantId);
         Result result = new Result();
         result.setData(offlineActivityOrderVoList);
         return JSON.toJSONString(result);
     }
+
 }
