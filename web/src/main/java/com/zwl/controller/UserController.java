@@ -257,4 +257,18 @@ public class UserController {
 
         return result;
     }
+
+    @PostMapping("/auth/saveUserInfo")
+    public Result saveUserInfo(@RequestBody JSONObject jsonObject) {
+        String city = jsonObject.getString("city");
+        Integer gender = jsonObject.getInteger("gender");
+        String userId = ThreadVariable.getUserID();
+        User user = new User();
+        user.setUserId(userId);
+        user.setCity(city);
+        user.setGender(gender);
+        userService.updateUserByUserId(user);
+        return new Result();
+
+    }
 }

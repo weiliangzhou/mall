@@ -5,6 +5,7 @@ import com.terran4j.commons.api2doc.annotations.ApiComment;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.vo.PageUserVo;
 import com.zwl.model.vo.UserVo;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -60,6 +61,19 @@ public class UserController {
                          @ApiComment("会员等级名称") String levelName) {
         Result result = new Result();
         return result;
+    }
+
+    /**
+     * 保存城市、性别
+     *
+     * @param city
+     * @param gender
+     * @return
+     */
+    @ApiComment("保存城市、性别")
+    @PostMapping("/auth/saveUserInfo")
+    public Result saveUserInfo(@ApiComment("城市") String city, @ApiComment("性别0男 1女") String gender) {
+        return new Result();
     }
 
 

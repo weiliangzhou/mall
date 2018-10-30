@@ -31,7 +31,6 @@ public class User {
     private Integer gender;
     //城市
     private String city;
-    //
 
 
 }
