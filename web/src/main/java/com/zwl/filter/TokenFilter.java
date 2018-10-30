@@ -25,7 +25,7 @@ import java.io.IOException;
  */
 @Order(1)
 // 重点
-//@WebFilter(filterName = "tokenFilter", urlPatterns = "/wx/*")
+@WebFilter(filterName = "tokenFilter", urlPatterns = "/wx/*")
 @Slf4j
 public class TokenFilter implements Filter {
 
