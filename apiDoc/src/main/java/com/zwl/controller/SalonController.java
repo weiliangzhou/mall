@@ -80,7 +80,7 @@ public class SalonController {
             @ApiComment("city") String city,
             @ApiComment("phone") String phone,
             @ApiComment("idCardNum") String idCardNum,
-            @ApiComment(value = "slReferrer", sample = "线下沙龙推荐人") String slSeferrer,
+            @ApiComment(value = "slReferrer", sample = "线下沙龙推荐人") String slReferrer,
             @ApiComment(value = "wechatNo", sample = "纯文本输入没什么意思") String wechatNo
     ) {
         WxPayVo wxPayVo = new WxPayVo();
