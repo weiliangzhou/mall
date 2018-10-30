@@ -5,7 +5,6 @@ import com.zwl.model.po.*;
 import com.zwl.model.wxpay.PaymentKit;
 import com.zwl.service.*;
 import com.zwl.util.BigDecimalUtil;
-import com.zwl.util.DateUtil;
 import com.zwl.util.PayNotifyProperties;
 import com.zwl.util.QRCodeUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -139,19 +138,15 @@ public class DYServiceImpl implements DYService {
             //如果是0 或者为null
             //则先查询当天当天是否存在沙龙订单，如果存在 判断推荐人是否存在，存在 则获取  不存在则取user.getReferrer();
             Integer isBuy = user.getIsBuy();
-            if (null == isBuy || isBuy == 0) {
-                Date currentDate = new Date();
-                OfflineActivityOrder offlineActivityOrder = offlineActivityOrderService.getOfflineActivityOrderByActivityDate(userId, currentDate);
-                if( null != offlineActivityOrder){
-                    referrerId = offlineActivityOrder.getSlReferrer();
-                }
-            } else if (isBuy == 1) {
+            if (isBuy == 1) {
                 referrerId = user.getReferrer();
             } else {
-                log.error("返佣出错无效的isBuy:" + isBuy);
-                throw new RuntimeException("返佣出错无效的isBuy:" + isBuy);
+                Date currentDate = new Date();
+                OfflineActivityOrder offlineActivityOrder = offlineActivityOrderService.getOfflineActivityOrderByActivityDate(userId, currentDate);
+                if (null != offlineActivityOrder) {
+                    referrerId = offlineActivityOrder.getSlReferrer();
+                }
             }
-
             //增加小班次数,可能是第一次购买需要insert，也可能是update
             switch (memberLevel) {
                 case 4:
