@@ -57,9 +57,9 @@ public class OfflineActivityBuy {
     /**
      * 线下沙龙推荐人
      */
-    @NotBlank(message = "slSeferrer", groups = {SlBuy.class})
-    @ApiComment(value = "slSeferrer", sample = "线下沙龙推荐人UUID")
-    private String slSeferrer;
+    @NotBlank(message = "slReferrer", groups = {SlBuy.class})
+    @ApiComment(value = "slReferrer", sample = "线下沙龙推荐人UUID")
+    private String slReferrer;
 
     /**
      * 订单类似

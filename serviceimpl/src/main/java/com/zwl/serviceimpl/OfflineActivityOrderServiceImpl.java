@@ -116,7 +116,7 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         offlineActivityOrder.setActualMoney(activityPrice);
         offlineActivityOrder.setActivityPrice(activityPrice);
         offlineActivityOrder.setActivityThemeId(offlineActivity.getActivityThemeId());
-        offlineActivityOrder.setSlReferrer(offlineActivityBuy.getSlSeferrer());
+        offlineActivityOrder.setSlReferrer(offlineActivityBuy.getSlReferrer());
         offlineActivityOrder.setOrderType(offlineActivityBuy.getOrderType());
         offlineActivityOrder.setWechatNo(offlineActivityBuy.getWechatNo());
         offlineActivityOrder.setActivityDate(offlineActivity.getActivityStartTime());

@@ -166,8 +166,6 @@ public class TokenFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-
-
         // 验证token
         // 这里token如果接收有空格的地方，，那就是+号没有处理好。。可以考虑变成%2B
         if (StringUtils.isBlank(token)) {
