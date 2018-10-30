@@ -201,19 +201,20 @@ public class SalonController {
             result.setMessage("无权核销该场沙龙 , 请切换正确账户登入！");
             return result;
         }
-        if (offlineActivityCode == null)
+        if (offlineActivityCode == null) {
             BSUtil.isTrue(false, "非法code!");
-        else {
-            if (offlineActivityCode.getIsUsed() == 1)
+        } else {
+            if (offlineActivityCode.getIsUsed() == 1) {
                 BSUtil.isTrue(false, "签到码已被使用！");
+            }
             Integer activityId = offlineActivityCode.getActivityId();
             //需要判断当前下线活动  是否在活动期间
             //如果在的话 则更新
             //如果不在  则报错 签到活动已经到期
             OfflineActivity offlineActivityCheckTime = offlineActivityService.getOneByActivityIdAndCheckTime(activityId);
-            if (offlineActivityCheckTime == null)
+            if (offlineActivityCheckTime == null) {
                 BSUtil.isTrue(false, "活动未开始或者已过期！");
-
+            }
             offlineActivityCodeService.updatePassByActivityCode(activityCode);
         }
         Result result = new Result();

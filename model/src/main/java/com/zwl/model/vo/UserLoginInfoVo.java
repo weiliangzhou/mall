@@ -56,16 +56,25 @@ public class UserLoginInfoVo {
      */
     private String msgCode;
     /**
-     * 商户编号  引用上面
-     */
-    //    private String merchantId;
-    /**
      * 微信授权code
      */
     private String wxAccreditCode;
+//    账户管理
     /**
      * 真实姓名
      */
     private String realName;
+    /**
+     * 城市
+     */
+    private String city;
+    /**
+     * 性别
+     */
+    private Integer gender;
+    /**
+     * 身份证
+     */
+    private String idCardNum;
 
 }

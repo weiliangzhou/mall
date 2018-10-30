@@ -195,6 +195,7 @@ public class UserController {
 //        userLoginInfoVo.setIsCertification(userInfo.getIsCertification() == null ? 0 : 1);
         //实名认证状态
         UserCertification userCertification = certificationService.getOneByUserId(userId);
+        //fixme userCertification可能为null
         userLoginInfoVo.setCertificationStatus(userCertification.getStatus());
         Integer xiaxianCount = maidInfoService.getMaidInfoCount(userId);
         userLoginInfoVo.setXiaxianCount(null == xiaxianCount ? 0 : xiaxianCount);
@@ -204,6 +205,10 @@ public class UserController {
         balance = balance == null ? 0 : balance / 100;
         userLoginInfoVo.setBalance(balance);
         userLoginInfoVo.setRealName(StringUtils.isBlank(user.getRealName()) ? "" : user.getRealName());
+        //增加性别、城市、姓名、身份证
+        userLoginInfoVo.setGender(user.getGender());
+        userLoginInfoVo.setCity(user.getCity());
+        userLoginInfoVo.setIdCardNum(userCertification.getIdCard());
         result.setData(userLoginInfoVo);
         return result;
     }

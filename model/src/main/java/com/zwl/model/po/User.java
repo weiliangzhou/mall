@@ -27,4 +27,11 @@ public class User {
     private Integer available = 1;
     //是否购买
     private Integer isBuy;
+    //性别
+    private Integer gender;
+    //城市
+    private String city;
+    //
+
+
 }

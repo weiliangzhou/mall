@@ -138,7 +138,7 @@ public class MaidInfoController {
         MyMaidInfoVo myVipStudent = new MyMaidInfoVo();
         myVipStudent.setLeval(4);
         myVipStudent.setCount(VipStudent);
-        myVipStudent.setTitle("Vip学员");
+        myVipStudent.setTitle("创业教练");
         myMaidInfoList.add(myVipStudent);
 
         MyMaidInfoVo myStudent = new MyMaidInfoVo();
