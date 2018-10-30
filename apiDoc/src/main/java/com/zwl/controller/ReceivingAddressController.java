@@ -24,13 +24,13 @@ public class ReceivingAddressController {
     @RequestMapping(name = "保存",
             value = "/auth/saveUserReceivingAddress", method = RequestMethod.POST)
     public Result saveUserInfo(@ApiComment("收货人姓名") String receivingName,
-                               @ApiComment("性别0男 1女") String gender,
                                @ApiComment("省") String province,
                                @ApiComment("市") String city,
                                @ApiComment("区") String area,
                                @ApiComment("详细地址") String address,
                                @ApiComment("商户号") String merchantId,
-                               @ApiComment("是否默认地址 0不是 1是") String isDefault
+                               @ApiComment("是否默认地址 0不是 1是") String isDefault,
+                               @ApiComment("手机号") String phone
     ) {
         return new Result();
     }
@@ -39,10 +39,42 @@ public class ReceivingAddressController {
     @RequestMapping(name = "获取列表",
             value = "/auth/getUserReceivingAddressList", method = RequestMethod.POST)
     public UserReceivingAddress getUserReceivingAddressList(
-            @ApiComment("商户号") String merchantId,
-            @ApiComment("是否默认地址 0不是 1是") String isDefault
+            @ApiComment("商户号") String merchantId
     ) {
         return new UserReceivingAddress();
     }
 
+    @ApiComment("修改")
+    @RequestMapping(name = "修改",
+            value = "/auth/updateUserReceivingAddress", method = RequestMethod.POST)
+    public Result updateUserReceivingAddress(@ApiComment("收货人姓名") String receivingName,
+                               @ApiComment("省") String province,
+                               @ApiComment("市") String city,
+                               @ApiComment("区") String area,
+                               @ApiComment("详细地址") String address,
+                               @ApiComment("商户号") String merchantId,
+                               @ApiComment("是否默认地址 0不是 1是") String isDefault,
+                               @ApiComment("手机号") String phone,
+                                @ApiComment("id") Integer id
+    ) {
+        return new Result();
+    }
+
+    @ApiComment("获取单个收货地址")
+    @RequestMapping(name = "获取单个收货地址",
+            value = "/auth/getOneById", method = RequestMethod.POST)
+    public UserReceivingAddress getOneById(
+            @ApiComment("id") Integer id
+    ) {
+        return new UserReceivingAddress();
+    }
+
+    @ApiComment("删除收货地址")
+    @RequestMapping(name = "删除收货地址",
+            value = "/auth/deleteById", method = RequestMethod.POST)
+    public Result deleteById(
+            @ApiComment("id") Integer id
+    ) {
+        return new Result();
+    }
 }

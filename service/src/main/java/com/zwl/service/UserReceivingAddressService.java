@@ -2,6 +2,8 @@ package com.zwl.service;
 
 import com.zwl.model.po.UserReceivingAddress;
 
+import java.util.List;
+
 /**
  * @author 二师兄超级帅
  * @Title: UserReceivingAddress
@@ -12,4 +14,13 @@ import com.zwl.model.po.UserReceivingAddress;
 public interface UserReceivingAddressService {
     void insert(UserReceivingAddress userReceivingAddress);
 
+    void update(UserReceivingAddress userReceivingAddress);
+
+    List<UserReceivingAddress> getUserReceivingAddressList(UserReceivingAddress userReceivingAddress);
+
+    void updateIsDefaultByUserId(String userId, String merchantId);
+
+    UserReceivingAddress getOneById(Integer id);
+
+    void deleteById(Integer id);
 }
