@@ -109,21 +109,6 @@ public class TokenFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-//        //获取观后感列表
-//        if (requestURL.contains("/wx/classInfoComment/getClassInfoCommentList")) {
-//            chain.doFilter(request, response);
-//            return;
-//        }
-//        //新增观后感
-//        if (requestURL.contains("/wx/classInfoComment/add")) {
-//            chain.doFilter(request, response);
-//            return;
-//        }
-//        //获取节课下拉框
-//        if (requestURL.contains("/wx/classInfoComment/getClassInfoList")) {
-//            chain.doFilter(request, response);
-//            return;
-//        }
         //获取图标列表
         if (requestURL.contains("/wx/icon/getIconList")) {
             chain.doFilter(request, response);
@@ -157,42 +142,33 @@ public class TokenFilter implements Filter {
             return;
         }
         //线下活动签到
-        if (requestURL.contains("/wx/offlineActivity/signIn")) {
+        if (requestURL.contains("/wx/offlineActivity/signIn") || requestURL.contains("/wx/salon/signIn")) {
             chain.doFilter(request, response);
             return;
         }
-        //线下活动签到
-        if (requestURL.contains("/wx/offlineActivity/getOfflineActivityThemeList")) {
+        //线下、沙龙主题详情购买
+        if (requestURL.contains("/wx/offlineActivity/getOfflineActivityThemeList") || requestURL.contains("/wx/salon/getSalonThemeList")) {
             chain.doFilter(request, response);
             return;
         }
-        //线下活动签到
-//        if (requestURL.contains("/wx/offlineActivity/getOfflineActivityListByThemeId")) {
-//            chain.doFilter(request, response);
-//            return;
-//        }
-        //线下活动签到
-        if (requestURL.contains("/wx/offlineActivity/getOfflineActivityThemeDetailByThemeId")) {
+        //线下、沙龙主题详情购买
+        if (requestURL.contains("/wx/offlineActivity/getOfflineActivityThemeDetailByThemeId") || requestURL.contains("/wx/salon/getSalonListByThemeId")) {
             chain.doFilter(request, response);
             return;
         }
         //操作员登陆
-        if (requestURL.contains("/wx/offlineActivity/offlineLogin")) {
+        if (requestURL.contains("/wx/offlineActivity/offlineLogin") || requestURL.contains("/wx/salon/offlineLogin")) {
             chain.doFilter(request, response);
             return;
         }
-        //线下签到详情页
-        if (requestURL.contains("/wx/offlineActivity/getActivityCodeDetail")) {
+        //线下、沙龙主题详情介绍页
+        if (requestURL.contains("/wx/offlineActivity/getActivityCodeDetail") || requestURL.contains("/wx/salon/getSalonThemeDetailByThemeId")) {
             chain.doFilter(request, response);
             return;
         }
-       /* //用户信息展示
-        if (requestURL.contains("/user/getUserInfoByUserId")) {
-            chain.doFilter(request, response);
-            return;
-        }*/
+
+
         // 验证token
-        // token="nprI2s/ITAaGaLJfL+QkZZYKhMAH3C3PkQEbpv+qQwOFG7hECEPeR4lKz5NTpQ177Sk1MdBj1GEjyNM2V0G2Nbj3FfKz6X+C";
         // 这里token如果接收有空格的地方，，那就是+号没有处理好。。可以考虑变成%2B
         if (StringUtils.isBlank(token)) {
             Result result = new Result();
