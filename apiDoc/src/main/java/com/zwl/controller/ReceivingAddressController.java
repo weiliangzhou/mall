@@ -26,7 +26,9 @@ public class ReceivingAddressController {
                                @ApiComment("市") String city,
                                @ApiComment("区") String area,
                                @ApiComment("详细地址") String address,
-                               @ApiComment("商户号") String merchantId
+                               @ApiComment("商户号") String merchantId,
+                               @ApiComment("是否默认地址 0不是 1是") String isDefault
+
 
     ) {
         return new Result();
@@ -34,7 +36,8 @@ public class ReceivingAddressController {
     @ApiComment("保存城市、性别")
     @PostMapping("/auth/getUserReceivingAddressList")
     public Result getUserReceivingAddressList(
-            @ApiComment("商户号") String merchantId
+            @ApiComment("商户号") String merchantId,
+            @ApiComment("是否默认地址 0不是 1是") String isDefault
     ) {
         return new Result();
     }
