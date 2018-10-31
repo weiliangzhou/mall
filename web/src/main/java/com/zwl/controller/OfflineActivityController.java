@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -100,9 +99,10 @@ public class OfflineActivityController {
         Integer pageSize = jsonObject.getInteger("pageSize");
         Integer pageNum = jsonObject.getInteger("pageNum");
         Integer activityType = jsonObject.getInteger("activityType");
-        if (pageSize != null && pageNum != null)
+        if (pageSize != null && pageNum != null) {
             PageHelper.startPage(pageNum, pageSize);
-        List<OfflineActivityTheme> offlineActivityThemeList = offlineActivityThemeService.getOfflineActivityThemeListByQueryType(merchantId, queryType,activityType);
+        }
+        List<OfflineActivityTheme> offlineActivityThemeList = offlineActivityThemeService.getOfflineActivityThemeListByQueryType(merchantId, queryType, activityType);
         Result result = new Result();
         result.setData(offlineActivityThemeList);
         return JSON.toJSONString(result);
