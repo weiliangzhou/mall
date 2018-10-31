@@ -33,10 +33,10 @@
         from ss_gift
         where available=1
         <if test="queryType == 0">
-            is_recommend = 1
+            and is_recommend = 1
         </if>
         <if test="merchantId != null">
-            merchant_id = #{merchantId}
+            and merchant_id = #{merchantId}
         </if>
     </select>
 
