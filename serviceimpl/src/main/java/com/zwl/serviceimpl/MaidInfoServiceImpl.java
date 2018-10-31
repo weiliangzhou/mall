@@ -3,6 +3,7 @@ package com.zwl.serviceimpl;
 import com.zwl.dao.mapper.MaidInfoByMonthMapper;
 import com.zwl.dao.mapper.MaidInfoMapper;
 import com.zwl.model.po.MaidInfo;
+import com.zwl.model.vo.EncourageDetailVo;
 import com.zwl.model.vo.MaidInfoVo;
 import com.zwl.model.vo.MyMaidInfoVVo;
 import com.zwl.model.vo.XiaXianVo;
@@ -64,7 +65,11 @@ public class MaidInfoServiceImpl implements MaidInfoService {
     @Override
     public List<MyMaidInfoVVo> getMaidInfoListByLevel(@Param(value="userId")String userId, @Param(value="level")Integer level){
         return maidInfoMapper.getMaidInfoListByLevel(userId, level);
-    };
+    }
+    @Override
+    public List<MyMaidInfoVVo> getEncourageDetail(EncourageDetailVo encourageDetailVo){
+        return maidInfoMapper.getEncourageDetail(encourageDetailVo);
+    }
     @Override
     public List<MaidInfoVo> getMaidInfoByMonth(String userId){
         return maidInfoMapper.getMaidInfoByMonth(userId);

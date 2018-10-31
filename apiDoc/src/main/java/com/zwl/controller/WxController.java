@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -376,8 +377,8 @@ public class WxController {
         Result result = new Result();
         return result;
     }
-    @ApiComment("获取我的邀请列表")
-    @RequestMapping(name = "获取我的邀请列表",
+    @ApiComment("我的团队")
+    @RequestMapping(name = "我的团队",
             value = "/wx/maidInfo/auth/getMyMaidInfoList", method = RequestMethod.POST)
     public MyMaidInfoVo getMyMaidInfoList(@ApiComment("userId") String userId) {
         MyMaidInfoVo myMaidInfoVo = new MyMaidInfoVo();
@@ -385,10 +386,19 @@ public class WxController {
 
     }
 
-    @ApiComment("根据等级获取我我的邀请列表")
-    @RequestMapping(name = "根据等级获取我的邀请列表",
+    @ApiComment("根据等级获取我的团队")
+    @RequestMapping(name = "根据等级获取我的团队",
             value = "/wx/maidInfo/auth/getMyMaidInfoListByLevel", method = RequestMethod.POST)
-    public MaidInfoVVo getMyMaidInfoListByLevel(@ApiComment("userId") String userId,@ApiComment("等级") Integer level) {
+    public MaidInfoVVo getMyMaidInfoListByLevel(@ApiComment("userId") String userNum,@ApiComment("等级") Integer level) {
+        MaidInfoVVo maidInfoVVo = new MaidInfoVVo();
+        return maidInfoVVo;
+
+    }
+
+    @ApiComment("获取奖励明细")
+    @RequestMapping(name = "获取奖励明细",
+            value = "/wx/maidInfo/auth/getEncourageDetail", method = RequestMethod.POST)
+    public MaidInfoVVo getEncourageDetail(@ApiComment("userId") String userId,@ApiComment("时间：2018-08-01") Date startTime) {
         MaidInfoVVo maidInfoVVo = new MaidInfoVVo();
         return maidInfoVVo;
 

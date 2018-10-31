@@ -1,6 +1,7 @@
 package com.zwl.service;
 
 import com.zwl.model.po.MaidInfo;
+import com.zwl.model.vo.EncourageDetailVo;
 import com.zwl.model.vo.MaidInfoVo;
 import com.zwl.model.vo.MyMaidInfoVVo;
 import com.zwl.model.vo.XiaXianVo;
@@ -32,6 +33,8 @@ public interface MaidInfoService {
     Integer getTotalAmountByMonthByUserId(String userId);
 
     List<MyMaidInfoVVo> getMaidInfoListByLevel(@Param(value="userId")String userId, @Param(value="level")Integer level);
+
+    List<MyMaidInfoVVo> getEncourageDetail(EncourageDetailVo encourageDetailVo);
 
     List<MaidInfoVo> getMaidInfoByMonth(String userId);
 
