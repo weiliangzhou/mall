@@ -1,6 +1,7 @@
 package com.zwl.serviceimpl;
 
 import com.zwl.dao.mapper.GiftMapper;
+import com.zwl.model.po.Gift;
 import com.zwl.service.GiftService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,5 +23,10 @@ public class GiftServiceImpl implements GiftService {
     @Override
     public List getGiftList(Integer queryType, String merchantId) {
         return giftMapper.getGiftList(queryType, merchantId);
+    }
+
+    @Override
+    public Gift getGiftDetailById(Long giftId) {
+        return giftMapper.getGiftDetailById(giftId);
     }
 }

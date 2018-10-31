@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.zwl.model.baseresult.Result;
+import com.zwl.model.po.Gift;
 import com.zwl.service.GiftService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,6 +40,15 @@ public class GiftController {
         List giftList = giftService.getGiftList(queryType, merchantId);
         Result result = new Result();
         result.setData(giftList);
+        return JSON.toJSONString(result);
+    }
+
+    @PostMapping("/getGiftDetailById")
+    public String getGiftDetailById(@RequestBody JSONObject jsonObject) {
+        Long giftId = jsonObject.getLong("giftId");
+        Gift gift = giftService.getGiftDetailById(giftId);
+        Result result = new Result();
+        result.setData(gift);
         return JSON.toJSONString(result);
     }
 

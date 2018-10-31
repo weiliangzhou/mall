@@ -10,4 +10,5 @@ public interface GiftMapper {
     Gift selectByPrimaryKey(Long id);
     int updateByPrimaryKeySelective(Gift record);
     List getGiftList(@Param("queryType") Integer queryType,@Param("merchantId") String merchantId);
+    Gift getGiftDetailById(Long giftId);
 }

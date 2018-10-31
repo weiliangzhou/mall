@@ -1,5 +1,7 @@
 package com.zwl.service;
 
+import com.zwl.model.po.Gift;
+
 import java.util.List;
 
 /**
@@ -11,4 +13,6 @@ import java.util.List;
  */
 public interface GiftService {
     List getGiftList(Integer queryType, String merchantId);
+
+    Gift getGiftDetailById(Long giftId);
 }

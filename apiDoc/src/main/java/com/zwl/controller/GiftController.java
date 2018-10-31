@@ -28,4 +28,13 @@ public class GiftController {
         Gift gift = new Gift();
         return gift;
     }
+
+    @RequestMapping(name = "书籍详情",
+            value = "/wx/gift/getGiftDetailById", method = RequestMethod.POST)
+    public Gift getGiftDetailById(@ApiComment("书籍Id") Long giftId
+    ) {
+        Gift gift = new Gift();
+        return gift;
+    }
+
 }
