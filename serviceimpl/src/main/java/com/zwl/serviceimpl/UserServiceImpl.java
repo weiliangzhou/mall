@@ -43,6 +43,8 @@ public class UserServiceImpl implements UserService {
     private UserInfoService userInfoService;
     @Autowired
     private MsgSenderService msgSenderService;
+    @Autowired
+    private UserWechatService userWechatService;
 
 
     //微信小程序登录的时候目前是静默授权  设置为默认头像
@@ -397,6 +399,35 @@ public class UserServiceImpl implements UserService {
     @Override
     public Integer getXzCountByUserId(String userId) {
         return userMapper.getXzCountByUserId(userId);
+    }
+
+    @Override
+    public UserVo getSLUserInfo(String merchantId, String userId) {
+        UserVo userVo = new UserVo();
+        User user = userMapper.getUserByUserId(userId);
+        if(null != user){
+            if(StringUtils.isNotBlank(user.getRealName())) {
+                userVo.setRealName(user.getRealName());
+            }
+            if(StringUtils.isNotBlank(user.getRegisterMobile())) {
+                userVo.setRegisterMobile(user.getRegisterMobile());
+            }
+            userVo.setRegisterMobile(user.getRegisterMobile());
+            if(null != user.getGender() ) {
+                userVo.setGender(user.getGender());
+            }
+            if(StringUtils.isNotBlank(user.getCity())) {
+                userVo.setCity(user.getCity());
+            }
+        }
+        UserWechat userWechat = userWechatService.getUserWechatByUserId(userId);
+        if(null != userWechat){
+            if(StringUtils.isNotBlank(userWechat.getWechatAccount())) {
+                userVo.setWechatAccount(userWechat.getWechatAccount());
+            }
+            userVo.setWechatAccount(userWechat.getWechatAccount());
+        }
+        return userVo;
     }
 
     public User getUserByPhoneAndMerchantId(String phone, String merchantId) {

@@ -76,5 +76,19 @@ public class UserController {
         return new Result();
     }
 
+    /**
+     *
+     * @param merchantId
+     * @param slReferrer
+     * @return
+     */
+    @RequestMapping(name = "线下沙龙报名信息",
+            value = "/wx/offlineActivity/getSLUserInfo", method = RequestMethod.POST)
+    public UserVo getSLUserInfo(@ApiComment("merchantId") String merchantId, @ApiComment("slReferrer") String slReferrer
+    ) {
+        UserVo userVo = new UserVo();
+        return userVo;
+    }
+
 
 }

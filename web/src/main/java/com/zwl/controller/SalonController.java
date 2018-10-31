@@ -7,10 +7,7 @@ import com.zwl.model.baseresult.Result;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.groups.Buy;
 import com.zwl.model.po.*;
-import com.zwl.model.vo.ActivityCodeDetail;
-import com.zwl.model.vo.BuyResult;
-import com.zwl.model.vo.OfflineActivityBuy;
-import com.zwl.model.vo.SignInVo;
+import com.zwl.model.vo.*;
 import com.zwl.model.wxpay.IpKit;
 import com.zwl.model.wxpay.StrKit;
 import com.zwl.model.wxpay.WxPayVo;
@@ -18,6 +15,7 @@ import com.zwl.service.*;
 import com.zwl.util.DictUtil;
 import com.zwl.util.ThreadVariable;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -219,5 +217,26 @@ public class SalonController {
         }
         Result result = new Result();
         return result;
+    }
+
+    @PostMapping("/getSLUserInfo")
+    public String getSLUserInfo(@RequestBody JSONObject jsonObject) {
+        String merchantId = jsonObject.getString("merchantId");
+        String slReferrer = jsonObject.getString("slReferrer");
+        String userId = ThreadVariable.getUserID();
+        //String userId = "579bbf4031c041efa65ded6d41fbc742";
+        UserVo userVo = userService.getSLUserInfo(merchantId, userId);
+        if(StringUtils.isNotBlank(slReferrer)) {
+            User user = userService.getByUserId(slReferrer);
+            userVo.setSlReferrerName(user.getRealName());
+            userVo.setSlReferrerPhone(user.getRegisterMobile());
+        }else{
+            userVo.setSlReferrerName("单影");
+            userVo.setSlReferrerPhone("18896815868");
+            userVo.setSlReferrer("25c3c33de8e74f3482aec08d2ab6206c");
+        }
+        Result result = new Result();
+        result.setData(userVo);
+        return JSON.toJSONString(result);
     }
 }

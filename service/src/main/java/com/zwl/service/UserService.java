@@ -6,6 +6,7 @@ import com.zwl.model.po.User;
 import com.zwl.model.vo.H5LoginResultVo;
 import com.zwl.model.vo.UserLoginInfoVo;
 import com.zwl.model.vo.UserQueryVo;
+import com.zwl.model.vo.UserVo;
 
 import java.util.List;
 
@@ -176,4 +177,12 @@ public interface UserService {
     void updateUserToXzByUserId(String userId);
 
     Integer getXzCountByUserId(String userId);
+
+    /**
+     *
+     * @param merchantId  商户id
+     * @param userId      用户id
+     * @return
+     */
+    UserVo getSLUserInfo(String merchantId, String userId);
 }
