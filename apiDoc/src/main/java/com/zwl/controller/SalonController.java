@@ -47,30 +47,6 @@ public class SalonController {
         return offlineActivity;
     }
 
-    @RequestMapping(name = "操作员签到",
-            value = "/wx/salon/offlineLogin", method = RequestMethod.POST)
-    public Result operatorSignIn(@ApiComment("操作员") String operator, @ApiComment("密码") Integer password, @ApiComment("商户号") String merchantId) {
-        Result result = new Result();
-        return result;
-    }
-
-    @RequestMapping(name = "线下签到详情页",
-            value = "/wx/salon/getActivityCodeDetail", method = RequestMethod.POST)
-    public ActivityCodeDetail getActivityCodeDetail(@ApiComment("activityCode") String activityCode
-    ) {
-        ActivityCodeDetail activityCodeDetail = new ActivityCodeDetail();
-        return activityCodeDetail;
-    }
-
-    @RequestMapping(name = "线下活动签到",
-            value = "/wx/salon/signIn", method = RequestMethod.POST)
-    public Result signIn(@ApiComment("activityCode") Integer activityCode,
-                         @ApiComment("操作员") String operator) {
-        Result result = new Result();
-        return result;
-
-    }
-
     @RequestMapping(name = "沙龙线下报名",
             value = "/wx/salon/buy", method = RequestMethod.POST)
     public WxPayVo offlineActivityBuy(
