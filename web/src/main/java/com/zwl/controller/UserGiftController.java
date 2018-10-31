@@ -27,8 +27,8 @@ public class UserGiftController {
     @PostMapping("/exhangeGift")
     public Result exhangeGift(@RequestBody JSONObject jsonObject) {
         String userId = ThreadVariable.getUserID();
-        String giftId = jsonObject.getString("giftId");
-        String addressId = jsonObject.getString("addressId");
+        Integer giftId = jsonObject.getInteger("giftId");
+        Integer addressId = jsonObject.getInteger("addressId");
         UserGift userGift = userGiftService.addUserExhangeGift(userId, giftId, addressId);
         Result result = new Result();
         result.setData(userGift);
