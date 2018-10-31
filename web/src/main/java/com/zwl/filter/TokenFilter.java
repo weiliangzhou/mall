@@ -167,7 +167,7 @@ public class TokenFilter implements Filter {
             return;
         }
         //获取书籍list
-        if (requestURL.contains("/wx/gift/getGiftList")) {
+        if (requestURL.contains("/wx/gift/getGiftList")||requestURL.contains("/wx/gift/getGiftDetailById")) {
             chain.doFilter(request, response);
             return;
         }
