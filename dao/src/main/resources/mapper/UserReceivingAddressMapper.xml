@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.zwl.model.po.UserReceivingAddress" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="receiving_name" property="receivingName" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
     <result column="province" property="province" jdbcType="VARCHAR" />
     <result column="city" property="city" jdbcType="VARCHAR" />
     <result column="area" property="area" jdbcType="VARCHAR" />
@@ -16,31 +17,55 @@
     <result column="available" property="available" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, receiving_name, province, city, area, address, is_default, user_id, merchant_id, 
+    id, receiving_name, phone, province, city, area, address, is_default, user_id, merchant_id, 
     create_time, modify_time, available
   </sql>
+
+    <update id="deleteById" parameterType="java.lang.Integer">
+    update ss_user_receivingaddress
+    set available = 0
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateIsDefaultByUserId" parameterType="java.lang.String">
+    update ss_user_receivingaddress
+    set is_default = 0
+    where user_id = #{userId,jdbcType=VARCHAR}
+    and merchant_id = #{merchantId,jdbcType=VARCHAR}
+  </update>
+
+  <select id="getUserReceivingAddressList" resultMap="BaseResultMap" parameterType="com.zwl.model.po.UserReceivingAddress" >
+    select
+    <include refid="Base_Column_List" />
+    from ss_user_receivingaddress
+    where user_id = #{userId,jdbcType=VARCHAR}
+    and merchant_id = #{merchantId,jdbcType=VARCHAR}
+    and available = 1
+    order by is_default desc
+  </select>
+
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from ss_user_receivingaddress
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from ss_user_receivingaddress
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="com.zwl.model.po.UserReceivingAddress" >
-    insert into ss_user_receivingaddress (id, receiving_name, province, 
-      city, area, address, 
-      is_default, user_id, merchant_id, 
-      create_time, modify_time, available
-      )
-    values (#{id,jdbcType=INTEGER}, #{receivingName,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
-      #{city,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
-      #{isDefault,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, #{merchantId,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, #{available,jdbcType=INTEGER}
-      )
-  </insert>
+  <!--<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >-->
+    <!--delete from ss_user_receivingaddress-->
+    <!--where id = #{id,jdbcType=INTEGER}-->
+  <!--</delete>-->
+  <!--<insert id="insert" parameterType="com.zwl.model.po.UserReceivingAddress" >-->
+    <!--insert into ss_user_receivingaddress (id, receiving_name, phone, -->
+      <!--province, city, area, -->
+      <!--address, is_default, user_id, -->
+      <!--merchant_id, create_time, modify_time, -->
+      <!--available)-->
+    <!--values (#{id,jdbcType=INTEGER}, #{receivingName,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, -->
+      <!--#{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, -->
+      <!--#{address,jdbcType=VARCHAR}, #{isDefault,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, -->
+      <!--#{merchantId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, -->
+      <!--#{available,jdbcType=INTEGER})-->
+  <!--</insert>-->
   <insert id="insertSelective" parameterType="com.zwl.model.po.UserReceivingAddress" >
     insert into ss_user_receivingaddress
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -49,6 +74,9 @@
       </if>
       <if test="receivingName != null" >
         receiving_name,
+      </if>
+      <if test="phone != null" >
+        phone,
       </if>
       <if test="province != null" >
         province,
@@ -88,6 +116,9 @@
       <if test="receivingName != null" >
         #{receivingName,jdbcType=VARCHAR},
       </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
       <if test="province != null" >
         #{province,jdbcType=VARCHAR},
       </if>
@@ -120,11 +151,15 @@
       </if>
     </trim>
   </insert>
+
   <update id="updateByPrimaryKeySelective" parameterType="com.zwl.model.po.UserReceivingAddress" >
     update ss_user_receivingaddress
     <set >
       <if test="receivingName != null" >
         receiving_name = #{receivingName,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
       </if>
       <if test="province != null" >
         province = #{province,jdbcType=VARCHAR},
@@ -159,19 +194,20 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.zwl.model.po.UserReceivingAddress" >
-    update ss_user_receivingaddress
-    set receiving_name = #{receivingName,jdbcType=VARCHAR},
-      province = #{province,jdbcType=VARCHAR},
-      city = #{city,jdbcType=VARCHAR},
-      area = #{area,jdbcType=VARCHAR},
-      address = #{address,jdbcType=VARCHAR},
-      is_default = #{isDefault,jdbcType=INTEGER},
-      user_id = #{userId,jdbcType=VARCHAR},
-      merchant_id = #{merchantId,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-      available = #{available,jdbcType=INTEGER}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+  <!--<update id="updateByPrimaryKey" parameterType="com.zwl.model.po.UserReceivingAddress" >-->
+    <!--update ss_user_receivingaddress-->
+    <!--set receiving_name = #{receivingName,jdbcType=VARCHAR},-->
+      <!--phone = #{phone,jdbcType=VARCHAR},-->
+      <!--province = #{province,jdbcType=VARCHAR},-->
+      <!--city = #{city,jdbcType=VARCHAR},-->
+      <!--area = #{area,jdbcType=VARCHAR},-->
+      <!--address = #{address,jdbcType=VARCHAR},-->
+      <!--is_default = #{isDefault,jdbcType=INTEGER},-->
+      <!--user_id = #{userId,jdbcType=VARCHAR},-->
+      <!--merchant_id = #{merchantId,jdbcType=VARCHAR},-->
+      <!--create_time = #{createTime,jdbcType=TIMESTAMP},-->
+      <!--modify_time = #{modifyTime,jdbcType=TIMESTAMP},-->
+      <!--available = #{available,jdbcType=INTEGER}-->
+    <!--where id = #{id,jdbcType=INTEGER}-->
+  <!--</update>-->
 </mapper>

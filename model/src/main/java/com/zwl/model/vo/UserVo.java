@@ -32,5 +32,17 @@ public class UserVo {
     private String referrerRegisterMobile;
     @ApiComment(value = "下线付费人数", sample = "8")
     private Integer xiaxianCount;
+    @ApiComment(value = "性别", sample = "0：男 1：女")
+    private Integer gender;
+    @ApiComment(value = "城市", sample = "杭州")
+    private String city;
+    @ApiComment(value = "微信号", sample = "16986556")
+    private String wechatAccount;
+    @ApiComment(value = "邀约人id", sample = "132")
+    private String slReferrer;
+    @ApiComment(value = "邀约人姓名", sample = "张三")
+    private String slReferrerName;
+    @ApiComment(value = "邀约人号码", sample = "16986556")
+    private String slReferrerPhone;
 
 }

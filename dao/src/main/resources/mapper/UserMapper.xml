@@ -20,11 +20,13 @@
         <result column="register_time" property="registerTime" jdbcType="TIMESTAMP"/>
         <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
         <result column="available" property="available" jdbcType="INTEGER"/>
+        <result column="gender" property="gender" jdbcType="INTEGER"/>
+        <result column="city" property="city" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, user_id, wechat_openid, wechat_union_id,gzh_openid, merchant_id, register_from,
         register_mobile,real_name,logo_url, referrer, member_level,
-        level_name, is_buy,expires_time, register_time, modify_time, available
+        level_name, is_buy,expires_time, register_time, modify_time, available, gender, city
     </sql>
     <sql id="Insert_Column_List">
         user_id, wechat_openid, wechat_union_id,gzh_openid, merchant_id, register_from, register_mobile,real_name,
