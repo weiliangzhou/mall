@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/wx/gift")
 public class GiftController {
     @RequestMapping(name = "书籍列表",
-            value = "/wx/gift/getGiftList", method = RequestMethod.POST)
+            value = "/getGiftList", method = RequestMethod.POST)
     public Gift getGiftList(@ApiComment("merchantId") String merchantId,
                             @ApiComment("queryType  0查询推荐列表 1查询全部") String queryType,
                             @ApiComment("pageSize") String pageSize,
@@ -30,7 +30,7 @@ public class GiftController {
     }
 
     @RequestMapping(name = "书籍详情",
-            value = "/wx/gift/getGiftDetailById", method = RequestMethod.POST)
+            value = "/getGiftDetailById", method = RequestMethod.POST)
     public Gift getGiftDetailById(@ApiComment("书籍Id") Long giftId
     ) {
         Gift gift = new Gift();

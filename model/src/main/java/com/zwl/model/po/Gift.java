@@ -31,7 +31,7 @@ public class Gift {
     private String priceDesc;
 
     public String getPriceDesc() {
-        return String.valueOf(BigDecimalUtil.div(this.price, 100, 2));
+        return String.valueOf(BigDecimalUtil.div(100, this.price, 2));
     }
 
     @ApiComment(value = "快递费(分)", sample = "12")
@@ -40,7 +40,7 @@ public class Gift {
     private String expressFeeDesc;
 
     public String getExpressFeeDesc() {
-        return String.valueOf(BigDecimalUtil.div(this.expressFee, 100, 2));
+        return String.valueOf(BigDecimalUtil.div(100, this.expressFee, 2));
     }
 
     @ApiComment(value = "库存", sample = "12")
