@@ -14,8 +14,8 @@
         <result column="express_fee" property="expressFee" jdbcType="INTEGER"/>
         <result column="stock" property="stock" jdbcType="INTEGER"/>
         <result column="gift_desc" property="giftDesc" jdbcType="VARCHAR"/>
-        <result column="is_recommend" property="isRecommend" jdbcType="VARCHAR"/>
-        <result column="is_show" property="isShow" jdbcType="VARCHAR"/>
+        <result column="is_recommend" property="isRecommend" jdbcType="INTEGER"/>
+        <result column="is_show" property="isShow" jdbcType="INTEGER"/>
         <result column="merchant_id" property="merchantId" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
@@ -144,10 +144,10 @@
                 #{giftDesc,jdbcType=VARCHAR},
             </if>
             <if test="isRecommend != null">
-                #{isRecommend,jdbcType=VARCHAR},
+                #{isRecommend,jdbcType=INTEGER},
             </if>
             <if test="isShow != null">
-                #{isShow,jdbcType=VARCHAR},
+                #{isShow,jdbcType=INTEGER},
             </if>
             <if test="merchantId != null">
                 #{merchantId,jdbcType=VARCHAR},
@@ -200,10 +200,10 @@
                 gift_desc = #{giftDesc,jdbcType=VARCHAR},
             </if>
             <if test="isRecommend != null">
-                is_recommend = #{isRecommend,jdbcType=VARCHAR},
+                is_recommend = #{isRecommend,jdbcType=INTEGER},
             </if>
             <if test="isShow != null">
-                is_show = #{isShow,jdbcType=VARCHAR},
+                is_show = #{isShow,jdbcType=INTEGER},
             </if>
             <if test="merchantId != null">
                 merchant_id = #{merchantId,jdbcType=VARCHAR},
