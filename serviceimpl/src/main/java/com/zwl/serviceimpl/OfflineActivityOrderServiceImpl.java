@@ -82,7 +82,7 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         if (0 == isRebuy) {
             //通过userId  activityId
             OfflineActivityCode offlineActivityCode = offlineActivityCodeService.getOneByUserIdAndOfflineActivityId(userId, offlineActivityId);
-            if (offlineActivityCode != null){
+            if (offlineActivityCode != null) {
                 BSUtil.isTrue(false, "不能重复购买！");
             }
         }
@@ -124,6 +124,7 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         try {
             offlineActivityOrderMapper.insertSelective(offlineActivityOrder);
         } catch (Exception e) {
+            log.error("生成订单出错:", e);
             BSUtil.isTrue(false, "操作频繁，请在一分钟后重试", e);
         }
         BuyResult buyResult = new BuyResult();
@@ -169,17 +170,17 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
             offlineActivityOrderVo.setOrderNo(offlineActivityOrder.getOrderNo());
             offlineActivityOrderVo.setActivityId(offlineActivityOrder.getActivityId());
             offlineActivityOrderVo.setCreateTime(offlineActivityOrder.getCreateTime());
-            if(null != orderType && orderType.equals(1)){
+            if (null != orderType && orderType.equals(1)) {
                 User user = userService.getByUserId(offlineActivityOrder.getSlReferrer());
                 offlineActivityOrderVo.setOrderType(1);
                 offlineActivityOrderVo.setSlReferrerName(user.getRealName());
                 offlineActivityOrderVo.setSlReferrerPhone(user.getRegisterMobile());
-                if(offlineActivity.getActivityStartTime().getTime()-System.currentTimeMillis()>0){
+                if (offlineActivity.getActivityStartTime().getTime() - System.currentTimeMillis() > 0) {
                     offlineActivityOrderVo.setSlStatus("报名成功");
-                }else{
+                } else {
                     offlineActivityOrderVo.setSlStatus("已结束");
                 }
-            }else{
+            } else {
                 offlineActivityOrderVo.setOrderType(0);
                 offlineActivityOrderVo.setAmount(1);
             }
@@ -210,12 +211,12 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         offlineActivityOrderVo.setActivityPrice(offlineActivityOrder.getActivityPrice());
         offlineActivityOrderVo.setActivityPriceDesc(div(100, offlineActivityOrder.getActivityPrice(), 2) + "");
         OfflineActivityCode offlineActivityCode = offlineActivityCodeService.getOneByUserIdAndOfflineActivityId(offlineActivityOrder.getUserId(), offlineActivityOrder.getActivityId());
-        if( null != orderType && orderType.equals(1)){
+        if (null != orderType && orderType.equals(1)) {
             offlineActivityOrderVo.setCreateTime(offlineActivityOrder.getCreateTime());
             offlineActivityOrderVo.setWechatNo(offlineActivityOrder.getWechatNo());
             offlineActivityOrderVo.setSex(offlineActivityOrder.getSex());
             offlineActivityOrderVo.setActivityCode(offlineActivityOrder.getActivityCode());
-        }else{
+        } else {
             offlineActivityOrderVo.setQrCodeUrl(offlineActivityCode.getQrCodeUrl());
             offlineActivityOrderVo.setAmount(1);
         }
@@ -230,9 +231,9 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         if (null == activityDate) {
             throw new BusinessException("活动时间不能为空");
         }
-        Date startDate= DateUtil.getDateDayStart(activityDate);
+        Date startDate = DateUtil.getDateDayStart(activityDate);
         Date endDate = DateUtil.getDateDayEnd(activityDate);
-        OfflineActivityOrder offlineActivityOrder = this.offlineActivityOrderMapper.getOfflineActivityOrderByActivityDate(userId,startDate,endDate);
+        OfflineActivityOrder offlineActivityOrder = this.offlineActivityOrderMapper.getOfflineActivityOrderByActivityDate(userId, startDate, endDate);
         return offlineActivityOrder;
     }
 
@@ -285,9 +286,9 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         offlineActivityOrderVo.setActivityPrice(offlineActivityOrder.getActivityPrice());
         offlineActivityOrderVo.setActivityPriceDesc(div(100, offlineActivityOrder.getActivityPrice(), 2) + "");
         //OfflineActivityCode offlineActivityCode = offlineActivityCodeService.getOneByActivityCode(offlineActivityOrder.getActivityCode());
-        if(offlineActivity.getActivityStartTime().getTime()-System.currentTimeMillis()>0){
+        if (offlineActivity.getActivityStartTime().getTime() - System.currentTimeMillis() > 0) {
             offlineActivityOrderVo.setSlStatus("报名成功");
-        }else{
+        } else {
             offlineActivityOrderVo.setSlStatus("已结束");
         }
 
