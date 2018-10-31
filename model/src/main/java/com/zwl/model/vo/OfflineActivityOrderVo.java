@@ -31,4 +31,10 @@ public class OfflineActivityOrderVo extends OfflineActivityOrder {
     private String createTimeDesc;
     @ApiComment(value = "活动价格", sample = "100")
     private String activityPriceDesc;
+    @ApiComment(value = "沙龙邀约人姓名", sample = "张三")
+    private String slReferrerName;
+    @ApiComment(value = "沙龙邀约人电话", sample = "110")
+    private String slReferrerPhone;
+    @ApiComment(value = "沙龙状态", sample = "已结束")
+    private String slStatus;
 }

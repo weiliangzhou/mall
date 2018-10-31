@@ -7,6 +7,7 @@ import com.zwl.model.po.OfflineActivity;
 import com.zwl.model.po.OfflineActivityOrder;
 import com.zwl.model.po.OfflineActivityTheme;
 import com.zwl.model.vo.ActivityCodeDetail;
+import com.zwl.model.vo.OfflineActivityOrderVo;
 import com.zwl.model.wxpay.WxPayVo;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -93,18 +94,20 @@ public class OfflineActivityController {
 
     @RequestMapping(name = "获取订单列表",
             value = "/wx/offlineActivity/getActivityOrderList", method = RequestMethod.POST)
-    public OfflineActivityOrder getActivityOrderList(@ApiComment("merchantId") String merchantId
+    public OfflineActivityOrderVo getActivityOrderList(@ApiComment("pageSize") String pageSize,
+                                                       @ApiComment("pageNum") String pageNum,
+                                                        @ApiComment("merchantId") String merchantId
     ) {
-        OfflineActivityOrder offlineActivityOrder = new OfflineActivityOrder();
+        OfflineActivityOrderVo offlineActivityOrder = new OfflineActivityOrderVo();
         return offlineActivityOrder;
     }
 
     @RequestMapping(name = "获取订单详情",
             value = "/wx/offlineActivity/getActivityOrderDetail", method = RequestMethod.POST)
-    public OfflineActivityOrder getActivityOrderDetail(@ApiComment("orderNo") String orderNo,
-                                                       @ApiComment("activityId") String activityId
+    public OfflineActivityOrderVo getActivityOrderDetail(@ApiComment("orderNo") String orderNo,
+                                                         @ApiComment("activityId") String activityId
     ) {
-        OfflineActivityOrder offlineActivityOrder = new OfflineActivityOrder();
+        OfflineActivityOrderVo offlineActivityOrder = new OfflineActivityOrderVo();
         return offlineActivityOrder;
     }
 
