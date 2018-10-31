@@ -24,8 +24,8 @@ public class UserGiftController {
     /**
      * 兑换商品
      */
-    @PostMapping("/exhangeGift")
-    public Result exhangeGift(@RequestBody JSONObject jsonObject) {
+    @PostMapping("/exchangeGift")
+    public Result exchangeGift(@RequestBody JSONObject jsonObject) {
         String userId = ThreadVariable.getUserID();
         Integer giftId = jsonObject.getInteger("giftId");
         Integer addressId = jsonObject.getInteger("addressId");
