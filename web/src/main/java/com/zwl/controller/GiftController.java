@@ -71,7 +71,7 @@ public class GiftController {
         Long giftId = jsonObject.getLong("giftId");
         Gift gift = giftService.getGiftDetailById(giftId);
         String merchantId = jsonObject.getString("merchantId");
-        String userId = ThreadVariable.getUserID();
+        String userId =  jsonObject.getString("userId");
         UserGift userGift = null;
         if (userId != null) {
             //查询是否已经购买过
