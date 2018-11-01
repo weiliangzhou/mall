@@ -70,7 +70,7 @@ public class LogAspectServiceApi {
     private JSONObject getParams(JoinPoint joinPoint) {
         //获取参数值
         Object[] args = joinPoint.getArgs();
-        if (args == null) {
+        if (args == null || args.length <= 0) {
             return null;
         }
         JSONObject params = new JSONObject();
