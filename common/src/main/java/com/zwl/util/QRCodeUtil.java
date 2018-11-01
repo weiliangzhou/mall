@@ -62,11 +62,10 @@ public class QRCodeUtil {
         try {
             Map<EncodeHintType, String> hints = new HashMap<>();
             hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
-            BitMatrix bitMatrix = new MultiFormatWriter().encode(url, BarcodeFormat.QR_CODE, 200, 200, hints);
+            BitMatrix bitMatrix = new MultiFormatWriter().encode(url, BarcodeFormat.QR_CODE, 300, 300, hints);
             BufferedImage image = toBufferedImage(bitMatrix);
             byte[] imgByte = ImageUtil.imageToBytes(image, "png");
             imgUrl = AliOSSUtil.uploadFileByte(imgByte);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -211,7 +210,7 @@ public class QRCodeUtil {
                 userLogo = ImageIO.read(new File(userLogoUrl));
             }
             Graphics2D g = big.createGraphics();
-            g.drawImage(small, (big.getWidth() - small.getWidth()) / 2, smallImageY, small.getWidth(), small.getHeight(), null);
+            g.drawImage(small, (big.getWidth() - 180) / 2, smallImageY, 180, 180, null);
             g.drawImage(roundImage(userLogo, 130, 150), (big.getWidth() - userLogo.getWidth()) / 2, userLogoUrlY, roundImage(userLogo, 130, 150).getWidth(), roundImage(userLogo, 130, 150).getHeight(), null);
 
             Font font = new Font("宋体", Font.BOLD, 20);
