@@ -196,7 +196,7 @@ public class SalonController {
         OfflineActivity offlineActivity = offlineActivityService.getOneByActivityId(slId);
         String qrUrl = stringRedisTemplate.boundValueOps(userId + "_sl_QrCode").get();
         if (StringUtils.isBlank(qrUrl)) {
-            String smallImage = QRCodeUtil.createQrCode(url + "&SlReferrer=" + userId, null, null);
+            String smallImage = QRCodeUtil.createQrCode(url + "&slReferrer=" + userId, null, null);
             User user = userService.getByUserId(userId);
             UserInfo userInfo = userInfoService.getByUserId(userId);
             String userLogo = user.getLogoUrl() == null ? "http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/6a989ec302994c6c98c2d4810f9fbcb2.png" : user.getLogoUrl();
