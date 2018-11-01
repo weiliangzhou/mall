@@ -70,6 +70,15 @@ public class GiftController {
     public String getGiftDetailById(@RequestBody JSONObject jsonObject) {
         Long giftId = jsonObject.getLong("giftId");
         Gift gift = giftService.getGiftDetailById(giftId);
+        String merchantId = jsonObject.getString("merchantId");
+        String userId = ThreadVariable.getUserID();
+        //查询是否已经购买过
+        UserGift userGift = userGiftService.getUserGiftByGiftId(userId, merchantId, giftId);
+        if (userGift != null) {
+            gift.setBuyFlag(1);
+        } else {
+            gift.setBuyFlag(0);
+        }
         List imgList = new ArrayList();
         if (gift != null) {
             String img1 = gift.getGiftViceImg1();
@@ -136,8 +145,8 @@ public class GiftController {
 
     @PostMapping("/getGiftQrCode")
     public String getGiftQrCode(@RequestBody JSONObject jsonObject) {
-        Long giftId=jsonObject.getLong("giftId");
-        String url=jsonObject.getString("url");
+        Long giftId = jsonObject.getLong("giftId");
+        String url = jsonObject.getString("url");
         String userId = ThreadVariable.getUserID();
         String qrUrl = stringRedisTemplate.boundValueOps(userId + "_gift_QrCode").get();
         if (StringUtils.isBlank(qrUrl)) {
@@ -146,9 +155,9 @@ public class GiftController {
             UserInfo userInfo = userInfoService.getByUserId(userId);
             String userLogo = user.getLogoUrl() == null ? "http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/6a989ec302994c6c98c2d4810f9fbcb2.png" : user.getLogoUrl();
             String nickNameOrPhone = StringUtils.isBlank(userInfo.getNickName()) ? user.getRegisterMobile() : userInfo.getNickName();
-            Gift gift=giftService.getGiftDetailById(giftId);
-            String giftMainImg=gift.getGiftMainImg();
-            String memberLevel=user.getLevelName();
+            Gift gift = giftService.getGiftDetailById(giftId);
+            String giftMainImg = gift.getGiftMainImg();
+            String memberLevel = user.getLevelName();
 
             try {
                 qrUrl = QRCodeUtil.giftMergeImage("http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20181101/b727dc1a4eb342dcabc90b4df03a9ba5.png", smallImage, 340, 710,
