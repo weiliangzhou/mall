@@ -58,8 +58,14 @@ public class UserGiftServiceImpl implements UserGiftService {
         if (null == userReceivingAddress || null == userReceivingAddress.getId()) {
             BSUtil.isTrue(false, "无效地址");
         }
+        UserGift sysUserGift = this.getUserGiftByGiftId(userId, merchantId, giftId);
+        if( null != sysUserGift){
+            BSUtil.isTrue(false, "请勿重复兑换");
+        }
         UserGift userGift = new UserGift();
         userGift.setGiftId(gift.getId());
+        userGift.setPrice(gift.getPrice());
+        userGift.setGiftMainImg(gift.getGiftMainImg());
         userGift.setGiftTitle(gift.getGiftMainTitle());
         userGift.setMerchantId(merchantId);
         userGift.setPhone(user.getRegisterMobile());
@@ -103,6 +109,21 @@ public class UserGiftServiceImpl implements UserGiftService {
             BSUtil.isTrue(false, "查询的编号不能为空");
         }
         UserGift userGift = userGiftMapper.selectByPrimaryKey(id);
+        return userGift;
+    }
+
+    @Override
+    public UserGift getUserGiftByGiftId(String userId, String merchantId, Long giftId) {
+        if (StringUtils.isBlank(userId)) {
+            BSUtil.isTrue(false, "用户标识不能为空");
+        }
+        if (StringUtils.isBlank(merchantId)) {
+            BSUtil.isTrue(false, "商户号不能为空");
+        }
+        if (giftId == null) {
+            BSUtil.isTrue(false, "请输入要查询的商品编号");
+        }
+        UserGift userGift = userGiftMapper.getUserGiftByGiftId(userId, merchantId, giftId);
         return userGift;
     }
 

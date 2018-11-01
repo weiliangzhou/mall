@@ -5,7 +5,9 @@
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="user_id" property="userId" jdbcType="VARCHAR"/>
         <result column="gift_id" property="giftId" jdbcType="INTEGER"/>
-        <result column="gift_title" property="giftTitle" jdbcType="INTEGER"/>
+        <result column="gift_title" property="giftTitle" jdbcType="VARCHAR"/>
+        <result column="price" property="price" jdbcType="INTEGER"/>
+        <result column="gift_main_img" property="giftMainImg" jdbcType="VARCHAR"/>
         <result column="phone" property="phone" jdbcType="VARCHAR"/>
         <result column="province" property="province" jdbcType="VARCHAR"/>
         <result column="city" property="city" jdbcType="VARCHAR"/>
@@ -62,6 +64,12 @@
             <if test="giftTitle != null">
                 gift_title,
             </if>
+            <if test="price != null">
+                price,
+            </if>
+            <if test="giftMainImg != null">
+                gift_main_img,
+            </if>
             <if test="phone != null">
                 phone,
             </if>
@@ -111,6 +119,12 @@
             </if>
             <if test="giftTitle != null">
                 #{giftTitle,jdbcType=INTEGER},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=INTEGER},
+            </if>
+            <if test="giftMainImg != null">
+                #{giftMainImg,jdbcType=VARCHAR},
             </if>
             <if test="phone != null">
                 #{phone,jdbcType=VARCHAR},
@@ -230,6 +244,23 @@
             </if>
             <if test="merchantId != null and merchantId !=''">
                 and s.merchant_id = #{merchantId}
+            </if>
+        </where>
+    </select>
+
+    <select id="getUserGiftByGiftId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ss_user_gift s
+        <where>
+            <if test="userId != null and userId !=''">
+                s.user_id = #{userId}
+            </if>
+            <if test="merchantId != null and merchantId !=''">
+                and s.merchant_id = #{merchantId}
+            </if>
+            <if test="giftId != null">
+                and s.gift_id = #{giftId}
             </if>
         </where>
     </select>

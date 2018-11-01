@@ -43,4 +43,14 @@ public interface UserGiftService {
      * @return 订单信息
      */
     UserGift getUserGiftById(Long id);
+
+    /**
+     * 查询用户是否已经兑换过商品
+     *
+     * @param userId     用户编号
+     * @param merchantId 商户号
+     * @param giftId     商品编号
+     * @return 兑换订单信息
+     */
+    UserGift getUserGiftByGiftId(String userId, String merchantId, Long giftId);
 }

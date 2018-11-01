@@ -19,17 +19,42 @@ public class UserGift {
      * 礼品编号
      */
     private Long giftId;
-
+    /**
+     * 价格(分)
+     */
+    private Integer price;
+    /**
+     * 礼品展示图
+     */
+    private String giftMainImg;
+    /**
+     * 标题
+     */
     private String giftTitle;
 
+    /**
+     * 号码
+     */
     private String phone;
 
+    /**
+     * 省
+     */
     private String province;
 
+    /**
+     * 市
+     */
     private String city;
 
+    /**
+     * 区
+     */
     private String area;
 
+    /**
+     * 地址
+     */
     private String address;
 
     /**
