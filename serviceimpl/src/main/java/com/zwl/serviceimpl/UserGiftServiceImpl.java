@@ -15,6 +15,7 @@ import com.zwl.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -35,12 +36,13 @@ public class UserGiftServiceImpl implements UserGiftService {
     private UserService userService;
 
     @Override
+    @Transactional
     public UserGift addUserExchangeGift(String userId, String merchantId, Long giftId, Long addressId) {
         if (StringUtils.isBlank(userId)) {
             BSUtil.isTrue(false, "用户信息不能为空");
         }
         if (null == giftId) {
-            BSUtil.isTrue(false, "礼品信息不能为空");
+            BSUtil.isTrue(false, "商品信息不能为空");
         }
         if (null == addressId) {
             BSUtil.isTrue(false, "收货地址不能为空");
@@ -51,16 +53,25 @@ public class UserGiftServiceImpl implements UserGiftService {
         }
         Gift gift = giftService.getGiftDetailById(giftId);
         if (null == gift || null == gift.getId()) {
-            BSUtil.isTrue(false, "无效礼品");
+            BSUtil.isTrue(false, "无效商品");
+        }
+        if (gift.getStock() == null || gift.getStock().intValue() <= 0) {
+            BSUtil.isTrue(false, "商品已售完");
         }
         UserReceivingAddress userReceivingAddress = userReceivingAddressService.getOneById(addressId);
         if (null == userReceivingAddress || null == userReceivingAddress.getId()) {
             BSUtil.isTrue(false, "无效地址");
         }
         UserGift sysUserGift = this.getUserGiftByGiftId(userId, merchantId, giftId);
-        if( null != sysUserGift){
+        if (null != sysUserGift) {
             BSUtil.isTrue(false, "请勿重复兑换");
         }
+        //减少相应库存数
+        giftService.updateGiftStock(gift.getId(), gift.getStock(), gift.getStock().intValue() - 1);
+        //更新商品销量
+        Integer buyCount = gift.getBuyCount() == null ? 0 : gift.getBuyCount();
+        giftService.updateGiftBuyCount(gift.getId(), buyCount + 1);
+        //添加订单
         UserGift userGift = new UserGift();
         userGift.setGiftId(gift.getId());
         userGift.setPrice(gift.getPrice());
