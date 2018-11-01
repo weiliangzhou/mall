@@ -50,7 +50,7 @@ public class GiftController {
 
     @RequestMapping(name = "获取用户兑换商品订单信息",
             value = "/getUserGiftById", method = RequestMethod.POST)
-    public UserGift getUserGiftById(@ApiComment(value = "订单编号") String id
+    public UserGift getUserGiftById(@ApiComment(value = "订单编号") Long id
     ) {
         UserGift gift = new UserGift();
         return gift;
