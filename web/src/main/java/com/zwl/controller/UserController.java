@@ -265,6 +265,7 @@ public class UserController {
         Integer gender = jsonObject.getInteger("gender");
         String userId = ThreadVariable.getUserID();
         User user = new User();
+        user.setProvince(province);
         user.setUserId(userId);
         user.setCity(city);
         user.setGender(gender);
