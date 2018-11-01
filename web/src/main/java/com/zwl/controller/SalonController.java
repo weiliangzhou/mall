@@ -160,6 +160,7 @@ public class SalonController {
     @PostMapping("/getSLQrCode")
     public String getSLQrCode(@RequestBody JSONObject jsonObject) {
         Integer slId = jsonObject.getInteger("slId");
+        String merchantId=jsonObject.getString("merchantId");
         String userId = ThreadVariable.getUserID();
         OfflineActivity offlineActivity = offlineActivityService.getOneByActivityId(slId);
         String qrUrl = stringRedisTemplate.boundValueOps(userId + "_sl_QrCode").get();
@@ -169,7 +170,9 @@ public class SalonController {
             UserInfo userInfo = userInfoService.getByUserId(userId);
             String userLogo = user.getLogoUrl() == null ? "http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/6a989ec302994c6c98c2d4810f9fbcb2.png" : user.getLogoUrl();
             String nickNameOrPhone = StringUtils.isBlank(userInfo.getNickName()) ? user.getRegisterMobile() : userInfo.getNickName();
-            String slName = offlineActivity.getThemeName();
+            Integer themeId=offlineActivity.getActivityThemeId();
+            OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(merchantId,themeId);
+            String slName=offlineActivityTheme.getThemeName();
             Date slStartTime = offlineActivity.getActivityStartTime();
             Date slEndTime = offlineActivity.getActivityEndTime();
             SimpleDateFormat sdf_yMd_Hms = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
