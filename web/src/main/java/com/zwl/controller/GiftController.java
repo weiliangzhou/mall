@@ -3,6 +3,7 @@ package com.zwl.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.po.Gift;
 import com.zwl.model.po.UserGift;
@@ -57,6 +58,20 @@ public class GiftController {
         return JSON.toJSONString(result);
     }
 
+    /**
+     * 分页查询用户兑换的礼品列表
+     */
+    @PostMapping("/findUserGiftListPage")
+    public String findUserGiftListPage(@RequestBody JSONObject jsonObject) {
+        String userId = ThreadVariable.getUserID();
+        String merchantId = jsonObject.getString("merchantId");
+        Integer pageSize = jsonObject.getInteger("pageSize");
+        Integer pageNum = jsonObject.getInteger("pageNum");
+        PageInfo<UserGift> userGiftLists = userGiftService.findUserGiftListPage(userId, merchantId, pageSize, pageNum);
+        Result result = new Result();
+        result.setData(userGiftLists);
+        return JSON.toJSONString(result);
+    }
 
     /**
      * 兑换商品

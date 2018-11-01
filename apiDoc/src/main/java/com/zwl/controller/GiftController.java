@@ -38,6 +38,16 @@ public class GiftController {
         return gift;
     }
 
+    @RequestMapping(name = "用户礼品兑换列表",
+            value = "/findUserGiftListPage", method = RequestMethod.POST)
+    public Gift findUserGiftListPage(@ApiComment("merchantId") String merchantId,
+                                     @ApiComment("pageSize") String pageSize,
+                                     @ApiComment("pageNum") String pageNum
+    ) {
+        Gift gift = new Gift();
+        return gift;
+    }
+
     @RequestMapping(name = "兑换商品",
             value = "/exchangeGift", method = RequestMethod.POST)
     public UserGift exchangeGift(@ApiComment(value = "商户号") String merchantId,

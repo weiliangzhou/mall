@@ -1,5 +1,7 @@
 package com.zwl.serviceimpl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.zwl.dao.mapper.UserGiftMapper;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.Gift;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author houyuhui
@@ -68,6 +71,19 @@ public class UserGiftServiceImpl implements UserGiftService {
             BSUtil.isTrue(false, "新增用户兑换礼品出错");
         }
         return userGift;
+    }
+
+    @Override
+    public PageInfo<UserGift> findUserGiftListPage(String userId, String merchantId, Integer pageSize, Integer pageNum) {
+        if (StringUtils.isBlank(userId)) {
+            BSUtil.isTrue(false, "用户编号不能为空");
+        }
+        if (StringUtils.isBlank(merchantId)) {
+            BSUtil.isTrue(false, "商户号不能为空");
+        }
+        PageHelper.startPage(pageNum, pageSize);
+        List<UserGift> userGifts = userGiftMapper.findUserGiftListPage(userId, merchantId);
+        return new PageInfo<>(userGifts);
     }
 
     private void verfiy(UserGift userGift) {
