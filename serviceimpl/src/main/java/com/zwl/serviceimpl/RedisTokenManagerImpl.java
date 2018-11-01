@@ -59,6 +59,7 @@ public class RedisTokenManagerImpl implements TokenManager {
         return new TokenModel(userId, token);
     }
 
+    @Override
     public boolean checkToken(TokenModel model) {
         if (model == null) {
             return false;
