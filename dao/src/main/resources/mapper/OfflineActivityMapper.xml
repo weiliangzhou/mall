@@ -52,8 +52,8 @@
         where merchant_id = #{merchantId,jdbcType=VARCHAR}
         and activity_theme_id=#{activityThemeId,jdbcType=INTEGER}
         and available =1
-        <![CDATA[ and apply_start_time <= now()]]>
-        <![CDATA[ and apply_end_time >= now()]]>
+        <!--<![CDATA[ and apply_start_time <= now()]]>-->
+        <!--<![CDATA[ and apply_end_time >= now()]]>-->
     </select>
 
 

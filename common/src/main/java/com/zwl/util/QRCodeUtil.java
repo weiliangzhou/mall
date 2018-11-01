@@ -62,11 +62,10 @@ public class QRCodeUtil {
         try {
             Map<EncodeHintType, String> hints = new HashMap<>();
             hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
-            BitMatrix bitMatrix = new MultiFormatWriter().encode(url, BarcodeFormat.QR_CODE, 170, 170, hints);
+            BitMatrix bitMatrix = new MultiFormatWriter().encode(url, BarcodeFormat.QR_CODE, 300, 300, hints);
             BufferedImage image = toBufferedImage(bitMatrix);
             byte[] imgByte = ImageUtil.imageToBytes(image, "png");
             imgUrl = AliOSSUtil.uploadFileByte(imgByte);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -211,7 +210,7 @@ public class QRCodeUtil {
                 userLogo = ImageIO.read(new File(userLogoUrl));
             }
             Graphics2D g = big.createGraphics();
-            g.drawImage(small, (big.getWidth() - small.getWidth()) / 2, smallImageY, small.getWidth(), small.getHeight(), null);
+            g.drawImage(small, (big.getWidth() - 180) / 2, smallImageY, 180, 180, null);
             g.drawImage(roundImage(userLogo, 130, 150), (big.getWidth() - userLogo.getWidth()) / 2, userLogoUrlY, roundImage(userLogo, 130, 150).getWidth(), roundImage(userLogo, 130, 150).getHeight(), null);
 
             Font font = new Font("宋体", Font.BOLD, 20);
@@ -251,6 +250,75 @@ public class QRCodeUtil {
             int slTimeMidX = (big.getWidth() - slTimeWidth) / 2;
             // 表示这段文字在图片上的位置(x,y) .第一个是你设置的内容。
             g.drawString(slTime, slTimeMidX, slTimeY);
+
+            g.dispose();
+            byte[] imgByte = ImageUtil.imageToBytes(big, "png");
+            return AliOSSUtil.uploadFileByte(imgByte);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+
+    public static String giftMergeImage(String bigImage,
+                                        String smallImage, int smallImageX, int smallImageY,
+                                        String userLogoUrl, int userLogoUrlX, int userLogoUrlY,
+                                        String nickName, int nickNameX, int nickNameY, Color nickNameColor,
+                                        String memberLevel, Integer memberLevelX, Integer memberLevelY, Color memberLevelColor,
+                                        String giftMainImg, Integer giftMainX, Integer giftMainY) throws IOException {
+        try {
+            BufferedImage small;
+            BufferedImage userLogo;
+            BufferedImage big;
+            BufferedImage giftMainImg_temp;
+            if (bigImage.contains("http")) {
+                URL url = new URL(bigImage);
+                big = ImageIO.read(url);
+            } else {
+                big = ImageIO.read(new File(bigImage));
+            }
+            if (smallImage.contains("http")) {
+                URL url = new URL(smallImage);
+                small = ImageIO.read(url);
+            } else {
+                small = ImageIO.read(new File(smallImage));
+            }
+            if (userLogoUrl.contains("http")) {
+                URL url = new URL(userLogoUrl);
+                userLogo = ImageIO.read(url);
+            } else {
+                userLogo = ImageIO.read(new File(userLogoUrl));
+            }
+            if (giftMainImg.contains("http")) {
+                URL url = new URL(giftMainImg);
+                giftMainImg_temp = ImageIO.read(url);
+            } else {
+                giftMainImg_temp = ImageIO.read(new File(giftMainImg));
+            }
+            Graphics2D g = big.createGraphics();
+            g.drawImage(small, smallImageX, smallImageY, 120, 120, null);
+            g.drawImage(giftMainImg_temp, giftMainX, giftMainY, 394, 230, null);
+            g.drawImage(roundImage(userLogo, 130, 150), userLogoUrlX, userLogoUrlY, 100, 100, null);
+            Font font = new Font("宋体", Font.BOLD, 20);
+            g.setFont(font);
+            g.setColor(nickNameColor);
+            // 抗锯齿
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            // 表示这段文字在图片上的位置(x,y) .第一个是你设置的内容。
+            g.drawString(nickName, nickNameX, nickNameY);
+
+
+            Font memberLevelFont = new Font("宋体", Font.BOLD, 16);
+            g.setFont(memberLevelFont);
+            g.setColor(memberLevelColor);
+            // 抗锯齿
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            // 表示这段文字在图片上的位置(x,y) .第一个是你设置的内容。
+            g.drawString(memberLevel, memberLevelX, memberLevelY);
+
 
             g.dispose();
             byte[] imgByte = ImageUtil.imageToBytes(big, "png");
