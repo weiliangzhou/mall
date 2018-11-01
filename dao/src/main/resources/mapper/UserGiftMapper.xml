@@ -22,7 +22,7 @@
         <result column="available" property="available" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, user_id, gift_id, gift_title, phone, province, city, area, address, express_no, 
+    id, user_id, gift_id, gift_title,price,gift_main_img, phone, province, city, area, address, express_no,
     express_company, merchant_id, order_state, create_time, modify_time, available
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">

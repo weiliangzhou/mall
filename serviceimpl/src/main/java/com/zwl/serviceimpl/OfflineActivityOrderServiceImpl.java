@@ -90,7 +90,7 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         Integer buyCount = offlineActivity.getBuyCount() == null ? 0 : offlineActivity.getBuyCount();
         //可购数量
         Integer limitCount = offlineActivity.getLimitCount() == null ? 0 : offlineActivity.getLimitCount();
-        if (limitCount.intValue() <= buyCount.intValue()) {
+        if (limitCount <= buyCount) {
             BSUtil.isTrue(false, "超过可购买数量");
         }
         String orderNo = "xx" + sdf_yMdHm.format(new Date()) + merchantId + userLongId + productId;
