@@ -5,11 +5,14 @@ import com.github.pagehelper.PageInfo;
 import com.zwl.dao.mapper.UserGiftMapper;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.Gift;
+import com.zwl.model.po.User;
 import com.zwl.model.po.UserGift;
 import com.zwl.model.po.UserReceivingAddress;
 import com.zwl.service.GiftService;
 import com.zwl.service.UserGiftService;
 import com.zwl.service.UserReceivingAddressService;
+import com.zwl.service.UserService;
+import com.zwl.util.ThreadVariable;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +32,8 @@ public class UserGiftServiceImpl implements UserGiftService {
     private GiftService giftService;
     @Autowired
     private UserReceivingAddressService userReceivingAddressService;
+    @Autowired
+    private UserService userService;
 
     @Override
     public UserGift addUserExchangeGift(String userId, String merchantId, Long giftId, Long addressId) {
@@ -40,6 +45,10 @@ public class UserGiftServiceImpl implements UserGiftService {
         }
         if (null == addressId) {
             BSUtil.isTrue(false, "收货地址不能为空");
+        }
+        User user = userService.getByUserId(userId);
+        if (null == user || StringUtils.isBlank(user.getUserId())) {
+            BSUtil.isTrue(false, "无效用户");
         }
         Gift gift = giftService.getGiftDetailById(giftId);
         if (null == gift || null == gift.getId()) {
@@ -53,6 +62,8 @@ public class UserGiftServiceImpl implements UserGiftService {
         userGift.setGiftId(gift.getId());
         userGift.setGiftTitle(gift.getGiftMainTitle());
         userGift.setMerchantId(merchantId);
+        userGift.setPhone(user.getRegisterMobile());
+        userGift.setProvince(userReceivingAddress.getProvince());
         userGift.setCity(userReceivingAddress.getCity());
         userGift.setArea(userReceivingAddress.getArea());
         userGift.setAddress(userReceivingAddress.getAddress());
