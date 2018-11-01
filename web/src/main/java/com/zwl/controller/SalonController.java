@@ -231,7 +231,7 @@ public class SalonController {
         String merchantId = jsonObject.getString("merchantId");
         String userId = ThreadVariable.getUserID();
         OfflineActivity offlineActivity = offlineActivityService.getOneByActivityId(slId);
-        String qrUrl = stringRedisTemplate.boundValueOps(userId + "_sl_QrCode").get();
+        String qrUrl = stringRedisTemplate.boundValueOps(userId + "_sl_QrCode" + slId).get();
         if (StringUtils.isBlank(qrUrl)) {
             String smallImage = QRCodeUtil.createQrCode(url + "&slReferrer=" + userId, null, null);
             User user = userService.getByUserId(userId);
@@ -253,7 +253,7 @@ public class SalonController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            stringRedisTemplate.boundValueOps(userId + "_sl_QrCode").set(qrUrl, 30, TimeUnit.DAYS);
+            stringRedisTemplate.boundValueOps(userId + "_sl_QrCode" + slId).set(qrUrl, 30, TimeUnit.DAYS);
         }
         log.info("userId:" + userId + "------二维码" + qrUrl);
         Result result = new Result();

@@ -37,4 +37,10 @@ public class OfflineActivityOrderVo extends OfflineActivityOrder {
     private String slReferrerPhone;
     @ApiComment(value = "沙龙状态", sample = "已结束")
     private String slStatus;
+    @ApiComment(value = "沙龙开始时间", sample = "2018-10-09 18:31")
+    @JSONField(format = "yyyy-MM-dd HH:mm")
+    private Date slActivityStartTime;
+    @JSONField(format = "yyyy-MM-dd HH:mm")
+    @ApiComment(value = "沙龙结束时间", sample = "2018-10-09 18:31")
+    private Date slActivityEndTime;
 }

@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import static com.zwl.util.BigDecimalUtil.div;
 
@@ -135,7 +136,15 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         offlineActivityOrder.setOrderNo(orderNo);
         offlineActivityOrder.setActivityId(activityId);
         //活动兑换码生成规则
-        String activityCode = UUIDUtil.getUUID32();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        String activityCode = sdf.format(new Date());
+        //String activityCode = UUIDUtil.getUUID32();
+        Random random = new Random();
+        String result="";
+        for (int i=0;i<3;i++){
+            result+=random.nextInt(10);
+        }
+        activityCode = activityCode + result;
         offlineActivityOrder.setActivityCode(activityCode);
         offlineActivityOrder.setUserId(userId);
         offlineActivityOrder.setPhone(offlineActivityBuy.getPhone());
@@ -321,8 +330,8 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         offlineActivityOrderVo.setThemeName(offlineActivityTheme.getThemeName());
         OfflineActivity offlineActivity = offlineActivityService.getOneByActivityId(offlineActivityOrder.getActivityId());
         offlineActivityOrderVo.setActivityAddress(offlineActivity.getActivityAddress());
-        offlineActivityOrderVo.setActivityStartTime(offlineActivity.getActivityStartTime());
-        offlineActivityOrderVo.setActivityEndTime(offlineActivity.getActivityEndTime());
+        offlineActivityOrderVo.setSlActivityStartTime(offlineActivity.getActivityStartTime());
+        offlineActivityOrderVo.setSlActivityEndTime(offlineActivity.getActivityEndTime());
         offlineActivityOrderVo.setActivityPrice(offlineActivityOrder.getActivityPrice());
         offlineActivityOrderVo.setActivityPriceDesc(div(100, offlineActivityOrder.getActivityPrice(), 2) + "");
         //OfflineActivityCode offlineActivityCode = offlineActivityCodeService.getOneByActivityCode(offlineActivityOrder.getActivityCode());
