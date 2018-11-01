@@ -20,7 +20,7 @@ public interface UserReceivingAddressService {
 
     void updateIsDefaultByUserId(String userId, String merchantId);
 
-    UserReceivingAddress getOneById(Integer id);
+    UserReceivingAddress getOneById(Long id);
 
     void deleteById(Integer id);
 }

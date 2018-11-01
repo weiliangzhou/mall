@@ -5,7 +5,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.po.Gift;
+import com.zwl.model.po.UserGift;
 import com.zwl.service.GiftService;
+import com.zwl.service.UserGiftService;
+import com.zwl.util.ThreadVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +29,8 @@ import java.util.List;
 public class GiftController {
     @Autowired
     private GiftService giftService;
+    @Autowired
+    private UserGiftService userGiftService;
 
     @PostMapping("/getGiftList")
     public String getGiftList(@RequestBody JSONObject jsonObject) {
@@ -52,5 +57,20 @@ public class GiftController {
         return JSON.toJSONString(result);
     }
 
+
+    /**
+     * 兑换商品
+     */
+    @PostMapping("/exchangeGift")
+    public Result exchangeGift(@RequestBody JSONObject jsonObject) {
+        String userId = ThreadVariable.getUserID();
+        String merchantId = jsonObject.getString("merchantId");
+        Long giftId = jsonObject.getLong("giftId");
+        Long addressId = jsonObject.getLong("addressId");
+        UserGift userGift = userGiftService.addUserExchangeGift(userId, merchantId, giftId, addressId);
+        Result result = new Result();
+        result.setData(userGift);
+        return result;
+    }
 
 }

@@ -2,11 +2,17 @@ package com.zwl.serviceimpl;
 
 import com.zwl.dao.mapper.UserGiftMapper;
 import com.zwl.model.exception.BSUtil;
+import com.zwl.model.po.Gift;
 import com.zwl.model.po.UserGift;
+import com.zwl.model.po.UserReceivingAddress;
+import com.zwl.service.GiftService;
 import com.zwl.service.UserGiftService;
+import com.zwl.service.UserReceivingAddressService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 /**
  * @author houyuhui
@@ -16,9 +22,13 @@ public class UserGiftServiceImpl implements UserGiftService {
 
     @Autowired
     private UserGiftMapper userGiftMapper;
+    @Autowired
+    private GiftService giftService;
+    @Autowired
+    private UserReceivingAddressService userReceivingAddressService;
 
     @Override
-    public UserGift addUserExhangeGift(String userId, Integer giftId, Integer addressId) {
+    public UserGift addUserExchangeGift(String userId, String merchantId, Long giftId, Long addressId) {
         if (StringUtils.isBlank(userId)) {
             BSUtil.isTrue(false, "用户信息不能为空");
         }
@@ -28,9 +38,25 @@ public class UserGiftServiceImpl implements UserGiftService {
         if (null == addressId) {
             BSUtil.isTrue(false, "收货地址不能为空");
         }
+        Gift gift = giftService.getGiftDetailById(giftId);
+        if (null == gift || null == gift.getId()) {
+            BSUtil.isTrue(false, "无效礼品");
+        }
+        UserReceivingAddress userReceivingAddress = userReceivingAddressService.getOneById(addressId);
+        if (null == userReceivingAddress || null == userReceivingAddress.getId()) {
+            BSUtil.isTrue(false, "无效地址");
+        }
         UserGift userGift = new UserGift();
-
-        return null;
+        userGift.setGiftId(gift.getId());
+        userGift.setGiftTitle(gift.getGiftMainTitle());
+        userGift.setMerchantId(merchantId);
+        userGift.setCity(userReceivingAddress.getCity());
+        userGift.setArea(userReceivingAddress.getArea());
+        userGift.setAddress(userReceivingAddress.getAddress());
+        userGift.setOrderState(0);
+        userGift.setAvailable(1);
+        userGift.setCreateTime(new Date());
+        return addUserGift(userGift);
     }
 
     @Override
