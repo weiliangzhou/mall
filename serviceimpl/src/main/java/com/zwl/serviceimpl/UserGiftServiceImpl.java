@@ -36,7 +36,7 @@ public class UserGiftServiceImpl implements UserGiftService {
     private UserService userService;
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public UserGift addUserExchangeGift(String userId, String merchantId, Long giftId, Long addressId) {
         if (StringUtils.isBlank(userId)) {
             BSUtil.isTrue(false, "用户信息不能为空");
