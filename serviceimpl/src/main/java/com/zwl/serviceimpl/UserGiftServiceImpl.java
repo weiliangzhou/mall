@@ -55,6 +55,9 @@ public class UserGiftServiceImpl implements UserGiftService {
         if (null == gift || null == gift.getId()) {
             BSUtil.isTrue(false, "无效商品");
         }
+        if (user.getMemberLevel().intValue() < gift.getMinRequirement().intValue()) {
+            BSUtil.isTrue(false, "请升级您的等级");
+        }
         if (gift.getStock() == null || gift.getStock().intValue() <= 0) {
             BSUtil.isTrue(false, "商品已售完");
         }
