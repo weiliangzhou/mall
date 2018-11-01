@@ -94,7 +94,7 @@ public class SalonController {
 
     @PostMapping("/getSalonThemeDetailByThemeId")
     public String getSalonThemeDetailByThemeId(@RequestBody JSONObject jsonObject) {
-        String userId = "2752aa450f544ea1b204b3ccfbe53a92";
+        String userId = ThreadVariable.getUserID();
         String merchantId = jsonObject.getString("merchantId");
         Integer themeId = jsonObject.getInteger("themeId");
         OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(merchantId, themeId);
