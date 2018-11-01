@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SalonController {
     @RequestMapping(name = "沙龙二维码",
             value = "/wx/salon/getSLQrCode", method = RequestMethod.POST)
-    public Result getSLQrCode(@ApiComment("沙龙Id") String slId, @ApiComment("merchantId") String merchantId) {
+    public Result getSLQrCode(@ApiComment("url") String url,@ApiComment("沙龙Id") String slId, @ApiComment("merchantId") String merchantId) {
         return new Result();
     }
 
