@@ -419,13 +419,15 @@ public class UserServiceImpl implements UserService {
             if(StringUtils.isNotBlank(user.getCity())) {
                 userVo.setCity(user.getCity());
             }
+            if(StringUtils.isNotBlank(user.getProvince())) {
+                userVo.setProvince(user.getProvince());
+            }
         }
         UserWechat userWechat = userWechatService.getUserWechatByUserId(userId);
         if(null != userWechat){
             if(StringUtils.isNotBlank(userWechat.getWechatAccount())) {
                 userVo.setWechatAccount(userWechat.getWechatAccount());
             }
-            userVo.setWechatAccount(userWechat.getWechatAccount());
         }
         return userVo;
     }
