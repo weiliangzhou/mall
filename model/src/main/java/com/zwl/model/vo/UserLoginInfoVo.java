@@ -64,6 +64,8 @@ public class UserLoginInfoVo {
      * 真实姓名
      */
     private String realName;
+    //省份
+    private String province;
     /**
      * 城市
      */
@@ -76,5 +78,7 @@ public class UserLoginInfoVo {
      * 身份证
      */
     private String idCardNum;
+
+
 
 }
