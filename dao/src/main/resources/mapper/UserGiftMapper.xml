@@ -229,7 +229,7 @@
                 s.user_id = #{userId}
             </if>
             <if test="merchantId != null and merchantId !=''">
-                s.merchant_id = #{merchantId}
+                and s.merchant_id = #{merchantId}
             </if>
         </where>
     </select>
