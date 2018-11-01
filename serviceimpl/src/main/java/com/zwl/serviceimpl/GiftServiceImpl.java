@@ -39,7 +39,7 @@ public class GiftServiceImpl implements GiftService {
         if (null == stock || null == currentStock) {
             BSUtil.isTrue(false, "库存数量错误");
         }
-        if (currentStock.intValue() < stock) {
+        if (stock < currentStock) {
             BSUtil.isTrue(false, "修改库存数量异常");
         }
         int updateLine = giftMapper.updateGiftStock(giftId, stock, currentStock);
