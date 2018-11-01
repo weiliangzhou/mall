@@ -76,6 +76,7 @@ public class UserGiftServiceImpl implements UserGiftService {
         giftService.updateGiftBuyCount(gift.getId(), buyCount + 1);
         //添加订单
         UserGift userGift = new UserGift();
+        userGift.setUserId(userId);
         userGift.setGiftId(gift.getId());
         userGift.setPrice(gift.getPrice());
         userGift.setGiftMainImg(gift.getGiftMainImg());
