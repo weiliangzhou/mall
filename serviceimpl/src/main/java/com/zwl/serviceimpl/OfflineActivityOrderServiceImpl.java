@@ -86,6 +86,13 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
                 BSUtil.isTrue(false, "不能重复购买！");
             }
         }
+        //已购数量
+        Integer buyCount = offlineActivity.getBuyCount() == null ? 0 : offlineActivity.getBuyCount();
+        //可购数量
+        Integer limitCount = offlineActivity.getLimitCount() == null ? 0 : offlineActivity.getLimitCount();
+        if (limitCount.intValue() <= buyCount.intValue()) {
+            BSUtil.isTrue(false, "超过可购买数量");
+        }
         String orderNo = "xx" + sdf_yMdHm.format(new Date()) + merchantId + userLongId + productId;
         OfflineActivityOrder offlineActivityOrder = new OfflineActivityOrder();
         Integer activityId = offlineActivity.getId();
