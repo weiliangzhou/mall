@@ -79,7 +79,7 @@ public class ReceivingAddressController {
 
     @PostMapping("/auth/getOneById")
     public String getOneById(@RequestBody JSONObject jsonObject) {
-        Long id = jsonObject.getLong("id");
+        Integer id = jsonObject.getInteger("id");
         UserReceivingAddress userReceivingAddress = userReceivingAddressService.getOneById(id);
         Result result = new Result();
         result.setData(userReceivingAddress);
