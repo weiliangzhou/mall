@@ -12,7 +12,6 @@ import com.zwl.service.GiftService;
 import com.zwl.service.UserGiftService;
 import com.zwl.service.UserReceivingAddressService;
 import com.zwl.service.UserService;
-import com.zwl.util.ThreadVariable;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

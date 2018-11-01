@@ -181,7 +181,7 @@ public class SalonController {
             String slStr = slStartTimeStr + "-" + slEndTimeStr;
             try {
                 qrUrl = QRCodeUtil.SlMergeImage("http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20181101/5cf42276a5c944429f1796e25305bb80.png", smallImage, 380, 703,
-                        userLogo, 200, 126, nickNameOrPhone, 200, 297, Color.white, slName, 693, 693, Color.orange, slStr, 873, 873, Color.orange);
+                        userLogo, 200, 126, nickNameOrPhone, 200, 297, Color.white, slName, 693, 685, Color.orange, slStr, 873, 900, Color.orange);
             } catch (IOException e) {
                 e.printStackTrace();
             }

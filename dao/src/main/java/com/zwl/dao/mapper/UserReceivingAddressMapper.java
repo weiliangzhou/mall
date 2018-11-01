@@ -8,7 +8,7 @@ import java.util.List;
 public interface UserReceivingAddressMapper {
     int insertSelective(UserReceivingAddress record);
 
-    UserReceivingAddress selectByPrimaryKey(Integer id);
+    UserReceivingAddress selectByPrimaryKey(Long id);
 
     int updateByPrimaryKeySelective(UserReceivingAddress record);
 

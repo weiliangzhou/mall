@@ -49,7 +49,7 @@ public class UserReceivingAddressServiceImpl implements UserReceivingAddressServ
     }
 
     @Override
-    public UserReceivingAddress getOneById(Integer id) {
+    public UserReceivingAddress getOneById(Long id) {
         return userReceivingAddressMapper.selectByPrimaryKey(id);
     }
 
