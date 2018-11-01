@@ -2,6 +2,7 @@ package com.zwl.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageHelper;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.po.UserReceivingAddress;
 import com.zwl.service.UserReceivingAddressService;
@@ -62,11 +63,14 @@ public class ReceivingAddressController {
 
     @PostMapping("/auth/getUserReceivingAddressList")
     public String getUserReceivingAddressList(@RequestBody JSONObject jsonObject) {
+        Integer pageSize = jsonObject.getInteger("pageSize");
+        Integer pageNum = jsonObject.getInteger("pageNum");
         String merchantId = jsonObject.getString("merchantId");
         String userID = ThreadVariable.getUserID();
         UserReceivingAddress userReceivingAddress = new UserReceivingAddress();
         userReceivingAddress.setMerchantId(merchantId);
         userReceivingAddress.setUserId(userID);
+        PageHelper.startPage(pageNum,pageSize);
         List<UserReceivingAddress> userReceivingAddressList = userReceivingAddressService.getUserReceivingAddressList(userReceivingAddress);
         Result result = new Result();
         result.setData(userReceivingAddressList);
