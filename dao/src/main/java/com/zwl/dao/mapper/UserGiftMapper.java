@@ -27,5 +27,5 @@ public interface UserGiftMapper {
      */
     List<UserGift> findUserGiftListPage(@Param("userId") String userId, @Param("merchantId") String merchantId);
 
-    UserGift getUserGiftByGiftId(String userId, String merchantId, Long giftId);
+    UserGift getUserGiftByGiftId(@Param("userId") String userId, @Param("merchantId") String merchantId, @Param("giftId") Long giftId);
 }
