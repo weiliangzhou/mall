@@ -103,6 +103,7 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         offlineActivityOrder.setActivityCode(activityCode);
         offlineActivityOrder.setUserId(userId);
         offlineActivityOrder.setPhone(offlineActivityBuy.getPhone());
+        offlineActivityOrder.setProvince(offlineActivityBuy.getProvince());
         offlineActivityOrder.setCity(offlineActivityBuy.getCity());
         offlineActivityOrder.setCreateTime(new Date());
         offlineActivityOrder.setAvailable(1);

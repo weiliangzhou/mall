@@ -65,6 +65,8 @@ public class Gift {
     private Integer available;
     @ApiComment(value = "轮播图", sample = "轮播图")
     private List<String> imgList;
+    @ApiComment(value = "销量", sample = "12")
+    private Integer buyCount;
 
 
 }
