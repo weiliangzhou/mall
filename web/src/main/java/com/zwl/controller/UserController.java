@@ -210,6 +210,17 @@ public class UserController {
         userLoginInfoVo.setProvince(user.getProvince());
         userLoginInfoVo.setCity(user.getCity());
         userLoginInfoVo.setIdCardNum(userCertification.getIdCard());
+        String referrerId = user.getReferrer();
+        if (referrerId != null) {
+            User referrerUser = userService.getByUserId(referrerId);
+            if (referrerUser != null) {
+                userLoginInfoVo.setReferrerName(referrerUser.getRealName());
+            } else {
+                userLoginInfoVo.setReferrerName("");
+            }
+
+        }
+
         result.setData(userLoginInfoVo);
         return result;
     }
