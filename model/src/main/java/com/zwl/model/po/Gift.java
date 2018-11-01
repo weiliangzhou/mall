@@ -7,6 +7,7 @@ import com.zwl.util.BigDecimalUtil;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class Gift {
@@ -62,6 +63,8 @@ public class Gift {
     @JSONField(serialize = false)
     @RestPackIgnore
     private Integer available;
+    @ApiComment(value = "轮播图", sample = "轮播图")
+    private List<String> imgList;
 
 
 }
