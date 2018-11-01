@@ -46,6 +46,8 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
     private OfflineActivityCodeService offlineActivityCodeService;
     @Autowired
     private OfflineActivityThemeService offlineActivityThemeService;
+    @Autowired
+    private UserWechatService userWechatService;
 
     @Override
     public BuyResult offlineActivityBuy(OfflineActivityBuy offlineActivityBuy) {
@@ -101,6 +103,33 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         if (isRetraining == 1) {
             Integer count = offlineActivityCodeService.getAlreadyBuyCountByUserIdAndThemeId(userId, offlineActivity.getActivityThemeId(), merchantId);
             activityPrice = count == 0 ? activityPrice : offlineActivity.getRetrainingPrice();
+        }
+
+        //更新用户  性别  省 市
+        User sysUser = userService.getByUserId(userId);
+        if (sysUser.getGender() == null) {
+            User sysUserParam = new User();
+            sysUserParam.setUserId(userId);
+            sysUserParam.setGender(offlineActivityBuy.getSex());
+            userService.updateUserByUserId(sysUserParam);
+        }
+        if (sysUser.getProvince() == null) {
+            User sysUserParam = new User();
+            sysUserParam.setUserId(userId);
+            sysUserParam.setProvince(offlineActivityBuy.getProvince());
+            userService.updateUserByUserId(sysUserParam);
+        }
+        if (sysUser.getCity() == null) {
+            User sysUserParam = new User();
+            sysUserParam.setUserId(userId);
+            sysUserParam.setCity(sysUser.getCity());
+            userService.updateUserByUserId(sysUserParam);
+        }
+
+        //更新用户微信号
+        UserWechat userWechat = userWechatService.getUserWechatByUserId(userId);
+        if (null == userWechat) {
+            userWechatService.saveUserWechat(offlineActivityBuy.getWechatNo());
         }
 
         offlineActivityOrder.setOrderNo(orderNo);
@@ -305,5 +334,4 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
 
         return offlineActivityOrderVo;
     }
-
 }
