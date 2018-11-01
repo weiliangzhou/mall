@@ -20,11 +20,12 @@
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
         <result column="available" property="available" jdbcType="INTEGER"/>
+        <result column="buy_count" property="buyCount" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
     id, gift_main_title, gift_vice_title, min_requirement, gift_main_img, gift_vice_img_1, 
     gift_vice_img_2, gift_vice_img_3, price, express_fee, stock, gift_desc, is_recommend, 
-    is_show, merchant_id, create_time, modify_time, available
+    is_show, merchant_id, create_time, modify_time, available,buy_count
   </sql>
 
     <select id="getGiftList" resultMap="BaseResultMap">
@@ -110,6 +111,9 @@
             <if test="available != null">
                 available,
             </if>
+            <if test="buyCount != null">
+                buy_count,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -166,6 +170,9 @@
             <if test="available != null">
                 #{available,jdbcType=INTEGER},
             </if>
+            <if test="buyCount != null">
+                #{buyCount,jdbcType=INTEGER},
+            </if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.zwl.model.po.Gift">
@@ -221,6 +228,9 @@
             </if>
             <if test="available != null">
                 available = #{available,jdbcType=INTEGER},
+            </if>
+            <if test="buyCount != null">
+                buyCount = #{buyCount,jdbcType=INTEGER},
             </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
