@@ -260,6 +260,7 @@ public class UserController {
 
     @PostMapping("/auth/saveUserInfo")
     public Result saveUserInfo(@RequestBody JSONObject jsonObject) {
+        String province = jsonObject.getString("province");
         String city = jsonObject.getString("city");
         Integer gender = jsonObject.getInteger("gender");
         String userId = ThreadVariable.getUserID();

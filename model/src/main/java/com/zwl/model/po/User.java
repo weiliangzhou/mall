@@ -31,6 +31,8 @@ public class User {
     private Integer gender;
     //城市
     private String city;
+    //省份
+    private String province;
 
 
 }
