@@ -286,7 +286,7 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         offlineActivityOrderVo.setSex(offlineActivityOrder.getSex());
         offlineActivityOrderVo.setCity(offlineActivityOrder.getCity());
         offlineActivityOrderVo.setActivityThemeId(offlineActivityOrder.getActivityThemeId());
-        //offlineActivityOrderVo.setActivityCode(offlineActivityOrder.getActivityCode());
+        offlineActivityOrderVo.setActivityCode(offlineActivityOrder.getActivityCode());
         OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(offlineActivityOrder.getMerchantId(), offlineActivityOrder.getActivityThemeId());
         offlineActivityOrderVo.setImgUrl(offlineActivityTheme.getImgUrl());
         offlineActivityOrderVo.setThemeName(offlineActivityTheme.getThemeName());
