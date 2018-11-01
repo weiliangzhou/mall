@@ -69,7 +69,7 @@ public class GiftController {
 
     @RequestMapping(name = "获取书籍二维码",
             value = "/getGiftQrCode", method = RequestMethod.POST)
-    public Result exchangeGift(@ApiComment(value = "书籍Id") String giftId,
+    public Result getGiftQrCode(@ApiComment(value = "书籍Id") String giftId,
                                @ApiComment(value = "url") Long url
                                ) {
         return new Result();
