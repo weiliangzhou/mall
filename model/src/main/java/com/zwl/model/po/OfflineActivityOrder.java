@@ -29,6 +29,8 @@ public class OfflineActivityOrder {
     private String phone;
     @ApiComment(value = "真实姓名", sample = "李小龙")
     private String realName;
+    @ApiComment(value = "所在省份", sample = "浙江省")
+    private String province;
     @ApiComment(value = "所在城市", sample = "杭州")
     private String city;
     @ApiComment(value = "身份证号码", sample = "330726199406141719")

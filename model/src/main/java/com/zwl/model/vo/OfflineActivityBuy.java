@@ -36,6 +36,12 @@ public class OfflineActivityBuy {
     @ApiComment(value = "sex", sample = "0 男 1女")
     private Integer sex;
     /**
+     * 所在省
+     */
+    @NotBlank(message = "所在省", groups = {Buy.class, SlBuy.class})
+    @ApiComment(value = "province", sample = "所在省")
+    private String province;
+    /**
      * 所在城市
      */
     @NotBlank(message = "所在城市", groups = {Buy.class, SlBuy.class})
