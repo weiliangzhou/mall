@@ -39,7 +39,7 @@ public class GiftController {
     }
 
     @RequestMapping(name = "兑换商品",
-            value = "/wx/gift/exchangeGift", method = RequestMethod.POST)
+            value = "/exchangeGift", method = RequestMethod.POST)
     public UserGift exchangeGift(@ApiComment(value = "商户号") String merchantId,
                                  @ApiComment(value = "礼品编号") Long giftId,
                                  @ApiComment(value = "地址编号") String addressId
