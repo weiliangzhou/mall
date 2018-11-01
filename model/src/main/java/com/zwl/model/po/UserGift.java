@@ -1,5 +1,6 @@
 package com.zwl.model.po;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -77,6 +78,7 @@ public class UserGift {
     private Integer orderState;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @JSONField(format = "yyyy-MM-dd")
     private Date createTime;
 
     private Date modifyTime;
