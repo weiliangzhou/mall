@@ -34,6 +34,8 @@ public class UserVo {
     private Integer xiaxianCount;
     @ApiComment(value = "性别", sample = "0：男 1：女")
     private Integer gender;
+    @ApiComment(value = "省份", sample = "浙江")
+    private String province;
     @ApiComment(value = "城市", sample = "杭州")
     private String city;
     @ApiComment(value = "微信号", sample = "16986556")
