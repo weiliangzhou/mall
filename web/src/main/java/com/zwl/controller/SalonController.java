@@ -99,6 +99,11 @@ public class SalonController {
         Integer themeId = jsonObject.getInteger("themeId");
         OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(merchantId, themeId);
         List<OfflineActivity> offlineActivityList = offlineActivityService.getOfflineActivityListByThemeId(merchantId, offlineActivityTheme.getId(), userId);
+        if (null == offlineActivityList || offlineActivityList.isEmpty()) {
+            Result result = new Result();
+            result.setData(offlineActivityTheme);
+            return JSON.toJSONString(result);
+        }
         User user = userService.getByUserId(userId);
         Integer memberLevel = user.getMemberLevel();
         Long millisecond = System.currentTimeMillis();
@@ -106,24 +111,24 @@ public class SalonController {
         if (null != offlineActivity) {
             Integer limitCount = offlineActivity.getLimitCount();
             Integer buyCount = offlineActivity.getBuyCount();
-            if(buyCount.intValue()>=limitCount.intValue()){
+            if (buyCount.intValue() >= limitCount.intValue()) {
                 //如果购买人数大于等于限制人数，则状态设为1，前台显示为名额已满
                 offlineActivityTheme.setApplyStatus(1);
-            }else if(millisecond < offlineActivity.getApplyStartTime().getTime() || millisecond > offlineActivity.getApplyEndTime().getTime()){
+            } else if (millisecond < offlineActivity.getApplyStartTime().getTime() || millisecond > offlineActivity.getApplyEndTime().getTime()) {
                 //如果系统当前时间不在报名时间内，则状态设为2，前台显示为报名已结束
                 offlineActivityTheme.setApplyStatus(2);
-            }else if(memberLevel.intValue()<offlineActivity.getMinRequirement().intValue()){
+            } else if (memberLevel.intValue() < offlineActivity.getMinRequirement().intValue()) {
                 //如果用户等级小于该场活动最低要求等级，则状态设为3，前台显示为未获得报名资格
                 offlineActivityTheme.setApplyStatus(3);
-            }else if(0 == offlineActivity.getIsRebuy().intValue()){
+            } else if (0 == offlineActivity.getIsRebuy().intValue()) {
                 OfflineActivityCode offlineActivityCode = offlineActivityCodeService.getOneByUserIdAndOfflineActivityId(userId, offlineActivity.getId());
-                if(null != offlineActivityCode){
+                if (null != offlineActivityCode) {
                     //如果用户已购买该场活动，则状态设为4，前台显示已报名
                     offlineActivityTheme.setApplyStatus(4);
-                }else {
+                } else {
                     offlineActivityTheme.setApplyStatus(0);
                 }
-            }else {
+            } else {
                 //上述条件都不满足，则状态设为4，前台显示为立即报名
                 offlineActivityTheme.setApplyStatus(0);
             }
@@ -145,24 +150,24 @@ public class SalonController {
         for (OfflineActivity offlineActivity : offlineActivityList) {
             Integer limitCount = offlineActivity.getLimitCount();
             Integer buyCount = offlineActivity.getBuyCount();
-            if(buyCount.intValue()>=limitCount.intValue()){
+            if (buyCount.intValue() >= limitCount.intValue()) {
                 //如果购买人数大于等于限制人数，则状态设为1，前台显示为名额已满
                 offlineActivity.setApplyStatus(1);
-            }else if(millisecond < offlineActivity.getApplyStartTime().getTime() || millisecond > offlineActivity.getApplyEndTime().getTime()){
+            } else if (millisecond < offlineActivity.getApplyStartTime().getTime() || millisecond > offlineActivity.getApplyEndTime().getTime()) {
                 //如果系统当前时间不在报名时间内，则状态设为2，前台显示为报名已结束
                 offlineActivity.setApplyStatus(2);
-            }else if(memberLevel.intValue()<offlineActivity.getMinRequirement().intValue()){
+            } else if (memberLevel.intValue() < offlineActivity.getMinRequirement().intValue()) {
                 //如果用户等级小于该场活动最低要求等级，则状态设为3，前台显示为未获得报名资格
                 offlineActivity.setApplyStatus(3);
-            }else if(0 == offlineActivity.getIsRebuy().intValue()){
+            } else if (0 == offlineActivity.getIsRebuy().intValue()) {
                 OfflineActivityCode offlineActivityCode = offlineActivityCodeService.getOneByUserIdAndOfflineActivityId(userId, offlineActivity.getId());
-                if(null != offlineActivityCode){
+                if (null != offlineActivityCode) {
                     //如果用户已购买该场活动，则状态设为4，前台显示已报名
                     offlineActivity.setApplyStatus(4);
-                }else {
+                } else {
                     offlineActivity.setApplyStatus(0);
                 }
-            }else {
+            } else {
                 //上述条件都不满足，则状态设为4，前台显示为立即报名
                 offlineActivity.setApplyStatus(0);
             }
@@ -220,9 +225,9 @@ public class SalonController {
 
     @PostMapping("/getSLQrCode")
     public String getSLQrCode(@RequestBody JSONObject jsonObject) {
-        String url=jsonObject.getString("url");
+        String url = jsonObject.getString("url");
         Integer slId = jsonObject.getInteger("slId");
-        String merchantId=jsonObject.getString("merchantId");
+        String merchantId = jsonObject.getString("merchantId");
         String userId = ThreadVariable.getUserID();
         OfflineActivity offlineActivity = offlineActivityService.getOneByActivityId(slId);
         String qrUrl = stringRedisTemplate.boundValueOps(userId + "_sl_QrCode").get();
@@ -232,9 +237,9 @@ public class SalonController {
             UserInfo userInfo = userInfoService.getByUserId(userId);
             String userLogo = user.getLogoUrl() == null ? "http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/6a989ec302994c6c98c2d4810f9fbcb2.png" : user.getLogoUrl();
             String nickNameOrPhone = StringUtils.isBlank(userInfo.getNickName()) ? user.getRegisterMobile() : userInfo.getNickName();
-            Integer themeId=offlineActivity.getActivityThemeId();
-            OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(merchantId,themeId);
-            String slName=offlineActivityTheme.getThemeName();
+            Integer themeId = offlineActivity.getActivityThemeId();
+            OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(merchantId, themeId);
+            String slName = offlineActivityTheme.getThemeName();
             Date slStartTime = offlineActivity.getActivityStartTime();
             Date slEndTime = offlineActivity.getActivityEndTime();
             SimpleDateFormat sdf_yMd_Hms = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
