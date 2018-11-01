@@ -33,7 +33,7 @@ public class GiftController {
 
     @RequestMapping(name = "书籍详情",
             value = "/getGiftDetailById", method = RequestMethod.POST)
-    public Gift getGiftDetailById(@ApiComment("书籍Id") Long giftId
+    public Gift getGiftDetailById(@ApiComment("书籍Id") Long giftId,@ApiComment("userId") Long userId
     ) {
         Gift gift = new Gift();
         return gift;
