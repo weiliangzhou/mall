@@ -67,6 +67,8 @@ public class Gift {
     private List<String> imgList;
     @ApiComment(value = "销量", sample = "12")
     private Integer buyCount;
+    @ApiComment(value = "当前用户是否已经购买", sample = "0未购买 1已购买")
+    private Integer buyFlag;
 
 
 }

@@ -152,7 +152,7 @@ public class TokenFilter implements Filter {
             return;
         }
         //线下、沙龙主题详情购买
-        if (requestURL.contains("/wx/offlineActivity/getOfflineActivityThemeDetailByThemeId") || requestURL.contains("/wx/salon/getSalonListByThemeId")) {
+        if (requestURL.contains("/wx/offlineActivity/getOfflineActivityThemeDetailByThemeId")) {
             chain.doFilter(request, response);
             return;
         }

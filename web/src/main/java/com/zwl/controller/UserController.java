@@ -207,8 +207,20 @@ public class UserController {
         userLoginInfoVo.setRealName(StringUtils.isBlank(user.getRealName()) ? "" : user.getRealName());
         //增加性别、城市、姓名、身份证
         userLoginInfoVo.setGender(user.getGender());
+        userLoginInfoVo.setProvince(user.getProvince());
         userLoginInfoVo.setCity(user.getCity());
         userLoginInfoVo.setIdCardNum(userCertification.getIdCard());
+        String referrerId = user.getReferrer();
+        if (referrerId != null) {
+            User referrerUser = userService.getByUserId(referrerId);
+            if (referrerUser != null) {
+                userLoginInfoVo.setReferrerName(referrerUser.getRealName());
+            } else {
+                userLoginInfoVo.setReferrerName("");
+            }
+
+        }
+
         result.setData(userLoginInfoVo);
         return result;
     }

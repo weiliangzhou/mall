@@ -84,6 +84,8 @@ public class OfflineActivity {
     private String activityAddressDesc;
     @ApiComment(value = "线下课程名称", sample = "微商夜大 20180920期")
     private String themeName;
+    @ApiComment(value = "报名状态", sample = "0可报名 1名额已满 2报名已结束 3未获得报名资格 4已报名")
+    private Integer applyStatus;
 
     public String getBuyCountDesc() {
         Integer count = limitCount - buyCount;

@@ -36,7 +36,7 @@ public class UserGiftServiceImpl implements UserGiftService {
     private UserService userService;
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Throwable.class)
     public UserGift addUserExchangeGift(String userId, String merchantId, Long giftId, Long addressId) {
         if (StringUtils.isBlank(userId)) {
             BSUtil.isTrue(false, "用户信息不能为空");
@@ -55,7 +55,10 @@ public class UserGiftServiceImpl implements UserGiftService {
         if (null == gift || null == gift.getId()) {
             BSUtil.isTrue(false, "无效商品");
         }
-        if (gift.getStock() == null || gift.getStock().intValue() <= 0) {
+        if (user.getMemberLevel() < gift.getMinRequirement()) {
+            BSUtil.isTrue(false, "请升级您的等级");
+        }
+        if (gift.getStock() == null || gift.getStock() <= 0) {
             BSUtil.isTrue(false, "商品已售完");
         }
         UserReceivingAddress userReceivingAddress = userReceivingAddressService.getOneById(addressId);
@@ -67,12 +70,13 @@ public class UserGiftServiceImpl implements UserGiftService {
             BSUtil.isTrue(false, "请勿重复兑换");
         }
         //减少相应库存数
-        giftService.updateGiftStock(gift.getId(), gift.getStock(), gift.getStock().intValue() - 1);
+        giftService.updateGiftStock(gift.getId(), gift.getStock(), gift.getStock() - 1);
         //更新商品销量
         Integer buyCount = gift.getBuyCount() == null ? 0 : gift.getBuyCount();
         giftService.updateGiftBuyCount(gift.getId(), buyCount + 1);
         //添加订单
         UserGift userGift = new UserGift();
+        userGift.setUserId(userId);
         userGift.setGiftId(gift.getId());
         userGift.setPrice(gift.getPrice());
         userGift.setGiftMainImg(gift.getGiftMainImg());

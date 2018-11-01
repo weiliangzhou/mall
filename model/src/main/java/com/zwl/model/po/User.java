@@ -18,7 +18,7 @@ public class User {
     private String logoUrl;
     private String registerMobile;
     private String referrer;
-    // 99校长   6院长 5班长 4学员 1小班 0会员 -1游客
+    // 99校长   6院长 4创业教练 1学员 0会员 -1游客
     private Integer memberLevel;
     private String levelName;
     private Date expiresTime;

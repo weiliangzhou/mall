@@ -45,26 +45,26 @@ public class OfflineActivityServiceImpl implements OfflineActivityService {
 
     @Override
     public List<OfflineActivity> getOfflineActivityListByThemeId(String merchantId, Integer activityThemeId, String userId) {
-        List<OfflineActivity> offlineActivityList = offlineActivityMapper.getOfflineActivityListByThemeId(merchantId,activityThemeId);
-        Integer count = offlineActivityCodeService.getAlreadyBuyCountByUserIdAndThemeId(userId,activityThemeId,merchantId);
-        if(0==count){
-            for(OfflineActivity offlineActivity:offlineActivityList){
-                offlineActivity.setActivityPriceDesc(div(100,offlineActivity.getActivityPrice(),2)+"");
-                OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(merchantId,offlineActivity.getActivityThemeId());
+        List<OfflineActivity> offlineActivityList = offlineActivityMapper.getOfflineActivityListByThemeId(merchantId, activityThemeId);
+        Integer count = offlineActivityCodeService.getAlreadyBuyCountByUserIdAndThemeId(userId, activityThemeId, merchantId);
+        if (0 == count) {
+            for (OfflineActivity offlineActivity : offlineActivityList) {
+                offlineActivity.setActivityPriceDesc(String.valueOf(div(100, offlineActivity.getActivityPrice(), 2)));
+                OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(merchantId, offlineActivity.getActivityThemeId());
                 offlineActivity.setImgUrl(offlineActivityTheme.getImgUrl());
                 offlineActivity.setThemeName(offlineActivityTheme.getThemeName());
                 offlineActivity.setActivityAddressDesc(offlineActivity.getActivityAddress());
             }
-        }else{
-            for(OfflineActivity offlineActivity:offlineActivityList){
-                OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(merchantId,offlineActivity.getActivityThemeId());
-                if(1 == offlineActivity.getIsRetraining()){
-                    offlineActivity.setActivityPriceDesc(div(100,offlineActivity.getRetrainingPrice(),2)+"");
+        } else {
+            for (OfflineActivity offlineActivity : offlineActivityList) {
+                OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(merchantId, offlineActivity.getActivityThemeId());
+                if (1 == offlineActivity.getIsRetraining()) {
+                    offlineActivity.setActivityPriceDesc(div(100, offlineActivity.getRetrainingPrice(), 2) + "");
                     offlineActivity.setImgUrl(offlineActivityTheme.getImgUrl());
                     offlineActivity.setThemeName(offlineActivityTheme.getThemeName());
-                    offlineActivity.setActivityAddressDesc(offlineActivity.getActivityAddress()+"-复训");
-                }else {
-                    offlineActivity.setActivityPriceDesc(div(100,offlineActivity.getActivityPrice(),2)+"");
+                    offlineActivity.setActivityAddressDesc(offlineActivity.getActivityAddress() + "-复训");
+                } else {
+                    offlineActivity.setActivityPriceDesc(div(100, offlineActivity.getActivityPrice(), 2) + "");
                     offlineActivity.setImgUrl(offlineActivityTheme.getImgUrl());
                     offlineActivity.setThemeName(offlineActivityTheme.getThemeName());
                     offlineActivity.setActivityAddressDesc(offlineActivity.getActivityAddress());
@@ -78,4 +78,5 @@ public class OfflineActivityServiceImpl implements OfflineActivityService {
     public void updateBuyCountById(Integer activityId) {
         offlineActivityMapper.updateBuyCountById(activityId);
     }
+
 }

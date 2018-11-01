@@ -13,7 +13,7 @@ import java.util.Date;
 @Data
 public class UserReceivingAddress {
     @ApiComment(value = "收货地址ID", sample = "1")
-    private Integer id;
+    private Long id;
     @NotBlank(message = "收货人不能为空", groups = {Update.class})
     @ApiComment(value = "收货人", sample = "孙悟空")
     private String receivingName;

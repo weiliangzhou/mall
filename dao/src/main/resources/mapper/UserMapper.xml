@@ -26,7 +26,7 @@
     <sql id="Base_Column_List">
         id, user_id, wechat_openid, wechat_union_id,gzh_openid, merchant_id, register_from,
         register_mobile,real_name,logo_url, referrer, member_level,
-        level_name, is_buy,expires_time, register_time, modify_time, available, gender, city
+        level_name, is_buy,expires_time, register_time, modify_time, available, gender, city,province
     </sql>
     <sql id="Insert_Column_List">
         user_id, wechat_openid, wechat_union_id,gzh_openid, merchant_id, register_from, register_mobile,real_name,
@@ -182,7 +182,7 @@
         where s.user_id = #{userId}
     </update>
 
-    <update id="updateUserWechatOpenidByUserId" >
+    <update id="updateUserWechatOpenidByUserId">
         update ss_user s set s.wechat_openid = #{wechatOpenId}
         where s.user_id = #{userId}
     </update>

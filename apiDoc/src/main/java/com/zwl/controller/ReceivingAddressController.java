@@ -66,7 +66,7 @@ public class ReceivingAddressController {
     @RequestMapping(name = "获取单个收货地址",
             value = "/auth/getOneById", method = RequestMethod.POST)
     public UserReceivingAddress getOneById(
-            @ApiComment("id") Integer id
+            @ApiComment("id") Long id
     ) {
         return new UserReceivingAddress();
     }
@@ -75,7 +75,7 @@ public class ReceivingAddressController {
     @RequestMapping(name = "删除收货地址",
             value = "/auth/deleteById", method = RequestMethod.POST)
     public Result deleteById(
-            @ApiComment("id") Integer id
+            @ApiComment("id") Long id
     ) {
         return new Result();
     }
