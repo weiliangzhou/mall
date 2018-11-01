@@ -39,7 +39,9 @@ public class ReceivingAddressController {
     @RequestMapping(name = "获取列表",
             value = "/auth/getUserReceivingAddressList", method = RequestMethod.POST)
     public UserReceivingAddress getUserReceivingAddressList(
-            @ApiComment("商户号") String merchantId
+            @ApiComment("商户号") String merchantId,
+            @ApiComment("pageSize") Integer pageSize,
+            @ApiComment("pageNum") Integer pageNum
     ) {
         return new UserReceivingAddress();
     }
