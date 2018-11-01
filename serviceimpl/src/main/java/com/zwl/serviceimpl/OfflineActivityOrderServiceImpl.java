@@ -106,31 +106,33 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
             activityPrice = count == 0 ? activityPrice : offlineActivity.getRetrainingPrice();
         }
 
-        //更新用户  性别  省 市
-        User sysUser = userService.getByUserId(userId);
-        if (sysUser.getGender() == null) {
-            User sysUserParam = new User();
-            sysUserParam.setUserId(userId);
-            sysUserParam.setGender(offlineActivityBuy.getSex());
-            userService.updateUserByUserId(sysUserParam);
-        }
-        if (sysUser.getProvince() == null) {
-            User sysUserParam = new User();
-            sysUserParam.setUserId(userId);
-            sysUserParam.setProvince(offlineActivityBuy.getProvince());
-            userService.updateUserByUserId(sysUserParam);
-        }
-        if (sysUser.getCity() == null) {
-            User sysUserParam = new User();
-            sysUserParam.setUserId(userId);
-            sysUserParam.setCity(sysUser.getCity());
-            userService.updateUserByUserId(sysUserParam);
-        }
+        if (offlineActivityBuy.getOrderType() == 1) {
+            //更新用户  性别  省 市
+            User sysUser = userService.getByUserId(userId);
+            if (sysUser.getGender() == null) {
+                User sysUserParam = new User();
+                sysUserParam.setUserId(userId);
+                sysUserParam.setGender(offlineActivityBuy.getSex());
+                userService.updateUserByUserId(sysUserParam);
+            }
+            if (sysUser.getProvince() == null) {
+                User sysUserParam = new User();
+                sysUserParam.setUserId(userId);
+                sysUserParam.setProvince(offlineActivityBuy.getProvince());
+                userService.updateUserByUserId(sysUserParam);
+            }
+            if (sysUser.getCity() == null) {
+                User sysUserParam = new User();
+                sysUserParam.setUserId(userId);
+                sysUserParam.setCity(sysUser.getCity());
+                userService.updateUserByUserId(sysUserParam);
+            }
 
-        //更新用户微信号
-        UserWechat userWechat = userWechatService.getUserWechatByUserId(userId);
-        if (null == userWechat) {
-            userWechatService.saveUserWechat(offlineActivityBuy.getWechatNo());
+            //更新用户微信号
+            UserWechat userWechat = userWechatService.getUserWechatByUserId(userId);
+            if (null == userWechat) {
+                userWechatService.saveUserWechat(offlineActivityBuy.getWechatNo());
+            }
         }
 
         offlineActivityOrder.setOrderNo(orderNo);
@@ -140,9 +142,9 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         String activityCode = sdf.format(new Date());
         //String activityCode = UUIDUtil.getUUID32();
         Random random = new Random();
-        String result="";
-        for (int i=0;i<3;i++){
-            result+=random.nextInt(10);
+        String result = "";
+        for (int i = 0; i < 3; i++) {
+            result += random.nextInt(10);
         }
         activityCode = activityCode + result;
         offlineActivityOrder.setActivityCode(activityCode);
