@@ -73,6 +73,7 @@ public class SalonController {
             realIp = "127.0.0.1";
         }
         WxPayVo wxPayVo = wxPayService.pay(realIp, user.getGzhOpenid(), orderNo, totalFee.toString(), gzhAppId, merchantId, wxPayKey);
+        wxPayVo.setOrderNo(orderNo);
         result.setData(wxPayVo);
         return JSON.toJSONString(result);
     }

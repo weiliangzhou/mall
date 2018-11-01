@@ -18,4 +18,5 @@ public class WxPayVo {
     private String signType;
     private String mweb_url;
     private String appid;
+    private String orderNo;
 }
