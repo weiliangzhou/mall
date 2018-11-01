@@ -72,8 +72,11 @@ public class GiftController {
         Gift gift = giftService.getGiftDetailById(giftId);
         String merchantId = jsonObject.getString("merchantId");
         String userId = ThreadVariable.getUserID();
-        //查询是否已经购买过
-        UserGift userGift = userGiftService.getUserGiftByGiftId(userId, merchantId, giftId);
+        UserGift userGift = null;
+        if (userId != null) {
+            //查询是否已经购买过
+            userGift = userGiftService.getUserGiftByGiftId(userId, merchantId, giftId);
+        }
         if (userGift != null) {
             gift.setBuyFlag(1);
         } else {

@@ -16,5 +16,5 @@ public interface UserReceivingAddressMapper {
 
     void updateIsDefaultByUserId(@Param("userId") String userId, @Param("merchantId") String merchantId);
 
-    int deleteById(Integer id);
+    int deleteById(Long id);
 }

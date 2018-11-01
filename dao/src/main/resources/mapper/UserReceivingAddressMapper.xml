@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zwl.dao.mapper.UserReceivingAddressMapper" >
   <resultMap id="BaseResultMap" type="com.zwl.model.po.UserReceivingAddress" >
-    <id column="id" property="id" jdbcType="INTEGER" />
+    <id column="id" property="id" jdbcType="BIGINT" />
     <result column="receiving_name" property="receivingName" jdbcType="VARCHAR" />
     <result column="phone" property="phone" jdbcType="VARCHAR" />
     <result column="province" property="province" jdbcType="VARCHAR" />
@@ -21,10 +21,10 @@
     create_time, modify_time, available
   </sql>
 
-    <update id="deleteById" parameterType="java.lang.Integer">
+    <update id="deleteById" parameterType="java.lang.Long">
     update ss_user_receivingaddress
     set available = 0
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </update>
 
   <update id="updateIsDefaultByUserId" parameterType="java.lang.String">
@@ -44,11 +44,11 @@
     order by is_default desc
   </select>
 
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select
     <include refid="Base_Column_List" />
     from ss_user_receivingaddress
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </select>
   <!--<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >-->
     <!--delete from ss_user_receivingaddress-->
@@ -111,7 +111,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
-        #{id,jdbcType=INTEGER},
+        #{id,jdbcType=BIGINT},
       </if>
       <if test="receivingName != null" >
         #{receivingName,jdbcType=VARCHAR},
@@ -192,7 +192,7 @@
         available = #{available,jdbcType=INTEGER},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </update>
   <!--<update id="updateByPrimaryKey" parameterType="com.zwl.model.po.UserReceivingAddress" >-->
     <!--update ss_user_receivingaddress-->
