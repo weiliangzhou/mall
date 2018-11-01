@@ -272,6 +272,7 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         OfflineActivityOrder offlineActivityOrder = offlineActivityOrderMapper.selectByPrimaryKey(orderNo);
         OfflineActivityOrderVo offlineActivityOrderVo = new OfflineActivityOrderVo();
         offlineActivityOrderVo.setCreateTime(offlineActivityOrder.getCreateTime());
+        offlineActivityOrderVo.setActivityId(offlineActivityOrder.getActivityId());
         offlineActivityOrderVo.setRealName(offlineActivityOrder.getRealName());
         offlineActivityOrderVo.setWechatNo(offlineActivityOrder.getWechatNo());
         offlineActivityOrderVo.setSex(offlineActivityOrder.getSex());
