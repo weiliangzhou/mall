@@ -50,6 +50,8 @@ public class OfflineActivityTheme {
     private String activityTime;
     @ApiComment(value = "图标地址", sample = "sdgs")
     private String imgUrl;
+    @ApiComment(value = "报名状态", sample = "0可报名 1名额已满 2报名已结束 3未获得报名资格 4已报名")
+    private Integer applyStatus;
 
     public String getBuyCountShow() {
         if (buyCount == null)
