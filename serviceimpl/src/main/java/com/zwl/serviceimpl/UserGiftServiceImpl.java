@@ -86,6 +86,15 @@ public class UserGiftServiceImpl implements UserGiftService {
         return new PageInfo<>(userGifts);
     }
 
+    @Override
+    public UserGift getUserGiftById(Long id) {
+        if (null == id) {
+            BSUtil.isTrue(false, "查询的编号不能为空");
+        }
+        UserGift userGift = userGiftMapper.selectByPrimaryKey(id);
+        return userGift;
+    }
+
     private void verfiy(UserGift userGift) {
         if (userGift == null) {
             BSUtil.isTrue(false, "参数错误");

@@ -35,4 +35,12 @@ public interface UserGiftService {
      * @return 分页数据信息
      */
     PageInfo<UserGift> findUserGiftListPage(String userId, String merchantId, Integer pageSize, Integer pageNum);
+
+    /**
+     * 获取用户兑换的礼品订单信息
+     *
+     * @param id 订单编号
+     * @return 订单信息
+     */
+    UserGift getUserGiftById(Long id);
 }

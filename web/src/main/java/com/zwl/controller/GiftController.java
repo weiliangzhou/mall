@@ -74,6 +74,18 @@ public class GiftController {
     }
 
     /**
+     * 获取用户的订单详情用户前端查看快递单号
+     */
+    @PostMapping("/getUserGiftById")
+    public Result getUserGiftById(@RequestBody JSONObject jsonObject) {
+        Long id = jsonObject.getLong("id");
+        UserGift userGift = userGiftService.getUserGiftById(id);
+        Result result = new Result();
+        result.setData(userGift);
+        return result;
+    }
+
+    /**
      * 兑换商品
      */
     @PostMapping("/exchangeGift")
