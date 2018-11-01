@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -79,7 +80,7 @@ public class QRCodeController {
             String userLogo = user.getLogoUrl()==null?"http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/6a989ec302994c6c98c2d4810f9fbcb2.png": user.getLogoUrl();
             String nickNameOrPhone=StringUtils.isBlank(userInfo.getNickName())?user.getRegisterMobile():userInfo.getNickName();
             try {
-                qrUrl = QRCodeUtil.mergeImage("http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20181017/006174286bc34c2aacbc7303b354d36e.png", smallImage, "380", "576", userLogo, "200", "25",nickNameOrPhone);
+                qrUrl = QRCodeUtil.mergeImage("http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20181017/006174286bc34c2aacbc7303b354d36e.png", smallImage, 380, 576, userLogo, 200, 25,nickNameOrPhone,200,185, Color.BLACK);
             } catch (IOException e) {
                 e.printStackTrace();
             }

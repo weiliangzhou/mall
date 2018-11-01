@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -53,6 +54,23 @@ public class GiftController {
     public String getGiftDetailById(@RequestBody JSONObject jsonObject) {
         Long giftId = jsonObject.getLong("giftId");
         Gift gift = giftService.getGiftDetailById(giftId);
+        List imgList=new ArrayList();
+        if (gift != null) {
+            String img1=gift.getGiftViceImg1();
+            String img2=gift.getGiftViceImg2();
+            String img3=gift.getGiftViceImg3();
+            if (img1 != null) {
+                imgList.add(img1);
+            }
+            if (img2 != null) {
+                imgList.add(img2);
+            }
+            if (img3 != null) {
+                imgList.add(img3);
+            }
+
+        }
+        gift.setImgList(imgList);
         Result result = new Result();
         result.setData(gift);
         return JSON.toJSONString(result);

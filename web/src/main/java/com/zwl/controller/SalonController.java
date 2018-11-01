@@ -4,27 +4,33 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.zwl.model.baseresult.Result;
-import com.zwl.model.exception.BSUtil;
-import com.zwl.model.groups.Buy;
 import com.zwl.model.po.*;
-import com.zwl.model.vo.*;
+import com.zwl.model.vo.BuyResult;
+import com.zwl.model.vo.OfflineActivityBuy;
+import com.zwl.model.vo.OfflineActivityOrderVo;
+import com.zwl.model.vo.UserVo;
 import com.zwl.model.wxpay.IpKit;
 import com.zwl.model.wxpay.StrKit;
 import com.zwl.model.wxpay.WxPayVo;
 import com.zwl.service.*;
-import com.zwl.util.DictUtil;
+import com.zwl.util.QRCodeUtil;
 import com.zwl.util.ThreadVariable;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.awt.*;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @Slf4j
@@ -35,10 +41,6 @@ public class SalonController {
     @Autowired
     private OfflineActivityService offlineActivityService;
     @Autowired
-    private OfflineActivityOperatorService offlineActivityOperatorService;
-    @Autowired
-    private OfflineActivityCodeService offlineActivityCodeService;
-    @Autowired
     private OfflineActivityOrderService offlineActivityOrderService;
     @Autowired
     private UserService userService;
@@ -46,6 +48,10 @@ public class SalonController {
     private MerchantService merchantService;
     @Autowired
     private WxPayService wxPayService;
+    @Autowired
+    private UserInfoService userInfoService;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     @PostMapping("/buy")
     public String offlineActivityBuy(HttpServletRequest request, @RequestBody OfflineActivityBuy offlineActivityBuy) {
@@ -137,11 +143,11 @@ public class SalonController {
         String userId = ThreadVariable.getUserID();
         //String userId = "579bbf4031c041efa65ded6d41fbc742";
         UserVo userVo = userService.getSLUserInfo(merchantId, userId);
-        if(StringUtils.isNotBlank(slReferrer)) {
+        if (StringUtils.isNotBlank(slReferrer)) {
             User user = userService.getByUserId(slReferrer);
             userVo.setSlReferrerName(user.getRealName());
             userVo.setSlReferrerPhone(user.getRegisterMobile());
-        }else{
+        } else {
             userVo.setSlReferrerName("单影");
             userVo.setSlReferrerPhone("18896815868");
             userVo.setSlReferrer("25c3c33de8e74f3482aec08d2ab6206c");
@@ -149,5 +155,43 @@ public class SalonController {
         Result result = new Result();
         result.setData(userVo);
         return JSON.toJSONString(result);
+    }
+
+    @PostMapping("/getSLQrCode")
+    public String getSLQrCode(@RequestBody JSONObject jsonObject) {
+        String url=jsonObject.getString("url");
+        Integer slId = jsonObject.getInteger("slId");
+        String merchantId=jsonObject.getString("merchantId");
+        String userId = ThreadVariable.getUserID();
+        OfflineActivity offlineActivity = offlineActivityService.getOneByActivityId(slId);
+        String qrUrl = stringRedisTemplate.boundValueOps(userId + "_sl_QrCode").get();
+        if (StringUtils.isBlank(qrUrl)) {
+            String smallImage = QRCodeUtil.createQrCode(url + "&SlReferrer=" + userId, null, null);
+            User user = userService.getByUserId(userId);
+            UserInfo userInfo = userInfoService.getByUserId(userId);
+            String userLogo = user.getLogoUrl() == null ? "http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/6a989ec302994c6c98c2d4810f9fbcb2.png" : user.getLogoUrl();
+            String nickNameOrPhone = StringUtils.isBlank(userInfo.getNickName()) ? user.getRegisterMobile() : userInfo.getNickName();
+            Integer themeId=offlineActivity.getActivityThemeId();
+            OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(merchantId,themeId);
+            String slName=offlineActivityTheme.getThemeName();
+            Date slStartTime = offlineActivity.getActivityStartTime();
+            Date slEndTime = offlineActivity.getActivityEndTime();
+            SimpleDateFormat sdf_yMd_Hms = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String slStartTimeStr = sdf_yMd_Hms.format(slStartTime);
+            String slEndTimeStr = sdf_yMd_Hms.format(slEndTime);
+            String slStr = slStartTimeStr + "-" + slEndTimeStr;
+            try {
+                qrUrl = QRCodeUtil.SlMergeImage("http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20181101/5cf42276a5c944429f1796e25305bb80.png", smallImage, 380, 703,
+                        userLogo, 200, 126, nickNameOrPhone, 200, 297, Color.white, slName, 693, 685, Color.orange, slStr, 873, 900, Color.orange);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            stringRedisTemplate.boundValueOps(userId + "_sl_QrCode").set(qrUrl, 30, TimeUnit.DAYS);
+        }
+        log.info("userId:" + userId + "------二维码" + qrUrl);
+        Result result = new Result();
+        result.setData(qrUrl);
+        return JSON.toJSONString(result);
+
     }
 }
