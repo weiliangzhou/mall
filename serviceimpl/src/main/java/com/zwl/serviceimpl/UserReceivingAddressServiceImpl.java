@@ -54,7 +54,7 @@ public class UserReceivingAddressServiceImpl implements UserReceivingAddressServ
     }
 
     @Override
-    public void deleteById(Integer id) {
+    public void deleteById(Long id) {
         int count = userReceivingAddressMapper.deleteById(id);
         if (count != 1) {
             log.error("删除收货地址失败!");

@@ -88,7 +88,7 @@ public class ReceivingAddressController {
 
     @PostMapping("/auth/deleteById")
     public String deleteById(@RequestBody JSONObject jsonObject) {
-        Integer id = jsonObject.getInteger("id");
+        Long id = jsonObject.getLong("id");
         userReceivingAddressService.deleteById(id);
         return JSON.toJSONString(new Result());
     }

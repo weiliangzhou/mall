@@ -22,5 +22,5 @@ public interface UserReceivingAddressService {
 
     UserReceivingAddress getOneById(Long id);
 
-    void deleteById(Integer id);
+    void deleteById(Long id);
 }
