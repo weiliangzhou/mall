@@ -52,8 +52,6 @@ public class SalonController {
     private UserInfoService userInfoService;
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
-    @Autowired
-    private OfflineActivityService offlineActivityService;
 
     @PostMapping("/buy")
     public String offlineActivityBuy(HttpServletRequest request, @RequestBody OfflineActivityBuy offlineActivityBuy) {
@@ -174,11 +172,13 @@ public class SalonController {
             String slName = offlineActivity.getThemeName();
             Date slStartTime = offlineActivity.getActivityStartTime();
             Date slEndTime = offlineActivity.getActivityEndTime();
-            SimpleDateFormat sdf_yMd_Hms=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String slStartTimeStr =sdf_yMd_Hms .format(slStartTime);
-
+            SimpleDateFormat sdf_yMd_Hms = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String slStartTimeStr = sdf_yMd_Hms.format(slStartTime);
+            String slEndTimeStr = sdf_yMd_Hms.format(slEndTime);
+            String slStr = slStartTimeStr + "-" + slEndTimeStr;
             try {
-                qrUrl = QRCodeUtil.mergeImage("http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20181101/5cf42276a5c944429f1796e25305bb80.png", smallImage, 380, 703, userLogo, 200, 126, nickNameOrPhone, 200, 297, Color.white);
+                qrUrl = QRCodeUtil.SlMergeImage("http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20181101/5cf42276a5c944429f1796e25305bb80.png", smallImage, 380, 703,
+                        userLogo, 200, 126, nickNameOrPhone, 200, 297, Color.white, slName, 693, 693, Color.orange, slStr, 873, 873, Color.orange);
             } catch (IOException e) {
                 e.printStackTrace();
             }

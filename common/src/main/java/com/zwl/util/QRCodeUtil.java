@@ -138,7 +138,7 @@ public class QRCodeUtil {
         return "";
     }
 
-    public static String mergeImage(String bigImage, String smallImage, int smallImageX, int smallImageY, String userLogoUrl, int userLogoUrlX, int userLogoUrlY, String nickName, int nickNameX, int nickNameY,Color nickNameColor) throws IOException {
+    public static String mergeImage(String bigImage, String smallImage, int smallImageX, int smallImageY, String userLogoUrl, int userLogoUrlX, int userLogoUrlY, String nickName, int nickNameX, int nickNameY, Color nickNameColor) throws IOException {
 
         try {
             BufferedImage small;
@@ -186,6 +186,83 @@ public class QRCodeUtil {
         }
         return "";
     }
+
+    public static String SlMergeImage(String bigImage, String smallImage, int smallImageX, int smallImageY, String userLogoUrl, int userLogoUrlX, int userLogoUrlY, String nickName, int nickNameX, int nickNameY, Color nickNameColor, String slName, Integer slNameX, Integer slNameY, Color slNameColor, String slTime, Integer slTimeX, Integer slTimeY, Color slTimeColor) throws IOException {
+        try {
+            BufferedImage small;
+            BufferedImage userLogo;
+            BufferedImage big;
+            if (bigImage.contains("http")) {
+                URL url = new URL(bigImage);
+                big = ImageIO.read(url);
+            } else {
+                big = ImageIO.read(new File(bigImage));
+            }
+            if (smallImage.contains("http")) {
+                URL url = new URL(smallImage);
+                small = ImageIO.read(url);
+            } else {
+                small = ImageIO.read(new File(smallImage));
+            }
+            if (userLogoUrl.contains("http")) {
+                URL url = new URL(userLogoUrl);
+                userLogo = ImageIO.read(url);
+            } else {
+                userLogo = ImageIO.read(new File(userLogoUrl));
+            }
+            Graphics2D g = big.createGraphics();
+            g.drawImage(small, (big.getWidth() - small.getWidth()) / 2, smallImageY, small.getWidth(), small.getHeight(), null);
+            g.drawImage(roundImage(userLogo, 130, 150), (big.getWidth() - userLogo.getWidth()) / 2, userLogoUrlY, roundImage(userLogo, 130, 150).getWidth(), roundImage(userLogo, 130, 150).getHeight(), null);
+
+            Font font = new Font("宋体", Font.BOLD, 20);
+            g.setFont(font);
+            g.setColor(nickNameColor);
+            // 抗锯齿
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            // 计算文字长度，计算居中的x点坐标
+            FontMetrics fm = g.getFontMetrics(font);
+            int textWidth = fm.stringWidth(nickName);
+            int widthX = (big.getWidth() - textWidth) / 2;
+            // 表示这段文字在图片上的位置(x,y) .第一个是你设置的内容。
+            g.drawString(nickName, widthX, nickNameY);
+
+
+            Font slNameFont = new Font("宋体", Font.BOLD, 20);
+            g.setFont(slNameFont);
+            g.setColor(slNameColor);
+            // 抗锯齿
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            // 计算文字长度，计算居中的x点坐标
+            FontMetrics slNameFm = g.getFontMetrics(slNameFont);
+            int slNameWidth = slNameFm.stringWidth(slName);
+            int slNameMidX = (big.getWidth() - slNameWidth) / 2;
+            // 表示这段文字在图片上的位置(x,y) .第一个是你设置的内容。
+            g.drawString(slName, slNameMidX, slNameY);
+
+
+            Font slTimeFont = new Font("宋体", Font.BOLD, 20);
+            g.setFont(slTimeFont);
+            g.setColor(slTimeColor);
+            // 抗锯齿
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            // 计算文字长度，计算居中的x点坐标
+            FontMetrics slTimeFm = g.getFontMetrics(slTimeFont);
+            int slTimeWidth = slTimeFm.stringWidth(slTime);
+            int slTimeMidX = (big.getWidth() - slTimeWidth) / 2;
+            // 表示这段文字在图片上的位置(x,y) .第一个是你设置的内容。
+            g.drawString(slTime, slTimeMidX, slTimeY);
+
+            g.dispose();
+            byte[] imgByte = ImageUtil.imageToBytes(big, "png");
+            return AliOSSUtil.uploadFileByte(imgByte);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
 
     private static BufferedImage roundImage(BufferedImage image, int targetSize, int cornerRadius) {
         BufferedImage outputImage = new BufferedImage(targetSize, targetSize, BufferedImage.TYPE_INT_ARGB);
