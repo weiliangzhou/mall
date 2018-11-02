@@ -195,11 +195,11 @@ public class UserController {
 //        userLoginInfoVo.setIsCertification(userInfo.getIsCertification() == null ? 0 : 1);
         //实名认证状态
         UserCertification userCertification = certificationService.getOneByUserId(userId);
-        Integer certificationStatus=userCertification.getStatus();
+        Integer certificationStatus = userCertification.getStatus();
         userLoginInfoVo.setCertificationStatus(certificationStatus);
         if (certificationStatus == 2) {
             userLoginInfoVo.setIdCardNum(userCertification.getIdCard());
-        }else{
+        } else {
             userLoginInfoVo.setIdCardNum("");
         }
         Integer xiaxianCount = maidInfoService.getMaidInfoCount(userId);
@@ -282,10 +282,14 @@ public class UserController {
         Integer gender = jsonObject.getInteger("gender");
         String userId = ThreadVariable.getUserID();
         User user = new User();
-        user.setProvince(province);
+        if (StringUtils.isBlank(province) && StringUtils.isBlank(city)) {
+            user.setProvince(province);
+            user.setCity(city);
+        }
+        if (gender != null) {
+            user.setGender(gender);
+        }
         user.setUserId(userId);
-        user.setCity(city);
-        user.setGender(gender);
         userService.updateUserByUserId(user);
         return new Result();
 

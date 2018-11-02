@@ -158,7 +158,7 @@
                 register_mobile = #{registerMobile,jdbcType=VARCHAR},
             </if>
             <if test="gender != null">
-                gender = #{gender,jdbcType=VARCHAR},
+                gender = #{gender,jdbcType=INTEGER},
             </if>
             <if test="province != null">
                 province = #{province,jdbcType=VARCHAR},
@@ -166,8 +166,6 @@
             <if test="city != null">
                 city = #{city,jdbcType=VARCHAR},
             </if>
-
-
         </set>
         where user_id = #{userId,jdbcType=VARCHAR}
     </update>
