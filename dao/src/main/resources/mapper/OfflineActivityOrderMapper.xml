@@ -329,6 +329,7 @@
     and order_type = 1
     and merchant_id = #{merchantId,jdbcType=VARCHAR}
     and sl_referrer = #{userId,jdbcType=VARCHAR}
+    and activity_theme_id = #{activityThemeId,jdbcType=VARCHAR}
     order by create_time desc
   </select>
 </mapper>

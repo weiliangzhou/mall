@@ -161,6 +161,7 @@ public class SalonController {
     @PostMapping("/getMySLActivityOrderList")
     public String getMySLActivityOrderList(@RequestBody JSONObject jsonObject) {
         String merchantId = jsonObject.getString("merchantId");
+        String activityThemeId = jsonObject.getString("activityThemeId");
         Integer pageSize = jsonObject.getInteger("pageSize");
         Integer pageNum = jsonObject.getInteger("pageNum");
         if (pageSize != null && pageNum != null) {
@@ -168,7 +169,7 @@ public class SalonController {
         }
         String userId = ThreadVariable.getUserID();
         //String userId = "123";
-        List<OfflineActivityOrderVo> offlineActivityOrderVoList = offlineActivityOrderService.getMySLActivityOrderList(userId, merchantId);
+        List<OfflineActivityOrderVo> offlineActivityOrderVoList = offlineActivityOrderService.getMySLActivityOrderList(userId, merchantId, activityThemeId);
         Result result = new Result();
         result.setData(offlineActivityOrderVoList);
         return JSON.toJSONString(result);
@@ -193,9 +194,15 @@ public class SalonController {
         if (StringUtils.isNotBlank(slReferrer)) {
             User user = userService.getByUserId(slReferrer);
             if(null != user){
-                userVo.setSlReferrer(slReferrer);
-                userVo.setSlReferrerName(user.getRealName());
-                userVo.setSlReferrerPhone(user.getRegisterMobile());
+                if(user.getMemberLevel() >=1){
+                    userVo.setSlReferrer(slReferrer);
+                    userVo.setSlReferrerName(user.getRealName());
+                    userVo.setSlReferrerPhone(user.getRegisterMobile());
+                }else{
+                    userVo.setSlReferrerName("单影");
+                    userVo.setSlReferrerPhone("18896815868");
+                    userVo.setSlReferrer("25c3c33de8e74f3482aec08d2ab6206c");
+                }
             }else{
                 userVo.setSlReferrerName("单影");
                 userVo.setSlReferrerPhone("18896815868");

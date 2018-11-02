@@ -41,7 +41,7 @@ public interface OfflineActivityOrderService {
      * @param merchantId 商户号
      * @return
      */
-    List<OfflineActivityOrderVo> getMySLActivityOrderList(String userId, String merchantId);
+    List<OfflineActivityOrderVo> getMySLActivityOrderList(String userId, String merchantId, String activityThemeId);
 
     /**
      * @param orderNo 订单id

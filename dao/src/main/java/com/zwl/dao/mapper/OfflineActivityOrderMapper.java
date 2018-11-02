@@ -23,5 +23,5 @@ public interface OfflineActivityOrderMapper {
 
     OfflineActivityOrder getOfflineActivityOrderByActivityDate(@Param("userId") String userId, @Param("merchantId") String merchantId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
-    List<OfflineActivityOrder> findSLOrderByUserId(@Param("userId") String userId, @Param("merchantId") String merchantId);
+    List<OfflineActivityOrder> findSLOrderByUserId(@Param("userId") String userId, @Param("merchantId") String merchantId, @Param("activityThemeId")String activityThemeId);
 }

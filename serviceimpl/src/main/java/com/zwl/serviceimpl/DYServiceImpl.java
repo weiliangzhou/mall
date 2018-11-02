@@ -124,11 +124,9 @@ public class DYServiceImpl implements DYService {
                 referrerId = user.getReferrer();
             } else {
                 Date currentDate = new Date();
-                log.info(" !!!!!!!!!!!!!!!!!!!!!!!!!!   userId:" + userId + "mch_id:" + mch_id + " date: " + sdf_yMdHms.format(currentDate));
                 OfflineActivityOrder offlineActivityOrder = offlineActivityOrderService.getOfflineActivityOrderByActivityDate(userId, mch_id, currentDate);
                 if (null != offlineActivityOrder) {
                     referrerId = offlineActivityOrder.getSlReferrer();
-                    log.info(" !!!!!!!!!!!!!!!!!!!!!!!!!!查询数据:" + offlineActivityOrder.toString() + " ------" + referrerId);
                     //用户没有绑定用户 只跟沙龙绑定
                     // 情形1:用户在沙龙开始当时又买商品则跟沙龙推荐人产生死绑
                     User sysUserParam = new User();
@@ -138,6 +136,8 @@ public class DYServiceImpl implements DYService {
                 }
             }
             Integer memberLevel = order.getLevel();
+            //设置成null 避免覆盖掉  沙龙绑定的推荐人
+            user.setReferrer(null);
             user.setMemberLevel(memberLevel);
             user.setLevelName(order.getLevelName());
             user.setIsBuy(1);
@@ -235,14 +235,10 @@ public class DYServiceImpl implements DYService {
                             //根据推荐的的分佣百分比返佣
                             //如果产品的等级是1，分佣比列按照产品的分佣百分比计算
                             Integer maidMoney = 0;
-                            if (level == 1) {
-                                maidMoney = orderActualMoney * maidPercent / 100;
-                                maidInfo.setMaidPercent(maidPercent);
-                            } else {
-                                log.info("maidPercent_referrer:" + maidPercent_referrer);
-                                maidMoney = orderActualMoney * maidPercent_referrer / 100;
-                                maidInfo.setMaidPercent(maidPercent_referrer);
-                            }
+                            log.info("maidPercent_referrer:" + maidPercent_referrer);
+                            maidMoney = orderActualMoney * maidPercent_referrer / 100;
+                            maidInfo.setMaidPercent(maidPercent_referrer);
+                            
                             maidInfo.setMaidMoney(maidMoney);
                             maidInfo.setOrderActualMoney(orderActualMoney);
                             maidInfo.setMerchantId(merchantId);
