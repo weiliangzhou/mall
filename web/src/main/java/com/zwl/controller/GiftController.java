@@ -158,12 +158,28 @@ public class GiftController {
 
         String qrUrl = stringRedisTemplate.boundValueOps(userId + "_gift_QrCode_" + giftId).get();
         if (StringUtils.isBlank(qrUrl)) {
-            String smallImage = QRCodeUtil.createQrCode(url + "&referrer=" + userId, null, null);
+
             User user = userService.getByUserId(userId);
             UserInfo userInfo = userInfoService.getByUserId(userId);
             String userLogo = user.getLogoUrl() == null ? "http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/6a989ec302994c6c98c2d4810f9fbcb2.png" : user.getLogoUrl();
             String nickNameOrPhone = StringUtils.isBlank(userInfo.getNickName()) ? user.getRegisterMobile() : userInfo.getNickName();
             Gift gift = giftService.getGiftDetailById(giftId);
+            //通过giftId 最低要求等级  对应productId
+            Integer minLevel = gift.getMinRequirement();
+            Integer productId = 1;
+            switch (minLevel) {
+                case 6:
+                    productId = 1;
+                    break;
+                case 4:
+                    productId = 3;
+                    break;
+                case 1:
+                    productId = 4;
+                    break;
+            }
+
+            String smallImage = QRCodeUtil.createQrCode(url + "?productId=" + productId + "&referrer=" + userId, null, null);
             try {
                 qrUrl = QRCodeUtil.mergeImage(gift.getGiftShareBack(), smallImage, 340, 630,
                         userLogo, 197, 36, nickNameOrPhone, 178, 206, Color.BLACK);
