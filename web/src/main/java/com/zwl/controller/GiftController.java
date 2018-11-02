@@ -71,7 +71,7 @@ public class GiftController {
         Long giftId = jsonObject.getLong("giftId");
         Gift gift = giftService.getGiftDetailById(giftId);
         String merchantId = jsonObject.getString("merchantId");
-        String userId =  jsonObject.getString("userId");
+        String userId = jsonObject.getString("userId");
         UserGift userGift = null;
         if (userId != null) {
             //查询是否已经购买过
@@ -153,7 +153,7 @@ public class GiftController {
         String userId = ThreadVariable.getUserID();
         String qrUrl = stringRedisTemplate.boundValueOps(userId + "_gift_QrCode").get();
         if (StringUtils.isBlank(qrUrl)) {
-            String smallImage = QRCodeUtil.createQrCode(url + "&referrer=" + userId, null, null);
+            String smallImage = QRCodeUtil.createQrCode(url + "&referrer=" + userId + giftId, null, null);
             User user = userService.getByUserId(userId);
             UserInfo userInfo = userInfoService.getByUserId(userId);
             String userLogo = user.getLogoUrl() == null ? "http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/6a989ec302994c6c98c2d4810f9fbcb2.png" : user.getLogoUrl();
@@ -168,7 +168,7 @@ public class GiftController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            stringRedisTemplate.boundValueOps(userId + "_gift_QrCode").set(qrUrl, 30, TimeUnit.DAYS);
+            stringRedisTemplate.boundValueOps(userId + "_gift_QrCode" + giftId).set(qrUrl, 30, TimeUnit.DAYS);
         }
         Result result = new Result();
         result.setData(qrUrl);
