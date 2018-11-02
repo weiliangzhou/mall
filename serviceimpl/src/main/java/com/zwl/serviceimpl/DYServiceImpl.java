@@ -140,6 +140,8 @@ public class DYServiceImpl implements DYService {
                 }
             }
             Integer memberLevel = order.getLevel();
+            //设置成null 避免覆盖掉  沙龙绑定的推荐人
+            user.setReferrer(null);
             user.setMemberLevel(memberLevel);
             user.setLevelName(order.getLevelName());
             user.setIsBuy(1);
