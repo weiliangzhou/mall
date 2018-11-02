@@ -234,7 +234,7 @@ public class SalonController {
         String merchantId = jsonObject.getString("merchantId");
         String userId = ThreadVariable.getUserID();
         OfflineActivity offlineActivity = offlineActivityService.getOneByActivityId(slId);
-        String qrUrl = stringRedisTemplate.boundValueOps(userId + "_sl_QrCode" + slId).get();
+        String qrUrl = stringRedisTemplate.boundValueOps(userId + "_sl_QrCode_" + slId).get();
         if (StringUtils.isBlank(qrUrl)) {
             String smallImage = QRCodeUtil.createQrCode(url + "&slReferrer=" + userId, null, null);
             User user = userService.getByUserId(userId);
@@ -252,12 +252,16 @@ public class SalonController {
             String slEndTimeStr = sdf_Hms.format(slEndTime);
             String slStr = slStartTimeStr + "-" + slEndTimeStr;
             try {
-                qrUrl = QRCodeUtil.SlMergeImage("http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20181101/5cf42276a5c944429f1796e25305bb80.png", smallImage, 380, 703,
-                        userLogo, 200, 126, nickNameOrPhone, 200, 297, Color.white, slName, 693, 685, Color.orange, slStr, 873, 900, Color.orange);
+                qrUrl = QRCodeUtil.SlMergeImage("http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20181101/5cf42276a5c944429f1796e25305bb80.png",
+                        smallImage, 380, 690,
+                        userLogo, 200, 126,
+                        nickNameOrPhone, 200, 297, Color.white,
+                        slName, 693, 670, Color.orange,
+                        slStr, 873, 900, Color.orange);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            stringRedisTemplate.boundValueOps(userId + "_sl_QrCode" + slId).set(qrUrl, 30, TimeUnit.DAYS);
+            stringRedisTemplate.boundValueOps(userId + "_sl_QrCode_" + slId).set(qrUrl, 30, TimeUnit.DAYS);
         }
         log.info("userId:" + userId + "------二维码" + qrUrl);
         Result result = new Result();
