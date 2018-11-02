@@ -34,10 +34,9 @@ public interface OfflineActivityOrderService {
      * @param userId       用户订单
      * @param activityDate 线下活动 时间
      */
-    OfflineActivityOrder getOfflineActivityOrderByActivityDate(String userId, Date activityDate);
+    OfflineActivityOrder getOfflineActivityOrderByActivityDate(String userId, String merchantId, Date activityDate);
 
     /**
-     *
      * @param userId     用户id
      * @param merchantId 商户号
      * @return
@@ -45,8 +44,7 @@ public interface OfflineActivityOrderService {
     List<OfflineActivityOrderVo> getMySLActivityOrderList(String userId, String merchantId, String activityThemeId);
 
     /**
-     *
-     * @param orderNo     订单id
+     * @param orderNo 订单id
      * @return
      */
     OfflineActivityOrderVo getSLActivityOrderDetail(String orderNo);
