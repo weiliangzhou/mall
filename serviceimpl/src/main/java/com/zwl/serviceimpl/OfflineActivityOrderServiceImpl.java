@@ -296,12 +296,12 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
             offlineActivityOrderVo.setRealName(offlineActivityOrder.getRealName());
             offlineActivityOrderVo.setPhone(offlineActivityOrder.getPhone());
             OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(offlineActivityOrder.getMerchantId(), offlineActivityOrder.getActivityThemeId());
-            offlineActivityOrderVo.setImgUrl(offlineActivityTheme.getImgUrl());
             offlineActivityOrderVo.setThemeName(offlineActivityTheme.getThemeName());
             OfflineActivity offlineActivity = offlineActivityService.getOneByActivityId(offlineActivityOrder.getActivityId());
             offlineActivityOrderVo.setActivityAddress(offlineActivity.getActivityAddress());
             OfflineActivityCode offlineActivityCode = offlineActivityCodeService.getOneByActivityCode(offlineActivityOrder.getActivityCode());
             offlineActivityOrderVo.setIsUsed(offlineActivityCode.getIsUsed());
+            offlineActivityOrderVo.setCreateTime(offlineActivityOrder.getCreateTime());
             offlineActivityOrderVo.setCreateTimeDesc(simpleDateFormat.format(offlineActivityOrder.getCreateTime()));
             offlineActivityOrderVo.setActivityPrice(offlineActivityOrder.getActivityPrice());
             offlineActivityOrderVo.setActivityPriceDesc(div(100, offlineActivityOrder.getActivityPrice(), 2) + "");
@@ -310,7 +310,10 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
             User user = userService.getByUserId(offlineActivityOrder.getSlReferrer());
             offlineActivityOrderVo.setSlReferrerName(user.getRealName());
             offlineActivityOrderVo.setSlReferrerPhone(user.getRegisterMobile());
+            User userV = userService.getByUserId(offlineActivityOrder.getUserId());
+            offlineActivityOrderVo.setImgUrl(userV.getLogoUrl());
             offlineActivityOrderVoList.add(offlineActivityOrderVo);
+
         }
         return offlineActivityOrderVoList;
     }
