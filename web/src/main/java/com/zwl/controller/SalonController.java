@@ -184,6 +184,7 @@ public class SalonController {
     @PostMapping("/getMySLActivityOrderList")
     public String getMySLActivityOrderList(@RequestBody JSONObject jsonObject) {
         String merchantId = jsonObject.getString("merchantId");
+        String activityThemeId = jsonObject.getString("activityThemeId");
         Integer pageSize = jsonObject.getInteger("pageSize");
         Integer pageNum = jsonObject.getInteger("pageNum");
         if (pageSize != null && pageNum != null) {
@@ -191,7 +192,7 @@ public class SalonController {
         }
         String userId = ThreadVariable.getUserID();
         //String userId = "123";
-        List<OfflineActivityOrderVo> offlineActivityOrderVoList = offlineActivityOrderService.getMySLActivityOrderList(userId, merchantId);
+        List<OfflineActivityOrderVo> offlineActivityOrderVoList = offlineActivityOrderService.getMySLActivityOrderList(userId, merchantId, activityThemeId);
         Result result = new Result();
         result.setData(offlineActivityOrderVoList);
         return JSON.toJSONString(result);

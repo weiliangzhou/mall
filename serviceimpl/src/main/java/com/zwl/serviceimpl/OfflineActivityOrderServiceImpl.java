@@ -286,8 +286,8 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
     }
 
     @Override
-    public List<OfflineActivityOrderVo> getMySLActivityOrderList(String userId, String merchantId) {
-        List<OfflineActivityOrder> offlineActivityOrderList = offlineActivityOrderMapper.findSLOrderByUserId(userId, merchantId);
+    public List<OfflineActivityOrderVo> getMySLActivityOrderList(String userId, String merchantId, String activityThemeId) {
+        List<OfflineActivityOrder> offlineActivityOrderList = offlineActivityOrderMapper.findSLOrderByUserId(userId, merchantId,activityThemeId);
         List<OfflineActivityOrderVo> offlineActivityOrderVoList = new ArrayList<>();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         for (OfflineActivityOrder offlineActivityOrder : offlineActivityOrderList) {
