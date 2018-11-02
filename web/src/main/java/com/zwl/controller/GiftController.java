@@ -163,7 +163,7 @@ public class GiftController {
             String memberLevel = user.getLevelName();
 
             try {
-                qrUrl = QRCodeUtil.giftMergeImage("http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20181101/b727dc1a4eb342dcabc90b4df03a9ba5.png", smallImage, 340, 710,
+                qrUrl = QRCodeUtil.giftMergeImage(gift.getGiftShareBack(), smallImage, 340, 710,
                         userLogo, 88, 715, nickNameOrPhone, 178, 770, Color.BLACK, memberLevel, 178, 790, Color.gray, giftMainImg, 88, 470);
             } catch (IOException e) {
                 e.printStackTrace();

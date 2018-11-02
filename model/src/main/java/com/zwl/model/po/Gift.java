@@ -26,6 +26,8 @@ public class Gift {
     private String giftViceImg2;
     @ApiComment(value = "产品副图3", sample = "产品副图")
     private String giftViceImg3;
+    @ApiComment(value = "产品背景图", sample = "产品副图")
+    private String giftShareBack;
     @ApiComment(value = "价格(分)", sample = "12")
     private Integer price;
     @ApiComment(value = "价格（元）", sample = "12")
