@@ -218,6 +218,8 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
             offlineActivityOrderVo.setOrderNo(offlineActivityOrder.getOrderNo());
             offlineActivityOrderVo.setActivityId(offlineActivityOrder.getActivityId());
             offlineActivityOrderVo.setCreateTime(offlineActivityOrder.getCreateTime());
+            offlineActivityOrderVo.setActivityStartTime(offlineActivity.getActivityStartTime());
+            offlineActivityOrderVo.setActivityEndTime(offlineActivity.getApplyEndTime());
             if (null != orderType && orderType.equals(1)) {
                 User user = userService.getByUserId(offlineActivityOrder.getSlReferrer());
                 offlineActivityOrderVo.setOrderType(1);
