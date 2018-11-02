@@ -181,7 +181,7 @@
             <![CDATA[ and level = #{level} ]]>
         </if>
         <if test="merchantId != null and merchantId != ''">
-            and merchantId = #{merchantId}
+            and merchant_id = #{merchantId}
         </if>
     </select>
     <!--<select id="getProductByMemberLevel" resultMap="BaseResultMap" parameterType="Integer">-->

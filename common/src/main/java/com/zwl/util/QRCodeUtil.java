@@ -211,9 +211,9 @@ public class QRCodeUtil {
             }
             Graphics2D g = big.createGraphics();
             g.drawImage(small, (big.getWidth() - 180) / 2, smallImageY, 180, 180, null);
-            g.drawImage(roundImage(userLogo, 130, 150), (big.getWidth() - userLogo.getWidth()) / 2, userLogoUrlY, roundImage(userLogo, 130, 150).getWidth(), roundImage(userLogo, 130, 150).getHeight(), null);
+            g.drawImage(roundImage(userLogo, 130, 150), (big.getWidth() - 210) / 2, userLogoUrlY, 210, 210, null);
 
-            Font font = new Font("宋体", Font.BOLD, 20);
+            Font font = new Font("宋体", Font.BOLD, 30);
             g.setFont(font);
             g.setColor(nickNameColor);
             // 抗锯齿
@@ -226,7 +226,7 @@ public class QRCodeUtil {
             g.drawString(nickName, widthX, nickNameY);
 
 
-            Font slNameFont = new Font("宋体", Font.BOLD, 20);
+            Font slNameFont = new Font("宋体", Font.BOLD, 30);
             g.setFont(slNameFont);
             g.setColor(slNameColor);
             // 抗锯齿
