@@ -159,9 +159,6 @@ public class GiftController {
             String userLogo = user.getLogoUrl() == null ? "http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/6a989ec302994c6c98c2d4810f9fbcb2.png" : user.getLogoUrl();
             String nickNameOrPhone = StringUtils.isBlank(userInfo.getNickName()) ? user.getRegisterMobile() : userInfo.getNickName();
             Gift gift = giftService.getGiftDetailById(giftId);
-            String giftMainImg = gift.getGiftMainImg();
-            String memberLevel = user.getLevelName();
-
             try {
                 qrUrl = QRCodeUtil.mergeImage(gift.getGiftShareBack(), smallImage, 340, 630,
                         userLogo, 197, 36, nickNameOrPhone, 178, 206, Color.BLACK);
