@@ -150,7 +150,7 @@ public class GiftController {
     public String getGiftQrCode(@RequestBody JSONObject jsonObject) {
         Long giftId = jsonObject.getLong("giftId");
         String url = jsonObject.getString("url");
-        String userId = ThreadVariable.getUserID();
+        String userId = jsonObject.getString("userId");
         String qrUrl = stringRedisTemplate.boundValueOps(userId + "_gift_QrCode_" + giftId).get();
         if (StringUtils.isBlank(qrUrl)) {
             String smallImage = QRCodeUtil.createQrCode(url + "&referrer=" + userId, null, null);
@@ -163,8 +163,8 @@ public class GiftController {
             String memberLevel = user.getLevelName();
 
             try {
-                qrUrl = QRCodeUtil.giftMergeImage(gift.getGiftShareBack(), smallImage, 340, 710,
-                        userLogo, 88, 715, nickNameOrPhone, 178, 770, Color.BLACK, memberLevel, 178, 790, Color.gray, giftMainImg, 88, 470);
+                qrUrl = QRCodeUtil.mergeImage(gift.getGiftShareBack(), smallImage, 340, 630,
+                        userLogo, 197, 36, nickNameOrPhone, 178, 206, Color.BLACK);
             } catch (IOException e) {
                 e.printStackTrace();
             }

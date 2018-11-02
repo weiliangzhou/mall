@@ -124,19 +124,15 @@ public class DYServiceImpl implements DYService {
                 referrerId = user.getReferrer();
             } else {
                 Date currentDate = new Date();
-                log.info(" !!!!!!!!!!!!!!!!!!!!!!!!!!   userId:" + userId + "mch_id:" + mch_id + " date: " + sdf_yMdHms.format(currentDate));
                 OfflineActivityOrder offlineActivityOrder = offlineActivityOrderService.getOfflineActivityOrderByActivityDate(userId, mch_id, currentDate);
                 if (null != offlineActivityOrder) {
                     referrerId = offlineActivityOrder.getSlReferrer();
-                    log.info(" !!!!!!!!!!!!!!!!!!!!!!!!!!查询数据:" + offlineActivityOrder.toString() + " ------" + referrerId);
                     //用户没有绑定用户 只跟沙龙绑定
                     // 情形1:用户在沙龙开始当时又买商品则跟沙龙推荐人产生死绑
                     User sysUserParam = new User();
                     sysUserParam.setUserId(userId);
                     sysUserParam.setReferrer(referrerId);
                     userService.updateUserByUserId(sysUserParam);
-                    User ccccccccc = userService.getByUserId(userId);
-                    log.info(" !!!!!!!!!!!!!!!!!!!!!!!!!!返回用户数据:" + ccccccccc.toString() + " ------" + referrerId);
                 }
             }
             Integer memberLevel = order.getLevel();
