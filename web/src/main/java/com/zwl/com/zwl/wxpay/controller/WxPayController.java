@@ -135,10 +135,21 @@ public class WxPayController {
                 //根据订单号（xx） 区分 是否是线下活动
                 if (!out_trade_no.contains("xx")) {
                     dyService.payNotify(params, out_trade_no, sign, mch_id, total_fee, time_end, transaction_id);
+                    //发送通知等
+                    Map<String, String> xml = new HashMap<String, String>();
+                    xml.put("return_code", "SUCCESS");
+                    xml.put("return_msg", "OK");
+                    log.info("微信回调成功");
+                    return PaymentKit.toXml(xml);
                 } else {
                     //--------------------------------------------线下活动----------------------------------------
                     dyService.xxPayNotify(params, out_trade_no, sign, mch_id, total_fee, time_end, transaction_id);
-
+                    //发送通知等
+                    Map<String, String> xml = new HashMap<String, String>();
+                    xml.put("return_code", "SUCCESS");
+                    xml.put("return_msg", "OK");
+                    log.info("微信回调成功");
+                    return PaymentKit.toXml(xml);
                 }
 
 

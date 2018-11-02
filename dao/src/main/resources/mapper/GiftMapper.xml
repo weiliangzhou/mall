@@ -10,6 +10,7 @@
         <result column="gift_vice_img_1" property="giftViceImg1" jdbcType="VARCHAR"/>
         <result column="gift_vice_img_2" property="giftViceImg2" jdbcType="VARCHAR"/>
         <result column="gift_vice_img_3" property="giftViceImg3" jdbcType="VARCHAR"/>
+        <result column="gift_share_back" property="giftShareBack" jdbcType="VARCHAR"/>
         <result column="price" property="price" jdbcType="INTEGER"/>
         <result column="express_fee" property="expressFee" jdbcType="INTEGER"/>
         <result column="stock" property="stock" jdbcType="INTEGER"/>
@@ -24,7 +25,7 @@
     </resultMap>
     <sql id="Base_Column_List">
     id, gift_main_title, gift_vice_title, min_requirement, gift_main_img, gift_vice_img_1, 
-    gift_vice_img_2, gift_vice_img_3, price, express_fee, stock, gift_desc, is_recommend, 
+    gift_vice_img_2, gift_vice_img_3,gift_share_back, price, express_fee, stock, gift_desc, is_recommend,
     is_show, merchant_id, create_time, modify_time, available,buy_count
   </sql>
 
