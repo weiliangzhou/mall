@@ -34,4 +34,12 @@ public interface OfflineActivityService {
      * @param activityId
      */
     void updateBuyCountById(Integer activityId);
+
+    /**
+     * 根据沙龙主题id查询该场沙龙
+     * @param merchantId
+     * @param themeId
+     * @return
+     */
+    OfflineActivity getOfflineActivityByThemeId(String merchantId, Integer themeId);
 }

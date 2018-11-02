@@ -20,4 +20,6 @@ public interface OfflineActivityMapper {
 
     @Update(" update ss_offline_activity set buy_count=buy_count+1 where id=#{activityId}")
     void updateBuyCountById(Integer activityId);
+
+    OfflineActivity getOfflineActivityByThemeId(@Param("merchantId")String merchantId, @Param("themeId")Integer themeId);
 }
