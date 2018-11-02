@@ -135,6 +135,8 @@ public class DYServiceImpl implements DYService {
                     sysUserParam.setUserId(userId);
                     sysUserParam.setReferrer(referrerId);
                     userService.updateUserByUserId(sysUserParam);
+                    User ccccccccc = userService.getByUserId(userId);
+                    log.info(" !!!!!!!!!!!!!!!!!!!!!!!!!!返回用户数据:" + ccccccccc.toString() + " ------" + referrerId);
                 }
             }
             Integer memberLevel = order.getLevel();
