@@ -242,8 +242,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Integer getMaidPercentByLevel(Integer referrerLevel,String merchantId) {
-        return productMapper.getMaidPercentByLevel(referrerLevel,merchantId);
+    public Integer getMaidPercentByLevel(Integer referrerLevel, String merchantId) {
+        return productMapper.getMaidPercentByLevel(referrerLevel, merchantId);
     }
 
     @Override
@@ -256,6 +256,17 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.updateBuyCountById(productId, merchantId);
     }
 
+    @Override
+    public Product getProductByLevelAndMerchantId(Integer level, String merchantId) {
+        if (null == level) {
+            BSUtil.isTrue(false, "请输入要查询的等级");
+        }
+        if (StringUtils.isBlank(merchantId)) {
+            BSUtil.isTrue(false, "商户号不能为空");
+        }
+        Product product = productMapper.getProductByLevelAndMerchantId(level, merchantId);
+        return product;
+    }
 
 
     @Override
