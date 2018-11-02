@@ -237,8 +237,8 @@ public class DYServiceImpl implements DYService {
                             Integer maidMoney = 0;
                             log.info("maidPercent_referrer:" + maidPercent_referrer);
                             maidMoney = orderActualMoney * maidPercent_referrer / 100;
+
                             maidInfo.setMaidPercent(maidPercent_referrer);
-                            
                             maidInfo.setMaidMoney(maidMoney);
                             maidInfo.setOrderActualMoney(orderActualMoney);
                             maidInfo.setMerchantId(merchantId);
