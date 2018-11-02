@@ -48,7 +48,7 @@ public class TokenFilter implements Filter {
         ThreadVariable.clearThreadVariable();
 
         // 注册、登录、注册短信、首页、回调 不需要token
-        if (requestURL.contains("/pay_notify.do") || requestURL.contains("/information/getInformationList")) {
+        if (requestURL.contains("/pay_notify.do") || requestURL.contains("/information/getInformationList") || requestURL.contains("/wx/gift/getGiftQrCode")) {
             chain.doFilter(request, response);
             return;
         }

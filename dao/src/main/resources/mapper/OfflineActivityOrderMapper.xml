@@ -315,6 +315,9 @@
             <if test="endDate != null">
                 and s.activity_date <![CDATA[ <= ]]> #{endDate}
             </if>
+            <if test="merchantId != null and merchantId != ''">
+                and s.merchant_id = #{merchantId}
+            </if>
         </where>
     </select>
   <select id="findSLOrderByUserId" resultMap="BaseResultMap">
@@ -326,6 +329,7 @@
     and order_type = 1
     and merchant_id = #{merchantId,jdbcType=VARCHAR}
     and sl_referrer = #{userId,jdbcType=VARCHAR}
+    and activity_theme_id = #{activityThemeId,jdbcType=VARCHAR}
     order by create_time desc
   </select>
 </mapper>

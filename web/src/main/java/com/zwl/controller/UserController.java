@@ -198,8 +198,10 @@ public class UserController {
         Integer certificationStatus = userCertification.getStatus();
         userLoginInfoVo.setCertificationStatus(certificationStatus);
         if (certificationStatus == 2) {
-            userLoginInfoVo.setIdCardNum(userCertification.getIdCard());
-        } else {
+            String idCardNum = userCertification.getIdCard();
+            idCardNum = idCardNum.substring(0,6)+"********"+idCardNum.substring(idCardNum.length()-4,idCardNum.length());
+            userLoginInfoVo.setIdCardNum(idCardNum);
+        }else{
             userLoginInfoVo.setIdCardNum("");
         }
         Integer xiaxianCount = maidInfoService.getMaidInfoCount(userId);
@@ -282,14 +284,10 @@ public class UserController {
         Integer gender = jsonObject.getInteger("gender");
         String userId = ThreadVariable.getUserID();
         User user = new User();
-        if (StringUtils.isBlank(province) && StringUtils.isBlank(city)) {
-            user.setProvince(province);
-            user.setCity(city);
-        }
-        if (gender != null) {
-            user.setGender(gender);
-        }
+        user.setProvince(province);
         user.setUserId(userId);
+        user.setCity(city);
+        user.setGender(gender);
         userService.updateUserByUserId(user);
         return new Result();
 
