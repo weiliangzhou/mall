@@ -198,7 +198,9 @@ public class UserController {
         Integer certificationStatus=userCertification.getStatus();
         userLoginInfoVo.setCertificationStatus(certificationStatus);
         if (certificationStatus == 2) {
-            userLoginInfoVo.setIdCardNum(userCertification.getIdCard());
+            String idCardNum = userCertification.getIdCard();
+            idCardNum = idCardNum.substring(0,6)+"********"+idCardNum.substring(idCardNum.length()-4,idCardNum.length());
+            userLoginInfoVo.setIdCardNum(idCardNum);
         }else{
             userLoginInfoVo.setIdCardNum("");
         }
