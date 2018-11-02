@@ -195,8 +195,13 @@ public class UserController {
 //        userLoginInfoVo.setIsCertification(userInfo.getIsCertification() == null ? 0 : 1);
         //实名认证状态
         UserCertification userCertification = certificationService.getOneByUserId(userId);
-        //fixme userCertification可能为null
-        userLoginInfoVo.setCertificationStatus(userCertification.getStatus());
+        Integer certificationStatus=userCertification.getStatus();
+        userLoginInfoVo.setCertificationStatus(certificationStatus);
+        if (certificationStatus == 2) {
+            userLoginInfoVo.setIdCardNum(userCertification.getIdCard());
+        }else{
+            userLoginInfoVo.setIdCardNum("");
+        }
         Integer xiaxianCount = maidInfoService.getMaidInfoCount(userId);
         userLoginInfoVo.setXiaxianCount(null == xiaxianCount ? 0 : xiaxianCount);
         //账户余额
@@ -209,7 +214,7 @@ public class UserController {
         userLoginInfoVo.setGender(user.getGender());
         userLoginInfoVo.setProvince(user.getProvince());
         userLoginInfoVo.setCity(user.getCity());
-        userLoginInfoVo.setIdCardNum(userCertification.getIdCard());
+
         String referrerId = user.getReferrer();
         if (referrerId != null) {
             User referrerUser = userService.getByUserId(referrerId);
