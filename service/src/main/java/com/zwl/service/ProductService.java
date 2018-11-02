@@ -35,4 +35,12 @@ public interface ProductService {
 
     int updateBuyCountById(Long productId, String merchantId);
 
+    /**
+     * 根据商品对应等级查询商品信息
+     *
+     * @param level      等级
+     * @param merchantId 商户编号
+     * @return 商品信息
+     */
+    Product getProductByLevelAndMerchantId(Integer level, String merchantId);
 }

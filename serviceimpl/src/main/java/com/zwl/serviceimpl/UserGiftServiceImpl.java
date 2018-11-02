@@ -4,21 +4,17 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zwl.dao.mapper.UserGiftMapper;
 import com.zwl.model.exception.BSUtil;
-import com.zwl.model.po.Gift;
-import com.zwl.model.po.User;
-import com.zwl.model.po.UserGift;
-import com.zwl.model.po.UserReceivingAddress;
-import com.zwl.service.GiftService;
-import com.zwl.service.UserGiftService;
-import com.zwl.service.UserReceivingAddressService;
-import com.zwl.service.UserService;
+import com.zwl.model.po.*;
+import com.zwl.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author houyuhui
@@ -34,6 +30,8 @@ public class UserGiftServiceImpl implements UserGiftService {
     private UserReceivingAddressService userReceivingAddressService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private ProductService productService;
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
@@ -114,6 +112,7 @@ public class UserGiftServiceImpl implements UserGiftService {
         }
         PageHelper.startPage(pageNum, pageSize);
         List<UserGift> userGifts = userGiftMapper.findUserGiftListPage(userId, merchantId);
+        fullUserGiftLists(userGifts, merchantId);
         return new PageInfo<>(userGifts);
     }
 
@@ -139,6 +138,20 @@ public class UserGiftServiceImpl implements UserGiftService {
         }
         UserGift userGift = userGiftMapper.getUserGiftByGiftId(userId, merchantId, giftId);
         return userGift;
+    }
+
+    private void fullUserGiftLists(List<UserGift> userGifts, String merchantId) {
+        if (null == userGifts || userGifts.isEmpty()) {
+            return;
+        }
+        for (UserGift userGift : userGifts) {
+            if (null == userGift) {
+                continue;
+            }
+            Gift gift = giftService.getGiftDetailById(userGift.getGiftId());
+            Product product = productService.getProductByLevelAndMerchantId(gift.getMinRequirement(), merchantId);
+            userGift.setProductId(product.getId());
+        }
     }
 
     private void verfiy(UserGift userGift) {

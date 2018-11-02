@@ -34,4 +34,6 @@ public interface ProductMapper {
 
     @Update("update ss_product set buy_count = buy_count+1 where id = #{productId} and merchant_id=#{merchantId}")
     int updateBuyCountById(@Param("productId") Long productId, @Param("merchantId") String merchantId);
+
+    Product getProductByLevelAndMerchantId(@Param("level") Integer level, @Param("merchantId") String merchantId);
 }

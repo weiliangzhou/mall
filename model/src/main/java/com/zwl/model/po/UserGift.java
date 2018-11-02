@@ -79,6 +79,10 @@ public class UserGift {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JSONField(format = "yyyy-MM-dd")
     private Date createTime;
+    /**
+     * 返回商品购买等级对应的商品编号
+     */
+    private Long productId;
 
     private Date modifyTime;
 
