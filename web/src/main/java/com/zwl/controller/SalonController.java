@@ -246,9 +246,10 @@ public class SalonController {
             String slName = offlineActivityTheme.getThemeName();
             Date slStartTime = offlineActivity.getActivityStartTime();
             Date slEndTime = offlineActivity.getActivityEndTime();
-            SimpleDateFormat sdf_yMd_Hms = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String slStartTimeStr = sdf_yMd_Hms.format(slStartTime);
-            String slEndTimeStr = sdf_yMd_Hms.format(slEndTime);
+            SimpleDateFormat sdf_yMd_Hm = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            SimpleDateFormat sdf_Hms = new SimpleDateFormat("HH:mm");
+            String slStartTimeStr = sdf_yMd_Hm.format(slStartTime);
+            String slEndTimeStr = sdf_Hms.format(slEndTime);
             String slStr = slStartTimeStr + "-" + slEndTimeStr;
             try {
                 qrUrl = QRCodeUtil.SlMergeImage("http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20181101/5cf42276a5c944429f1796e25305bb80.png", smallImage, 380, 703,
