@@ -42,6 +42,7 @@
     and available =1
     and order_status = 1
     and merchant_id = #{merchantId,jdbcType=VARCHAR}
+    order by create_time desc
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select
@@ -325,5 +326,6 @@
     and order_type = 1
     and merchant_id = #{merchantId,jdbcType=VARCHAR}
     and sl_referrer = #{userId,jdbcType=VARCHAR}
+    order by create_time desc
   </select>
 </mapper>
