@@ -120,19 +120,21 @@ public class DYServiceImpl implements DYService {
             //如果是0 或者为null
             //则先查询当天当天是否存在沙龙订单，如果存在 判断推荐人是否存在，存在 则获取  不存在则取user.getReferrer();
             Integer isBuy = user.getIsBuy() == null ? 0 : user.getIsBuy();
-            if (isBuy == 1) {
-                referrerId = user.getReferrer();
-            } else {
+            referrerId = user.getReferrer();
+            if (isBuy == 0) {
                 Date currentDate = new Date();
                 OfflineActivityOrder offlineActivityOrder = offlineActivityOrderService.getOfflineActivityOrderByActivityDate(userId, mch_id, currentDate);
                 if (null != offlineActivityOrder) {
-                    referrerId = offlineActivityOrder.getSlReferrer();
+                    String slReferrer = offlineActivityOrder.getSlReferrer();
                     //用户没有绑定用户 只跟沙龙绑定
                     // 情形1:用户在沙龙开始当时又买商品则跟沙龙推荐人产生死绑
-                    User sysUserParam = new User();
-                    sysUserParam.setUserId(userId);
-                    sysUserParam.setReferrer(referrerId);
-                    userService.updateUserByUserId(sysUserParam);
+                    if (slReferrer != null) {
+                        User sysUserParam = new User();
+                        sysUserParam.setUserId(userId);
+                        sysUserParam.setReferrer(slReferrer);
+                        userService.updateUserByUserId(sysUserParam);
+                        referrerId = slReferrer;
+                    }
                 }
             }
             Integer memberLevel = order.getLevel();
@@ -315,7 +317,8 @@ public class DYServiceImpl implements DYService {
     }
 
     @Override
-    public String xxPayNotify(Map<String, String> params, String out_trade_no, String sign, String mch_id, String total_fee, String time_end, String transaction_id) {
+    public String xxPayNotify(Map<String, String> params, String out_trade_no, String sign, String
+            mch_id, String total_fee, String time_end, String transaction_id) {
         //线下活动回调通知
         //生成二维码
         //是否返佣
