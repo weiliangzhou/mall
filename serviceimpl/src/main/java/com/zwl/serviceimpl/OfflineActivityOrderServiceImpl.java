@@ -124,7 +124,7 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
             if (sysUser.getCity() == null) {
                 User sysUserParam = new User();
                 sysUserParam.setUserId(userId);
-                sysUserParam.setCity(sysUser.getCity());
+                sysUserParam.setCity(offlineActivityBuy.getCity());
                 userService.updateUserByUserId(sysUserParam);
             }
 
@@ -218,6 +218,8 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
             offlineActivityOrderVo.setOrderNo(offlineActivityOrder.getOrderNo());
             offlineActivityOrderVo.setActivityId(offlineActivityOrder.getActivityId());
             offlineActivityOrderVo.setCreateTime(offlineActivityOrder.getCreateTime());
+            offlineActivityOrderVo.setActivityStartTime(offlineActivity.getActivityStartTime());
+            offlineActivityOrderVo.setActivityEndTime(offlineActivity.getApplyEndTime());
             if (null != orderType && orderType.equals(1)) {
                 User user = userService.getByUserId(offlineActivityOrder.getSlReferrer());
                 offlineActivityOrderVo.setOrderType(1);

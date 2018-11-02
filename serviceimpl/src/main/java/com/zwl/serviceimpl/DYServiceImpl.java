@@ -235,14 +235,10 @@ public class DYServiceImpl implements DYService {
                             //根据推荐的的分佣百分比返佣
                             //如果产品的等级是1，分佣比列按照产品的分佣百分比计算
                             Integer maidMoney = 0;
-                            if (level == 1) {
-                                maidMoney = orderActualMoney * maidPercent / 100;
-                                maidInfo.setMaidPercent(maidPercent);
-                            } else {
-                                log.info("maidPercent_referrer:" + maidPercent_referrer);
-                                maidMoney = orderActualMoney * maidPercent_referrer / 100;
-                                maidInfo.setMaidPercent(maidPercent_referrer);
-                            }
+                            log.info("maidPercent_referrer:" + maidPercent_referrer);
+                            maidMoney = orderActualMoney * maidPercent_referrer / 100;
+
+                            maidInfo.setMaidPercent(maidPercent_referrer);
                             maidInfo.setMaidMoney(maidMoney);
                             maidInfo.setOrderActualMoney(orderActualMoney);
                             maidInfo.setMerchantId(merchantId);

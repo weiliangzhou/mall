@@ -52,10 +52,19 @@
         where merchant_id = #{merchantId,jdbcType=VARCHAR}
         and activity_theme_id=#{activityThemeId,jdbcType=INTEGER}
         and available =1
-        <!--<![CDATA[ and apply_start_time <= now()]]>-->
-        <!--<![CDATA[ and apply_end_time >= now()]]>-->
+        <![CDATA[ and apply_start_time <= now()]]>
+        <![CDATA[ and apply_end_time >= now()]]>
     </select>
 
+    <select id="getOfflineActivityByThemeId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ss_offline_activity
+        where merchant_id = #{merchantId,jdbcType=VARCHAR}
+        and activity_theme_id=#{themeId,jdbcType=INTEGER}
+        and available =1
+        limit 1
+    </select>
 
     <insert id="insertSelective" parameterType="com.zwl.model.po.OfflineActivity">
         insert into ss_offline_activity
