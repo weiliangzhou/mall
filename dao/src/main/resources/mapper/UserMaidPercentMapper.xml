@@ -16,8 +16,7 @@
     id, member_level, maid_percent_1, maid_percent_4, maid_percent_6, merchant_id, create_time, 
     modify_time, available
   </sql>
-    <select id="getUserMaidPercentByMemberLevelAndMerchantId" resultMap="BaseResultMap"
-            parameterType="java.lang.String">
+    <select id="getUserMaidPercentByMemberLevelAndMerchantId" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from ss_user_maid_percent
