@@ -47,7 +47,7 @@ public class CertificationController {
                 String msg = IdCardVerification.IDCardValidate(cardNum);
                 if (!msg.contains("有效")) {
                     result.setCode(ResultCodeEnum.EXCEPTION);
-                    result.setData(msg);
+                    result.setMessage(msg);
                     return result;
                 }
             } catch (ParseException e) {
