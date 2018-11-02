@@ -39,6 +39,7 @@
             and is_recommend =1
         </if>
         and activity_type = #{activityType,jdbcType=INTEGER}
+        order by modify_time desc
     </select>
     <select id="getOfflineActivityThemeDetailByThemeId" resultMap="BaseResultMap">
         select
@@ -47,7 +48,6 @@
         where merchant_id = #{merchantId,jdbcType=VARCHAR}
         and available= 1
         and id= #{themeId,jdbcType=INTEGER}
-        order by modify_time desc
     </select>
 
 
