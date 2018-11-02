@@ -217,9 +217,15 @@ public class SalonController {
         if (StringUtils.isNotBlank(slReferrer)) {
             User user = userService.getByUserId(slReferrer);
             if(null != user){
-                userVo.setSlReferrer(slReferrer);
-                userVo.setSlReferrerName(user.getRealName());
-                userVo.setSlReferrerPhone(user.getRegisterMobile());
+                if(user.getMemberLevel() >=1){
+                    userVo.setSlReferrer(slReferrer);
+                    userVo.setSlReferrerName(user.getRealName());
+                    userVo.setSlReferrerPhone(user.getRegisterMobile());
+                }else{
+                    userVo.setSlReferrerName("单影");
+                    userVo.setSlReferrerPhone("18896815868");
+                    userVo.setSlReferrer("25c3c33de8e74f3482aec08d2ab6206c");
+                }
             }else{
                 userVo.setSlReferrerName("单影");
                 userVo.setSlReferrerPhone("18896815868");
