@@ -112,7 +112,28 @@ public class DYServiceImpl implements DYService {
                 String memberValidityTime = sdf_yMdHms.format(paymentTime.getTime() + (long) validityTime * 24 * 60 * 60 * 1000);
                 user.setExpiresTime(sdf_yMdHms.parse(memberValidityTime));
             } catch (ParseException e) {
-                e.printStackTrace();
+                log.error("未知错误", e);
+            }
+            String referrerId = null;
+            //fixme 推荐人关联沙龙活动
+            //根据推荐人是否死绑推荐人
+            //如果是0 或者为null
+            //则先查询当天当天是否存在沙龙订单，如果存在 判断推荐人是否存在，存在 则获取  不存在则取user.getReferrer();
+            Integer isBuy = user.getIsBuy() == null ? 0 : user.getIsBuy();
+            if (isBuy == 1) {
+                referrerId = user.getReferrer();
+            } else {
+                Date currentDate = new Date();
+                OfflineActivityOrder offlineActivityOrder = offlineActivityOrderService.getOfflineActivityOrderByActivityDate(userId, currentDate);
+                if (null != offlineActivityOrder) {
+                    referrerId = offlineActivityOrder.getSlReferrer();
+                    //用户没有绑定用户 只跟沙龙绑定
+                    // 情形1:用户在沙龙开始当时又买商品则跟沙龙推荐人产生死绑
+                    User sysUserParam = new User();
+                    sysUserParam.setUserId(userId);
+                    sysUserParam.setReferrer(referrerId);
+                    userService.updateUserByUserId(sysUserParam);
+                }
             }
             Integer memberLevel = order.getLevel();
             user.setMemberLevel(memberLevel);
@@ -132,21 +153,6 @@ public class DYServiceImpl implements DYService {
             String productName = order.getProductName();
             Integer level = order.getLevel();
             String levelName = order.getLevelName();
-            String referrerId = null;
-            //fixme 推荐人关联沙龙活动
-            //根据推荐人是否死绑推荐人
-            //如果是0 或者为null
-            //则先查询当天当天是否存在沙龙订单，如果存在 判断推荐人是否存在，存在 则获取  不存在则取user.getReferrer();
-            Integer isBuy = user.getIsBuy();
-            if (isBuy == 1) {
-                referrerId = user.getReferrer();
-            } else {
-                Date currentDate = new Date();
-                OfflineActivityOrder offlineActivityOrder = offlineActivityOrderService.getOfflineActivityOrderByActivityDate(userId, currentDate);
-                if (null != offlineActivityOrder) {
-                    referrerId = offlineActivityOrder.getSlReferrer();
-                }
-            }
             //增加小班次数,可能是第一次购买需要insert，也可能是update
             switch (memberLevel) {
                 case 4:
