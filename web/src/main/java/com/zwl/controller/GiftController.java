@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zwl.model.baseresult.Result;
+import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.Gift;
 import com.zwl.model.po.User;
 import com.zwl.model.po.UserGift;
@@ -151,6 +152,10 @@ public class GiftController {
         Long giftId = jsonObject.getLong("giftId");
         String url = jsonObject.getString("url");
         String userId = jsonObject.getString("userId");
+        if (giftId == null || StringUtils.isBlank(url) || StringUtils.isBlank(userId)) {
+            BSUtil.isTrue(false, "缺少参数！");
+        }
+
         String qrUrl = stringRedisTemplate.boundValueOps(userId + "_gift_QrCode_" + giftId).get();
         if (StringUtils.isBlank(qrUrl)) {
             String smallImage = QRCodeUtil.createQrCode(url + "&referrer=" + userId, null, null);
