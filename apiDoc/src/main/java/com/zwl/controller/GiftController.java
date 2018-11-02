@@ -33,7 +33,7 @@ public class GiftController {
 
     @RequestMapping(name = "书籍详情",
             value = "/getGiftDetailById", method = RequestMethod.POST)
-    public Gift getGiftDetailById(@ApiComment("书籍Id") Long giftId,@ApiComment("userId") Long userId
+    public Gift getGiftDetailById(@ApiComment("书籍Id") Long giftId, @ApiComment("userId") Long userId
     ) {
         Gift gift = new Gift();
         return gift;
@@ -70,8 +70,10 @@ public class GiftController {
     @RequestMapping(name = "获取书籍二维码",
             value = "/getGiftQrCode", method = RequestMethod.POST)
     public Result getGiftQrCode(@ApiComment(value = "书籍Id") String giftId,
-                               @ApiComment(value = "url") Long url
-                               ) {
+                                @ApiComment(value = "url") String url,
+                                @ApiComment(value = "userId") Long userId,
+                                @ApiComment(value = "merchantId") String merchantId
+    ) {
         return new Result();
     }
 
