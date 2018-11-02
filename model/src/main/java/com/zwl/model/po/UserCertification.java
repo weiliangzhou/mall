@@ -49,5 +49,7 @@ public class UserCertification {
     @RestPackIgnore
     @JSONField(serialize = false)
     private Integer available = 1;
+    @ApiComment(value = "身份证类型", sample = "0国内 1国外")
+    private Integer cardType;
 
 }
