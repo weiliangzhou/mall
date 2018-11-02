@@ -124,7 +124,7 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
             if (sysUser.getCity() == null) {
                 User sysUserParam = new User();
                 sysUserParam.setUserId(userId);
-                sysUserParam.setCity(sysUser.getCity());
+                sysUserParam.setCity(offlineActivityBuy.getCity());
                 userService.updateUserByUserId(sysUserParam);
             }
 
