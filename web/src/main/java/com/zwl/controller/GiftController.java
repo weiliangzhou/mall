@@ -88,13 +88,13 @@ public class GiftController {
             String img1 = gift.getGiftViceImg1();
             String img2 = gift.getGiftViceImg2();
             String img3 = gift.getGiftViceImg3();
-            if (img1 != null) {
+            if (StringUtils.isNotBlank(img1)) {
                 imgList.add(img1);
             }
-            if (img2 != null) {
+            if (StringUtils.isNotBlank(img2)) {
                 imgList.add(img2);
             }
-            if (img3 != null) {
+            if (StringUtils.isNotBlank(img3)) {
                 imgList.add(img3);
             }
 
