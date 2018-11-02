@@ -195,7 +195,7 @@ public class UserController {
 //        userLoginInfoVo.setIsCertification(userInfo.getIsCertification() == null ? 0 : 1);
         //实名认证状态
         UserCertification userCertification = certificationService.getOneByUserId(userId);
-        Integer certificationStatus=userCertification.getStatus();
+        Integer certificationStatus = userCertification.getStatus();
         userLoginInfoVo.setCertificationStatus(certificationStatus);
         if (certificationStatus == 2) {
             String idCardNum = userCertification.getIdCard();

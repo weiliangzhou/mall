@@ -70,7 +70,7 @@ public class SalonController {
 
     @RequestMapping(name = "我的邀约人",
             value = "/wx/offlineActivity/getMySLActivityOrderList", method = RequestMethod.POST)
-    public OfflineActivityOrderVo getActivityOrderList(@ApiComment("merchantId") String merchantId,@ApiComment("activityThemeId") String activityThemeId, @ApiComment("pageSize") String pageSize,
+    public OfflineActivityOrderVo getActivityOrderList(@ApiComment("merchantId") String merchantId, @ApiComment("pageSize") String pageSize,
                                                        @ApiComment("pageNum") String pageNum
     ) {
         OfflineActivityOrderVo offlineActivityOrder = new OfflineActivityOrderVo();
