@@ -162,7 +162,7 @@ public class QRCodeUtil {
                 userLogo = ImageIO.read(new File(userLogoUrl));
             }
             Graphics2D g = big.createGraphics();
-            g.drawImage(small, (big.getWidth() - small.getWidth()) / 2, smallImageY, small.getWidth(), small.getHeight(), null);
+            g.drawImage(small, (big.getWidth() - small.getWidth()) / 2, smallImageY, 170, 170, null);
             g.drawImage(roundImage(userLogo, 130, 150), (big.getWidth() - userLogo.getWidth()) / 2, userLogoUrlY, roundImage(userLogo, 130, 150).getWidth(), roundImage(userLogo, 130, 150).getHeight(), null);
             Font font = new Font("宋体", Font.BOLD, 20);
             g.setFont(font);

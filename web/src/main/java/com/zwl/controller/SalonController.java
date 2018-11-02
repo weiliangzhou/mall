@@ -257,7 +257,7 @@ public class SalonController {
             SimpleDateFormat sdf_Hms = new SimpleDateFormat("HH:mm");
             String slStartTimeStr = sdf_yMd_Hm.format(slStartTime);
             String slEndTimeStr = sdf_Hms.format(slEndTime);
-            String slStr = "时间:  "+slStartTimeStr + "-" + slEndTimeStr;
+            String slStr = "时间: "+slStartTimeStr + "-" + slEndTimeStr;
             try {
                 qrUrl = QRCodeUtil.SlMergeImage("http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20181101/5cf42276a5c944429f1796e25305bb80.png",
                         smallImage, 380, 690,
