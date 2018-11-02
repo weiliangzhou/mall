@@ -151,9 +151,9 @@ public class GiftController {
         Long giftId = jsonObject.getLong("giftId");
         String url = jsonObject.getString("url");
         String userId = ThreadVariable.getUserID();
-        String qrUrl = stringRedisTemplate.boundValueOps(userId + "_gift_QrCode").get();
+        String qrUrl = stringRedisTemplate.boundValueOps(userId + "_gift_QrCode_" + giftId).get();
         if (StringUtils.isBlank(qrUrl)) {
-            String smallImage = QRCodeUtil.createQrCode(url + "&referrer=" + userId + giftId, null, null);
+            String smallImage = QRCodeUtil.createQrCode(url + "&referrer=" + userId, null, null);
             User user = userService.getByUserId(userId);
             UserInfo userInfo = userInfoService.getByUserId(userId);
             String userLogo = user.getLogoUrl() == null ? "http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/6a989ec302994c6c98c2d4810f9fbcb2.png" : user.getLogoUrl();
@@ -168,7 +168,7 @@ public class GiftController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            stringRedisTemplate.boundValueOps(userId + "_gift_QrCode" + giftId).set(qrUrl, 30, TimeUnit.DAYS);
+            stringRedisTemplate.boundValueOps(userId + "_gift_QrCode_" + giftId).set(qrUrl, 30, TimeUnit.DAYS);
         }
         Result result = new Result();
         result.setData(qrUrl);
