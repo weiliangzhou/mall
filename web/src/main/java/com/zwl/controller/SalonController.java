@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.zwl.model.baseresult.Result;
+import com.zwl.model.baseresult.ResultCodeEnum;
 import com.zwl.model.po.*;
 import com.zwl.model.vo.BuyResult;
 import com.zwl.model.vo.OfflineActivityBuy;
@@ -101,7 +102,9 @@ public class SalonController {
         OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(merchantId, themeId);
         List<OfflineActivity> offlineActivityList = offlineActivityService.getOfflineActivityListByThemeId(merchantId, offlineActivityTheme.getId(), userId);
         if (null == offlineActivityList || offlineActivityList.isEmpty()) {
-            Result result = new Result();
+            Result result = new Result(ResultCodeEnum.FAIL ,"该沙龙暂未开始，敬请期待！");
+            //如果该场沙龙主题没有沙龙，则状态设为5，前台显示为暂未开始
+            offlineActivityTheme.setApplyStatus(5);
             result.setData(offlineActivityTheme);
             return JSON.toJSONString(result);
         }
