@@ -272,7 +272,7 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
     }
 
     @Override
-    public OfflineActivityOrder getOfflineActivityOrderByActivityDate(String userId, Date activityDate) {
+    public OfflineActivityOrder getOfflineActivityOrderByActivityDate(String userId, String merchantId, Date activityDate) {
         if (StringUtils.isBlank(userId)) {
             throw new BusinessException("用户编号不能为空");
         }
@@ -281,7 +281,7 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         }
         Date startDate = DateUtil.getDateDayStart(activityDate);
         Date endDate = DateUtil.getDateDayEnd(activityDate);
-        OfflineActivityOrder offlineActivityOrder = this.offlineActivityOrderMapper.getOfflineActivityOrderByActivityDate(userId, startDate, endDate);
+        OfflineActivityOrder offlineActivityOrder = this.offlineActivityOrderMapper.getOfflineActivityOrderByActivityDate(userId, merchantId, startDate, endDate);
         return offlineActivityOrder;
     }
 

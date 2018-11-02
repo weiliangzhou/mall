@@ -315,6 +315,9 @@
             <if test="endDate != null">
                 and s.activity_date <![CDATA[ <= ]]> #{endDate}
             </if>
+            <if test="merchantId != null and merchantId != ''">
+                and s.merchant_id = #{merchantId}
+            </if>
         </where>
     </select>
   <select id="findSLOrderByUserId" resultMap="BaseResultMap">

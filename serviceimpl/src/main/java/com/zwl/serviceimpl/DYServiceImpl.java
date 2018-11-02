@@ -124,7 +124,7 @@ public class DYServiceImpl implements DYService {
                 referrerId = user.getReferrer();
             } else {
                 Date currentDate = new Date();
-                OfflineActivityOrder offlineActivityOrder = offlineActivityOrderService.getOfflineActivityOrderByActivityDate(userId, currentDate);
+                OfflineActivityOrder offlineActivityOrder = offlineActivityOrderService.getOfflineActivityOrderByActivityDate(userId, mch_id, currentDate);
                 if (null != offlineActivityOrder) {
                     referrerId = offlineActivityOrder.getSlReferrer();
                     //用户没有绑定用户 只跟沙龙绑定
