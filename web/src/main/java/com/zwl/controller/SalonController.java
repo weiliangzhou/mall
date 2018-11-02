@@ -100,8 +100,16 @@ public class SalonController {
         String merchantId = jsonObject.getString("merchantId");
         Integer themeId = jsonObject.getInteger("themeId");
         OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(merchantId, themeId);
-        List<OfflineActivity> offlineActivityList = offlineActivityService.getOfflineActivityListByThemeId(merchantId, offlineActivityTheme.getId(), userId);
-        if (null == offlineActivityList || offlineActivityList.isEmpty()) {
+        if(StringUtils.isBlank(userId)){
+            Result result = new Result(ResultCodeEnum.FAIL ,"请先登录！");
+            //如果该场沙龙主题没有沙龙，则状态设为6，前台显示为请先登录
+            offlineActivityTheme.setApplyStatus(6);
+            result.setData(offlineActivityTheme);
+            return JSON.toJSONString(result);
+        }
+//        List<OfflineActivity> offlineActivityList = offlineActivityService.getOfflineActivityListByThemeId(merchantId, offlineActivityTheme.getId(), userId);
+        OfflineActivity offlineActivity = offlineActivityService.getOfflineActivityByThemeId(merchantId,themeId);
+        if (null == offlineActivity) {
             Result result = new Result(ResultCodeEnum.FAIL ,"该沙龙暂未开始，敬请期待！");
             //如果该场沙龙主题没有沙龙，则状态设为5，前台显示为暂未开始
             offlineActivityTheme.setApplyStatus(5);
@@ -111,31 +119,28 @@ public class SalonController {
         User user = userService.getByUserId(userId);
         Integer memberLevel = user.getMemberLevel();
         Long millisecond = System.currentTimeMillis();
-        OfflineActivity offlineActivity = offlineActivityList.get(0);
-        if (null != offlineActivity) {
-            Integer limitCount = offlineActivity.getLimitCount();
-            Integer buyCount = offlineActivity.getBuyCount();
-            if (buyCount.intValue() >= limitCount.intValue()) {
-                //如果购买人数大于等于限制人数，则状态设为1，前台显示为名额已满
-                offlineActivityTheme.setApplyStatus(1);
-            } else if (millisecond < offlineActivity.getApplyStartTime().getTime() || millisecond > offlineActivity.getApplyEndTime().getTime()) {
-                //如果系统当前时间不在报名时间内，则状态设为2，前台显示为报名已结束
-                offlineActivityTheme.setApplyStatus(2);
-            } else if (memberLevel.intValue() < offlineActivity.getMinRequirement().intValue()) {
-                //如果用户等级小于该场活动最低要求等级，则状态设为3，前台显示为未获得报名资格
-                offlineActivityTheme.setApplyStatus(3);
-            } else if (0 == offlineActivity.getIsRebuy().intValue()) {
-                OfflineActivityCode offlineActivityCode = offlineActivityCodeService.getOneByUserIdAndOfflineActivityId(userId, offlineActivity.getId());
-                if (null != offlineActivityCode) {
-                    //如果用户已购买该场活动，则状态设为4，前台显示已报名
-                    offlineActivityTheme.setApplyStatus(4);
-                } else {
-                    offlineActivityTheme.setApplyStatus(0);
-                }
+        Integer limitCount = offlineActivity.getLimitCount();
+        Integer buyCount = offlineActivity.getBuyCount();
+        if (buyCount.intValue() >= limitCount.intValue()) {
+            //如果购买人数大于等于限制人数，则状态设为1，前台显示为名额已满
+            offlineActivityTheme.setApplyStatus(1);
+        } else if (millisecond < offlineActivity.getApplyStartTime().getTime() || millisecond > offlineActivity.getApplyEndTime().getTime()) {
+            //如果系统当前时间不在报名时间内，则状态设为2，前台显示为报名已结束
+            offlineActivityTheme.setApplyStatus(2);
+        } else if (memberLevel.intValue() < offlineActivity.getMinRequirement().intValue()) {
+            //如果用户等级小于该场活动最低要求等级，则状态设为3，前台显示为未获得报名资格
+            offlineActivityTheme.setApplyStatus(3);
+        } else if (0 == offlineActivity.getIsRebuy().intValue()) {
+            OfflineActivityCode offlineActivityCode = offlineActivityCodeService.getOneByUserIdAndOfflineActivityId(userId, offlineActivity.getId());
+            if (null != offlineActivityCode) {
+                //如果用户已购买该场活动，则状态设为4，前台显示已报名
+                offlineActivityTheme.setApplyStatus(4);
             } else {
-                //上述条件都不满足，则状态设为4，前台显示为立即报名
                 offlineActivityTheme.setApplyStatus(0);
             }
+        } else {
+            //上述条件都不满足，则状态设为4，前台显示为立即报名
+            offlineActivityTheme.setApplyStatus(0);
         }
         Result result = new Result();
         result.setData(offlineActivityTheme);
@@ -148,34 +153,6 @@ public class SalonController {
         String merchantId = jsonObject.getString("merchantId");
         Integer activityThemeId = jsonObject.getInteger("activityThemeId");
         List<OfflineActivity> offlineActivityList = offlineActivityService.getOfflineActivityListByThemeId(merchantId, activityThemeId, userId);
-        User user = userService.getByUserId(userId);
-        Integer memberLevel = user.getMemberLevel();
-        Long millisecond = System.currentTimeMillis();
-        for (OfflineActivity offlineActivity : offlineActivityList) {
-            Integer limitCount = offlineActivity.getLimitCount();
-            Integer buyCount = offlineActivity.getBuyCount();
-            if (buyCount.intValue() >= limitCount.intValue()) {
-                //如果购买人数大于等于限制人数，则状态设为1，前台显示为名额已满
-                offlineActivity.setApplyStatus(1);
-            } else if (millisecond < offlineActivity.getApplyStartTime().getTime() || millisecond > offlineActivity.getApplyEndTime().getTime()) {
-                //如果系统当前时间不在报名时间内，则状态设为2，前台显示为报名已结束
-                offlineActivity.setApplyStatus(2);
-            } else if (memberLevel.intValue() < offlineActivity.getMinRequirement().intValue()) {
-                //如果用户等级小于该场活动最低要求等级，则状态设为3，前台显示为未获得报名资格
-                offlineActivity.setApplyStatus(3);
-            } else if (0 == offlineActivity.getIsRebuy().intValue()) {
-                OfflineActivityCode offlineActivityCode = offlineActivityCodeService.getOneByUserIdAndOfflineActivityId(userId, offlineActivity.getId());
-                if (null != offlineActivityCode) {
-                    //如果用户已购买该场活动，则状态设为4，前台显示已报名
-                    offlineActivity.setApplyStatus(4);
-                } else {
-                    offlineActivity.setApplyStatus(0);
-                }
-            } else {
-                //上述条件都不满足，则状态设为4，前台显示为立即报名
-                offlineActivity.setApplyStatus(0);
-            }
-        }
         Result result = new Result();
         result.setData(offlineActivityList);
         return JSON.toJSONString(result);
