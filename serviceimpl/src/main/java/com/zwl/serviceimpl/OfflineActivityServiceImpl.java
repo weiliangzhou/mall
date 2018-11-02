@@ -53,10 +53,14 @@ public class OfflineActivityServiceImpl implements OfflineActivityService {
                 OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(merchantId, offlineActivity.getActivityThemeId());
                 offlineActivity.setImgUrl(offlineActivityTheme.getImgUrl());
                 offlineActivity.setThemeName(offlineActivityTheme.getThemeName());
+                offlineActivity.setSlApplyStartTime(offlineActivity.getApplyStartTime());
+                offlineActivity.setSlApplyEndTime(offlineActivity.getApplyEndTime());
                 offlineActivity.setActivityAddressDesc(offlineActivity.getActivityAddress());
             }
         } else {
             for (OfflineActivity offlineActivity : offlineActivityList) {
+                offlineActivity.setSlApplyStartTime(offlineActivity.getApplyStartTime());
+                offlineActivity.setSlApplyEndTime(offlineActivity.getApplyEndTime());
                 OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(merchantId, offlineActivity.getActivityThemeId());
                 if (1 == offlineActivity.getIsRetraining()) {
                     offlineActivity.setActivityPriceDesc(div(100, offlineActivity.getRetrainingPrice(), 2) + "");

@@ -86,12 +86,18 @@ public class OfflineActivity {
     private String themeName;
     @ApiComment(value = "报名状态", sample = "0可报名 1名额已满 2报名已结束 3未获得报名资格 4已报名")
     private Integer applyStatus;
+    @ApiComment(value = "报名开始时间", sample = "2018-09-29 11:00")
+    @JSONField(format = "yyyy-MM-dd HH:mm")
+    private Date slApplyStartTime;
+    @ApiComment(value = "报名结束时间", sample = "2018-09-30 11:00")
+    @JSONField(format = "yyyy-MM-dd HH:mm")
+    private Date slApplyEndTime;
 
     public String getBuyCountDesc() {
         Integer count = limitCount - buyCount;
         if (count == 0)
             return "名额已满";
-        return "还剩" + count + "名额";
+        return "剩余" + count + "个名额";
     }
 
     public Integer getIsFull() {
