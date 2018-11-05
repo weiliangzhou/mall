@@ -175,7 +175,7 @@ public class TokenFilter implements Filter {
         // 这里token如果接收有空格的地方，，那就是+号没有处理好。。可以考虑变成%2B
         if (StringUtils.isBlank(token)) {
             Result result = new Result();
-            result.setCode(ResultCodeEnum.TOKEN_ERROR);
+            result.setCode("900");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().println(JSON.toJSONString(result));
             return;
@@ -192,7 +192,7 @@ public class TokenFilter implements Filter {
         } else {
             // 如果验证token失败
             Result result = new Result();
-            result.setCode(ResultCodeEnum.TOKEN_ERROR);
+            result.setCode("900");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().println(JSON.toJSONString(result));
             return;

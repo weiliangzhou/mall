@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
     String handleException(Exception e) {
         log.error(e.getMessage(), e);
         Result response = new Result();
-        response.setCode(ResultCodeEnum.FAIL);
+        response.setCode("205");
         response.setMessage("操作失败！");
         return JSON.toJSONString(response);
     }
@@ -44,7 +44,7 @@ public class GlobalExceptionHandler {
     String handleBusinessException(BusinessException e) {
         log.error(e.getMessage(), e);
         Result response = new Result();
-        response.setCode(ResultCodeEnum.FAIL);
+        response.setCode("205");
         response.setMessage(e.getMessage());
         return JSON.toJSONString(response);
     }
@@ -61,7 +61,7 @@ public class GlobalExceptionHandler {
     String handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.error(e.getMessage(), e);
         Result response = new Result();
-        response.setCode(ResultCodeEnum.FAIL);
+        response.setCode("205");
         response.setMessage(e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
         return JSON.toJSONString(response);
     }
