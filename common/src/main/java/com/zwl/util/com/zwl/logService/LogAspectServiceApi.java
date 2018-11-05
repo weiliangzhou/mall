@@ -42,7 +42,10 @@ public class LogAspectServiceApi {
             log.info("请求地址:" + request.getRequestURL().toString());
             log.info("请求方式:" + request.getMethod());
             log.info("请求类方法:" + joinPoint.getSignature());
-            log.info("请求类方法参数:" + getParams(joinPoint));
+            // 过滤newH5Buy  request
+            if (!request.getRequestURL().toString().contains("newH5Buy")) {
+                log.info("请求类方法参数:" + getParams(joinPoint));
+            }
         } catch (Exception e) {
             log.error("###LogAspectServiceApi.class methodBefore() ### ERROR:", e);
         }
