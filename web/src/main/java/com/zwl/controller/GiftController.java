@@ -170,7 +170,7 @@ public class GiftController extends BaseController {
 
             String smallImage = QRCodeUtil.createQrCode(url + "?productId=" + productId + "&referrer=" + userId, null, null);
             try {
-                qrUrl = QRCodeUtil.mergeImage(gift.getGiftShareBack(), smallImage, 340, 630,
+                qrUrl = QRCodeUtil.mergeImage(gift.getGiftShareBack(), smallImage, 340, 640,
                         userLogo, 197, 36, nickNameOrPhone, 178, 206, Color.BLACK);
             } catch (IOException e) {
                 e.printStackTrace();
