@@ -23,8 +23,6 @@ import javax.servlet.http.HttpServletRequest;
 @Component
 @Slf4j
 public class LogAspectServiceApi {
-    private JSONObject jsonObject = new JSONObject();
-
     // 申明一个切点 里面是 execution表达式
     @Pointcut("execution(public * com.zwl.controller.*.*(..))")
     private void controllerAspect() {
@@ -55,13 +53,13 @@ public class LogAspectServiceApi {
     // 在方法执行完结后打印返回内容
     @AfterReturning(returning = "o", pointcut = "controllerAspect()")
     public void methodAfterReturing(Object o) {
-        log.debug("--------------返回内容----------------");
+        log.info("--------------返回内容----------------");
         try {
-            log.debug("Response内容:" + jsonObject.toJSONString(o));
+            log.info("Response内容:" + JSON.toJSONString(o));
         } catch (Exception e) {
             log.error("###LogAspectServiceApi.class methodAfterReturing() ### ERROR:", e);
         }
-        log.debug("--------------返回内容----------------");
+        log.info("--------------返回内容----------------");
     }
 
     /**

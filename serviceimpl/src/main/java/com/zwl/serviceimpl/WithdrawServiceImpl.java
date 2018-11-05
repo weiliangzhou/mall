@@ -57,8 +57,9 @@ public class WithdrawServiceImpl implements WithdrawService {
     @Transactional(rollbackFor = Exception.class)
     public void approveWithdraw(Integer status, String operator, String withdrawId, String realIp) {
         int count = withdrawMapper.updateWithdrawById(status, operator, withdrawId);
-        if (count == 0)
+        if (count == 0) {
             BSUtil.isTrue(false, "操作异常,请重新操作");
+        }
         //记录流水表
         WithdrawFlow withdrawFlow = new WithdrawFlow();
         withdrawFlow.setWithdrawId(withdrawId);
@@ -86,16 +87,19 @@ public class WithdrawServiceImpl implements WithdrawService {
     public synchronized void apply(Withdraw withdraw) {
         verfiy(withdraw);
         Integer money = withdraw.getMoney() * 100;
-        if (money == 0)
+        if (money == 0) {
             BSUtil.isTrue(false, "提现金额不能为0");
+        }
 
         String userId = withdraw.getUserId();
         String merchantId = withdraw.getMerchantId();
         Integer balance = userAccountMapper.getBalanceByUserId(userId);
-        if (balance == null)
+        if (balance == null) {
             BSUtil.isTrue(false, "可用余额不足");
-        if (money > balance)
+        }
+        if (money > balance) {
             BSUtil.isTrue(false, "可用余额不足");
+        }
         User user = userService.getByUserId(userId);
         //        需校验该用户是否实名，未实名则返回
 //        UserCertification userCertification = userCertificationService.getOneByUserId(userId);
@@ -103,8 +107,9 @@ public class WithdrawServiceImpl implements WithdrawService {
 //        Integer status = userCertification == null ? 0 : userCertification.getStatus();
 //        if (status != 2)
 //            BSUtil.isTrue(false, "未实名");
-        if (StringUtils.isBlank(user.getRealName()))
+        if (StringUtils.isBlank(user.getRealName())) {
             BSUtil.isTrue(false, "未实名");
+        }
 //        默认写死微信，后期可配置，申请提现金额，可提现金额，点击确认，
 //调用微信支付    记录发送参数日志
 //        发送支付信息成功
@@ -112,8 +117,9 @@ public class WithdrawServiceImpl implements WithdrawService {
 //        同时记录提现流水表
 //        Integer currentAmount = balance - money;// Arith.sub(balance, money);
         int difBalance = userAccountMapper.subBanlanceByUserId(userId, money);
-        if (difBalance == 0)
+        if (difBalance == 0) {
             BSUtil.isTrue(false, "更新余额异常");
+        }
         withdraw.setWithdrawId(UUIDUtil.getUUID32());
         withdraw.setOpenId(user.getWechatOpenid());
         withdraw.setRealName(user.getRealName());

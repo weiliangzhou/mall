@@ -47,15 +47,18 @@ public class MyBase64 {
 	public static byte[] decode(char[] data) {
 		int tempLen = data.length;
 		for (int ix = 0; ix < data.length; ix++) {
-			if ((data[ix] > 255) || codes[data[ix]] < 0)
-				--tempLen;
+			if ((data[ix] > 255) || codes[data[ix]] < 0) {
+                --tempLen;
+            }
 		}
 
 		int len = (tempLen / 4) * 3;
-		if ((tempLen % 4) == 3)
-			len += 2;
-		if ((tempLen % 4) == 2)
-			len += 1;
+		if ((tempLen % 4) == 3) {
+            len += 2;
+        }
+		if ((tempLen % 4) == 2) {
+            len += 1;
+        }
 
 		byte[] out = new byte[len];
 
@@ -89,14 +92,18 @@ public class MyBase64 {
 	private static byte[] codes = new byte[256];
 
 	static {
-		for (int i = 0; i < 256; i++)
-			codes[i] = -1;
-		for (int i = 'A'; i <= 'Z'; i++)
-			codes[i] = (byte) (i - 'A');
-		for (int i = 'a'; i <= 'z'; i++)
-			codes[i] = (byte) (26 + i - 'a');
-		for (int i = '0'; i <= '9'; i++)
-			codes[i] = (byte) (52 + i - '0');
+		for (int i = 0; i < 256; i++) {
+            codes[i] = -1;
+        }
+		for (int i = 'A'; i <= 'Z'; i++) {
+            codes[i] = (byte) (i - 'A');
+        }
+		for (int i = 'a'; i <= 'z'; i++) {
+            codes[i] = (byte) (26 + i - 'a');
+        }
+		for (int i = '0'; i <= '9'; i++) {
+            codes[i] = (byte) (52 + i - '0');
+        }
 		codes['+'] = 62;
 		codes['/'] = 63;
 	}
@@ -109,10 +116,11 @@ public class MyBase64 {
 			System.exit(0);
 		}
 		for (int i = 0; i < args.length; i++) {
-			if ("-decode".equalsIgnoreCase(args[i]))
-				decode = true;
-			else if ("-d".equalsIgnoreCase(args[i]))
-				decode = true;
+			if ("-decode".equalsIgnoreCase(args[i])) {
+                decode = true;
+            } else if ("-d".equalsIgnoreCase(args[i])) {
+                decode = true;
+            }
 		}
 
 		String filename = args[args.length - 1];
@@ -141,8 +149,9 @@ public class MyBase64 {
 			int count = 0;
 			byte[] buf = new byte[16384];
 			while ((count = is.read(buf)) != -1) {
-				if (count > 0)
-					baos.write(buf, 0, count);
+				if (count > 0) {
+                    baos.write(buf, 0, count);
+                }
 			}
 			is.close();
 		} catch (Exception e) {
@@ -160,8 +169,9 @@ public class MyBase64 {
 			int count = 0;
 			char[] buf = new char[16384];
 			while ((count = in.read(buf)) != -1) {
-				if (count > 0)
-					caw.write(buf, 0, count);
+				if (count > 0) {
+                    caw.write(buf, 0, count);
+                }
 			}
 			in.close();
 		} catch (Exception e) {

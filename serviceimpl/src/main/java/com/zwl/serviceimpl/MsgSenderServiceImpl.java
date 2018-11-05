@@ -37,12 +37,14 @@ public class MsgSenderServiceImpl implements MsgSenderService {
     @Override
     public void sendCode(String phone, String busCode) {
         String checkLimit = stringRedisTemplate.boundValueOps(phone + "_limit1").get();
-        if (StringUtils.isNotBlank(checkLimit))
+        if (StringUtils.isNotBlank(checkLimit)) {
             BSUtil.isTrue(false, "请一分钟之后重发！");
+        }
         Map map = new HashMap();
         int msgCode = new Random().nextInt(9999);
-        if (msgCode < 1000)
+        if (msgCode < 1000) {
             msgCode += 1000;
+        }
         map.put("account", MsgSenderConstants.UN);
         map.put("password", MsgSenderConstants.PW);
         map.put("msg", MsgSenderConstants.TEMPLATE + msgCode);
@@ -84,8 +86,9 @@ public class MsgSenderServiceImpl implements MsgSenderService {
             if ("0".equals(code)) {
                 log.info("发送成功");
                 //存入redis
-            } else
+            } else {
                 log.error("短信发送失败" + "错误原因" + errorMsg);
+            }
         } catch (Exception e) {
             log.error("发送短信出现未知错误", e);
         }
@@ -101,9 +104,9 @@ public class MsgSenderServiceImpl implements MsgSenderService {
         }
 
         String redisCode = stringRedisTemplate.boundValueOps(busCode + phone).get();
-        if (StringUtils.isEmpty(redisCode))
+        if (StringUtils.isEmpty(redisCode)) {
             return false;
-        else {
+        } else {
             if ("3".equals(busCode)) {//首页绑定手机号码 busCode=3    普通发送验证码 busCode= 1注册 2购买
                 if (redisCode.equals(code) || "xdy".equals(code) || "admin123".equals(code)) {
                     //            删除redis
@@ -111,8 +114,9 @@ public class MsgSenderServiceImpl implements MsgSenderService {
                     return true;
                 }
             } else {
-                if (redisCode.equals(code) || "xdy".equals(code) || "admin123".equals(code))
+                if (redisCode.equals(code) || "xdy".equals(code) || "admin123".equals(code)) {
                     return true;
+                }
 
             }
 

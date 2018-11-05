@@ -49,8 +49,9 @@ public class XZFenYongTask {
         queryUser.setMemberLevel(MemberLevel.XZ);
         List<User> xzList = userService.getListByParams(queryUser);
         for (User xzUser : xzList) {
-            if (xzUser == null)
+            if (xzUser == null) {
                 continue;
+            }
             log.info("开始校长分佣=======================>校长userid" + xzUser.getUserId());
             //根据校长的userid获取useridlist（非校长）
             String xzUserId = xzUser.getUserId();
@@ -63,8 +64,9 @@ public class XZFenYongTask {
             Integer totalPerformanceWithXZ = 0;
             Integer totalPerformanceWithOutXZ = 0;
             for (User userTemp : userList) {
-                if (userTemp == null)
+                if (userTemp == null) {
                     continue;
+                }
 //                log.info("开始校长分佣=======================>线下userid" + userTemp.getUserId());
                 //统计非校长的总业绩（排除小班的业绩） 按照每月的新增业绩
                 Integer memberLevel = userTemp.getMemberLevel() == null ? -1 : userTemp.getMemberLevel();
@@ -77,7 +79,7 @@ public class XZFenYongTask {
                     totalPerformanceWithOutXZ += totalPerformanceWithOutXZTemp;
                 }
                 //纵向奖
-                else if (memberLevel == MemberLevel.XZ) {
+                else if (memberLevel.equals(MemberLevel.XZ)) {
                     Integer totalPerformanceWithXZTemp = userService.getTotalPerformanceByUserId(userIdTemp);
                     totalPerformanceWithXZTemp = totalPerformanceWithXZTemp == null ? 0 : totalPerformanceWithXZTemp;
                     totalPerformanceWithXZ += totalPerformanceWithXZTemp;
@@ -89,14 +91,15 @@ public class XZFenYongTask {
             //50万 4%
             //100万 6%
             //300万 8%
-            if (totalPerformanceWithXZ >= 10000000 && totalPerformanceWithXZ < 50000000)
+            if (totalPerformanceWithXZ >= 10000000 && totalPerformanceWithXZ < 50000000) {
                 maidPercent = 2;
-            else if (totalPerformanceWithXZ >= 50000000 && totalPerformanceWithXZ < 100000000)
+            } else if (totalPerformanceWithXZ >= 50000000 && totalPerformanceWithXZ < 100000000) {
                 maidPercent = 4;
-            else if (totalPerformanceWithXZ >= 100000000 && totalPerformanceWithXZ < 300000000)
+            } else if (totalPerformanceWithXZ >= 100000000 && totalPerformanceWithXZ < 300000000) {
                 maidPercent = 6;
-            else if (totalPerformanceWithXZ >= 300000000)
+            } else if (totalPerformanceWithXZ >= 300000000) {
                 maidPercent = 8;
+            }
             //团队奖
             tdMaidMoney = totalPerformanceWithOutXZ * 5/100;
             log.info("开始校长分佣=======================>团队奖总业绩" + totalPerformanceWithOutXZ);
@@ -119,9 +122,9 @@ public class XZFenYongTask {
             if (tdMaidMoney > 0) {
                 Integer maidType = 0;
                 int existCount = maidInfoByMonthMapper.getExistCountByUserIdAndRecordTime(xzUserId, recordTime, maidType);
-                if (existCount >= 1)
+                if (existCount >= 1) {
                     log.info("已经存在当月记录则不插入新数据");
-                else {
+                } else {
                     maidInfoByMonth.setTotalPerformance(totalPerformanceWithOutXZ);
                     maidInfoByMonth.setMaidType(0);
                     maidInfoByMonth.setMaidMoney(tdMaidMoney);
@@ -135,9 +138,9 @@ public class XZFenYongTask {
             if (zxMaidMoney > 0) {
                 Integer maidType = 1;
                 int existCount = maidInfoByMonthMapper.getExistCountByUserIdAndRecordTime(xzUserId, recordTime, maidType);
-                if (existCount >= 1)
+                if (existCount >= 1) {
                     log.info("已经存在当月记录则不插入新数据");
-                else {
+                } else {
                     maidInfoByMonth.setTotalPerformance(totalPerformanceWithXZ);
                     maidInfoByMonth.setMaidType(1);
                     maidInfoByMonth.setMaidMoney(zxMaidMoney);

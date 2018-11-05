@@ -89,14 +89,15 @@ public class HttpsUtils {
         BufferedReader in = null;
         try {
             String urlNameString = url;
-            if (param != null && !("".equals(param)))
+            if (param != null && !("".equals(param))) {
                 urlNameString = url + "?" + param;
+            }
             URL realUrl = new URL(urlNameString);
             // 打开和URL之间的连接
             HttpURLConnection connection = null;
             connection = (HttpURLConnection) realUrl.openConnection();
             // https 忽略证书验证
-            if (url.substring(0, 5).equals("https")) {
+            if ("https".equals(url.substring(0, 5))) {
                 SSLContext ctx = MyX509TrustManagerUtils();
                 ((HttpsURLConnection) connection).setSSLSocketFactory(ctx.getSocketFactory());
                 ((HttpsURLConnection) connection).setHostnameVerifier(new HostnameVerifier() {
@@ -158,7 +159,7 @@ public class HttpsUtils {
             HttpURLConnection conn = null;
             conn = (HttpURLConnection) realUrl.openConnection();
             // https
-            if (url.substring(0, 5).equals("https")) {
+            if ("https".equals(url.substring(0, 5))) {
                 SSLContext ctx = MyX509TrustManagerUtils();
                 ((HttpsURLConnection) conn).setSSLSocketFactory(ctx.getSocketFactory());
                 ((HttpsURLConnection) conn).setHostnameVerifier(new HostnameVerifier() {

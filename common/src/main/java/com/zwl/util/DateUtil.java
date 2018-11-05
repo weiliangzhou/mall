@@ -6,7 +6,10 @@ import java.util.*;
 
 /**
  * 时间的操作类
+ *
+ * @author 二师兄
  */
+
 public class DateUtil {
 
     public static final long OneDayMils = 24 * 60 * 60 * 1000;
@@ -274,7 +277,8 @@ public class DateUtil {
      * @return
      */
     public static long getMargin(long timeInMils) {
-        return (timeInMils + 8 * 60 * 60 * 1000) % (OneDayMils);//这里要加8小时，因为时区问题
+        //这里要加8小时，因为时区问题
+        return (timeInMils + 8 * 60 * 60 * 1000) % (OneDayMils);
     }
 
     /**
@@ -508,7 +512,7 @@ public class DateUtil {
      * 获取中文展示格式
      *
      * @param date
-     * @return
+     * @return string
      */
     public static String getChineseFormat(Date date) {
         Calendar cal = Calendar.getInstance();
@@ -536,9 +540,15 @@ public class DateUtil {
      * @return
      */
     public static boolean isDateEqual(Date date1, Date date2) {
-        if (date1 == null && date2 == null) return true;
-        if (date1 != null && date2 == null) return false;
-        if (date1 == null && date2 != null) return false;
+        if (date1 == null && date2 == null) {
+            return true;
+        }
+        if (date1 != null && date2 == null) {
+            return false;
+        }
+        if (date1 == null && date2 != null) {
+            return false;
+        }
         return date1.getTime() == date2.getTime();
     }
 
@@ -560,7 +570,9 @@ public class DateUtil {
             return (int) margin + 1;
         } else {
             long margin = (Math.abs(timeMargin) / OneDayMils) % 7;
-            if (margin == 0) margin = 7;
+            if (margin == 0) {
+                margin = 7;
+            }
             return (int) (Calendar.SUNDAY + 7 - margin);
         }
     }
@@ -587,7 +599,9 @@ public class DateUtil {
      * @return
      */
     public static String getWeekStr(Date date) {
-        if (date == null) return null;
+        if (date == null) {
+            return null;
+        }
         int weekdayNum = getCalendarWeekdayNum(date);
         switch (weekdayNum) {
             case Calendar.MONDAY:
@@ -721,6 +735,7 @@ public class DateUtil {
         calendar.set(Calendar.SECOND, 59);
         return calendar.getTime();
     }
+
     public static void main(String[] args) {
 
 //        System.out.println(1463328000000L - OneDayMils);

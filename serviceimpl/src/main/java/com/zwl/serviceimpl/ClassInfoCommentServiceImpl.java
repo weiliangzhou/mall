@@ -21,7 +21,9 @@ public class ClassInfoCommentServiceImpl implements ClassInfoCommentService {
     @Override
     public int addClassInfoComment(ClassInfoComment classInfoComment) {
         String comment = classInfoComment.getComment();
-        if(10>comment.length() || 100<comment.length())BSUtil.isTrue(false,"评论字数应在10-100字之间");
+        if(10>comment.length() || 100<comment.length()) {
+            BSUtil.isTrue(false,"评论字数应在10-100字之间");
+        }
         return classInfoCommentMapper.insertSelective(classInfoComment);
     }
 

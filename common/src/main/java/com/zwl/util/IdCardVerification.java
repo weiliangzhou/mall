@@ -66,6 +66,11 @@ public class IdCardVerification {
      */
     public static final String INVALIDCALIBRATION = "身份证校验码无效，不是合法的身份证号码";
 
+    private static Pattern patternNum = Pattern.compile("[0-9]*");
+    private static Pattern patternString = Pattern.compile(
+            "^((\\d{2}(([02468][048])|([13579][26]))[\\-\\/\\s]?((((0?[13578])|(1[02]))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])))))|(\\d{2}(([02468][1235679])|([13579][01345789]))[\\-\\/\\s]?((((0?[13578])|(1[02]))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\\-\\/\\s]?((0?[1-9])|(1[0-9])|(2[0-8]))))))?$");
+
+
     /**
      * 检验身份证号码是否符合规范
      *
@@ -219,8 +224,8 @@ public class IdCardVerification {
      * @return true, 符合; false, 不符合。
      */
     private static boolean isNumeric(String strnum) {
-        Pattern pattern = Pattern.compile("[0-9]*");
-        Matcher isNum = pattern.matcher(strnum);
+
+        Matcher isNum = patternNum.matcher(strnum);
         if (isNum.matches()) {
             return true;
         } else {
@@ -231,13 +236,11 @@ public class IdCardVerification {
     /**
      * 功能：判断字符串出生日期是否符合正则表达式：包括年月日，闰年、平年和每月31天、30天和闰月的28天或者29天
      *
-     * @param string
+     * @param strDate
      * @return true, 符合; false, 不符合。
      */
     public static boolean isDate(String strDate) {
-        Pattern pattern = Pattern.compile(
-                "^((\\d{2}(([02468][048])|([13579][26]))[\\-\\/\\s]?((((0?[13578])|(1[02]))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])))))|(\\d{2}(([02468][1235679])|([13579][01345789]))[\\-\\/\\s]?((((0?[13578])|(1[02]))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\\-\\/\\s]?((0?[1-9])|(1[0-9])|(2[0-8]))))))?$");
-        Matcher m = pattern.matcher(strDate);
+        Matcher m = patternString.matcher(strDate);
         if (m.matches()) {
             return true;
         } else {

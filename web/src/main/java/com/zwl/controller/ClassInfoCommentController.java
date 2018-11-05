@@ -46,7 +46,9 @@ public class ClassInfoCommentController extends BaseController {
     @PostMapping("/add")
     public String addClassInfoComment(@RequestBody ClassInfoComment classInfoComment) {
         int count = classInfoCommentService.addClassInfoComment(classInfoComment);
-        if (1 != count) BSUtil.isTrue(false, "新增失败");
+        if (1 != count) {
+            BSUtil.isTrue(false, "新增失败");
+        }
         return setSuccessResult();
     }
 

@@ -30,8 +30,9 @@ public class OfflineActivityCodeServiceImpl implements OfflineActivityCodeServic
     @Override
     public void updatePassByActivityCode(String activityCode) {
         int count = offlineActivityCodeMapper.updatePassByActivityCode(activityCode);
-        if (count != 1)
+        if (count != 1) {
             BSUtil.isTrue(false, "签到错误，请重试！");
+        }
     }
 
     @Override

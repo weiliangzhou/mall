@@ -67,8 +67,9 @@ public class QRCodeController extends BaseController {
     @PostMapping("/getH5QrCode")
     public String getH5QrCode(@RequestBody JSONObject jsonObject) {
         String userId = jsonObject.getString("userId");
-        if (userId == null)
+        if (userId == null) {
             BSUtil.isTrue(false, "系统繁忙请稍后重试!");
+        }
         String qrUrl = stringRedisTemplate.boundValueOps(userId + "_h5qrcode").get();
         if (StringUtils.isBlank(qrUrl)) {
             String smallImage = QRCodeUtil.createQrCode("http://dy.xc2018.com.cn/home?referrer=" + userId, null, null);

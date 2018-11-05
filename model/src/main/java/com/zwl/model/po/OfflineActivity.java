@@ -95,15 +95,17 @@ public class OfflineActivity {
 
     public String getBuyCountDesc() {
         Integer count = limitCount - buyCount;
-        if (count == 0)
+        if (count == 0) {
             return "名额已满";
+        }
         return "剩余" + count + "个名额";
     }
 
     public Integer getIsFull() {
         Integer count = limitCount - buyCount;
-        if (count == 0)
+        if (count == 0) {
             return 1;
+        }
         return 0;
     }
 }
