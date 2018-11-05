@@ -131,7 +131,7 @@ public class UserController extends BaseController {
         String phone = jsonObject.getString("phone");
         String busCode = jsonObject.getString("busCode");
         msgSenderService.sendCode(phone, busCode);
-        return setSuccessResult();
+        return setSuccessResult("200","发送成功");
     }
 
     @PostMapping("/checkCode")
