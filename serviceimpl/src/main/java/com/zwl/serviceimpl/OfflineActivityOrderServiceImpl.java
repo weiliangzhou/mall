@@ -342,6 +342,9 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
         offlineActivityOrderVo.setActivityPrice(offlineActivityOrder.getActivityPrice());
         offlineActivityOrderVo.setActivityPriceDesc(div(100, offlineActivityOrder.getActivityPrice(), 2) + "");
         //OfflineActivityCode offlineActivityCode = offlineActivityCodeService.getOneByActivityCode(offlineActivityOrder.getActivityCode());
+        User user = userService.getByUserId(offlineActivityOrder.getSlReferrer());
+        offlineActivityOrderVo.setSlReferrerName(user.getRealName());
+        offlineActivityOrderVo.setSlReferrerPhone(user.getRegisterMobile());
         if (offlineActivity.getActivityEndTime().getTime() - System.currentTimeMillis() > 0) {
             offlineActivityOrderVo.setSlStatus("报名成功");
         } else {
