@@ -1,10 +1,9 @@
 package com.zwl.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.zwl.model.baseresult.Result;
+import com.zwl.baseController.BaseController;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.Gift;
 import com.zwl.model.po.User;
@@ -39,7 +38,7 @@ import java.util.concurrent.TimeUnit;
  */
 @RequestMapping("/wx/gift")
 @RestController
-public class GiftController {
+public class GiftController extends BaseController {
     @Autowired
     private GiftService giftService;
     @Autowired
@@ -62,9 +61,7 @@ public class GiftController {
             PageHelper.startPage(pageNum, pageSize);
         }
         List giftList = giftService.getGiftList(queryType, merchantId);
-        Result result = new Result();
-        result.setData(giftList);
-        return JSON.toJSONString(result);
+        return setSuccessResult(giftList);
     }
 
     @PostMapping("/getGiftDetailById")
@@ -100,9 +97,7 @@ public class GiftController {
 
         }
         gift.setImgList(imgList);
-        Result result = new Result();
-        result.setData(gift);
-        return JSON.toJSONString(result);
+        return setSuccessResult(gift);
     }
 
     /**
@@ -115,36 +110,30 @@ public class GiftController {
         Integer pageSize = jsonObject.getInteger("pageSize");
         Integer pageNum = jsonObject.getInteger("pageNum");
         PageInfo<UserGift> userGiftLists = userGiftService.findUserGiftListPage(userId, merchantId, pageSize, pageNum);
-        Result result = new Result();
-        result.setData(userGiftLists);
-        return JSON.toJSONString(result);
+        return setSuccessResult(userGiftLists);
     }
 
     /**
      * 获取用户的订单详情用户前端查看快递单号
      */
     @PostMapping("/getUserGiftById")
-    public Result getUserGiftById(@RequestBody JSONObject jsonObject) {
+    public String getUserGiftById(@RequestBody JSONObject jsonObject) {
         Long id = jsonObject.getLong("id");
         UserGift userGift = userGiftService.getUserGiftById(id);
-        Result result = new Result();
-        result.setData(userGift);
-        return result;
+        return setSuccessResult(userGift);
     }
 
     /**
      * 兑换商品
      */
     @PostMapping("/exchangeGift")
-    public Result exchangeGift(@RequestBody JSONObject jsonObject) {
+    public String exchangeGift(@RequestBody JSONObject jsonObject) {
         String userId = ThreadVariable.getUserID();
         String merchantId = jsonObject.getString("merchantId");
         Long giftId = jsonObject.getLong("giftId");
         Long addressId = jsonObject.getLong("addressId");
         UserGift userGift = userGiftService.addUserExchangeGift(userId, merchantId, giftId, addressId);
-        Result result = new Result();
-        result.setData(userGift);
-        return result;
+        return setSuccessResult(userGift);
     }
 
     @PostMapping("/getGiftQrCode")
@@ -188,9 +177,7 @@ public class GiftController {
             }
             stringRedisTemplate.boundValueOps(userId + "_gift_QrCode_" + giftId).set(qrUrl, 30, TimeUnit.DAYS);
         }
-        Result result = new Result();
-        result.setData(qrUrl);
-        return JSON.toJSONString(result);
+        return setSuccessResult(qrUrl);
 
     }
 }

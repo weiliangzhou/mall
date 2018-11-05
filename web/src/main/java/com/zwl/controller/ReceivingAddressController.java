@@ -1,15 +1,13 @@
 package com.zwl.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
-import com.zwl.model.baseresult.Result;
+import com.zwl.baseController.BaseController;
 import com.zwl.model.po.UserReceivingAddress;
 import com.zwl.service.UserReceivingAddressService;
 import com.zwl.util.ThreadVariable;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Update;
-import org.omg.PortableInterceptor.INACTIVE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,7 +28,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequestMapping("/wx/userReceivingAddress")
-public class ReceivingAddressController {
+public class ReceivingAddressController extends BaseController {
     @Autowired
     private UserReceivingAddressService userReceivingAddressService;
 
@@ -39,14 +37,14 @@ public class ReceivingAddressController {
         String userId = ThreadVariable.getUserID();
         String merchantId = userReceivingAddress.getMerchantId();
         Integer isDefault = userReceivingAddress.getIsDefault();
-        if(1==isDefault.intValue()){
-            userReceivingAddressService.updateIsDefaultByUserId(userId,merchantId);
+        if (1 == isDefault.intValue()) {
+            userReceivingAddressService.updateIsDefaultByUserId(userId, merchantId);
         }
         userReceivingAddress.setUserId(userId);
         userReceivingAddress.setCreateTime(new Date());
         userReceivingAddress.setAvailable(1);
         userReceivingAddressService.insert(userReceivingAddress);
-        return JSON.toJSONString(new Result());
+        return setSuccessResult();
     }
 
     @PostMapping("/auth/updateUserReceivingAddress")
@@ -54,11 +52,11 @@ public class ReceivingAddressController {
         String userId = ThreadVariable.getUserID();
         String merchantId = userReceivingAddress.getMerchantId();
         Integer isDefault = userReceivingAddress.getIsDefault();
-        if(1==isDefault.intValue()){
-            userReceivingAddressService.updateIsDefaultByUserId(userId,merchantId);
+        if (1 == isDefault.intValue()) {
+            userReceivingAddressService.updateIsDefaultByUserId(userId, merchantId);
         }
         userReceivingAddressService.update(userReceivingAddress);
-        return JSON.toJSONString(new Result());
+        return setSuccessResult();
     }
 
     @PostMapping("/auth/getUserReceivingAddressList")
@@ -70,26 +68,22 @@ public class ReceivingAddressController {
         UserReceivingAddress userReceivingAddress = new UserReceivingAddress();
         userReceivingAddress.setMerchantId(merchantId);
         userReceivingAddress.setUserId(userID);
-        PageHelper.startPage(pageNum,pageSize);
+        PageHelper.startPage(pageNum, pageSize);
         List<UserReceivingAddress> userReceivingAddressList = userReceivingAddressService.getUserReceivingAddressList(userReceivingAddress);
-        Result result = new Result();
-        result.setData(userReceivingAddressList);
-        return JSON.toJSONString(result);
+        return setSuccessResult(userReceivingAddressList);
     }
 
     @PostMapping("/auth/getOneById")
     public String getOneById(@RequestBody JSONObject jsonObject) {
         Long id = jsonObject.getLong("id");
         UserReceivingAddress userReceivingAddress = userReceivingAddressService.getOneById(id);
-        Result result = new Result();
-        result.setData(userReceivingAddress);
-        return JSON.toJSONString(result);
+        return setSuccessResult(userReceivingAddress);
     }
 
     @PostMapping("/auth/deleteById")
     public String deleteById(@RequestBody JSONObject jsonObject) {
         Long id = jsonObject.getLong("id");
         userReceivingAddressService.deleteById(id);
-        return JSON.toJSONString(new Result());
+        return setSuccessResult();
     }
 }

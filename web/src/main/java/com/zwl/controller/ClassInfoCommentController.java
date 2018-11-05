@@ -1,9 +1,8 @@
 package com.zwl.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
-import com.zwl.model.baseresult.Result;
+import com.zwl.baseController.BaseController;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.ClassInfo;
 import com.zwl.model.po.ClassInfoComment;
@@ -22,7 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/wx/classInfoComment")
-public class ClassInfoCommentController {
+public class ClassInfoCommentController extends BaseController {
     @Autowired
     private ClassInfoCommentService classInfoCommentService;
     @Autowired
@@ -31,39 +30,35 @@ public class ClassInfoCommentController {
     private ClassInfoService classInfoService;
 
     @PostMapping("/getClassInfoCommentList")
-    public String getClassInfoCommentList(@RequestBody JSONObject jsonObject){
-        Integer pageNum=jsonObject.getInteger("pageNum");
-        Integer pageSize=jsonObject.getInteger("pageSize");
+    public String getClassInfoCommentList(@RequestBody JSONObject jsonObject) {
+        Integer pageNum = jsonObject.getInteger("pageNum");
+        Integer pageSize = jsonObject.getInteger("pageSize");
         String merchantId = jsonObject.getString("merchantId");
         Long classInfoId = jsonObject.getLong("classInfoId");
         PageHelper.startPage(pageNum, pageSize);
-        Result result = new Result();
         ClassInfoComment classInfoComment = new ClassInfoComment();
         classInfoComment.setMerchantId(merchantId);
         classInfoComment.setClassInfoId(classInfoId);
         List<ClassInfoComment> classInfoCommentList = classInfoCommentService.getClassInfoCommentList(classInfoComment);
-        result.setData(classInfoCommentList);
-        return JSON.toJSONString(result);
+        return setSuccessResult(classInfoCommentList);
     }
 
     @PostMapping("/add")
-    public String addClassInfoComment(@RequestBody ClassInfoComment classInfoComment){
-        Result result = new Result();
+    public String addClassInfoComment(@RequestBody ClassInfoComment classInfoComment) {
         int count = classInfoCommentService.addClassInfoComment(classInfoComment);
-        if(1 != count)BSUtil.isTrue(false,"新增失败");
-        return JSONObject.toJSONString(result);
+        if (1 != count) BSUtil.isTrue(false, "新增失败");
+        return setSuccessResult();
     }
 
     @PostMapping("/getClassInfoList")
-    public String getClassInfoList(@RequestBody JSONObject jsonObject){
-        Result result = new Result();
+    public String getClassInfoList(@RequestBody JSONObject jsonObject) {
         String merchantId = jsonObject.getString("merchantId");
         List<ClassVo> classVoList = classSetService.getAllClassOrderById(merchantId, 1);
-        for (ClassVo c:classVoList) {
-            if(c.getClassType()==1){
+        for (ClassVo c : classVoList) {
+            if (c.getClassType() == 1) {
                 List<ClassInfo> classInfoList = classInfoService.getByClassSetId(c.getId());
-                List<ClassVo> children =new ArrayList<>();
-                for (ClassInfo classInfo: classInfoList) {
+                List<ClassVo> children = new ArrayList<>();
+                for (ClassInfo classInfo : classInfoList) {
                     ClassVo classVo = new ClassVo();
                     classVo.setId(classInfo.getId());
                     classVo.setTitle(classInfo.getTitle());
@@ -72,7 +67,6 @@ public class ClassInfoCommentController {
                 c.setChildren(children);
             }
         }
-        result.setData(classVoList);
-        return JSON.toJSONString(result);
+        return setSuccessResult(classVoList);
     }
 }

@@ -1,8 +1,7 @@
 package com.zwl.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.zwl.model.baseresult.Result;
+import com.zwl.baseController.BaseController;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.Merchant;
 import com.zwl.model.po.User;
@@ -29,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @RequestMapping("/wx/qr")
 @Slf4j
-public class QRCodeController {
+public class QRCodeController extends BaseController {
 
     @Autowired
     private WxAccessTokenService wxAccessTokenService;
@@ -61,14 +60,12 @@ public class QRCodeController {
         String accessToken = wxAccessTokenService.getAccessToken(merchantId, appid, appSecret, 2);
         String qrCode = qrCodeService.getQRCode(userId, page, accessToken);
         log.info("微信小程序accessToken" + accessToken);
-        Result result = new Result();
-        result.setData(qrCode);
-        return JSON.toJSONString(result);
+        return setSuccessResult(qrCode);
 
     }
 
     @PostMapping("/getH5QrCode")
-    public Result getH5QrCode(@RequestBody JSONObject jsonObject) {
+    public String getH5QrCode(@RequestBody JSONObject jsonObject) {
         String userId = jsonObject.getString("userId");
         if (userId == null)
             BSUtil.isTrue(false, "系统繁忙请稍后重试!");
@@ -77,19 +74,17 @@ public class QRCodeController {
             String smallImage = QRCodeUtil.createQrCode("http://dy.xc2018.com.cn/home?referrer=" + userId, null, null);
             User user = userService.getByUserId(userId);
             UserInfo userInfo = userInfoService.getByUserId(userId);
-            String userLogo = user.getLogoUrl()==null?"http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/6a989ec302994c6c98c2d4810f9fbcb2.png": user.getLogoUrl();
-            String nickNameOrPhone=StringUtils.isBlank(userInfo.getNickName())?user.getRegisterMobile():userInfo.getNickName();
+            String userLogo = user.getLogoUrl() == null ? "http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/6a989ec302994c6c98c2d4810f9fbcb2.png" : user.getLogoUrl();
+            String nickNameOrPhone = StringUtils.isBlank(userInfo.getNickName()) ? user.getRegisterMobile() : userInfo.getNickName();
             try {
-                qrUrl = QRCodeUtil.mergeImage("http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20181017/006174286bc34c2aacbc7303b354d36e.png", smallImage, 380, 576, userLogo, 200, 25,nickNameOrPhone,200,185, Color.BLACK);
+                qrUrl = QRCodeUtil.mergeImage("http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20181017/006174286bc34c2aacbc7303b354d36e.png", smallImage, 380, 576, userLogo, 200, 25, nickNameOrPhone, 200, 185, Color.BLACK);
             } catch (IOException e) {
                 e.printStackTrace();
             }
             stringRedisTemplate.boundValueOps(userId + "_h5qrcode").set(qrUrl, 30, TimeUnit.DAYS);
         }
         log.info("userId:" + userId + "------二维码" + qrUrl);
-        Result result = new Result();
-        result.setData(qrUrl);
-        return result;
+        return setSuccessResult(qrUrl);
     }
 
 }

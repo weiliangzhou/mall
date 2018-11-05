@@ -1,9 +1,8 @@
 package com.zwl.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
-import com.zwl.model.baseresult.Result;
+import com.zwl.baseController.BaseController;
 import com.zwl.model.groups.ApplyWithdraw;
 import com.zwl.model.po.Withdraw;
 import com.zwl.service.WithdrawService;
@@ -25,15 +24,14 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/wx/withdraw")
-public class WithdrawController {
+public class WithdrawController extends BaseController {
     @Autowired
     private WithdrawService withdrawService;
 
     @PostMapping("/auth/apply")
     public String apply(@Validated(ApplyWithdraw.class) @RequestBody Withdraw withdraw) {
-        Result result = new Result();
         withdrawService.apply(withdraw);
-        return JSON.toJSONString(result);
+        return setSuccessResult();
     }
 
     @PostMapping("/auth/getWithdrawList")
@@ -42,10 +40,8 @@ public class WithdrawController {
         Integer pageSize = jsonObject.getInteger("pageSize");
         PageHelper.startPage(pageNum, pageSize);
         String userId = jsonObject.getString("userId");
-        Result result = new Result();
         List<Withdraw> withdrawList = withdrawService.getWithdrawListByUserId(userId);
-        result.setData(withdrawList);
-        return JSON.toJSONString(result);
+        return setSuccessResult(withdrawList);
     }
 
 

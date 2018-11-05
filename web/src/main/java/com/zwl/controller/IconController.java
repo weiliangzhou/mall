@@ -1,8 +1,7 @@
 package com.zwl.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.zwl.model.baseresult.Result;
+import com.zwl.baseController.BaseController;
 import com.zwl.model.po.Icon;
 import com.zwl.service.IconService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,23 +14,22 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/wx/icon")
-public class IconController {
+public class IconController extends BaseController {
     @Autowired
     private IconService iconService;
+
     @PostMapping("/getIconList")
-    public String getIconList(@RequestBody JSONObject jsonObject){
-        String merchantId=jsonObject.getString("merchantId");
+    public String getIconList(@RequestBody JSONObject jsonObject) {
+        String merchantId = jsonObject.getString("merchantId");
         Integer portType = jsonObject.getInteger("portType");
-        Result result = new Result();
         Icon icon = new Icon();
         icon.setMerchantId(merchantId);
-        if(null != portType){
+        if (null != portType) {
             icon.setPortType(portType);
-        }else {
+        } else {
             icon.setPortType(0);
         }
         List<Icon> iconList = iconService.getIconList(icon);
-        result.setData(iconList);
-        return JSON.toJSONString(result);
+        return setSuccessResult(iconList);
     }
 }

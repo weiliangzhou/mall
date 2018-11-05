@@ -1,7 +1,7 @@
 package com.zwl.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.zwl.model.baseresult.Result;
+import com.zwl.baseController.BaseController;
 import com.zwl.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,18 +18,16 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/wx/useraccount")
-public class UserAccountController {
+public class UserAccountController extends BaseController {
 
     @Autowired
     private UserAccountService userAccountService;
 
     @PostMapping("/getBalance")
-    public Result getBalance(@RequestBody JSONObject jsonObject) {
+    public String getBalance(@RequestBody JSONObject jsonObject) {
         String userId = jsonObject.getString("userId");
         Integer balance = userAccountService.getBalanceByUserId(userId);
-        Result result = new Result();
-        result.setData(balance == null ? 0 : balance/100);
-        return result;
+        return setSuccessResult(balance == null ? 0 : balance / 100);
     }
 
 }

@@ -1,8 +1,7 @@
 package com.zwl.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.zwl.model.baseresult.Result;
+import com.zwl.baseController.BaseController;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.groups.Buy;
 import com.zwl.model.groups.H5Buy;
@@ -16,7 +15,6 @@ import com.zwl.model.wxpay.StrKit;
 import com.zwl.model.wxpay.WxPayVo;
 import com.zwl.service.*;
 import com.zwl.util.MathUtil;
-import com.zwl.util.ThreadVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,7 +35,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/wx/product")
-public class ProductController {
+public class ProductController extends BaseController {
     @Autowired
     private ProductService productService;
     @Autowired
@@ -52,48 +50,24 @@ public class ProductController {
 
     @PostMapping("/auth/buy")
     public String buy(@Validated(Buy.class) @RequestBody Product product) {
-        Result result = new Result();
-//        Long id = Long.parseLong(request.getParameter("id"));
-//        String userId = request.getParameter("userId");
-//        String merchantId = request.getParameter("merchantId");
-//        Product product = new Product();
-//        product.setId(id);
-//        product.setUserId(userId);
-//        product.setMerchantId(merchantId);
         BuyResult buyResult = productService.buy(product);
-        result.setData(buyResult);
-//        String result = "{'ret':'true','data':"+JSON.toJSONString(buyResult)+"}";
-        //加上返回参数
-//        result = callback + "(" + result +")";
-        return JSON.toJSONString(result);
+        return setSuccessResult(buyResult);
     }
+
     @PostMapping("/H5Buy")
-    public String h5Buy(@Validated(H5Buy.class)@RequestBody Product product) {
-        Result result = new Result();
-//        Long id = Long.parseLong(request.getParameter("id"));
-//        String userId = request.getParameter("userId");
-//        String merchantId = request.getParameter("merchantId");
-//        Product product = new Product();
-//        product.setId(id);
-//        product.setUserId(userId);
-//        product.setMerchantId(merchantId);
-        String code =product.getCode();
-        String phone =product.getPhone();
-//        校验验证码
+    public String h5Buy(@Validated(H5Buy.class) @RequestBody Product product) {
+        String code = product.getCode();
+        String phone = product.getPhone();
         //  校验验证码
-        boolean isValidate = msgSenderService.checkCode(phone, code,"2");
+        boolean isValidate = msgSenderService.checkCode(phone, code, "2");
         if (!isValidate)
             BSUtil.isTrue(false, "验证码错误");
         BuyResult buyResult = productService.buy(product);
-        result.setData(buyResult);
-//        String result = "{'ret':'true','data':"+JSON.toJSONString(buyResult)+"}";
-        //加上返回参数
-//        result = callback + "(" + result +")";
-        return JSON.toJSONString(result);
+        return setSuccessResult(buyResult);
     }
+
     @PostMapping("/newH5Buy")
     public String newH5Buy(HttpServletRequest request, @Validated(H5Buy.class) @RequestBody Product product) {
-        Result result = new Result();
         BuyResult buyResult = productService.newH5Buy(product);
         String orderNo = buyResult.getOrderNo();
         Integer totalFee = buyResult.getTotalFee();
@@ -104,14 +78,13 @@ public class ProductController {
         String userId_local = product.getUserId();
         User user = userService.getByUserId(userId_local);
         String wxPayKey = merchant.getWxPayKey();
-        String redirectUrl=product.getRedirectUrl();
+        String redirectUrl = product.getRedirectUrl();
         String realIp = IpKit.getRealIp(request);
         if (StrKit.isBlank(realIp)) {
             realIp = "127.0.0.1";
         }
         WxPayVo wxPayVo = wxPayService.pay(realIp, user.getGzhOpenid(), orderNo, totalFee.toString(), gzhAppId, merchantId, wxPayKey);
-        result.setData(wxPayVo);
-        return JSON.toJSONString(result);
+        return setSuccessResult(wxPayVo);
     }
 
     /**
@@ -123,7 +96,6 @@ public class ProductController {
     @PostMapping("/getProductList")
     public String getProductList(@RequestBody JSONObject jsonObject) {
         String merchantId = jsonObject.getString("merchantId");
-        Result result = new Result();
         List<Product> productList = productService.getProductList(merchantId);
         List<ProductVo> listVo = new ArrayList<>();
         for (Product p : productList) {
@@ -149,8 +121,7 @@ public class ProductController {
             productVo.setBuyCountDesc2("人购买");
             listVo.add(productVo);
         }
-        result.setData(listVo);
-        return JSON.toJSONString(result);
+        return setSuccessResult(listVo);
     }
 
     /**
@@ -160,7 +131,6 @@ public class ProductController {
      */
     @PostMapping(value = "/getProductById")
     public String getProductById(@RequestBody JSONObject jsonObject) {
-        Result result = new Result();
         Long id = jsonObject.getLong("id");
         Product p = productService.getProductById(id);
         ProductVo productVo = new ProductVo();
@@ -172,7 +142,6 @@ public class ProductController {
         productVo.setProductName(p.getProductName());
         if (p.getPrice() != null)
             productVo.setPriceDesc(String.valueOf(p.getPrice() / 100));
-        result.setData(productVo);
-        return JSON.toJSONString(result);
+        return setSuccessResult(productVo);
     }
 }

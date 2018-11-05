@@ -1,8 +1,8 @@
 package com.zwl.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
+import com.zwl.baseController.BaseController;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.baseresult.ResultCodeEnum;
 import com.zwl.model.po.*;
@@ -36,7 +36,7 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @Slf4j
 @RequestMapping("/wx/salon")
-public class SalonController {
+public class SalonController extends BaseController {
     @Autowired
     private OfflineActivityThemeService offlineActivityThemeService;
     @Autowired
@@ -58,7 +58,6 @@ public class SalonController {
 
     @PostMapping("/buy")
     public String offlineActivityBuy(HttpServletRequest request, @RequestBody OfflineActivityBuy offlineActivityBuy) {
-        Result result = new Result();
         offlineActivityBuy.setOrderType(1);
         BuyResult buyResult = offlineActivityOrderService.offlineActivityBuy(offlineActivityBuy);
         String orderNo = buyResult.getOrderNo();
@@ -75,8 +74,7 @@ public class SalonController {
         }
         WxPayVo wxPayVo = wxPayService.pay(realIp, user.getGzhOpenid(), orderNo, totalFee.toString(), gzhAppId, merchantId, wxPayKey);
         wxPayVo.setOrderNo(orderNo);
-        result.setData(wxPayVo);
-        return JSON.toJSONString(result);
+        return setSuccessResult(wxPayVo);
     }
 
     @PostMapping("/getSalonThemeList")
@@ -89,9 +87,7 @@ public class SalonController {
         if (pageSize != null && pageNum != null)
             PageHelper.startPage(pageNum, pageSize);
         List<OfflineActivityTheme> offlineActivityThemeList = offlineActivityThemeService.getOfflineActivityThemeListByQueryType(merchantId, queryType, activityType);
-        Result result = new Result();
-        result.setData(offlineActivityThemeList);
-        return JSON.toJSONString(result);
+        return setSuccessResult(offlineActivityThemeList);
     }
 
     @PostMapping("/getSalonThemeDetailByThemeId")
@@ -100,21 +96,18 @@ public class SalonController {
         String merchantId = jsonObject.getString("merchantId");
         Integer themeId = jsonObject.getInteger("themeId");
         OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(merchantId, themeId);
-        if(StringUtils.isBlank(userId)){
-            Result result = new Result(ResultCodeEnum.FAIL ,"请先登录！");
+        if (StringUtils.isBlank(userId)) {
+            Result result = new Result();
             //如果该场沙龙主题没有沙龙，则状态设为6，前台显示为请先登录
             offlineActivityTheme.setApplyStatus(6);
-            result.setData(offlineActivityTheme);
-            return JSON.toJSONString(result);
+            return setFailResult(ResultCodeEnum.FAIL + "", "请先登录！", offlineActivityTheme);
         }
 //        List<OfflineActivity> offlineActivityList = offlineActivityService.getOfflineActivityListByThemeId(merchantId, offlineActivityTheme.getId(), userId);
-        OfflineActivity offlineActivity = offlineActivityService.getOfflineActivityByThemeId(merchantId,themeId);
+        OfflineActivity offlineActivity = offlineActivityService.getOfflineActivityByThemeId(merchantId, themeId);
         if (null == offlineActivity) {
-            Result result = new Result(ResultCodeEnum.FAIL ,"该沙龙暂未开始，敬请期待！");
             //如果该场沙龙主题没有沙龙，则状态设为5，前台显示为暂未开始
             offlineActivityTheme.setApplyStatus(5);
-            result.setData(offlineActivityTheme);
-            return JSON.toJSONString(result);
+            return setFailResult(ResultCodeEnum.FAIL + "", "该沙龙暂未开始，敬请期待！", offlineActivityTheme);
         }
         User user = userService.getByUserId(userId);
         Integer memberLevel = user.getMemberLevel();
@@ -142,9 +135,7 @@ public class SalonController {
             //上述条件都不满足，则状态设为4，前台显示为立即报名
             offlineActivityTheme.setApplyStatus(0);
         }
-        Result result = new Result();
-        result.setData(offlineActivityTheme);
-        return JSON.toJSONString(result);
+        return setSuccessResult(offlineActivityTheme);
     }
 
     @PostMapping("/getSalonListByThemeId")
@@ -153,9 +144,7 @@ public class SalonController {
         String merchantId = jsonObject.getString("merchantId");
         Integer activityThemeId = jsonObject.getInteger("activityThemeId");
         List<OfflineActivity> offlineActivityList = offlineActivityService.getOfflineActivityListByThemeId(merchantId, activityThemeId, userId);
-        Result result = new Result();
-        result.setData(offlineActivityList);
-        return JSON.toJSONString(result);
+        return setSuccessResult(offlineActivityList);
     }
 
     @PostMapping("/getMySLActivityOrderList")
@@ -168,20 +157,15 @@ public class SalonController {
             PageHelper.startPage(pageNum, pageSize);
         }
         String userId = ThreadVariable.getUserID();
-        //String userId = "123";
         List<OfflineActivityOrderVo> offlineActivityOrderVoList = offlineActivityOrderService.getMySLActivityOrderList(userId, merchantId, activityThemeId);
-        Result result = new Result();
-        result.setData(offlineActivityOrderVoList);
-        return JSON.toJSONString(result);
+        return setSuccessResult(offlineActivityOrderVoList);
     }
 
     @PostMapping("/getSLActivityOrderDetail")
     public String getSLActivityOrderDetail(@RequestBody JSONObject jsonObject) {
         String orderNo = jsonObject.getString("orderNo");
         OfflineActivityOrderVo offlineActivityOrderVo = offlineActivityOrderService.getSLActivityOrderDetail(orderNo);
-        Result result = new Result();
-        result.setData(offlineActivityOrderVo);
-        return JSON.toJSONString(result);
+        return setSuccessResult(offlineActivityOrderVo);
     }
 
     @PostMapping("/getSLUserInfo")
@@ -193,17 +177,17 @@ public class SalonController {
         UserVo userVo = userService.getSLUserInfo(merchantId, userId);
         if (StringUtils.isNotBlank(slReferrer)) {
             User user = userService.getByUserId(slReferrer);
-            if(null != user){
-                if(user.getMemberLevel() >=1){
+            if (null != user) {
+                if (user.getMemberLevel() >= 1) {
                     userVo.setSlReferrer(slReferrer);
                     userVo.setSlReferrerName(user.getRealName());
                     userVo.setSlReferrerPhone(user.getRegisterMobile());
-                }else{
+                } else {
                     userVo.setSlReferrerName("单影");
                     userVo.setSlReferrerPhone("18896815868");
                     userVo.setSlReferrer("25c3c33de8e74f3482aec08d2ab6206c");
                 }
-            }else{
+            } else {
                 userVo.setSlReferrerName("单影");
                 userVo.setSlReferrerPhone("18896815868");
                 userVo.setSlReferrer("25c3c33de8e74f3482aec08d2ab6206c");
@@ -213,9 +197,7 @@ public class SalonController {
             userVo.setSlReferrerPhone("18896815868");
             userVo.setSlReferrer("25c3c33de8e74f3482aec08d2ab6206c");
         }
-        Result result = new Result();
-        result.setData(userVo);
-        return JSON.toJSONString(result);
+        return setSuccessResult(userVo);
     }
 
     @PostMapping("/getSLQrCode")
@@ -241,7 +223,7 @@ public class SalonController {
             SimpleDateFormat sdf_Hms = new SimpleDateFormat("HH:mm");
             String slStartTimeStr = sdf_yMd_Hm.format(slStartTime);
             String slEndTimeStr = sdf_Hms.format(slEndTime);
-            String slStr = "时间: "+slStartTimeStr + "-" + slEndTimeStr;
+            String slStr = "时间: " + slStartTimeStr + "-" + slEndTimeStr;
             try {
                 qrUrl = QRCodeUtil.SlMergeImage("http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20181101/5cf42276a5c944429f1796e25305bb80.png",
                         smallImage, 380, 690,
@@ -255,9 +237,7 @@ public class SalonController {
             stringRedisTemplate.boundValueOps(userId + "_sl_QrCode_" + slId).set(qrUrl, 30, TimeUnit.DAYS);
         }
         log.info("userId:" + userId + "------二维码" + qrUrl);
-        Result result = new Result();
-        result.setData(qrUrl);
-        return JSON.toJSONString(result);
+        return setSuccessResult(qrUrl);
 
     }
 }

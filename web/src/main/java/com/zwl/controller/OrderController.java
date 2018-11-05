@@ -1,9 +1,8 @@
 package com.zwl.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
-import com.zwl.model.baseresult.Result;
+import com.zwl.baseController.BaseController;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.Order;
 import com.zwl.model.po.Product;
@@ -28,7 +27,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/wx/order")
-public class OrderController {
+public class OrderController extends BaseController {
     @Autowired
     private OrderService orderService;
     @Autowired
@@ -47,7 +46,6 @@ public class OrderController {
         order.setPhone(phone);
         order.setOrderStatus(orderStatus);
         order.setUserId(userId);
-        Result result = new Result();
         PageHelper.startPage(pageNum, pageSize);
         List<Order> orderList = orderService.getOrderList(order);
         List<Product> productList = productService.getProductList(order.getMerchantId());
@@ -65,8 +63,7 @@ public class OrderController {
             order_temp.setImageUrl(imageUrl);
         }
 
-        result.setData(orderList);
-        return JSON.toJSONString(result);
+        return setSuccessResult(orderList);
     }
 
     /**
@@ -81,8 +78,7 @@ public class OrderController {
         int updateCount = orderService.updateOrder(order);
         if (updateCount == 0)
             BSUtil.isTrue(false, "系统繁忙，请稍后重试！");
-        Result result = new Result();
-        return JSON.toJSONString(result);
+        return setSuccessResult();
     }
 
 

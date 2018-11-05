@@ -1,6 +1,7 @@
 package com.zwl.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.zwl.baseController.BaseController;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.Merchant;
@@ -32,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @RequestMapping("/wx/gzh/")
 @Slf4j
-public class GZController {
+public class GZController extends BaseController {
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
@@ -45,27 +46,8 @@ public class GZController {
     @Autowired
     private GZHService gzhService;
 
-//    @PostMapping("/sendFormId")
-//    public Result saveFormIdToRedis(@RequestBody JSONObject jsonObject) {
-//        String formId = jsonObject.getString("formId");
-//        String userId = jsonObject.getString("userId");
-//
-//        stringRedisTemplate.boundValueOps("formId_" + userId).set(formId, 7, TimeUnit.DAYS);
-//        Result result = new Result();
-//        return result;
-//    }
-//
-//    @PostMapping("/getFormId")
-//    public Result getFormIdFromRedis(@RequestBody JSONObject jsonObject) {
-//        String userId = jsonObject.getString("userId");
-//        String gzOpenId = stringRedisTemplate.boundValueOps("formId_" + userId).get();
-//        Result result = new Result();
-//        result.setData(StringUtils.isBlank(gzOpenId) ? "true" : "false");
-//        return result;
-//    }
-
     @PostMapping("/getGzhOpenId")
-    public Result getGzhOpenId(@RequestBody JSONObject jsonObject) {
+    public String getGzhOpenId(@RequestBody JSONObject jsonObject) {
         String code = jsonObject.getString("code");
         String merchantId = jsonObject.getString("merchantId");
         Merchant merchant = merchantService.getMerchantByMerchantId(merchantId);
@@ -76,12 +58,9 @@ public class GZController {
             log.error("获取公众号openId错误");
             BSUtil.isTrue(false, "系统异常，请稍后重试！");
         }
-        Result result = new Result();
-        result.setData(openId);
-        return result;
+        return setSuccessResult(openId);
     }
 
-    //@RequestParam(value = "merchantId") String merchantId ,@RequestParam(value = "url") String url
     @PostMapping("/getGzhJsApiToken")
     public Result getGzhJsApiToken(@RequestBody JSONObject jsonObject) {
         String merchantId = jsonObject.getString("merchantId");

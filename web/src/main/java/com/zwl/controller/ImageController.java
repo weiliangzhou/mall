@@ -1,7 +1,5 @@
 package com.zwl.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.zwl.model.baseresult.Result;
 import com.zwl.service.FileUploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,15 +17,13 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @RestController
 @RequestMapping("/wx/file")
-public class ImageController {
+public class ImageController extends BannerController {
     @Autowired
     private FileUploadService fileUploadService;
 
     @PostMapping("/upload")
     public String imageUpload(@RequestParam("file") MultipartFile file) {
-        Result result = new Result();
         String url = fileUploadService.upload(file, 1);
-        result.setData(url);
-        return JSON.toJSONString(result);
+        return setSuccessResult(url);
     }
 }

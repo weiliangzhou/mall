@@ -1,9 +1,8 @@
 package com.zwl.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
-import com.zwl.model.baseresult.Result;
+import com.zwl.baseController.BaseController;
 import com.zwl.model.po.User;
 import com.zwl.model.po.UserQuotaCount;
 import com.zwl.model.vo.*;
@@ -30,7 +29,7 @@ import java.util.*;
  */
 @RestController
 @RequestMapping("/wx/maidInfo")
-public class MaidInfoController {
+public class MaidInfoController extends BaseController {
     @Autowired
     private MaidInfoService maidInfoService;
     @Autowired
@@ -45,15 +44,14 @@ public class MaidInfoController {
         String userId = jsonObject.getString("userId");
         Integer pageNum = jsonObject.getInteger("pageNum");
         Integer pageSize = jsonObject.getInteger("pageSize");
-        Result result = new Result();
         PageHelper.startPage(pageNum, pageSize);
         List<MaidInfoVo> maidInfoList = maidInfoService.getMaidInfoList(userId);
         UserQuotaCount userQuotaCount = userQuotaCountService.getByUserId(userId);
         Integer totalAmount = maidInfoService.getTotalMaidMoneyByUserId(userId);
-        Integer totalAmountByMonth=maidInfoService.getTotalAmountByMonthByUserId(userId);
-        Integer totalAmountAll=(totalAmount == null ? 0 : totalAmount)+(totalAmountByMonth == null ? 0 : totalAmountByMonth);
-        User referrerUser=userService.getReferrerByUserId(userId);
-        User user=userService.getByUserId(userId);
+        Integer totalAmountByMonth = maidInfoService.getTotalAmountByMonthByUserId(userId);
+        Integer totalAmountAll = (totalAmount == null ? 0 : totalAmount) + (totalAmountByMonth == null ? 0 : totalAmountByMonth);
+        User referrerUser = userService.getReferrerByUserId(userId);
+        User user = userService.getByUserId(userId);
         MaidInfoVVo maidInfoVVo = new MaidInfoVVo();
         Integer count = 0;
         Integer totalCount = 0;
@@ -62,26 +60,25 @@ public class MaidInfoController {
             totalCount = userQuotaCount.getTotalCount();
         }
         maidInfoVVo.setCount(count);
-        maidInfoVVo.setTotalAmount(totalAmountAll == null ? 0 : totalAmountAll/100);
+        maidInfoVVo.setTotalAmount(totalAmountAll == null ? 0 : totalAmountAll / 100);
         maidInfoVVo.setMaidInfoVoList(maidInfoList);
         maidInfoVVo.setTotalCount(totalCount);
-        maidInfoVVo.setLogoUrl(user.getLogoUrl()==null?"":user.getLogoUrl());
-        maidInfoVVo.setReferrerPhone(referrerUser==null?"":PhoneUtil.replace(referrerUser.getRegisterMobile()));
-        if(null == referrerUser){
+        maidInfoVVo.setLogoUrl(user.getLogoUrl() == null ? "" : user.getLogoUrl());
+        maidInfoVVo.setReferrerPhone(referrerUser == null ? "" : PhoneUtil.replace(referrerUser.getRegisterMobile()));
+        if (null == referrerUser) {
             maidInfoVVo.setReferrerRealName("");
-        }else{
-            maidInfoVVo.setReferrerRealName(referrerUser.getRealName() == null ? "" :referrerUser.getRealName());
+        } else {
+            maidInfoVVo.setReferrerRealName(referrerUser.getRealName() == null ? "" : referrerUser.getRealName());
         }
-        result.setData(maidInfoVVo);
-        return JSON.toJSONString(result);
+        return setSuccessResult(maidInfoVVo);
     }
+
     @PostMapping("/auth/getMyMaidInfoList")
     public String getMyMaidInfoList(@RequestBody JSONObject jsonObject) {
         String userId = jsonObject.getString("userId");
         Integer pageNum = jsonObject.getInteger("pageNum");
         Integer pageSize = jsonObject.getInteger("pageSize");
         PageHelper.startPage(pageNum, pageSize);
-        Result result = new Result();
         List<MaidInfoVo> maidInfoList = maidInfoService.getMaidInfoList(userId);
         List<MyMaidInfoVo> myMaidInfoList = new ArrayList<MyMaidInfoVo>();
         Integer headmaster = 0;
@@ -91,19 +88,19 @@ public class MaidInfoController {
         Integer student = 0;
         Integer member = 0;
         Integer level;
-        for(MaidInfoVo maidInfoVo:maidInfoList){
+        for (MaidInfoVo maidInfoVo : maidInfoList) {
             level = maidInfoVo.getLevel();
-            if(99 == level){
+            if (99 == level) {
                 headmaster++;
-            }else if(6 == level){
+            } else if (6 == level) {
                 dean++;
-            }else if(5 == level){
+            } else if (5 == level) {
                 monitor++;
-            }else if(4 == level){
+            } else if (4 == level) {
                 VipStudent++;
-            }else if(1 == level){
+            } else if (1 == level) {
                 student++;
-            }else if(0 == level){
+            } else if (0 == level) {
                 member++;
             }
 
@@ -149,8 +146,7 @@ public class MaidInfoController {
         myStudent.setTotalCount(totalCount);
         myMaidInfoList.add(myStudent);
 
-        result.setData(myMaidInfoList);
-        return JSON.toJSONString(result);
+        return setSuccessResult(myMaidInfoList);
     }
 
     @PostMapping("/auth/getMaidInfoByMonth")
@@ -158,15 +154,14 @@ public class MaidInfoController {
         String userId = jsonObject.getString("userId");
         Integer pageNum = jsonObject.getInteger("pageNum");
         Integer pageSize = jsonObject.getInteger("pageSize");
-        Result result = new Result();
         PageHelper.startPage(pageNum, pageSize);
         List<MaidInfoVo> maidInfoList = maidInfoService.getMaidInfoByMonth(userId);
         UserQuotaCount userQuotaCount = userQuotaCountService.getByUserId(userId);
         Integer totalAmount = maidInfoService.getTotalMaidMoneyByUserId(userId);
-        Integer totalAmountByMonth=maidInfoService.getTotalAmountByMonthByUserId(userId);
-        Integer totalAmountAll=(totalAmount == null ? 0 : totalAmount)+(totalAmountByMonth == null ? 0 : totalAmountByMonth);
-        User referrerUser=userService.getReferrerByUserId(userId);
-        User user=userService.getByUserId(userId);
+        Integer totalAmountByMonth = maidInfoService.getTotalAmountByMonthByUserId(userId);
+        Integer totalAmountAll = (totalAmount == null ? 0 : totalAmount) + (totalAmountByMonth == null ? 0 : totalAmountByMonth);
+        User referrerUser = userService.getReferrerByUserId(userId);
+        User user = userService.getByUserId(userId);
         MaidInfoVVo maidInfoVVo = new MaidInfoVVo();
         Integer count = 0;
         Integer totalCount = 0;
@@ -175,19 +170,18 @@ public class MaidInfoController {
             totalCount = userQuotaCount.getTotalCount();
         }
         maidInfoVVo.setCount(count);
-        maidInfoVVo.setTotalAmount(totalAmountAll == null ? 0 : totalAmountAll/100);
+        maidInfoVVo.setTotalAmount(totalAmountAll == null ? 0 : totalAmountAll / 100);
         maidInfoVVo.setMaidInfoVoList(maidInfoList);
         maidInfoVVo.setTotalCount(totalCount);
-        maidInfoVVo.setLogoUrl(user.getLogoUrl()==null?"":user.getLogoUrl());
-        maidInfoVVo.setReferrerPhone(referrerUser==null?"":PhoneUtil.replace(referrerUser.getRegisterMobile()));
-        if(null == referrerUser){
+        maidInfoVVo.setLogoUrl(user.getLogoUrl() == null ? "" : user.getLogoUrl());
+        maidInfoVVo.setReferrerPhone(referrerUser == null ? "" : PhoneUtil.replace(referrerUser.getRegisterMobile()));
+        if (null == referrerUser) {
             maidInfoVVo.setReferrerRealName("");
-        }else{
-            maidInfoVVo.setReferrerRealName(referrerUser.getRealName() == null ? "" :referrerUser.getRealName());
+        } else {
+            maidInfoVVo.setReferrerRealName(referrerUser.getRealName() == null ? "" : referrerUser.getRealName());
         }
-        maidInfoVVo.setReferrerPhone(referrerUser==null?"":referrerUser.getRegisterMobile());
-        result.setData(maidInfoVVo);
-        return JSON.toJSONString(result);
+        maidInfoVVo.setReferrerPhone(referrerUser == null ? "" : referrerUser.getRegisterMobile());
+        return setSuccessResult(maidInfoVVo);
     }
 
     @PostMapping("/auth/getMyMaidInfoListByLevel")
@@ -197,10 +191,8 @@ public class MaidInfoController {
         Integer pageNum = jsonObject.getInteger("pageNum");
         Integer pageSize = jsonObject.getInteger("pageSize");
         PageHelper.startPage(pageNum, pageSize);
-        Result result = new Result();
-        List<MyMaidInfoVVo> maidInfoList = maidInfoService.getMaidInfoListByLevel(userId,level);
-        result.setData(maidInfoList);
-        return JSON.toJSONString(result);
+        List<MyMaidInfoVVo> maidInfoList = maidInfoService.getMaidInfoListByLevel(userId, level);
+        return setSuccessResult(maidInfoList);
     }
 
     @PostMapping("/auth/getEncourageDetail")
@@ -208,7 +200,7 @@ public class MaidInfoController {
         EncourageDetailVo encourageDetailVo = new EncourageDetailVo();
         String userId = jsonObject.getString("userId");
         encourageDetailVo.setUserId(userId);
-        if (StringUtils.isNotBlank(jsonObject.getString("startTime"))){
+        if (StringUtils.isNotBlank(jsonObject.getString("startTime"))) {
             Date startTime = jsonObject.getDate("startTime");
             Calendar calendar = new GregorianCalendar();
             calendar.setTime(startTime);
@@ -221,26 +213,20 @@ public class MaidInfoController {
         Integer pageNum = jsonObject.getInteger("pageNum");
         Integer pageSize = jsonObject.getInteger("pageSize");
         PageHelper.startPage(pageNum, pageSize);
-        Result result = new Result();
         List<MyMaidInfoVVo> maidInfoList = maidInfoService.getEncourageDetail(encourageDetailVo);
-        result.setData(maidInfoList);
-        return JSON.toJSONString(result);
+        return setSuccessResult(maidInfoList);
     }
 
     @PostMapping("/auth/getEncourageInfo")
     public String getEncourageInfo(@RequestBody JSONObject jsonObject) {
         String userId = jsonObject.getString("userId");
         EncourageInfoVo encourageInfoVo = new EncourageInfoVo();
-        Result result = new Result();
         Integer balance = maidInfoService.getBalance(userId);
         Integer totalMoney = withdrawService.getTotalMoneyByUserId(userId);
         encourageInfoVo.setBalance(balance == null ? 0 : balance);
         encourageInfoVo.setTotalMoney(totalMoney == null ? 0 : totalMoney);
-        result.setData(encourageInfoVo);
-        return JSON.toJSONString(result);
+        return setSuccessResult(encourageInfoVo);
     }
-
-
 
 
 }

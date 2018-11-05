@@ -3,7 +3,7 @@ package com.zwl.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.zwl.model.baseresult.Result;
+import com.zwl.baseController.BaseController;
 import com.zwl.model.baseresult.ResultCodeEnum;
 import com.zwl.model.po.ClassInfo;
 import com.zwl.model.po.ClassInfoStatistics;
@@ -31,7 +31,7 @@ import java.util.List;
  */
 @RequestMapping("/wx/classset")
 @RestController
-public class ClassSetController {
+public class ClassSetController extends BaseController {
     @Autowired
     private ClassSetService classSetService;
     @Autowired
@@ -40,28 +40,28 @@ public class ClassSetController {
     private ClassInfoStatisticsService classInfoStatisticsService;
     @Autowired
     private ClassInfoService classInfoService;
-    private static final long CONSTANT_WAN=10000L;
+    private static final long CONSTANT_WAN = 10000L;
+
     @PostMapping("/getPageAllClass")
-    public Result getPageAllClass(@RequestBody JSONObject jsonObject) {
-        Result result = new Result();
+    public String getPageAllClass(@RequestBody JSONObject jsonObject) {
         String merchantId = jsonObject.getString("merchantId");
         Integer pageNum = jsonObject.getInteger("pageNum");
         Integer pageSize = jsonObject.getInteger("pageSize");
         Integer queryType = jsonObject.getInteger("queryType");
         Page page = PageHelper.startPage(pageNum, pageSize);
-        List<ClassVo> list = classSetService.getAllClassOrderById(merchantId,queryType);
+        List<ClassVo> list = classSetService.getAllClassOrderById(merchantId, queryType);
         for (ClassVo classVo : list
-                ) {
+        ) {
             Long browseCount = 0L;
             //套课程
             if (classVo.getClassType() == 1) {
                 List<ClassInfo> classInfoList = classInfoService.getByClassSetId(classVo.getId());
                 if (CheckUtil.isNotEmpty(classInfoList)) {
                     for (ClassInfo c : classInfoList
-                            ) {
+                    ) {
                         ClassInfoStatistics csi = classInfoStatisticsService.getByClassInfoId(c.getId());
-                        Long temp = csi==null||csi.getListenCount() == null ? 0L : csi.getListenCount();
-                        browseCount = temp+browseCount;
+                        Long temp = csi == null || csi.getListenCount() == null ? 0L : csi.getListenCount();
+                        browseCount = temp + browseCount;
                     }
                 }
                 //    如果是堂，logo是节的可配置优先级），
@@ -72,14 +72,14 @@ public class ClassSetController {
             //单节课程
             if (classVo.getClassType() == 2) {
                 ClassInfoStatistics csi = classInfoStatisticsService.getByClassInfoId(classVo.getId());
-                browseCount = csi==null||csi.getListenCount() == null ? 0L : csi.getListenCount();
+                browseCount = csi == null || csi.getListenCount() == null ? 0L : csi.getListenCount();
                 //节课因没封面，封面设置为它的logo图片
                 classVo.setFrontCover(classVo.getLogoUrl());
             }
             classVo.setBrowseCount(browseCount);
-            String classListenCountDesc=String.valueOf(browseCount);
-            if(browseCount>=CONSTANT_WAN){
-                classListenCountDesc=MathUtil.changeWan(classListenCountDesc)+"万";
+            String classListenCountDesc = String.valueOf(browseCount);
+            if (browseCount >= CONSTANT_WAN) {
+                classListenCountDesc = MathUtil.changeWan(classListenCountDesc) + "万";
             }
             classVo.setBrowseCountDesc(classListenCountDesc);
             classVo.setBrowseCountDesc2("人收听");
@@ -89,8 +89,7 @@ public class ClassSetController {
         pageClassVo.setPageNum(pageNum);
         pageClassVo.setTotalPage(page.getTotal());
         pageClassVo.setList(list);
-        result.setData(pageClassVo);
-        return result;
+        return setSuccessResult(pageClassVo);
     }
 
     /**
@@ -99,8 +98,7 @@ public class ClassSetController {
      * @return
      */
     @PostMapping("/setpAddBrowseCount")
-    public Result setpAddBrowseCount(@RequestBody JSONObject jsonObject) {
-        Result result = new Result();
+    public String setpAddBrowseCount(@RequestBody JSONObject jsonObject) {
         Long classSetId = jsonObject.getLong("classSetId");
         ClassSetStatistics classSetStatistics = classSetStatisticsService.getByClassSetId(classSetId);
         if (StringUtils.isEmpty(classSetStatistics)) {
@@ -111,22 +109,21 @@ public class ClassSetController {
         } else {
             classSetStatisticsService.setpAddBrowseCount(classSetId);
         }
-        return result;
+        return setSuccessResult();
     }
+
     /**
      * @param jsonObject
      * @return
      */
     @PostMapping("/getById")
-    public Result getById(@RequestBody JSONObject jsonObject) {
-        Result result = new Result();
+    public String getById(@RequestBody JSONObject jsonObject) {
         Long id = jsonObject.getLong("id");
-        ClassSet classSet=classSetService.getById(id);
-        if(classSet==null){
-            result.setCode(ResultCodeEnum.EXCEPTION);
-            result.setMessage("查无此套课，请确认套课id传入正确");
+        ClassSet classSet = classSetService.getById(id);
+        if (classSet == null) {
+            return setFailResult(ResultCodeEnum.EXCEPTION + "", "查无此套课，请确认套课id传入正确");
         }
-        ClassVo classVo=new ClassVo();
+        ClassVo classVo = new ClassVo();
         classVo.setId(classSet.getId());
         classVo.setTitle(classSet.getTitle());
         classVo.setContent(classSet.getContent());
@@ -134,25 +131,23 @@ public class ClassSetController {
         classVo.setLogoUrl(classSet.getBannerUrl());
         //浏览人数
         List<ClassInfo> classInfoList = classInfoService.getByClassSetId(id);
-        classVo.setChildrenSize(CheckUtil.isEmpty(classInfoList)?0:classInfoList.size());
+        classVo.setChildrenSize(CheckUtil.isEmpty(classInfoList) ? 0 : classInfoList.size());
         if (CheckUtil.isNotEmpty(classInfoList)) {
             Long classListenCount = 0L;
             for (ClassInfo c : classInfoList
-                    ) {
+            ) {
                 ClassInfoStatistics cis = classInfoStatisticsService.getByClassInfoId(c.getId());
-                Long browseCount = cis==null||cis.getListenCount() == null ? 0L : cis.getListenCount();
+                Long browseCount = cis == null || cis.getListenCount() == null ? 0L : cis.getListenCount();
                 classListenCount += browseCount;
             }
             classVo.setBrowseCount(classListenCount);
-            String classListenCountDesc=String.valueOf(classListenCount);
-            if(classListenCount>=CONSTANT_WAN){
-                classListenCountDesc=MathUtil.changeWan(classListenCountDesc)+"万";
+            String classListenCountDesc = String.valueOf(classListenCount);
+            if (classListenCount >= CONSTANT_WAN) {
+                classListenCountDesc = MathUtil.changeWan(classListenCountDesc) + "万";
             }
-            classVo.setBrowseCountDesc(classListenCountDesc+ "人收听");
+            classVo.setBrowseCountDesc(classListenCountDesc + "人收听");
         }
-
-        result.setData(classVo);
-        return result;
+        return setSuccessResult(classVo);
     }
 
 }

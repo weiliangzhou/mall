@@ -1,6 +1,6 @@
 package com.zwl.controller;
 
-import com.zwl.model.baseresult.Result;
+import com.zwl.baseController.BaseController;
 import com.zwl.model.po.BankCard;
 import com.zwl.service.BankCardService;
 import com.zwl.util.ThreadVariable;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/wx/bankCard")
-public class BankCardController {
+public class BankCardController extends BaseController {
 
     @Autowired
     private BankCardService bankCardService;
@@ -21,23 +21,19 @@ public class BankCardController {
      * 获取当前用户银行卡绑定信息
      */
     @PostMapping("/getUserBankCard")
-    public Result getUserBankCard() {
+    public String getUserBankCard() {
         String userId = ThreadVariable.getUserID();
         BankCard bankCard = bankCardService.getBankCardBaseInfoUserId(userId);
-        Result result = new Result();
-        result.setData(bankCard);
-        return result;
+        return setSuccessResult(bankCard);
     }
 
     /**
      * 获取当前用户银行卡绑定信息
      */
     @PostMapping("/setUserBankCard")
-    public Result setUserBankCard(@RequestBody BankCard bankCard) {
+    public String setUserBankCard(@RequestBody BankCard bankCard) {
         BankCard resultBank = bankCardService.saveBankCard(bankCard);
-        Result result = new Result();
-        result.setData(resultBank);
-        return result;
+        return setSuccessResult(resultBank);
     }
 
 

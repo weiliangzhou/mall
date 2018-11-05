@@ -1,8 +1,7 @@
 package com.zwl.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.zwl.model.baseresult.Result;
-import com.zwl.model.baseresult.ResultCodeEnum;
+import com.zwl.baseController.BaseController;
 import com.zwl.model.groups.CertificationVal;
 import com.zwl.model.po.UserCertification;
 import com.zwl.model.po.UserInfo;
@@ -25,7 +24,7 @@ import java.text.ParseException;
  */
 @RequestMapping("/wx/certification")
 @RestController
-public class CertificationController {
+public class CertificationController extends BaseController {
     @Autowired
     private CertificationService certificationService;
     @Autowired
@@ -38,50 +37,32 @@ public class CertificationController {
      * @return
      */
     @PostMapping("/add")
-    public synchronized Result addCertification(@Validated(CertificationVal.class) @RequestBody UserCertification userCertification) {
-        Result result = new Result();
+    public synchronized String addCertification(@Validated(CertificationVal.class) @RequestBody UserCertification userCertification) {
         Integer cardType = userCertification.getCardType();
         String cardNum = userCertification.getIdCard();
         if (0 == cardType) {
             try {
                 String msg = IdCardVerification.IDCardValidate(cardNum);
                 if (!msg.contains("有效")) {
-                    result.setCode(ResultCodeEnum.EXCEPTION);
-                    result.setMessage(msg);
-                    return result;
+                    return setFailResult("401", msg);
                 }
             } catch (ParseException e) {
                 e.printStackTrace();
+                return setFailResult("205", "身份证号码不正确");
             }
         }
 
         UserCertification temp = certificationService.getOneByUserId(userCertification.getUserId());
         switch (temp.getStatus()) {
             case 1:
-                result.setCode(ResultCodeEnum.EXCEPTION);
-                result.setMessage("该用户实名认证正在审核中");
-                return result;
+                return setFailResult("401", "该用户实名认证正在审核中");
             case 2:
-                result.setCode(ResultCodeEnum.EXCEPTION);
-                result.setMessage("该用户实名认证已经提交并审批通过");
-                return result;
+                return setFailResult("401", "该用户实名认证已经提交并审批通过");
         }
 
-//        身份证防重,只通过才,
-   /*     String cardNum = userCertification.getIdCard();
-        UserCertification queryUserCertification = new UserCertification();
-        queryUserCertification.setIdCard(cardNum);
-        queryUserCertification.setStatus(2);
-        UserCertification isExist = certificationService.getOneByParams(queryUserCertification);
-        if (isExist != null)
-            BSUtil.isTrue(false, "身份证已经存在，请更换其他绑定！");
-        queryUserCertification.setStatus(1);
-        UserCertification isBinding = certificationService.getOneByParams(queryUserCertification);
-        if (isBinding != null)
-            BSUtil.isTrue(false, "身份证已经在审核中！！！！");*/
         userCertification.setStatus(1);
         certificationService.add(userCertification);
-        return result;
+        return setSuccessResult();
     }
 
     /**
@@ -90,12 +71,10 @@ public class CertificationController {
      * @return
      */
     @PostMapping("/getOneByUserId")
-    public Result getOneByUserId(@RequestBody JSONObject jsonObject) {
-        Result result = new Result();
+    public String getOneByUserId(@RequestBody JSONObject jsonObject) {
         String userId = jsonObject.getString("userId");
         if (CheckUtil.isEmpty(userId)) {
-            result.setCode(ResultCodeEnum.PARAMS_IS_NULL);
-            return result;
+            return setFailResult("900", "");
         }
         UserCertification userCertification = certificationService.getOneByUserId(userId);
         Integer status = userCertification.getStatus();
@@ -115,8 +94,7 @@ public class CertificationController {
                 certificationVoResult.setRejectReason(userCertification.getRejectReason());
                 break;
         }
-        result.setData(certificationVoResult);
-        return result;
+        return setSuccessResult(certificationVoResult);
     }
 
     /**
@@ -126,8 +104,7 @@ public class CertificationController {
      * @return
      */
     @PostMapping("/modifyById")
-    public Result modifyById(@RequestBody UserCertification userCertification) {
-        Result result = new Result();
+    public String modifyById(@RequestBody UserCertification userCertification) {
         certificationService.modifyById(userCertification);
         //如果实名认证通过，则更新用户详情表
         if (userCertification.getStatus() == 2) {
@@ -136,7 +113,7 @@ public class CertificationController {
             userInfo.setIsCertification(1);
             userInfoService.modifyByParams(userInfo);
         }
-        return result;
+        return setSuccessResult();
     }
 
 

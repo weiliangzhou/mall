@@ -1,9 +1,8 @@
 package com.zwl.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
-import com.zwl.model.baseresult.Result;
+import com.zwl.baseController.BaseController;
 import com.zwl.model.po.Information;
 import com.zwl.service.InformationService;
 import org.apache.commons.lang3.StringUtils;
@@ -24,37 +23,34 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/wx/information")
-public class InformationController {
+public class InformationController extends BaseController {
     @Autowired
     private InformationService informationService;
 
     @PostMapping("/getInformationList")
     public String getInformationList(@RequestBody JSONObject jsonObject) {
         String merchantId = jsonObject.getString("merchantId");
-        Integer pageNum=jsonObject.getInteger("pageNum");
-        Integer pageSize=jsonObject.getInteger("pageSize");
+        Integer pageNum = jsonObject.getInteger("pageNum");
+        Integer pageSize = jsonObject.getInteger("pageSize");
         PageHelper.startPage(pageNum, pageSize);
-        Result result = new Result();
-        Information information=new Information();
+        Information information = new Information();
         information.setMerchantId(merchantId);
         List<Information> informationList = informationService.getWxInformationList(information);
-        for(Information information1:informationList){
-            if(StringUtils.isBlank(information1.getAudioUrl())){
+        for (Information information1 : informationList) {
+            if (StringUtils.isBlank(information1.getAudioUrl())) {
                 information1.setAudioUrl("");
             }
         }
-        result.setData(informationList);
-        return JSON.toJSONString(result);
+        return setSuccessResult(informationList);
     }
+
     @PostMapping("/getInformationInfo")
     public String getInformationInfo(@RequestBody JSONObject jsonObject) {
         Integer id = jsonObject.getInteger("id");
-        Result result = new Result();
         Information information = new Information();
         information.setId(id);
         List<Information> informationList = informationService.getInformationInfo(information);
-        result.setData(informationList);
-        return JSONObject.toJSONString(result);
+        return setSuccessResult(informationList);
     }
 
 }

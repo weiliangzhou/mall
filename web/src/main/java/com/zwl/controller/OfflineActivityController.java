@@ -1,9 +1,8 @@
 package com.zwl.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
-import com.zwl.model.baseresult.Result;
+import com.zwl.baseController.BaseController;
 import com.zwl.model.exception.BSUtil;
 import com.zwl.model.groups.Buy;
 import com.zwl.model.po.*;
@@ -35,7 +34,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequestMapping("/wx/offlineActivity")
-public class OfflineActivityController {
+public class OfflineActivityController extends BaseController {
     @Autowired
     private MerchantService merchantService;
     @Autowired
@@ -55,7 +54,6 @@ public class OfflineActivityController {
 
     @PostMapping("/buy")
     public String offlineActivityBuy(HttpServletRequest request, @RequestBody OfflineActivityBuy offlineActivityBuy) {
-        Result result = new Result();
         offlineActivityBuy.setOrderType(0);
         BuyResult buyResult = offlineActivityOrderService.offlineActivityBuy(offlineActivityBuy);
         String orderNo = buyResult.getOrderNo();
@@ -71,12 +69,11 @@ public class OfflineActivityController {
             realIp = "127.0.0.1";
         }
         WxPayVo wxPayVo = wxPayService.pay(realIp, user.getGzhOpenid(), orderNo, totalFee.toString(), gzhAppId, merchantId, wxPayKey);
-        result.setData(wxPayVo);
-        return JSON.toJSONString(result);
+        return setSuccessResult(wxPayVo);
     }
 
     @PostMapping("/offlineLogin")
-    public Result operatorSignIn(@RequestBody JSONObject jsonObject) {
+    public String operatorSignIn(@RequestBody JSONObject jsonObject) {
         String operator = jsonObject.getString("operator");
         String password = jsonObject.getString("password");
         String merchantId = jsonObject.getString("merchantId");
@@ -87,8 +84,7 @@ public class OfflineActivityController {
         offlineActivityOperator.setAvailable(1);
         OfflineActivityOperator offlineActivityOperator1 = offlineActivityOperatorService.selectByOperatorAndPassword(offlineActivityOperator);
         if (offlineActivityOperator1 == null) BSUtil.isTrue(false, "操作员登陆失败");
-        Result result = new Result();
-        return result;
+        return setSuccessResult();
 
     }
 
@@ -103,9 +99,7 @@ public class OfflineActivityController {
             PageHelper.startPage(pageNum, pageSize);
         }
         List<OfflineActivityTheme> offlineActivityThemeList = offlineActivityThemeService.getOfflineActivityThemeListByQueryType(merchantId, queryType, activityType);
-        Result result = new Result();
-        result.setData(offlineActivityThemeList);
-        return JSON.toJSONString(result);
+        return setSuccessResult(offlineActivityThemeList);
     }
 
     @PostMapping("/getOfflineActivityThemeDetailByThemeId")
@@ -113,9 +107,7 @@ public class OfflineActivityController {
         String merchantId = jsonObject.getString("merchantId");
         Integer themeId = jsonObject.getInteger("themeId");
         OfflineActivityTheme offlineActivityTheme = offlineActivityThemeService.getOfflineActivityThemeDetailByThemeId(merchantId, themeId);
-        Result result = new Result();
-        result.setData(offlineActivityTheme);
-        return JSON.toJSONString(result);
+        return setSuccessResult(offlineActivityTheme);
     }
 
     @PostMapping("/getOfflineActivityListByThemeId")
@@ -124,23 +116,18 @@ public class OfflineActivityController {
         String merchantId = jsonObject.getString("merchantId");
         Integer activityThemeId = jsonObject.getInteger("activityThemeId");
         List<OfflineActivity> offlineActivityList = offlineActivityService.getOfflineActivityListByThemeId(merchantId, activityThemeId, userId);
-        Result result = new Result();
-        result.setData(offlineActivityList);
-        return JSON.toJSONString(result);
+        return setSuccessResult(offlineActivityList);
     }
 
     @PostMapping("/signIn")
-    public Result signIn(@Validated(Buy.class) @RequestBody SignInVo signInVo) {
+    public String signIn(@Validated(Buy.class) @RequestBody SignInVo signInVo) {
         //获取操作员
         String operator = signInVo.getOperator();
         //通过操作员匹配
         //ss_offline_activity_operator
         OfflineActivityOperator offlineActivityOperator = offlineActivityOperatorService.getOneByOperator(operator);
         if (null == offlineActivityOperator) {
-            Result result = new Result();
-            result.setCode("800");
-            result.setMessage("非法操作！");
-            return result;
+            return setFailResult("800", "非法操作!");
         }
 
         Integer themeId = offlineActivityOperator.getActivityThemeId();
@@ -153,10 +140,7 @@ public class OfflineActivityController {
         Integer themeId_code = offlineActivityCode.getActivityThemeId();
         log.info("操作员主题" + themeId_code);
         if (themeId != themeId_code) {
-            Result result = new Result();
-            result.setCode("800");
-            result.setMessage("请切换账号！");
-            return result;
+            return setFailResult("800", "请切换账号!");
         }
 
         if (offlineActivityCode == null)
@@ -174,8 +158,7 @@ public class OfflineActivityController {
 
             offlineActivityCodeService.updatePassByActivityCode(activityCode);
         }
-        Result result = new Result();
-        return result;
+        return setSuccessResult();
 
     }
 
@@ -216,9 +199,7 @@ public class OfflineActivityController {
                 activityCodeDetail.setActivityStartTime(offlineActivityCheckTime.getActivityStartTime());
                 activityCodeDetail.setActivityEndTime(offlineActivityCheckTime.getActivityEndTime());
                 activityCodeDetail.setLogoUrl(user.getLogoUrl() == null ? "http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180930/be406a40059343eb8e4952300e063149.jpg" : user.getLogoUrl());
-                Result result = new Result();
-                result.setData(activityCodeDetail);
-                return JSON.toJSONString(result);
+                return setSuccessResult(activityCodeDetail);
             }
 
 
@@ -236,11 +217,8 @@ public class OfflineActivityController {
             PageHelper.startPage(pageNum, pageSize);
         }
         String userId = ThreadVariable.getUserID();
-        //String userId = "de3c5bf3d8004a06b5bb22c94f63c7e4";
         List<OfflineActivityOrderVo> offlineActivityOrderVoList = offlineActivityOrderService.getActivityOrderListByUserId(userId, merchantId);
-        Result result = new Result();
-        result.setData(offlineActivityOrderVoList);
-        return JSON.toJSONString(result);
+        return setSuccessResult(offlineActivityOrderVoList);
     }
 
     @PostMapping("/getActivityOrderDetail")
@@ -248,9 +226,7 @@ public class OfflineActivityController {
         String userId = ThreadVariable.getUserID();
         String orderNo = jsonObject.getString("orderNo");
         OfflineActivityOrderVo offlineActivityOrderVo = offlineActivityOrderService.findOrderDetailByOrderNo(orderNo, userId);
-        Result result = new Result();
-        result.setData(offlineActivityOrderVo);
-        return JSON.toJSONString(result);
+        return setSuccessResult(offlineActivityOrderVo);
     }
 
 }

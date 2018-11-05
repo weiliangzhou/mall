@@ -1,6 +1,7 @@
 package com.zwl.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.zwl.baseController.BaseController;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.baseresult.ResultCodeEnum;
 import com.zwl.model.exception.BSUtil;
@@ -30,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/wx/user")
-public class UserController {
+public class UserController extends BaseController {
     @Autowired
     private UserService userService;
     @Autowired
@@ -63,9 +64,6 @@ public class UserController {
         if (userLoginInfoVo == null) {
             BSUtil.isTrue(Boolean.FALSE, "参数错误");
         }
-//        if (userLoginInfoVo.getBusCode() == null) {
-//            BSUtil.isTrue(Boolean.FALSE, "请输入要授权的方式 1:小程序 2:H5页面授权");
-//        }
         Result result = new Result();
         if (userLoginInfoVo.getBusCode() == null || userLoginInfoVo.getBusCode() == 1) {
             result = userService.miniAppWeChatAuthorization(userLoginInfoVo, userLoginInfoVo.getCode(), userLoginInfoVo.getMerchantId());
@@ -91,7 +89,7 @@ public class UserController {
 
     //购买前绑定手机号
     @PostMapping("/bindingMobile")
-    public Result bindMobile(@RequestBody JSONObject jsonObject) {
+    public String bindMobile(@RequestBody JSONObject jsonObject) {
         String phone = jsonObject.getString("phone");
         String msgCode = jsonObject.getString("msgCode");
         String userId = jsonObject.getString("userId");
@@ -106,7 +104,6 @@ public class UserController {
         boolean isValidate = msgSenderService.checkCode(phone, msgCode, "1");
         if (!isValidate)
             BSUtil.isTrue(false, "验证码错误");
-        Result result = new Result();
         //更新用户表
         User user = new User();
         user.setUserId(userId);
@@ -123,28 +120,26 @@ public class UserController {
         userInfo.setIsBindMobile(1);
         userInfoService.modifyByParams(userInfo);
 
-        return result;
+        return setSuccessResult();
     }
 
     @PostMapping("/sendMsgCode")
-    public Result sendRegisterCode(@RequestBody JSONObject jsonObject) {
+    public String sendRegisterCode(@RequestBody JSONObject jsonObject) {
         String phone = jsonObject.getString("phone");
         String busCode = jsonObject.getString("busCode");
         msgSenderService.sendCode(phone, busCode);
-        Result result = new Result();
-        return result;
+        return setSuccessResult();
     }
 
     @PostMapping("/checkCode")
-    public Result checkCode(@RequestBody JSONObject jsonObject) {
+    public String checkCode(@RequestBody JSONObject jsonObject) {
         String phone = jsonObject.getString("phone");
         String busCode = jsonObject.getString("busCode");
         String code = jsonObject.getString("code");
         boolean flag = msgSenderService.checkCode(phone, code, busCode);
         if (!flag)
             BSUtil.isTrue(false, "验证码错误");
-        Result result = new Result();
-        return result;
+        return setSuccessResult();
     }
 
 
@@ -152,11 +147,10 @@ public class UserController {
      * 用户信息展示
      */
     @PostMapping("/getUserInfoByUserId")
-    public Result getUserInfoByUserId(@RequestBody JSONObject jsonObject) {
+    public String getUserInfoByUserId(@RequestBody JSONObject jsonObject) {
         String userId_local = ThreadVariable.getUserID();
         String userId_param = jsonObject.getString("userId");
         String userId = org.apache.commons.lang3.StringUtils.isBlank(userId_local) ? userId_param : userId_local;
-        Result result = new Result();
         //根据UserId查找用户详情表
         UserInfo userInfo = userInfoService.getByUserId(userId);
         UserLoginInfoVo userLoginInfoVo = new UserLoginInfoVo();
@@ -169,9 +163,7 @@ public class UserController {
 
         User user = userService.getByUserId(userId);
         if (user == null) {
-            result.setCode(ResultCodeEnum.EXCEPTION);
-            result.setMessage("查无用户，请校验userId");
-            return result;
+            return setFailResult(ResultCodeEnum.EXCEPTION + "", "查无用户，请校验userId");
         } else
             logoUrl = StringUtils.isBlank(logoUrl) ? StringUtils.isBlank(user.getLogoUrl()) ? defaultLogoUrl : user.getLogoUrl() : logoUrl;
         userLoginInfoVo.setLogoUrl(logoUrl);
@@ -199,9 +191,9 @@ public class UserController {
         userLoginInfoVo.setCertificationStatus(certificationStatus);
         if (certificationStatus == 2) {
             String idCardNum = userCertification.getIdCard();
-            idCardNum = idCardNum.substring(0,6)+"********"+idCardNum.substring(idCardNum.length()-4,idCardNum.length());
+            idCardNum = idCardNum.substring(0, 6) + "********" + idCardNum.substring(idCardNum.length() - 4, idCardNum.length());
             userLoginInfoVo.setIdCardNum(idCardNum);
-        }else{
+        } else {
             userLoginInfoVo.setIdCardNum("");
         }
         Integer xiaxianCount = maidInfoService.getMaidInfoCount(userId);
@@ -227,28 +219,23 @@ public class UserController {
             }
 
         }
-
-        result.setData(userLoginInfoVo);
-        return result;
+        return setSuccessResult(userLoginInfoVo);
     }
 
     /**
      * 分享绑定上下级关系
      */
     @PostMapping("/shareRelation")
-    public Result shareRelation(@RequestBody JSONObject jsonObject) {
+    public String shareRelation(@RequestBody JSONObject jsonObject) {
         String referrer = jsonObject.getString("referrer");
         String userId = jsonObject.getString("userId");
 //        String merchantId = jsonObject.getString("merchantId");
         log.info("====@@@@进入用户授权@@@@@==========userId：" + userId);
         log.info("====@@@@推荐人传入参数为@@@@@==========：" + referrer);
-        Result result = new Result();
         User userQuery = userService.getByUserId(userId);
         if (userQuery == null) {
-            result.setCode(ResultCodeEnum.EXCEPTION);
-            result.setMessage("查无用户，请检查userId");
             log.error("==============@@@@@@@@分享绑定上下级关系@@用户推荐人referrer：" + "为" + referrer + "的用户的userid不存在");
-            return result;
+            return setFailResult(ResultCodeEnum.EXCEPTION + "", "查无用户，请检查userId");
         }
 
         //如果用户还未购买，则可以更新推荐人
@@ -258,27 +245,22 @@ public class UserController {
             //推荐人userId 推荐人必须购买过
             User userIsBuy = userService.getByUserId(referrer);
             if (userIsBuy == null) {
-                result.setCode(ResultCodeEnum.EXCEPTION);
-                result.setMessage("推荐人不存在，请检查referrer！");
-                return result;
+                return setFailResult(ResultCodeEnum.EXCEPTION + "", "推荐人不存在，请检查referrer！");
             }
             if (userIsBuy.getIsBuy() != null && userIsBuy.getIsBuy() == 1) {
                 user.setReferrer(referrer);
                 userService.updateUserByUserId(user);
             } else {
-                result.setCode(ResultCodeEnum.EXCEPTION);
-                result.setMessage("推荐人还未购买，不绑定关系！");
+                return setFailResult(ResultCodeEnum.EXCEPTION + "", "推荐人还未购买，不绑定关系！");
             }
         } else {
-            result.setCode(ResultCodeEnum.EXCEPTION);
-            result.setMessage("该用户已经购买，不再改绑推荐人！");
+            return setFailResult(ResultCodeEnum.EXCEPTION + "", "该用户已经购买，不再改绑推荐人！");
         }
-
-        return result;
+        return setSuccessResult();
     }
 
     @PostMapping("/auth/saveUserInfo")
-    public Result saveUserInfo(@RequestBody JSONObject jsonObject) {
+    public String saveUserInfo(@RequestBody JSONObject jsonObject) {
         String province = jsonObject.getString("province");
         String city = jsonObject.getString("city");
         Integer gender = jsonObject.getInteger("gender");
@@ -289,7 +271,7 @@ public class UserController {
         user.setCity(city);
         user.setGender(gender);
         userService.updateUserByUserId(user);
-        return new Result();
+        return setSuccessResult();
 
     }
 }
