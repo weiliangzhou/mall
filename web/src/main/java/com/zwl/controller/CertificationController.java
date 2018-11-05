@@ -3,8 +3,6 @@ package com.zwl.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.baseresult.ResultCodeEnum;
-import com.zwl.model.exception.BSUtil;
-import com.zwl.model.groups.Buy;
 import com.zwl.model.groups.CertificationVal;
 import com.zwl.model.po.UserCertification;
 import com.zwl.model.po.UserInfo;
@@ -12,12 +10,15 @@ import com.zwl.model.vo.CertificationVo;
 import com.zwl.service.CertificationService;
 import com.zwl.service.UserInfoService;
 import com.zwl.util.CheckUtil;
+import com.zwl.util.IdCardVerification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.text.ParseException;
 
 /**
  * 用户实名认证controller
@@ -39,6 +40,21 @@ public class CertificationController {
     @PostMapping("/add")
     public synchronized Result addCertification(@Validated(CertificationVal.class) @RequestBody UserCertification userCertification) {
         Result result = new Result();
+        Integer cardType = userCertification.getCardType();
+        String cardNum = userCertification.getIdCard();
+        if (0 == cardType) {
+            try {
+                String msg = IdCardVerification.IDCardValidate(cardNum);
+                if (!msg.contains("有效")) {
+                    result.setCode(ResultCodeEnum.EXCEPTION);
+                    result.setMessage(msg);
+                    return result;
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
         UserCertification temp = certificationService.getOneByUserId(userCertification.getUserId());
         switch (temp.getStatus()) {
             case 1:
@@ -77,12 +93,12 @@ public class CertificationController {
     public Result getOneByUserId(@RequestBody JSONObject jsonObject) {
         Result result = new Result();
         String userId = jsonObject.getString("userId");
-        if(CheckUtil.isEmpty(userId)){
+        if (CheckUtil.isEmpty(userId)) {
             result.setCode(ResultCodeEnum.PARAMS_IS_NULL);
             return result;
         }
-        UserCertification userCertification=certificationService.getOneByUserId(userId);
-        Integer status=userCertification.getStatus();
+        UserCertification userCertification = certificationService.getOneByUserId(userId);
+        Integer status = userCertification.getStatus();
         CertificationVo certificationVoResult = new CertificationVo();
         switch (status) {
             case 0:

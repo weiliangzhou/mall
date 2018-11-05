@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zwl.model.baseresult.Result;
+import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.Gift;
 import com.zwl.model.po.User;
 import com.zwl.model.po.UserGift;
@@ -87,13 +88,13 @@ public class GiftController {
             String img1 = gift.getGiftViceImg1();
             String img2 = gift.getGiftViceImg2();
             String img3 = gift.getGiftViceImg3();
-            if (img1 != null) {
+            if (StringUtils.isNotBlank(img1)) {
                 imgList.add(img1);
             }
-            if (img2 != null) {
+            if (StringUtils.isNotBlank(img2)) {
                 imgList.add(img2);
             }
-            if (img3 != null) {
+            if (StringUtils.isNotBlank(img3)) {
                 imgList.add(img3);
             }
 
@@ -151,14 +152,34 @@ public class GiftController {
         Long giftId = jsonObject.getLong("giftId");
         String url = jsonObject.getString("url");
         String userId = jsonObject.getString("userId");
+        if (giftId == null || StringUtils.isBlank(url) || StringUtils.isBlank(userId)) {
+            BSUtil.isTrue(false, "缺少参数！");
+        }
+
         String qrUrl = stringRedisTemplate.boundValueOps(userId + "_gift_QrCode_" + giftId).get();
         if (StringUtils.isBlank(qrUrl)) {
-            String smallImage = QRCodeUtil.createQrCode(url + "&referrer=" + userId, null, null);
+
             User user = userService.getByUserId(userId);
             UserInfo userInfo = userInfoService.getByUserId(userId);
             String userLogo = user.getLogoUrl() == null ? "http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/6a989ec302994c6c98c2d4810f9fbcb2.png" : user.getLogoUrl();
             String nickNameOrPhone = StringUtils.isBlank(userInfo.getNickName()) ? user.getRegisterMobile() : userInfo.getNickName();
             Gift gift = giftService.getGiftDetailById(giftId);
+            //通过giftId 最低要求等级  对应productId
+            Integer minLevel = gift.getMinRequirement();
+            Integer productId = 1;
+            switch (minLevel) {
+                case 6:
+                    productId = 1;
+                    break;
+                case 4:
+                    productId = 3;
+                    break;
+                case 1:
+                    productId = 4;
+                    break;
+            }
+
+            String smallImage = QRCodeUtil.createQrCode(url + "?productId=" + productId + "&referrer=" + userId, null, null);
             try {
                 qrUrl = QRCodeUtil.mergeImage(gift.getGiftShareBack(), smallImage, 340, 630,
                         userLogo, 197, 36, nickNameOrPhone, 178, 206, Color.BLACK);
