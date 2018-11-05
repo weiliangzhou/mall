@@ -225,7 +225,7 @@ public class OfflineActivityOrderServiceImpl implements OfflineActivityOrderServ
                 offlineActivityOrderVo.setOrderType(1);
                 offlineActivityOrderVo.setSlReferrerName(user.getRealName());
                 offlineActivityOrderVo.setSlReferrerPhone(user.getRegisterMobile());
-                if (offlineActivity.getActivityStartTime().getTime() - System.currentTimeMillis() > 0) {
+                if (offlineActivity.getActivityEndTime().getTime() - System.currentTimeMillis() > 0) {
                     offlineActivityOrderVo.setSlStatus("报名成功");
                 } else {
                     offlineActivityOrderVo.setSlStatus("已结束");
