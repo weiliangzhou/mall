@@ -67,8 +67,9 @@ public class ProductServiceImpl implements ProductService {
 //            return -1;
 //        else
         int count = productMapper.updateByPrimaryKeySelective(product);
-        if (0 == count)
+        if (0 == count) {
             BSUtil.isTrue(false, "更新失败,请稍后重试！");
+        }
     }
 
     @Override
@@ -84,8 +85,9 @@ public class ProductServiceImpl implements ProductService {
             User queryUser = new User();
             queryUser.setRegisterMobile(phone);
             user = userService.getOneByParams(queryUser);
-            if (user == null)
+            if (user == null) {
                 BSUtil.isTrue(false, "请先进入微信小程序授权并绑定手机号");
+            }
             userId = user.getUserId();
         } else {
             userId = product.getUserId();
@@ -116,8 +118,9 @@ public class ProductServiceImpl implements ProductService {
         //否则判断等级如果等级一致则不可购买
         Integer alreadyLevel = userService.getMemberLevel(userId);
 
-        if (null != alreadyLevel && alreadyLevel >= level)
+        if (null != alreadyLevel && alreadyLevel >= level) {
             BSUtil.isTrue(false, "不能重复购买！");
+        }
         String orderNo = sdf_yMdHm.format(new Date()) + merchantId + userLongId + productId;
         Order order = new Order();
         order.setOrderNo(orderNo);
@@ -189,8 +192,9 @@ public class ProductServiceImpl implements ProductService {
         //否则判断等级如果等级一致则不可购买
         Integer alreadyLevel = userService.getMemberLevel(userId);
 
-        if (null != alreadyLevel && alreadyLevel >= level)
+        if (null != alreadyLevel && alreadyLevel >= level) {
             BSUtil.isTrue(false, "不能重复购买！");
+        }
         String orderNo = sdf_yMdHm.format(new Date()) + merchantId + userLongId + productId;
         Order order = new Order();
         order.setOrderNo(orderNo);

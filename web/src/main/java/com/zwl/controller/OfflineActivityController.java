@@ -83,7 +83,9 @@ public class OfflineActivityController extends BaseController {
         offlineActivityOperator.setMerchantId(merchantId);
         offlineActivityOperator.setAvailable(1);
         OfflineActivityOperator offlineActivityOperator1 = offlineActivityOperatorService.selectByOperatorAndPassword(offlineActivityOperator);
-        if (offlineActivityOperator1 == null) BSUtil.isTrue(false, "操作员登陆失败");
+        if (offlineActivityOperator1 == null) {
+            BSUtil.isTrue(false, "操作员登陆失败");
+        }
         return setSuccessResult();
 
     }
@@ -139,22 +141,24 @@ public class OfflineActivityController extends BaseController {
         OfflineActivityCode offlineActivityCode = offlineActivityCodeService.getOneByActivityCode(activityCode);
         Integer themeId_code = offlineActivityCode.getActivityThemeId();
         log.info("操作员主题" + themeId_code);
-        if (themeId != themeId_code) {
+        if (!themeId.equals(themeId_code)) {
             return setFailResult("800", "请切换账号!");
         }
 
-        if (offlineActivityCode == null)
+        if (offlineActivityCode == null) {
             BSUtil.isTrue(false, "非法code!");
-        else {
-            if (offlineActivityCode.getIsUsed() == 1)
+        } else {
+            if (offlineActivityCode.getIsUsed() == 1) {
                 BSUtil.isTrue(false, "签到码已被使用！");
+            }
             Integer activityId = offlineActivityCode.getActivityId();
             //需要判断当前下线活动  是否在活动期间
             //如果在的话 则更新
             //如果不在  则报错 签到活动已经到期
             OfflineActivity offlineActivityCheckTime = offlineActivityService.getOneByActivityIdAndCheckTime(activityId);
-            if (offlineActivityCheckTime == null)
+            if (offlineActivityCheckTime == null) {
                 BSUtil.isTrue(false, "活动未开始或者已过期！");
+            }
 
             offlineActivityCodeService.updatePassByActivityCode(activityCode);
         }
@@ -166,14 +170,14 @@ public class OfflineActivityController extends BaseController {
     public String getActivityCodeDetail(@RequestBody JSONObject jsonObject) {
         String activityCode = jsonObject.getString("activityCode");
         OfflineActivityCode offlineActivityCode = offlineActivityCodeService.getOneByActivityCode(activityCode);
-        if (offlineActivityCode == null)
+        if (offlineActivityCode == null) {
             BSUtil.isTrue(false, "非法code!");
-        else {
+        } else {
             Integer activityId = offlineActivityCode.getActivityId();
             OfflineActivity offlineActivityCheckTime = offlineActivityService.getOneByActivityIdAndCheckTime(activityId);
-            if (offlineActivityCheckTime == null)
+            if (offlineActivityCheckTime == null) {
                 BSUtil.isTrue(false, "活动未开始或者已过期！");
-            else {
+            } else {
                 //查询订单号
                 OfflineActivityOrder offlineActivityOrder = offlineActivityOrderService.findOrderByActivityCode(activityCode);
                 ActivityCodeDetail activityCodeDetail = new ActivityCodeDetail();

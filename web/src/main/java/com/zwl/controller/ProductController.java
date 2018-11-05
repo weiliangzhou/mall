@@ -60,8 +60,9 @@ public class ProductController extends BaseController {
         String phone = product.getPhone();
         //  校验验证码
         boolean isValidate = msgSenderService.checkCode(phone, code, "2");
-        if (!isValidate)
+        if (!isValidate) {
             BSUtil.isTrue(false, "验证码错误");
+        }
         BuyResult buyResult = productService.buy(product);
         return setSuccessResult(buyResult);
     }
@@ -108,8 +109,9 @@ public class ProductController extends BaseController {
             productVo.setImageUrl(p.getImageUrl());
             //返回给前端 单位:元
             productVo.setPrice(p.getPrice());
-            if (p.getPrice() != null)
+            if (p.getPrice() != null) {
                 productVo.setPriceDesc(String.valueOf(p.getPrice() / 100));
+            }
             Integer buyCount = p.getBuyCount() == null ? 0 : p.getBuyCount();
             String buyCountDesc = String.valueOf(buyCount);
             if (buyCount > CONSTANT_WAN) {
@@ -140,8 +142,9 @@ public class ProductController extends BaseController {
         productVo.setImageUrl(p.getImageUrl());
         productVo.setPrice(p.getPrice());
         productVo.setProductName(p.getProductName());
-        if (p.getPrice() != null)
+        if (p.getPrice() != null) {
             productVo.setPriceDesc(String.valueOf(p.getPrice() / 100));
+        }
         return setSuccessResult(productVo);
     }
 }

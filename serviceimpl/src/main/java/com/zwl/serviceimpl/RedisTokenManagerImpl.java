@@ -25,6 +25,7 @@ public class RedisTokenManagerImpl implements TokenManager {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
+    @Override
     public TokenModel createToken(String userId) {
         // 通过userId获取redis缓存
         // 如果存在则直接获取
@@ -37,22 +38,26 @@ public class RedisTokenManagerImpl implements TokenManager {
             model = new TokenModel(userId, token);
             // 存储到redis并设置过期时间
             stringRedisTemplate.boundValueOps(userId).set(token, 30, TimeUnit.DAYS);
-        } else
+        } else {
             model = new TokenModel(userId, token_redis);
+        }
         //使用token作为key 存放User对象
         return model;
     }
 
+    @Override
     public TokenModel getToken(String authentication) {
         if (authentication == null || authentication.length() == 0) {
             return null;
         }
         String token_a = Des3.decryptMode(authentication);
-        if (StringUtils.isBlank(token_a))
+        if (StringUtils.isBlank(token_a)) {
             return null;
+        }
         String[] param = token_a.split("_");
-        if (param.length != 2)
+        if (param.length != 2) {
             return null;
+        }
         // 使用userId和源token简单拼接成的token，可以增加加密措施
         String userId = param[0];
         String token = param[1];
@@ -75,6 +80,7 @@ public class RedisTokenManagerImpl implements TokenManager {
         return true;
     }
 
+    @Override
     public void deleteToken(String userId) {
         stringRedisTemplate.delete(userId);
     }

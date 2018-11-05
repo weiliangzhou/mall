@@ -72,8 +72,9 @@ public class AliOSSUtil {
      * 上传byte数组
      */
     public static String uploadFileByte(byte[] content) {
-        if (content == null)
+        if (content == null) {
             return "";
+        }
         //生成唯一的文件名
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
         df.format(new Date());
@@ -92,8 +93,9 @@ public class AliOSSUtil {
                 sb.append("https://").append(BUCKET_NAME).append(".").append(FILE_HOST).append("/").append(filePath);
                 url = sb.toString();
                 return url;
-            } else
+            } else {
                 return null;
+            }
 
         } catch (OSSException |
                 ClientException oe)

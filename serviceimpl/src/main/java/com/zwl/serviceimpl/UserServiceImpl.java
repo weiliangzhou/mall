@@ -268,12 +268,14 @@ public class UserServiceImpl implements UserService {
         //根据merchantid获取appid和secret
         Merchant merchant = merchantService.getMerchantByMerchantId(merchantId);
         Result result = new Result();
-        if (merchant == null)
+        if (merchant == null) {
             BSUtil.isTrue(false, "商户不存在");
+        }
         //根据code获取openid 去掉数据库appid和appsecret的空格和换行等
         String resultStr = miniAppWeChatService.authorizationCode(code, merchant.getAppId(), merchant.getAppSecret());
-        if (StringUtils.isEmpty(resultStr))
+        if (StringUtils.isEmpty(resultStr)) {
             BSUtil.isTrue(false, "获取不到微信用户信息");
+        }
         Map map = JSON.parseObject(resultStr, Map.class);
         if (!(map.get("errcode") == null)) {
             result.setCode(map.get("errcode").toString());
@@ -432,6 +434,7 @@ public class UserServiceImpl implements UserService {
         return userVo;
     }
 
+    @Override
     public User getUserByPhoneAndMerchantId(String phone, String merchantId) {
         if (StringUtils.isEmpty(phone)) {
             BSUtil.isTrue(Boolean.FALSE, "请输入要查询的手机号码");

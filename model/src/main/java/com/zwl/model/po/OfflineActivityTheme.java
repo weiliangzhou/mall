@@ -54,12 +54,13 @@ public class OfflineActivityTheme {
     private Integer applyStatus;
 
     public String getBuyCountShow() {
-        if (buyCount == null)
+        if (buyCount == null) {
             return "0";
-        else if (buyCount > 10000) {
+        } else if (buyCount > 10000) {
             return BigDecimalUtil.div(10000, buyCount, 2)+"万";
-        } else
+        } else {
             return buyCount+"";
+        }
     }
 
     public String getBuyCountDesc() {

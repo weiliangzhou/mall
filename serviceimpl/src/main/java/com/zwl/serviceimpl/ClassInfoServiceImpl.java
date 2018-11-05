@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+
 @SuppressWarnings("All")
 @Service
 public class ClassInfoServiceImpl implements ClassInfoService {
@@ -18,32 +19,34 @@ public class ClassInfoServiceImpl implements ClassInfoService {
 
     @Override
     public int add(ParamClassInfoVo paramClassInfoVo) {
-        if (CheckTitle(paramClassInfoVo)) return -1;
+        if (checkTitle(paramClassInfoVo)) {
+            return -1;
+        }
 
         return classInfoMapper.insert(paramClassInfoVo);
     }
 
-    private boolean CheckTitle(ParamClassInfoVo classInfo) {
+    private boolean checkTitle(ParamClassInfoVo classInfo) {
         //是单节 只查单节（不属于套课）标题重复
-        if (!StringUtils.isEmpty(classInfo.getCategoryId()) && StringUtils.isEmpty(classInfo.getClassSetId())){
+        if (!StringUtils.isEmpty(classInfo.getCategoryId()) && StringUtils.isEmpty(classInfo.getClassSetId())) {
             ClassInfo query = new ClassInfo();
 
             query.setTitle(classInfo.getTitle());
             query.setMerchantId(classInfo.getMerchantId());
             List<ClassInfo> list = classInfoMapper.selectListByParams(query);
-            if(list!=null && list.size()>0){
+            if (list != null && list.size() > 0) {
                 return true;
             }
 
         }
         //属于套课 查重
-        if (StringUtils.isEmpty(classInfo.getCategoryId()) && !StringUtils.isEmpty(classInfo.getClassSetId())){
+        if (StringUtils.isEmpty(classInfo.getCategoryId()) && !StringUtils.isEmpty(classInfo.getClassSetId())) {
             ClassInfo query = new ClassInfo();
 
             query.setTitle(classInfo.getTitle());
             query.setCategoryId(classInfo.getClassSetId());
             List<ClassInfo> list = classInfoMapper.selectListByParams(query);
-            if(list!=null && list.size()>0){
+            if (list != null && list.size() > 0) {
                 return true;
             }
 
@@ -59,20 +62,20 @@ public class ClassInfoServiceImpl implements ClassInfoService {
     @Override
     public int modifyByParams(ParamClassInfoVo classInfo) {
 //        if (CheckTitle(classInfo)) return -1;
-        int count=0;
+        int count = 0;
         //是单节 只查单节（不属于套课）标题重复
-        if (!StringUtils.isEmpty(classInfo.getCategoryId()) && StringUtils.isEmpty(classInfo.getClassSetId())){
-            count=classInfoMapper.selecetCountByTitleUpdate(classInfo.getTitle(),classInfo.getId(),
-                    classInfo.getCategoryId(),classInfo.getMerchantId());
-            if(count>0){
+        if (!StringUtils.isEmpty(classInfo.getCategoryId()) && StringUtils.isEmpty(classInfo.getClassSetId())) {
+            count = classInfoMapper.selecetCountByTitleUpdate(classInfo.getTitle(), classInfo.getId(),
+                    classInfo.getCategoryId(), classInfo.getMerchantId());
+            if (count > 0) {
                 return -1;
             }
         }
         //属于套课 查重
-        if (StringUtils.isEmpty(classInfo.getCategoryId()) && !StringUtils.isEmpty(classInfo.getClassSetId())){
-            count=classInfoMapper.selecetCountBySetTitle(classInfo.getTitle(),classInfo.getId(),classInfo.getClassSetId()
-                    ,classInfo.getMerchantId());
-            if(count>0){
+        if (StringUtils.isEmpty(classInfo.getCategoryId()) && !StringUtils.isEmpty(classInfo.getClassSetId())) {
+            count = classInfoMapper.selecetCountBySetTitle(classInfo.getTitle(), classInfo.getId(), classInfo.getClassSetId()
+                    , classInfo.getMerchantId());
+            if (count > 0) {
                 return -1;
             }
         }
@@ -92,7 +95,7 @@ public class ClassInfoServiceImpl implements ClassInfoService {
 
     @Override
     public String getLogoUrlByClassSetId(Long id) {
-        return  classInfoMapper.getLogoUrlByClassSetId(id);
+        return classInfoMapper.getLogoUrlByClassSetId(id);
     }
 
 

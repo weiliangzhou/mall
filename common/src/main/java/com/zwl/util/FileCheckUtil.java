@@ -15,10 +15,11 @@ public class FileCheckUtil {
      */
     public static boolean isImageType(String contentType) {
         if ("image/jpeg".equals(contentType)||"image/png".equals(contentType)
-                ||"image/gif".equals(contentType)||"image/bmp".equals(contentType))
+                ||"image/gif".equals(contentType)||"image/bmp".equals(contentType)) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
 
 }

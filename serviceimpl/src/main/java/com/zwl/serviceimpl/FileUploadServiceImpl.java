@@ -23,8 +23,9 @@ import java.io.File;
 public class FileUploadServiceImpl implements FileUploadService {
     @Override
     public String upload(MultipartFile file, int type) {
-        if (file.isEmpty())
+        if (file.isEmpty()) {
             BSUtil.isTrue(false, "文件不能为空");
+        }
 
         // 上传文件信息
         log.info("OriginalFilename：" + file.getOriginalFilename());
@@ -57,8 +58,9 @@ public class FileUploadServiceImpl implements FileUploadService {
 
             // 上传到OSS
             String url = AliOSSUtil.uploadLocalFile(excelFile, "upload/image/");
-            if (url == null)
+            if (url == null) {
                 BSUtil.isTrue(false, "上传oss失败");
+            }
             log.info("上传完毕,访问地址:" + url);
 
             //程序结束时，删除临时文件

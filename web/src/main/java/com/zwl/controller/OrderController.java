@@ -51,7 +51,9 @@ public class OrderController extends BaseController {
         List<Product> productList = productService.getProductList(order.getMerchantId());
         Map productImageMap = new HashMap<>();
         for (Product product : productList) {
-            if (product == null) continue;
+            if (product == null) {
+                continue;
+            }
             Long productId = product.getId();
             String imageUrl = product.getImageUrl();
             productImageMap.put(productId, imageUrl);
@@ -76,8 +78,9 @@ public class OrderController extends BaseController {
         order.setOrderNo(orderNo);
         order.setOrderStatus(2);
         int updateCount = orderService.updateOrder(order);
-        if (updateCount == 0)
+        if (updateCount == 0) {
             BSUtil.isTrue(false, "系统繁忙，请稍后重试！");
+        }
         return setSuccessResult();
     }
 

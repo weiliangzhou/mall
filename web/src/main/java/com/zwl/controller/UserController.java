@@ -97,13 +97,15 @@ public class UserController extends BaseController {
         User queryUser = new User();
         queryUser.setRegisterMobile(phone);
         User validate_user = userService.getOneByParams(queryUser);
-        if (validate_user != null)
+        if (validate_user != null) {
             BSUtil.isTrue(false, "已存在该手机号码");
+        }
 
         //  校验验证码
         boolean isValidate = msgSenderService.checkCode(phone, msgCode, "1");
-        if (!isValidate)
+        if (!isValidate) {
             BSUtil.isTrue(false, "验证码错误");
+        }
         //更新用户表
         User user = new User();
         user.setUserId(userId);
@@ -111,8 +113,9 @@ public class UserController extends BaseController {
         //绑定手机成为会员
         user.setMemberLevel(0);
         int count = userService.updateUserByUserId(user);
-        if (count == 0)
+        if (count == 0) {
             BSUtil.isTrue(false, "绑定失败");
+        }
         //更新用户详情表
         UserInfo userInfo = new UserInfo();
         userInfo.setUserId(userId);
@@ -137,8 +140,9 @@ public class UserController extends BaseController {
         String busCode = jsonObject.getString("busCode");
         String code = jsonObject.getString("code");
         boolean flag = msgSenderService.checkCode(phone, code, busCode);
-        if (!flag)
+        if (!flag) {
             BSUtil.isTrue(false, "验证码错误");
+        }
         return setSuccessResult();
     }
 
@@ -164,8 +168,9 @@ public class UserController extends BaseController {
         User user = userService.getByUserId(userId);
         if (user == null) {
             return setFailResult(ResultCodeEnum.EXCEPTION + "", "查无用户，请校验userId");
-        } else
+        } else {
             logoUrl = StringUtils.isBlank(logoUrl) ? StringUtils.isBlank(user.getLogoUrl()) ? defaultLogoUrl : user.getLogoUrl() : logoUrl;
+        }
         userLoginInfoVo.setLogoUrl(logoUrl);
         Integer memberLevel = user.getMemberLevel();
         String levelName;

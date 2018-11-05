@@ -78,8 +78,9 @@ public class DYServiceImpl implements DYService {
             return PaymentKit.toXml(xml);
         }
         Integer orderActualMoney_temp = order.getActualMoney();
-        if (Integer.parseInt(total_fee) < orderActualMoney_temp)
+        if (Integer.parseInt(total_fee) < orderActualMoney_temp) {
             BSUtil.isTrue(false, "支付失败");
+        }
 
 
         if (null == status || 1 != status) {
@@ -95,8 +96,9 @@ public class DYServiceImpl implements DYService {
             order_t.setPayWay(1);
             //更新订单信息
             int count = orderService.updateOrder(order_t);
-            if (count != 1)
+            if (count != 1) {
                 BSUtil.isTrue(false, "异步支付更新失败");
+            }
             //                    支付完成时间，格式为yyyyMMddHHmmss
             Date paymentTime = null;
             try {
@@ -250,8 +252,9 @@ public class DYServiceImpl implements DYService {
                             maidInfo.setLevelName(levelName);
                             log.info("回调支付成功，分佣信息" + maidInfo);
                             int madiInfoCount = maidInfoService.save(maidInfo);
-                            if (madiInfoCount == 0)
+                            if (madiInfoCount == 0) {
                                 BSUtil.isTrue(false, "分佣失败");
+                            }
                             log.info("回调支付成功，结束分佣");
                             //分佣完成之后，更新用户账户表ss_user_account
                             //存在未开户 直接开户
@@ -264,8 +267,9 @@ public class DYServiceImpl implements DYService {
                                 userAccount_t.setBalance(maidMoney);
                                 userAccountService.save(userAccount_t);
                                 log.info("创建用户余额表结束");
-                            } else
+                            } else {
                                 userAccountService.addBanlanceByUserId(referrerId, maidMoney);
+                            }
                             log.info("回调支付成功，更新用户余额成功");
 //                                【东遥课堂】尾号7903成功购买99元课程 , 你将获得奖励90元 ,  尽快查阅小程序
                             String referrerPhone = referrerUser.getRegisterMobile();
@@ -425,8 +429,9 @@ public class DYServiceImpl implements DYService {
                     maidInfo.setLevelName(user.getLevelName());
                     log.info("回调支付成功，分佣信息" + maidInfo);
                     int madiInfoCount = maidInfoService.save(maidInfo);
-                    if (madiInfoCount == 0)
+                    if (madiInfoCount == 0) {
                         BSUtil.isTrue(false, "分佣失败");
+                    }
                     log.info("回调支付成功，结束分佣");
                     //分佣完成之后，更新用户账户表ss_user_account
                     //存在未开户 直接开户

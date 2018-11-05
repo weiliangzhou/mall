@@ -27,9 +27,10 @@ public class CheseUtil {
                 valueLength += 1;
             }
         }
-        if (valueLength > length)
+        if (valueLength > length) {
             return false;
-        else
+        } else {
             return true;
+        }
     }
 }
