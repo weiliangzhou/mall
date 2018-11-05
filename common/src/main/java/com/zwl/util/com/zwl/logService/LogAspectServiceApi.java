@@ -41,7 +41,7 @@ public class LogAspectServiceApi {
             log.info("请求方式:" + request.getMethod());
             log.info("请求类方法:" + joinPoint.getSignature());
             // 过滤newH5Buy  request
-            if (!request.getRequestURL().toString().contains("newH5Buy")) {
+            if (!request.getRequestURL().toString().contains("newH5Buy")||!request.getRequestURL().toString().contains("buy")) {
                 log.info("请求类方法参数:" + getParams(joinPoint));
             }
         } catch (Exception e) {
