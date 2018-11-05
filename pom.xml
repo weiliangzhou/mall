@@ -179,8 +179,6 @@
         <module>serviceimpl</module>
         <module>apiDoc</module>
         <module>common</module>
-        <module>adminApi</module>
-        <module>teacherApi</module>
         <module>web</module>
     </modules>
 
