@@ -55,13 +55,13 @@ public class LogAspectServiceApi {
     // 在方法执行完结后打印返回内容
     @AfterReturning(returning = "o", pointcut = "controllerAspect()")
     public void methodAfterReturing(Object o) {
-        log.info("--------------返回内容----------------");
+        log.debug("--------------返回内容----------------");
         try {
-            log.info("Response内容:" + jsonObject.toJSONString(o));
+            log.debug("Response内容:" + jsonObject.toJSONString(o));
         } catch (Exception e) {
             log.error("###LogAspectServiceApi.class methodAfterReturing() ### ERROR:", e);
         }
-        log.info("--------------返回内容----------------");
+        log.debug("--------------返回内容----------------");
     }
 
     /**
