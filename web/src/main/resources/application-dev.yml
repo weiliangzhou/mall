@@ -79,3 +79,4 @@ mapper:
 pay:
     pay-notify_url: http://xdy.wegoo.com.cn/wx/pay/pay_notify.do
     qrcode-url: http://test.xc2018.com.cn/adminlogin/checkout?activityCode=
+    h5share-url: http://test.xc2018.com.cn/home?referrer=
