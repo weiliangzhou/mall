@@ -7,6 +7,7 @@ import com.zwl.model.po.Merchant;
 import com.zwl.model.po.User;
 import com.zwl.model.po.UserInfo;
 import com.zwl.service.*;
+import com.zwl.util.PayNotifyProperties;
 import com.zwl.util.QRCodeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -42,6 +43,8 @@ public class QRCodeController extends BaseController {
     private QRCodeService qrCodeService;
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    private PayNotifyProperties payNotifyProperties;
 
     @PostMapping("/getQRCode")
     public String getQRCode(@RequestBody JSONObject jsonObject) {
@@ -72,7 +75,7 @@ public class QRCodeController extends BaseController {
         }
         String qrUrl = stringRedisTemplate.boundValueOps(userId + "_h5qrcode").get();
         if (StringUtils.isBlank(qrUrl)) {
-            String smallImage = QRCodeUtil.createQrCode("http://dy.xc2018.com.cn/home?referrer=" + userId, null, null);
+            String smallImage = QRCodeUtil.createQrCode(payNotifyProperties.getH5shareUrl() + userId, null, null);
             User user = userService.getByUserId(userId);
             UserInfo userInfo = userInfoService.getByUserId(userId);
             String userLogo = user.getLogoUrl() == null ? "http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/6a989ec302994c6c98c2d4810f9fbcb2.png" : user.getLogoUrl();

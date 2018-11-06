@@ -17,4 +17,8 @@ import org.springframework.stereotype.Component;
 public class PayNotifyProperties {
     private String payNotifyUrl;
     private String qrCodeUrl;
+    /**
+     * 微信分享图片
+     */
+    private String h5shareUrl;
 }
