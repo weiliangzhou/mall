@@ -137,6 +137,77 @@ public class QRCodeUtil {
         return "";
     }
 
+    /**
+     * @param bigImage    背景图片
+     * @param smallImage  二维码
+     * @param x           二维码 偏移量X
+     * @param y           二维码 偏移量Y
+     * @param userLogoUrl 用户LOGO
+     * @param x1          用户LOGO X
+     * @param y1          用户LOGO Y
+     * @param nickName    昵称
+     */
+    public static String qdgmMergeImage(String bigImage, String smallImage, String x, String y, String userLogoUrl, String x1, String y1, String nickName,Color nickNameColor) throws IOException {
+
+        try {
+            BufferedImage small;
+            BufferedImage userLogo;
+            BufferedImage big;
+            if (bigImage.contains("http")) {
+                URL url = new URL(bigImage);
+                big = ImageIO.read(url);
+            } else {
+                big = ImageIO.read(new File(bigImage));
+            }
+            if (smallImage.contains("http")) {
+                URL url = new URL(smallImage);
+                small = ImageIO.read(url);
+            } else {
+                small = ImageIO.read(new File(smallImage));
+            }
+            if (userLogoUrl.contains("http")) {
+                URL url = new URL(userLogoUrl);
+                userLogo = ImageIO.read(url);
+            } else {
+                userLogo = ImageIO.read(new File(userLogoUrl));
+            }
+
+            Graphics2D g = big.createGraphics();
+            float fx = Float.parseFloat(x);
+            float fy = Float.parseFloat(y);
+            int x_i = (int) fx;
+            int y_i = (int) fy;
+
+            float fx_t = Float.parseFloat(x1);
+            float fy_t = Float.parseFloat(y1);
+            int x_i_t = (int) fx_t;
+            int y_i_t = (int) fy_t;
+            g.drawImage(small, x_i, y_i, 170, 170, null);
+            g.drawImage(roundImage(userLogo, 130, 130), (big.getWidth() - 110) / 2, y_i_t, 110, 110, null);
+            Font font = new Font("宋体", Font.BOLD, 20);
+            g.setFont(font);
+            g.setColor(nickNameColor);
+            // 抗锯齿
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            // 计算文字长度，计算居中的x点坐标
+            FontMetrics fm = g.getFontMetrics(font);
+            int textWidth = fm.stringWidth(nickName);
+            int widthX = (big.getWidth() - textWidth) / 2;
+            // 表示这段文字在图片上的位置(x,y) .第一个是你设置的内容。
+            g.drawString(nickName, widthX, 160);
+            g.dispose();
+            byte[] imgByte = ImageUtil.imageToBytes(big, "png");
+            return AliOSSUtil.uploadFileByte(imgByte);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+
+
     public static String mergeImage(String bigImage, String smallImage, int smallImageX, int smallImageY, String userLogoUrl, int userLogoUrlX, int userLogoUrlY, String nickName, int nickNameX, int nickNameY, Color nickNameColor) throws IOException {
 
         try {
