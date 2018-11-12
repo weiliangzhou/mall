@@ -82,7 +82,7 @@ public class QRCodeController extends BaseController {
             String nickNameOrPhone = StringUtils.isBlank(userInfo.getNickName()) ? user.getRegisterMobile() : userInfo.getNickName();
             try {
 //                qrUrl = QRCodeUtil.mergeImage("http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20181017/006174286bc34c2aacbc7303b354d36e.png", smallImage, 380, 576, userLogo, 200, 25, nickNameOrPhone, 200, 185, Color.BLACK);
-                qrUrl = QRCodeUtil.qdgmMergeImage("http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20181107/c7e18827cf40430280d0db9ebf4c7743.png", smallImage, "100", "682", userLogo, "238", "26", nickNameOrPhone, Color.BLACK);
+                qrUrl = QRCodeUtil.qdgmMergeImage("http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20181107/c7e18827cf40430280d0db9ebf4c7743.png", smallImage, "100", "682", userLogo, "238", "26", nickNameOrPhone, Color.WHITE);
             } catch (IOException e) {
                 e.printStackTrace();
             }
