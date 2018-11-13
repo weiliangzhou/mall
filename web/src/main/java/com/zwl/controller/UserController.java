@@ -55,6 +55,30 @@ public class UserController extends BaseController {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
+    /**
+     * 是否可分享
+     * @param jsonObject
+     * @return
+     */
+    @PostMapping("/isShare")
+    public Result isShare(@RequestBody JSONObject jsonObject) {
+        Result result = new Result();
+        String userId = jsonObject.getString("userId");
+        User user = userService.getByUserId(userId);
+        User referrer = userService.getByUserId(user.getReferrer());
+        if (null != referrer) {
+            if ("cyy".equals(user.getTeamCode()) || "cyy".equals(referrer.getTeamCode())) {
+                result.setData(0);
+                return result;
+            } else {
+                result.setData(1);
+                return result;
+            }
+        } else {
+            result.setData(1);
+            return result;
+        }
+    }
 
     /**
      * 用户小程序微信授权登录
@@ -131,7 +155,7 @@ public class UserController extends BaseController {
         String phone = jsonObject.getString("phone");
         String busCode = jsonObject.getString("busCode");
         msgSenderService.sendCode(phone, busCode);
-        return setSuccessResult("200","发送成功");
+        return setSuccessResult("200", "发送成功");
     }
 
     @PostMapping("/checkCode")
@@ -234,12 +258,8 @@ public class UserController extends BaseController {
     public String shareRelation(@RequestBody JSONObject jsonObject) {
         String referrer = jsonObject.getString("referrer");
         String userId = jsonObject.getString("userId");
-        //fixme 为什么注释掉？
-//        String merchantId = jsonObject.getString("merchantId");
         log.info("====@@@@进入用户授权@@@@@==========userId：" + userId);
         log.info("====@@@@推荐人传入参数为@@@@@==========：" + referrer);
-        //fixme 通过referrer 查询上级信息 ，如果team_code = cyy 并且等级<6 则 referrer=718a061c87e240028a10f4cb8a709aa1,注意is_buy字段，如果is_buy=1表示已经死绑，不更改
-
         User userQuery = userService.getByUserId(userId);
         if (userQuery == null) {
             log.error("==============@@@@@@@@分享绑定上下级关系@@用户推荐人referrer：" + "为" + referrer + "的用户的userid不存在");
@@ -256,7 +276,13 @@ public class UserController extends BaseController {
                 return setFailResult(ResultCodeEnum.EXCEPTION + "", "推荐人不存在，请检查referrer！");
             }
             if (userIsBuy.getIsBuy() != null && userIsBuy.getIsBuy() == 1) {
-                user.setReferrer(referrer);
+                // 通过referrer 查询上级信息 ，如果team_code = cyy 并且等级<6 则 referrer=718a061c87e240028a10f4cb8a709aa1
+                if ("cyy".equals(userIsBuy.getTeamCode()) && userIsBuy.getMemberLevel() < 6) {
+                    user.setReferrer("718a061c87e240028a10f4cb8a709aa1");
+                    user.setTeamCode("cyy");
+                } else {
+                    user.setReferrer(referrer);
+                }
                 userService.updateUserByUserId(user);
             } else {
                 return setFailResult(ResultCodeEnum.EXCEPTION + "", "推荐人还未购买，不绑定关系！");

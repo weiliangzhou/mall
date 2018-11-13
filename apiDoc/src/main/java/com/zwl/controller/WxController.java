@@ -420,4 +420,11 @@ public class WxController {
         return encourageInfoVo;
 
     }
+    @ApiComment("是否可分享")
+    @RequestMapping(name = "是否可分享",
+            value = "/wx/user/isShare", method = RequestMethod.POST)
+    public Result isShare( @ApiComment("userId") String userId) {
+        Result result = new Result();
+        return result;
+    }
 }

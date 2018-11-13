@@ -33,6 +33,7 @@ public class User {
     private String city;
     //省份
     private String province;
+    private String teamCode;
 
 
 }
