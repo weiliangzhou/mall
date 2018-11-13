@@ -57,26 +57,23 @@ public class UserController extends BaseController {
 
     /**
      * 是否可分享
+     *
      * @param jsonObject
      * @return
      */
     @PostMapping("/isShare")
-    public Result isShare(@RequestBody JSONObject jsonObject) {
-        Result result = new Result();
+    public String isShare(@RequestBody JSONObject jsonObject) {
         String userId = jsonObject.getString("userId");
         User user = userService.getByUserId(userId);
-        User referrer = userService.getByUserId(user.getReferrer());
-        if (null != referrer) {
-            if ("cyy".equals(user.getTeamCode()) || "cyy".equals(referrer.getTeamCode())) {
-                result.setData(0);
-                return result;
-            } else {
-                result.setData(1);
-                return result;
-            }
+        if (null == user) {
+            //用户未登录也可分享
+            return setSuccessResult(1);
+        }
+        int memberLevel = user.getMemberLevel() == null ? 0 : user.getMemberLevel().intValue();
+        if ("cyy".equals(user.getTeamCode()) && 6 > memberLevel) {
+            return setSuccessResult(0);
         } else {
-            result.setData(1);
-            return result;
+            return setSuccessResult(1);
         }
     }
 
