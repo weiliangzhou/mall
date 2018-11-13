@@ -10,6 +10,7 @@ import com.zwl.model.po.User;
 import com.zwl.model.po.UserCertification;
 import com.zwl.model.po.UserInfo;
 import com.zwl.model.vo.H5LoginResultVo;
+import com.zwl.model.vo.ShareAndBuyVo;
 import com.zwl.model.vo.UserLoginInfoVo;
 import com.zwl.service.*;
 import com.zwl.serviceimpl.RedisTokenManagerImpl;
@@ -56,7 +57,7 @@ public class UserController extends BaseController {
     private StringRedisTemplate stringRedisTemplate;
 
     /**
-     * 是否可分享
+     * 是否可分享,是否可购买
      *
      * @param jsonObject
      * @return
@@ -64,16 +65,46 @@ public class UserController extends BaseController {
     @PostMapping("/isShare")
     public String isShare(@RequestBody JSONObject jsonObject) {
         String userId = jsonObject.getString("userId");
+        String referrer = jsonObject.getString("referrer");
         User user = userService.getByUserId(userId);
-        if (null == user) {
-            //用户未登录也可分享
-            return setSuccessResult(1);
-        }
-        int memberLevel = user.getMemberLevel() == null ? 0 : user.getMemberLevel().intValue();
-        if ("cyy".equals(user.getTeamCode()) && 6 > memberLevel) {
-            return setSuccessResult(0);
-        } else {
-            return setSuccessResult(1);
+        User referrerUser = userService.getByUserId(referrer);
+        //1,user为null,referrer为null   1,1
+        // 2,user不为null,referrer为null  如果cyy,<6  0，1    不是的话 1，1
+        //3,user为null,referrer不为null  如果cyy,<6   1，0    不是的话 1，1
+        //4.user不为null,referrer不为null  cyy,<6 cyy,<6
+        ShareAndBuyVo shareAndBuyVo = new ShareAndBuyVo();
+        if (null == user && null == referrerUser) {
+            shareAndBuyVo.setIsShare(1);
+            shareAndBuyVo.setIsBuy(1);
+            return setSuccessResult(shareAndBuyVo);
+        }else if(null != user && null == referrerUser){
+            shareAndBuyVo.setIsShare(1);
+            shareAndBuyVo.setIsBuy(1);
+            int memberLevel = user.getMemberLevel() == null ? 0 : user.getMemberLevel().intValue();
+            if ("cyy".equals(user.getTeamCode()) && 6 > memberLevel) {
+                shareAndBuyVo.setIsShare(0);
+            }
+            return setSuccessResult(shareAndBuyVo);
+        }else if(null == user && null != referrerUser){
+            shareAndBuyVo.setIsShare(1);
+            shareAndBuyVo.setIsBuy(1);
+            int referrerMemberLevel = referrerUser.getMemberLevel() == null ? 0 : referrerUser.getMemberLevel().intValue();
+            if ("cyy".equals(referrerUser.getTeamCode()) && 6 > referrerMemberLevel) {
+                shareAndBuyVo.setIsBuy(0);
+            }
+            return setSuccessResult(shareAndBuyVo);
+        }else {
+            shareAndBuyVo.setIsShare(1);
+            shareAndBuyVo.setIsBuy(1);
+            int memberLevel = user.getMemberLevel() == null ? 0 : user.getMemberLevel().intValue();
+            if ("cyy".equals(user.getTeamCode()) && 6 > memberLevel) {
+                shareAndBuyVo.setIsShare(0);
+            }
+            int referrerMemberLevel = referrerUser.getMemberLevel() == null ? 0 : referrerUser.getMemberLevel().intValue();
+            if ("cyy".equals(referrerUser.getTeamCode()) && 6 > referrerMemberLevel) {
+                shareAndBuyVo.setIsBuy(0);
+            }
+            return setSuccessResult(shareAndBuyVo);
         }
     }
 
@@ -275,7 +306,7 @@ public class UserController extends BaseController {
             if (userIsBuy.getIsBuy() != null && userIsBuy.getIsBuy() == 1) {
                 // 通过referrer 查询上级信息 ，如果team_code = cyy 并且等级<6 则 referrer=718a061c87e240028a10f4cb8a709aa1
                 if ("cyy".equals(userIsBuy.getTeamCode()) && userIsBuy.getMemberLevel() < 6) {
-                    user.setReferrer("718a061c87e240028a10f4cb8a709aa1");
+                    user.setReferrer(null);
                     user.setTeamCode("cyy");
                 } else {
                     user.setReferrer(referrer);

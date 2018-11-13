@@ -420,10 +420,10 @@ public class WxController {
         return encourageInfoVo;
 
     }
-    @ApiComment("是否可分享")
-    @RequestMapping(name = "是否可分享",
+    @ApiComment("是否可分享,是否可购买")
+    @RequestMapping(name = "是否可分享,是否可购买",
             value = "/wx/user/isShare", method = RequestMethod.POST)
-    public Result isShare( @ApiComment("userId") String userId) {
+    public Result isShare( @ApiComment("userId") String userId,@ApiComment("referrer") String referrer) {
         Result result = new Result();
         return result;
     }
