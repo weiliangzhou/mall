@@ -234,9 +234,12 @@ public class UserController extends BaseController {
     public String shareRelation(@RequestBody JSONObject jsonObject) {
         String referrer = jsonObject.getString("referrer");
         String userId = jsonObject.getString("userId");
+        //fixme 为什么注释掉？
 //        String merchantId = jsonObject.getString("merchantId");
         log.info("====@@@@进入用户授权@@@@@==========userId：" + userId);
         log.info("====@@@@推荐人传入参数为@@@@@==========：" + referrer);
+        //fixme 通过referrer 查询上级信息 ，如果team_code = cyy 并且等级<6 则 referrer=718a061c87e240028a10f4cb8a709aa1,注意is_buy字段，如果is_buy=1表示已经死绑，不更改
+
         User userQuery = userService.getByUserId(userId);
         if (userQuery == null) {
             log.error("==============@@@@@@@@分享绑定上下级关系@@用户推荐人referrer：" + "为" + referrer + "的用户的userid不存在");
