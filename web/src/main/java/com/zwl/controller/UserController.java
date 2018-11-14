@@ -307,7 +307,6 @@ public class UserController extends BaseController {
                 // 通过referrer 查询上级信息 ，如果team_code = cyy 并且等级<6 则 referrer=718a061c87e240028a10f4cb8a709aa1
                 if ("cyy".equals(userIsBuy.getTeamCode()) && userIsBuy.getMemberLevel() < 6) {
                     user.setReferrer(null);
-                    user.setTeamCode("cyy");
                 } else {
                     user.setReferrer(referrer);
                 }
