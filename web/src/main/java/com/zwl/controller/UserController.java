@@ -90,6 +90,7 @@ public class UserController extends BaseController {
             shareAndBuyVo.setIsBuy(1);
             int referrerMemberLevel = referrerUser.getMemberLevel() == null ? 0 : referrerUser.getMemberLevel().intValue();
             if ("cyy".equals(referrerUser.getTeamCode()) && 6 > referrerMemberLevel) {
+                shareAndBuyVo.setIsShare(0);
                 shareAndBuyVo.setIsBuy(0);
             }
             return setSuccessResult(shareAndBuyVo);
@@ -102,6 +103,7 @@ public class UserController extends BaseController {
             }
             int referrerMemberLevel = referrerUser.getMemberLevel() == null ? 0 : referrerUser.getMemberLevel().intValue();
             if ("cyy".equals(referrerUser.getTeamCode()) && 6 > referrerMemberLevel) {
+                shareAndBuyVo.setIsShare(0);
                 shareAndBuyVo.setIsBuy(0);
             }
             return setSuccessResult(shareAndBuyVo);
