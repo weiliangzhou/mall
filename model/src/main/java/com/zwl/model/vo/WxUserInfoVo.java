@@ -50,6 +50,11 @@ public class WxUserInfoVo {
      */
     private String errmsg;
 
+    /**
+     * 是否关注公众号
+     */
+    private Integer subscribe;
+
     public String getOpenid() {
         return openid;
     }
@@ -136,5 +141,13 @@ public class WxUserInfoVo {
 
     public void setPrivilege(String[] privilege) {
         this.privilege = privilege;
+    }
+
+    public Integer getSubscribe() {
+        return subscribe;
+    }
+
+    public void setSubscribe(Integer subscribe) {
+        this.subscribe = subscribe;
     }
 }

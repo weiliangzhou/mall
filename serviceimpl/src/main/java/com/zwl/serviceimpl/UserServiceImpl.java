@@ -45,6 +45,8 @@ public class UserServiceImpl implements UserService {
     private MsgSenderService msgSenderService;
     @Autowired
     private UserWechatService userWechatService;
+    @Autowired
+    private WxAccessTokenService wxAccessTokenService;
 
 
     //微信小程序登录的时候目前是静默授权  设置为默认头像
@@ -504,5 +506,30 @@ public class UserServiceImpl implements UserService {
         return userInfo;
     }
 
-
+    @Override
+    public Integer isSubscribe(String merchantId, String userId) {
+        if (StringUtils.isEmpty(userId)) {
+            BSUtil.isTrue(Boolean.FALSE, "请输入用户编号");
+        }
+        if (StringUtils.isEmpty(merchantId)) {
+            BSUtil.isTrue(Boolean.FALSE, "请输入商户编号");
+        }
+        User user = userMapper.getUserByUserId(userId);
+        if(user == null){
+            BSUtil.isTrue(Boolean.FALSE, "用户不存在");
+        }
+        String gzhOpenid = user.getGzhOpenid();
+        if(StringUtils.isEmpty(gzhOpenid)){
+            return 0;
+        }
+        Merchant merchant = merchantService.getMerchantByMerchantId(merchantId);
+        if (merchant == null) {
+            BSUtil.isTrue(Boolean.FALSE, "商户不存在");
+        }
+        String accessToken = wxAccessTokenService.getAccessToken(merchantId, merchant.getGzAppId(), merchant.getGzAppKey(), 1);
+        //用户已存在获取微信用户信息更新数据库中的资料
+        WxUserInfoVo userInfoVo = h5AppWeChatService.getWeChatUserInfo(accessToken, gzhOpenid);
+        Integer subscribe = userInfoVo.getSubscribe();
+        return subscribe;
+    }
 }

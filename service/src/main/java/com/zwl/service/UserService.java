@@ -3,10 +3,7 @@ package com.zwl.service;
 
 import com.zwl.model.baseresult.Result;
 import com.zwl.model.po.User;
-import com.zwl.model.vo.H5LoginResultVo;
-import com.zwl.model.vo.UserLoginInfoVo;
-import com.zwl.model.vo.UserQueryVo;
-import com.zwl.model.vo.UserVo;
+import com.zwl.model.vo.*;
 
 import java.util.List;
 
@@ -185,4 +182,12 @@ public interface UserService {
      * @return
      */
     UserVo getSLUserInfo(String merchantId, String userId);
+
+    /**
+     * 是否已关注公众号
+     * @param merchantId
+     * @param userId
+     * @return
+     */
+    Integer isSubscribe(String merchantId, String userId);
 }

@@ -12,6 +12,7 @@ import com.zwl.model.po.UserInfo;
 import com.zwl.model.vo.H5LoginResultVo;
 import com.zwl.model.vo.ShareAndBuyVo;
 import com.zwl.model.vo.UserLoginInfoVo;
+import com.zwl.model.vo.WxUserInfoVo;
 import com.zwl.service.*;
 import com.zwl.serviceimpl.RedisTokenManagerImpl;
 import com.zwl.util.CheckUtil;
@@ -56,6 +57,18 @@ public class UserController extends BaseController {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
+    /**
+     * 是否已关注公众号
+     * @param jsonObject
+     * @return
+     */
+    @PostMapping("/isSubscribe")
+    public String isSubscribe(@RequestBody JSONObject jsonObject){
+        String merchantId = jsonObject.getString("merchantId");
+        String userId = jsonObject.getString("userId");
+        Integer subscribe = userService.isSubscribe(merchantId,userId);
+        return setSuccessResult(subscribe);
+    }
     /**
      * 是否可分享,是否可购买
      *
