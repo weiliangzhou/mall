@@ -40,5 +40,8 @@ public class WxConstans {
      * 微信获取JS执行权限
      */
     public static final String WECHAT_JSAPI = "https://api.weixin.qq.com/cgi-bin/ticket/getticket";
-
+    /**
+     * H5微信获取用户授权信息 包含是否关注过公众号
+     */
+    public static final String GET_WECHAT_USERINFO_INCLUDE_SUBSCRIBE = "https://api.weixin.qq.com/cgi-bin/user/info?lang=zh_CN";
 }

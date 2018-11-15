@@ -5,6 +5,7 @@ import com.zwl.model.exception.BSUtil;
 import com.zwl.model.vo.JsApiTokenVo;
 import com.zwl.model.vo.WxH5AccessTokenVo;
 import com.zwl.model.vo.WxUserInfoVo;
+import com.zwl.model.vo.WxUserInfoVo2;
 import com.zwl.model.wxpay.WxConstans;
 import com.zwl.service.H5AppWeChatService;
 import com.zwl.util.HttpsUtils;
@@ -86,5 +87,22 @@ public class H5AppWeChatServiceImpl implements H5AppWeChatService {
             BSUtil.isTrue(Boolean.FALSE, "获取微信JSAPI Token 出错");
         }
         return null;
+    }
+
+    @Override
+    public WxUserInfoVo2 getWeChatUserInfoIncludeSubscribe(String accessToken, String openid) {
+        if (null == accessToken) {
+            BSUtil.isTrue(Boolean.FALSE, "微信的accessToken不能为空");
+        }
+        if (null == openid) {
+            BSUtil.isTrue(Boolean.FALSE, "微信的openid不能为空");
+        }
+        String args = String.format("&access_token=%s&openid=%s", accessToken, openid);
+        String resultStr = HttpsUtils.sendGet(WxConstans.GET_WECHAT_USERINFO_INCLUDE_SUBSCRIBE + args, null);
+        if (null == resultStr) {
+            BSUtil.isTrue(Boolean.FALSE, "微信用户信息不存在");
+        }
+        WxUserInfoVo2 userInfoVo = JSON.parseObject(resultStr, WxUserInfoVo2.class);
+        return userInfoVo;
     }
 }

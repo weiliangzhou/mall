@@ -3,6 +3,7 @@ package com.zwl.service;
 import com.zwl.model.vo.JsApiTokenVo;
 import com.zwl.model.vo.WxH5AccessTokenVo;
 import com.zwl.model.vo.WxUserInfoVo;
+import com.zwl.model.vo.WxUserInfoVo2;
 
 /**
  * H5微信程序
@@ -32,4 +33,12 @@ public interface H5AppWeChatService {
      * @return
      */
     String getWechatJsApiToken(String accessToken);
+
+    /**
+     * 获取微信用户授权之后的用户信息,包含是否已关注公众号
+     *
+     * @param accessToken 通过 微信 https://api.weixin.qq.com/sns/oauth2/access_token  获取
+     * @param openid      微信用户的唯一标识
+     */
+    WxUserInfoVo2 getWeChatUserInfoIncludeSubscribe(String accessToken, String openid);
 }
