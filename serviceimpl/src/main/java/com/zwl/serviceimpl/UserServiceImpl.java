@@ -529,7 +529,9 @@ public class UserServiceImpl implements UserService {
         String accessToken = wxAccessTokenService.getAccessToken(merchantId, merchant.getGzAppId(), merchant.getGzAppKey(), 1);
         //用户已存在获取微信用户信息更新数据库中的资料
         WxUserInfoVo2 userInfoVo = h5AppWeChatService.getWeChatUserInfoIncludeSubscribe(accessToken, gzhOpenid);
+        log.info("用户信息："+userInfoVo);
         Integer subscribe = userInfoVo.getSubscribe();
+        log.info("是否已关注过公众号："+subscribe);
         return subscribe;
     }
 }
