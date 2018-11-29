@@ -131,12 +131,19 @@ public class GiftController extends BaseController {
         // FIXME: 2018/11/29 判断是否可用兑换
 //        根据giftId获取最低获取等级，如果是100则需要查询成功支付22元的订单
         Gift gift = giftService.getGiftDetailById(giftId);
-        if (100 == gift.getMinRequirement()) {
+        Integer minLevel = gift.getMinRequirement();
+        User user = userService.getByUserId(userId);
+        if (100 == minLevel) {
             Order order = new Order();
             order.setActualMoney(2200);
             order.setOrderStatus(1);
             List<Order> orderList = orderService.getOrderList(order);
             if (orderList.size() < 1) {
+                BSUtil.isTrue(false, "请先购买再领取");
+            }
+        } else {
+            //根据最低兑换等级兑换
+            if (user.getMemberLevel() < minLevel) {
                 BSUtil.isTrue(false, "请先购买再领取");
             }
         }
