@@ -5,14 +5,8 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zwl.baseController.BaseController;
 import com.zwl.model.exception.BSUtil;
-import com.zwl.model.po.Gift;
-import com.zwl.model.po.User;
-import com.zwl.model.po.UserGift;
-import com.zwl.model.po.UserInfo;
-import com.zwl.service.GiftService;
-import com.zwl.service.UserGiftService;
-import com.zwl.service.UserInfoService;
-import com.zwl.service.UserService;
+import com.zwl.model.po.*;
+import com.zwl.service.*;
 import com.zwl.util.QRCodeUtil;
 import com.zwl.util.ThreadVariable;
 import org.apache.commons.lang3.StringUtils;
@@ -49,6 +43,8 @@ public class GiftController extends BaseController {
     private UserService userService;
     @Autowired
     private UserInfoService userInfoService;
+    @Autowired
+    private OrderService orderService;
 
     @PostMapping("/getGiftList")
     public String getGiftList(@RequestBody JSONObject jsonObject) {
@@ -132,6 +128,18 @@ public class GiftController extends BaseController {
         String merchantId = jsonObject.getString("merchantId");
         Long giftId = jsonObject.getLong("giftId");
         Long addressId = jsonObject.getLong("addressId");
+        // FIXME: 2018/11/29 判断是否可用兑换
+//        根据giftId获取最低获取等级，如果是100则需要查询成功支付22元的订单
+        Gift gift = giftService.getGiftDetailById(giftId);
+        if (100 == gift.getMinRequirement()) {
+            Order order = new Order();
+            order.setActualMoney(2200);
+            order.setOrderStatus(1);
+            List<Order> orderList = orderService.getOrderList(order);
+            if (orderList.size() < 1) {
+                BSUtil.isTrue(false, "请先购买再领取");
+            }
+        }
         UserGift userGift = userGiftService.addUserExchangeGift(userId, merchantId, giftId, addressId);
         return setSuccessResult(userGift);
     }

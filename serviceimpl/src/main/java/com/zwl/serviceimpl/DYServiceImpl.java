@@ -81,8 +81,6 @@ public class DYServiceImpl implements DYService {
         if (Integer.parseInt(total_fee) < orderActualMoney_temp) {
             BSUtil.isTrue(false, "支付失败");
         }
-
-
         if (null == status || 1 != status) {
             Order order_t = new Order();
             order_t.setOrderNo(out_trade_no);
@@ -139,23 +137,34 @@ public class DYServiceImpl implements DYService {
                     }
                 }
             }
+            //购买成功之后,更新购买数量
+            Long productId = order.getProductId();
+            String merchantId = order.getMerchantId();
+            productService.updateBuyCountById(productId, merchantId);
             Integer memberLevel = order.getLevel();
-            //设置成null 避免覆盖掉  沙龙绑定的推荐人
-            user.setReferrer(null);
-            user.setMemberLevel(memberLevel);
-            user.setLevelName(order.getLevelName());
-            user.setIsBuy(1);
-            //更新是否购买
-            log.info("回调支付成功开始更新用户等级" + user);
-            userService.updateUserByUserId(user);
+            //fixme 22元书籍 不做绑定推荐人
+            if (memberLevel >= 1) {
+                //设置成null 避免覆盖掉  沙龙绑定的推荐人
+                user.setReferrer(null);
+                user.setMemberLevel(memberLevel);
+                user.setLevelName(order.getLevelName());
+                user.setIsBuy(1);
+                //更新是否购买
+                log.info("回调支付成功开始更新用户等级" + user);
+                userService.updateUserByUserId(user);
+            }else {
+                //发送通知等
+                Map<String, String> xml = new HashMap<String, String>();
+                xml.put("return_code", "SUCCESS");
+                xml.put("return_msg", "OK");
+                return PaymentKit.toXml(xml);
+            }
             //订单支付成功，返佣给推荐人
             //后期加入MQ
             log.info("回调支付成功，开始分佣");
-            String merchantId = order.getMerchantId();
             String orderNo = order.getOrderNo();
             Integer orderActualMoney = order.getActualMoney();
             Integer maidPercent = order.getMaidPercent();
-            Long productId = order.getProductId();
             String productName = order.getProductName();
             Integer level = order.getLevel();
             String levelName = order.getLevelName();
@@ -180,9 +189,6 @@ public class DYServiceImpl implements DYService {
                 default:
                     break;
             }
-            //购买成功之后,更新购买数量
-            productService.updateBuyCountById(productId, merchantId);
-
             if (StringUtils.isNotBlank(referrerId)) {
                 User referrerUser = userService.getByUserId(referrerId);
                 if (null != referrerUser) {
@@ -213,7 +219,6 @@ public class DYServiceImpl implements DYService {
                     if (null != referrerLevel && referrerLevel >= memberLevel && referrerLevel >= 1) {
 //                       //通过memberLevel,merchantId获取推荐人对应的分佣比例
                         UserMaidPercent userMaidPercent = userMaidPercentService.getUserMaidPercentByMemberLevelAndMerchantId(referrerLevel, merchantId);
-//                        Integer maidPercent_referrer = productService.getMaidPercentByLevel(referrerLevel, merchantId);
                         Integer maidPercent1 = userMaidPercent.getMaidPercent1();
                         Integer maidPercent4 = userMaidPercent.getMaidPercent4();
                         Integer maidPercent6 = userMaidPercent.getMaidPercent6();

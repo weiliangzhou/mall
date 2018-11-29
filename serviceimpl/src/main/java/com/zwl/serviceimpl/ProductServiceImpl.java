@@ -11,7 +11,6 @@ import com.zwl.service.MerchantService;
 import com.zwl.service.ProductService;
 import com.zwl.service.UserInfoService;
 import com.zwl.service.UserService;
-import com.zwl.util.ThreadVariable;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -191,9 +190,10 @@ public class ProductServiceImpl implements ProductService {
         //如果过期时间小于当前时间，则可以购买任何产品
         //否则判断等级如果等级一致则不可购买
         Integer alreadyLevel = userService.getMemberLevel(userId);
-
-        if (null != alreadyLevel && alreadyLevel >= level) {
-            BSUtil.isTrue(false, "不能重复购买！");
+        if (level != 0) {
+            if (null != alreadyLevel && alreadyLevel >= level) {
+                BSUtil.isTrue(false, "不能重复购买！");
+            }
         }
         String orderNo = sdf_yMdHm.format(new Date()) + merchantId + userLongId + productId;
         Order order = new Order();
