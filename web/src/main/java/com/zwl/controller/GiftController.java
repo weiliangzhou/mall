@@ -184,6 +184,9 @@ public class GiftController extends BaseController {
                 case 1:
                     productId = 4;
                     break;
+                case 100:
+                    productId = 100;
+                    break;
             }
 
             String smallImage = QRCodeUtil.createQrCode(url + "?productId=" + productId + "&referrer=" + userId, null, null);
