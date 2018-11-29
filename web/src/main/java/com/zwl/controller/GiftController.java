@@ -137,6 +137,7 @@ public class GiftController extends BaseController {
             Order order = new Order();
             order.setActualMoney(2200);
             order.setOrderStatus(1);
+            order.setUserId(userId);
             List<Order> orderList = orderService.getOrderList(order);
             if (orderList.size() < 1) {
                 BSUtil.isTrue(false, "请先购买再领取");
