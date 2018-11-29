@@ -112,7 +112,7 @@ public class UserGiftServiceImpl implements UserGiftService {
         }
         PageHelper.startPage(pageNum, pageSize);
         List<UserGift> userGifts = userGiftMapper.findUserGiftListPage(userId, merchantId);
-        fullUserGiftLists(userGifts, merchantId);
+//        fullUserGiftLists(userGifts, merchantId);
         return new PageInfo<>(userGifts);
     }
 

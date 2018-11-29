@@ -135,7 +135,7 @@ public class GiftController extends BaseController {
         User user = userService.getByUserId(userId);
         if (100 == minLevel) {
             Order order = new Order();
-            // FIXME: 2018/11/29 2200
+            // FIXME: 2018/11/29 2200   需要修改
             order.setActualMoney(1);
             order.setOrderStatus(1);
             order.setUserId(userId);
