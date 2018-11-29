@@ -198,6 +198,9 @@
         <if test="userId!=null">
             and user_id =#{userId}
         </if>
+        <if test="actualMoney!=null">
+            and actual_money =#{actualMoney}
+        </if>
         order by modify_time desc
 
     </select>
