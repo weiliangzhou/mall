@@ -20,6 +20,6 @@ public interface OrderMapper {
     @Update("update ss_order set order_status = -1 where order_status= 0 ")
     void updateOrderSetOverTime();
 
-    @Select("select count(*) from ss_order where order_status=1 and userId =#{userId} and product_id =#{productId}")
+    @Select("select count(*) from ss_order where order_status=1 and user_id =#{userId} and product_id =#{productId}")
     int getAlreadyBuyCount(@Param("userId") String userId, @Param("productId") Long productId);
 }
