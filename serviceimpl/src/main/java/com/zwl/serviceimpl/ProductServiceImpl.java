@@ -7,10 +7,7 @@ import com.zwl.model.exception.BSUtil;
 import com.zwl.model.po.*;
 import com.zwl.model.vo.BuyResult;
 import com.zwl.model.vo.ProductItemVo;
-import com.zwl.service.MerchantService;
-import com.zwl.service.ProductService;
-import com.zwl.service.UserInfoService;
-import com.zwl.service.UserService;
+import com.zwl.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +41,8 @@ public class ProductServiceImpl implements ProductService {
     private UserInfoService userInfoService;
     @Autowired
     private MerchantService merchantService;
+    @Autowired
+    private OrderService orderService;
 
     @Override
     public List getProductList(String merchantId) {
@@ -194,6 +193,12 @@ public class ProductServiceImpl implements ProductService {
             if (null != alreadyLevel && alreadyLevel >= level) {
                 BSUtil.isTrue(false, "不能重复购买！");
             }
+        }else{
+            int alreadyBuyCount = orderService.getAlreadyBuyCount(userId, productId);
+            if (alreadyBuyCount >=1) {
+                BSUtil.isTrue(false, "不能重复购买！");
+            }
+
         }
         String orderNo = sdf_yMdHm.format(new Date()) + merchantId + userLongId + productId;
         Order order = new Order();

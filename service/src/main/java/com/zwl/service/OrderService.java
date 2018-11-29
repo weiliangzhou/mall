@@ -19,4 +19,11 @@ public interface OrderService {
      * 作废超时订单
      */
     void updateOrderSetOverTime();
+
+    /**
+     * 获取已支付的订单数
+     * @param userId
+     * @param productId
+     */
+    int getAlreadyBuyCount(String userId, Long productId);
 }

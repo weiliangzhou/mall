@@ -40,5 +40,10 @@ public class OrderServiceImpl implements OrderService {
         orderMapper.updateOrderSetOverTime();
     }
 
+    @Override
+    public int getAlreadyBuyCount(String userId, Long productId) {
+        return orderMapper.getAlreadyBuyCount(userId,productId);
+    }
+
 
 }
