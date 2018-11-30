@@ -26,6 +26,10 @@ public class UserGift {
      */
     private Integer price;
     /**
+     * 价格(元)
+     */
+    private Integer priceDesc;
+    /**
      * 礼品展示图
      */
     private String giftMainImg;
@@ -87,4 +91,9 @@ public class UserGift {
     private Date modifyTime;
 
     private Integer available;
+
+
+    public Integer getPriceDesc() {
+        return this.price == null ? 0 : this.price / 100;
+    }
 }
