@@ -133,10 +133,10 @@ public class GiftController extends BaseController {
         Gift gift = giftService.getGiftDetailById(giftId);
         Integer minLevel = gift.getMinRequirement();
         User user = userService.getByUserId(userId);
-        if (100 == minLevel) {
+        if (100 == giftId) {
             Order order = new Order();
             // FIXME: 2018/11/29 2200   需要修改
-            order.setActualMoney(1);
+            order.setProductId(100L);
             order.setOrderStatus(1);
             order.setUserId(userId);
             order.setMerchantId(merchantId);

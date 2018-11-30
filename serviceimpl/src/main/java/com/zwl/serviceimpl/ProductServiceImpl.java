@@ -189,13 +189,13 @@ public class ProductServiceImpl implements ProductService {
         //如果过期时间小于当前时间，则可以购买任何产品
         //否则判断等级如果等级一致则不可购买
         Integer alreadyLevel = userService.getMemberLevel(userId);
-        if (level != 0) {
-            if (null != alreadyLevel && alreadyLevel >= level) {
+        if (productId == 100) {
+            int alreadyBuyCount = orderService.getAlreadyBuyCount(userId, productId);
+            if (alreadyBuyCount >= 1) {
                 BSUtil.isTrue(false, "不能重复购买！");
             }
-        }else{
-            int alreadyBuyCount = orderService.getAlreadyBuyCount(userId, productId);
-            if (alreadyBuyCount >=1) {
+        } else {
+            if (null != alreadyLevel && alreadyLevel >= level) {
                 BSUtil.isTrue(false, "不能重复购买！");
             }
 
