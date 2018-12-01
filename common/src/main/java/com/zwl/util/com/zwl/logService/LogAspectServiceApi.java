@@ -55,7 +55,7 @@ public class LogAspectServiceApi {
     public void methodAfterReturing(Object o) {
         log.info("--------------返回内容----------------");
         try {
-            log.info("Response内容:" + JSON.toJSONString(o));
+//            log.info("Response内容:" + JSON.toJSONString(o));
         } catch (Exception e) {
             log.error("###LogAspectServiceApi.class methodAfterReturing() ### ERROR:", e);
         }
