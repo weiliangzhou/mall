@@ -12,11 +12,9 @@ import com.zwl.model.po.UserInfo;
 import com.zwl.model.vo.H5LoginResultVo;
 import com.zwl.model.vo.ShareAndBuyVo;
 import com.zwl.model.vo.UserLoginInfoVo;
-import com.zwl.model.vo.WxUserInfoVo;
 import com.zwl.service.*;
 import com.zwl.serviceimpl.RedisTokenManagerImpl;
 import com.zwl.util.CheckUtil;
-import com.zwl.util.PhoneUtil;
 import com.zwl.util.ThreadVariable;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -59,16 +57,18 @@ public class UserController extends BaseController {
 
     /**
      * 是否已关注公众号
+     *
      * @param jsonObject
      * @return
      */
     @PostMapping("/isSubscribe")
-    public String isSubscribe(@RequestBody JSONObject jsonObject){
+    public String isSubscribe(@RequestBody JSONObject jsonObject) {
         String merchantId = jsonObject.getString("merchantId");
         String userId = jsonObject.getString("userId");
-        Integer subscribe = userService.isSubscribe(merchantId,userId);
+        Integer subscribe = userService.isSubscribe(merchantId, userId);
         return setSuccessResult(subscribe);
     }
+
     /**
      * 是否可分享,是否可购买
      *
@@ -90,7 +90,7 @@ public class UserController extends BaseController {
             shareAndBuyVo.setIsShare(1);
             shareAndBuyVo.setIsBuy(1);
             return setSuccessResult(shareAndBuyVo);
-        }else if(null != user && null == referrerUser){
+        } else if (null != user && null == referrerUser) {
             shareAndBuyVo.setIsShare(1);
             shareAndBuyVo.setIsBuy(1);
             int memberLevel = user.getMemberLevel() == null ? 0 : user.getMemberLevel().intValue();
@@ -98,7 +98,7 @@ public class UserController extends BaseController {
                 shareAndBuyVo.setIsShare(0);
             }
             return setSuccessResult(shareAndBuyVo);
-        }else if(null == user && null != referrerUser){
+        } else if (null == user && null != referrerUser) {
             shareAndBuyVo.setIsShare(1);
             shareAndBuyVo.setIsBuy(1);
             int referrerMemberLevel = referrerUser.getMemberLevel() == null ? 0 : referrerUser.getMemberLevel().intValue();
@@ -107,7 +107,7 @@ public class UserController extends BaseController {
                 shareAndBuyVo.setIsBuy(0);
             }
             return setSuccessResult(shareAndBuyVo);
-        }else {
+        } else {
             shareAndBuyVo.setIsShare(1);
             shareAndBuyVo.setIsBuy(1);
             int referrerMemberLevel = referrerUser.getMemberLevel() == null ? 0 : referrerUser.getMemberLevel().intValue();
@@ -255,7 +255,7 @@ public class UserController extends BaseController {
 //        userLoginInfoVo.setIsBindMobile(userInfo.getIsBindMobile()==null?0:1);
         //通过主表获取绑定手机号
         userLoginInfoVo.setIsBindMobile(user.getRegisterMobile() == null ? 0 : 1);
-        userLoginInfoVo.setRegisterMobile(user.getRegisterMobile() == null ? "" : PhoneUtil.replace(user.getRegisterMobile()));
+        userLoginInfoVo.setRegisterMobile(user.getRegisterMobile() == null ? "" : user.getRegisterMobile());
 //        userLoginInfoVo.setIsCertification(userInfo.getIsCertification() == null ? 0 : 1);
         //实名认证状态
         UserCertification userCertification = certificationService.getOneByUserId(userId);
