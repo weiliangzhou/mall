@@ -14,6 +14,7 @@
         <result column="area" property="area" jdbcType="VARCHAR"/>
         <result column="address" property="address" jdbcType="VARCHAR"/>
         <result column="express_no" property="expressNo" jdbcType="VARCHAR"/>
+        <result column="real_name" property="realName" jdbcType="VARCHAR"/>
         <result column="express_company" property="expressCompany" jdbcType="INTEGER"/>
         <result column="merchant_id" property="merchantId" jdbcType="VARCHAR"/>
         <result column="order_state" property="orderState" jdbcType="INTEGER"/>
@@ -23,7 +24,7 @@
     </resultMap>
     <sql id="Base_Column_List">
     id, user_id, gift_id, gift_title,price,gift_main_img, phone, province, city, area, address, express_no,
-    express_company, merchant_id, order_state, create_time, modify_time, available
+    express_company, merchant_id, order_state, create_time, modify_time, available,real_name
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
@@ -106,6 +107,9 @@
             <if test="available != null">
                 available,
             </if>
+            <if test="realName != null">
+                real_name,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -162,6 +166,9 @@
             <if test="available != null">
                 #{available,jdbcType=INTEGER},
             </if>
+            <if test="realName != null">
+                #{realName,jdbcType=VARCHAR},
+            </if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.zwl.model.po.UserGift">
@@ -211,6 +218,9 @@
             </if>
             <if test="available != null">
                 available = #{available,jdbcType=INTEGER},
+            </if>
+            <if test="realName != null">
+                real_name = #{realName,jdbcType=VARCHAR},
             </if>
         </set>
         where id = #{id,jdbcType=BIGINT}

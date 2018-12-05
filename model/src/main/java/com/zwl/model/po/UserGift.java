@@ -67,6 +67,10 @@ public class UserGift {
      * 快递单号
      */
     private String expressNo;
+    /**
+     * 收货姓名
+     */
+    private String realName;
 
     /**
      * 快递公司 1韵达 2圆通 3EMS 4申通
