@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zwl.dao.mapper.MaidInfoMapper">
+    <resultMap id="BaseResultMap" type="com.zwl.model.po.MaidInfo">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="order_no" property="orderNo" jdbcType="VARCHAR"/>
+        <result column="user_id" property="userId" jdbcType="VARCHAR"/>
+        <result column="maid_user_id" property="maidUserId" jdbcType="VARCHAR"/>
+        <result column="maid_money" property="maidMoney" jdbcType="INTEGER"/>
+        <result column="maid_percent" property="maidPercent" jdbcType="INTEGER"/>
+        <result column="order_actual_money" property="orderActualMoney" jdbcType="INTEGER"/>
+        <result column="merchant_id" property="merchantId" jdbcType="VARCHAR"/>
+        <result column="product_id" property="productId" jdbcType="VARCHAR"/>
+        <result column="product_name" property="productName" jdbcType="VARCHAR"/>
+        <result column="level" property="level" jdbcType="SMALLINT"/>
+        <result column="level_name" property="levelName" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="available" property="available" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, order_no, user_id, maid_user_id, maid_money, maid_percent, order_actual_money,
+    merchant_id, product_id, product_name, level, level_name, create_time, available
+  </sql>
+    <insert id="insertSelective" parameterType="com.zwl.model.po.MaidInfo">
+        insert into ss_maid_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderNo != null">
+                order_no,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="maidUserId != null">
+                maid_user_id,
+            </if>
+            <if test="maidMoney != null">
+                maid_money,
+            </if>
+            <if test="maidPercent != null">
+                maid_percent,
+            </if>
+            <if test="orderActualMoney != null">
+                order_actual_money,
+            </if>
+            <if test="merchantId != null">
+                merchant_id,
+            </if>
+            <if test="productId != null">
+                product_id,
+            </if>
+            <if test="productName != null">
+                product_name,
+            </if>
+            <if test="level != null">
+                `level`,
+            </if>
+            <if test="levelName != null">
+                level_name,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="available != null">
+                available,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderNo != null">
+                #{orderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="maidUserId != null">
+                #{maidUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="maidMoney != null">
+                #{maidMoney,jdbcType=INTEGER},
+            </if>
+            <if test="maidPercent != null">
+                #{maidPercent,jdbcType=INTEGER},
+            </if>
+            <if test="orderActualMoney != null">
+                #{orderActualMoney,jdbcType=INTEGER},
+            </if>
+            <if test="merchantId != null">
+                #{merchantId,jdbcType=VARCHAR},
+            </if>
+            <if test="productId != null">
+                #{productId,jdbcType=VARCHAR},
+            </if>
+            <if test="productName != null">
+                #{productName,jdbcType=VARCHAR},
+            </if>
+            <if test="level != null">
+                #{level,jdbcType=SMALLINT},
+            </if>
+            <if test="levelName != null">
+                #{levelName,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="available != null">
+                #{available,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.zwl.model.po.MaidInfo">
+        update ss_maid_info
+        <set>
+            <if test="orderNo != null">
+                order_no = #{orderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="maidUserId != null">
+                maid_user_id = #{maidUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="maidMoney != null">
+                maid_money = #{maidMoney,jdbcType=INTEGER},
+            </if>
+            <if test="maidPercent != null">
+                maid_percent = #{maidPercent,jdbcType=INTEGER},
+            </if>
+            <if test="orderActualMoney != null">
+                order_actual_money = #{orderActualMoney,jdbcType=INTEGER},
+            </if>
+            <if test="merchantId != null">
+                merchant_id = #{merchantId,jdbcType=VARCHAR},
+            </if>
+            <if test="productId != null">
+                product_id = #{productId,jdbcType=VARCHAR},
+            </if>
+            <if test="productName != null">
+                product_name = #{productName,jdbcType=VARCHAR},
+            </if>
+            <if test="level != null">
+                level = #{level,jdbcType=SMALLINT},
+            </if>
+            <if test="levelName != null">
+                level_name = #{levelName,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="available != null">
+                available = #{available,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="getMaidInfoList" resultType="com.zwl.model.vo.MaidInfoVo" parameterType="string">
+ SELECT * from (
+
+( SELECT
+    '' as title,
+	case when usr.logo_url is null then "http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/6a989ec302994c6c98c2d4810f9fbcb2.png"
+	 else usr.logo_url end  AS logoUrl,
+	usr.real_name AS realName,
+	INSERT ( usr.register_mobile, 4, 4, '****' ) AS phone,
+	smi.`LEVEL` AS `LEVEL`,
+	smi.level_name as levelName,
+	smi.maid_money / 100 AS maidMoney,
+	smi.create_time AS createTime,
+	2 as maidType
+	FROM
+		ss_maid_info smi,
+		ss_user usr
+	WHERE
+		usr.available = 1
+		AND smi.available = 1
+		AND smi.maid_user_id = usr.user_id
+		AND smi.user_id = #{userId}
+	) UNION ALL
+	(
+	SELECT
+	 CASE
+			maid_type
+			WHEN 0 THEN
+			CONCAT( DATE_FORMAT(create_time,'%m'),'月份团队奖') ELSE CONCAT( DATE_FORMAT(create_time,'%m'),'月份纵向奖')
+		END AS title,
+	CASE
+			maid_type
+			WHEN 0 THEN
+			'http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180823/0acd14b3553b4d4c89075b281ca80393.png' ELSE 'http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180823/40e1e20cb5114dbd95ba285f7102d236.png'
+		END
+		 AS logoUrl,
+		'' as realName,
+		'' AS phone,
+		'' AS `LEVEL`,
+		'' as levelName,
+		maid_money / 100 AS maidMoney,
+		create_time AS createTime,
+		maid_type as maidType
+	FROM
+		ss_maid_info_by_month
+	WHERE
+		user_id = #{userId}
+	AND available = 1
+	)) t ORDER BY t.createTime desc
+    </select>
+    <select id="getXiaXianList" resultType="com.zwl.model.vo.XiaXianVo" parameterType="string">
+    SELECT
+	su.real_name AS realName,
+	smi.order_actual_money / 100 AS money,
+	smi.create_time AS buyTime,
+	smi.maid_money/100 as maidMoney,
+	su.register_mobile AS mobile
+    FROM
+        ss_user su,
+        ss_maid_info smi
+    WHERE
+        su.referrer = #{userId}
+        and su.user_id=smi.maid_user_id
+        and su.referrer=smi.user_id
+
+    </select>
+    <!--小程序分类获取推荐下线-->
+    <select id="getXiaXianSortList" resultType="com.zwl.model.vo.XiaXianSortVo" parameterType="string">
+    SELECT
+        usr.real_name as realName,
+        so.actual_money/100 as money,
+        so.payment_time as buyTime,
+        so.actual_money*sp.maid_percent/10000 as maidMoney,
+        usr.register_mobile as mobile,
+        sp.`level` AS `level`,
+		sp.level_name AS levelName
+    FROM
+        ss_user usr,
+        ss_order so,
+        ss_product sp
+    WHERE
+        usr.available = 1
+        AND usr.referrer = #{userId}
+        AND so.available = 1
+        AND so.order_status>=1
+        AND usr.user_id = so.user_id
+        and usr.member_level=sp.`level`
+    </select>
+
+    <select id="getXiaXianCountByUserId" resultType="int" parameterType="string">
+    SELECT
+      count(*)
+    FROM
+        ss_user usr,
+        ss_order so,
+        ss_product sp
+    WHERE
+        usr.available = 1
+        AND usr.referrer = #{userId}
+        AND so.available = 1
+        AND so.order_status>=1
+        AND usr.user_id = so.user_id
+        and usr.member_level=sp.`level`
+    </select>
+    <select id="getMaidInfoListByLevel" resultType="com.zwl.model.vo.MyMaidInfoVVo">
+        SELECT
+        '' as title,
+        case when usr.logo_url is null then "http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/6a989ec302994c6c98c2d4810f9fbcb2.png"
+        else usr.logo_url end  AS logoUrl,
+        usr.real_name AS realName,
+        INSERT ( usr.register_mobile, 4, 4, '****' ) AS phone,
+        smi.`LEVEL` AS `LEVEL`,
+        smi.level_name as levelName,
+        smi.maid_money / 100 AS maidMoney,
+        smi.create_time AS createTime,
+        smi.maid_user_id AS userId,
+        2 as maidType
+        FROM
+        ss_maid_info smi,
+        ss_user usr
+        WHERE
+        usr.available = 1
+        AND smi.available = 1
+        AND smi.maid_user_id = usr.user_id
+        AND smi.user_id = #{userId}
+        AND smi.level = #{level}
+
+    </select>
+    <select id="getEncourageDetail" resultType="com.zwl.model.vo.MyMaidInfoVVo" parameterType="com.zwl.model.vo.EncourageDetailVo">
+        SELECT
+        '' as title,
+        case when usr.logo_url is null then "http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180911/6a989ec302994c6c98c2d4810f9fbcb2.png"
+        else usr.logo_url end  AS logoUrl,
+        usr.real_name AS realName,
+        INSERT ( usr.register_mobile, 4, 4, '****' ) AS phone,
+        smi.`LEVEL` AS `LEVEL`,
+        smi.level_name as levelName,
+        smi.maid_money / 100 AS maidMoney,
+        smi.create_time AS createTime,
+        smi.maid_user_id AS userId,
+        2 as maidType
+        FROM
+        ss_maid_info smi,
+        ss_user usr
+
+        <where>
+            usr.available = 1
+            AND smi.available = 1
+            AND smi.maid_user_id = usr.user_id
+            AND smi.user_id = #{userId}
+            <if test="startTime != null">
+                AND <![CDATA[ create_time >= #{startTime} ]]>
+                AND <![CDATA[ create_time <= #{endTime} ]]>
+            </if>
+        </where>
+
+    </select>
+    <select id="getMaidInfoByMonth" resultType="com.zwl.model.vo.MaidInfoVo" parameterType="string">
+        SELECT
+        CASE
+        maid_type
+        WHEN 0 THEN
+        CONCAT( DATE_FORMAT(create_time,'%m'),'月份团队奖') ELSE CONCAT( DATE_FORMAT(create_time,'%m'),'月份纵向奖')
+        END AS title,
+        CASE
+        maid_type
+        WHEN 0 THEN
+        'http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180823/0acd14b3553b4d4c89075b281ca80393.png' ELSE 'http://chuang-saas.oss-cn-hangzhou.aliyuncs.com/upload/image/20180823/40e1e20cb5114dbd95ba285f7102d236.png'
+        END
+        AS logoUrl,
+        '' as realName,
+        '' AS phone,
+        '' AS `LEVEL`,
+        '' as levelName,
+        maid_money / 100 AS maidMoney,
+        create_time AS createTime,
+        maid_type as maidType
+        FROM
+        ss_maid_info_by_month
+        WHERE
+        user_id = #{userId}
+        AND available = 1
+
+    </select>
+
+
+</mapper>

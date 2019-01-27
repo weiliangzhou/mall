@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zwl.dao.mapper.MerchantMapper" >
+  <resultMap id="BaseResultMap" type="com.zwl.model.po.Merchant" >
+    <id column="merchant_id" property="merchantId" jdbcType="VARCHAR" />
+    <result column="merchant_name" property="merchantName" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="app_id" property="appId" jdbcType="VARCHAR" />
+    <result column="app_secret" property="appSecret" jdbcType="VARCHAR" />
+    <result column="wx_pay_key" property="wxPayKey" jdbcType="VARCHAR" />
+    <result column="gz_app_id" property="gzAppId" jdbcType="VARCHAR" />
+    <result column="gz_app_key" property="gzAppKey" jdbcType="VARCHAR" />
+    <result column="buy_template_id" property="buyTemplateId" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="available" property="available" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    merchant_id, merchant_name, creator, app_id, app_secret,wx_pay_key,gz_app_id,gz_app_key,buy_template_id, create_time, modify_time,
+    available
+  </sql>
+  <!--新增-->
+  <insert id="insert" parameterType="com.zwl.model.po.Merchant" >
+    insert into ss_merchant (<include refid="Base_Column_List" />)
+    values (#{merchantId,jdbcType=VARCHAR}, #{merchantName,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{appId,jdbcType=VARCHAR}, #{appSecret,jdbcType=VARCHAR}, #{wxPayKey,jdbcType=VARCHAR},
+    , #{gzAppId,jdbcType=VARCHAR},
+    , #{gzAppKey,jdbcType=VARCHAR},
+    #{buyTemplateId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+      #{modifyTime,jdbcType=TIMESTAMP}, #{available,jdbcType=INTEGER})
+  </insert>
+  <!--根据merchantId-->
+  <select id="selectByMerchantId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from ss_merchant
+    where merchant_id = #{merchantId,jdbcType=VARCHAR}
+  </select>
+</mapper>

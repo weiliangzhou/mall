@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zwl.dao.mapper.InformationMapper" >
+  <resultMap id="BaseResultMap" type="com.zwl.model.po.Information" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="merchant_id" property="merchantId" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="is_show" property="isShow" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="logo_url" property="logoUrl" jdbcType="VARCHAR" />
+    <result column="audio_url" property="audioUrl" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="LONGVARBINARY" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="available" property="available" jdbcType="INTEGER" />
+    <result column="content_text" property="contentText" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, merchant_id, url, is_show, title, logo_url, audio_url,content, create_time, modify_time,
+    available,content_text
+  </sql>
+  <insert id="insertSelective" parameterType="com.zwl.model.po.Information" >
+    insert into ss_information
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="merchantId != null" >
+        merchant_id,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+      <if test="isShow != null" >
+        is_show,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="logoUrl != null" >
+        logo_url,
+      </if>
+      <if test="audioUrl != null" >
+        audio_url,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="available != null" >
+        available,
+      </if>
+      <if test="contentText != null" >
+        content_text,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="merchantId != null" >
+        #{merchantId,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="isShow != null" >
+        #{isShow,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="logoUrl != null" >
+        #{logoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="audioUrl != null" >
+        #{audioUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="available != null" >
+        #{available,jdbcType=INTEGER},
+      </if>
+      <if test="contentText != null" >
+        #{contentText,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.zwl.model.po.Information" >
+    update ss_information
+    <set >
+      <if test="merchantId != null" >
+        merchant_id = #{merchantId,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="isShow != null" >
+        is_show = #{isShow,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="logoUrl != null" >
+        logo_url = #{logoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="audioUrl != null" >
+        audio_url = #{audioUrl,jdbcType=VARCHAR},
+      </if>
+
+      <if test="available != null" >
+        available = #{available,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="contentText != null" >
+        content_text = #{contentText,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getInformationInfo" resultMap="BaseResultMap" parameterType="com.zwl.model.po.Information">
+    select
+    <include refid="Base_Column_List" />
+    from ss_information
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="getInformationList" resultMap="BaseResultMap" parameterType="com.zwl.model.po.Information">
+    select
+    <include refid="Base_Column_List" />
+    from ss_information
+    where available =1
+    <if test="title != null" >
+     and title like  CONCAT('%',#{title},'%')
+    </if>
+    order  by modify_time desc
+  </select>
+  <select id="getWxInformationList" resultMap="BaseResultMap" parameterType="com.zwl.model.po.Information">
+    select
+    <include refid="Base_Column_List" />
+    from ss_information
+    where available =1
+    and is_show = 1
+    <if test="title != null" >
+      and title like  CONCAT('%',#{title},'%')
+    </if>
+    order  by modify_time desc
+  </select>
+</mapper>

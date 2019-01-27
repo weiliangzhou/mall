@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zwl.dao.mapper.UserMaidPercentMapper">
+    <resultMap id="BaseResultMap" type="com.zwl.model.po.UserMaidPercent">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="member_level" property="memberLevel" jdbcType="INTEGER"/>
+        <result column="maid_percent_1" property="maidPercent1" jdbcType="INTEGER"/>
+        <result column="maid_percent_4" property="maidPercent4" jdbcType="INTEGER"/>
+        <result column="maid_percent_6" property="maidPercent6" jdbcType="INTEGER"/>
+        <result column="merchant_id" property="merchantId" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
+        <result column="available" property="available" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, member_level, maid_percent_1, maid_percent_4, maid_percent_6, merchant_id, create_time, 
+    modify_time, available
+  </sql>
+    <select id="getUserMaidPercentByMemberLevelAndMerchantId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ss_user_maid_percent
+        where
+        member_level=#{memberLevel}
+        and merchant_id=#{merchantId}
+        and available =1
+    </select>
+
+</mapper>

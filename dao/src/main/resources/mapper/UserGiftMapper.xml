@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zwl.dao.mapper.UserGiftMapper">
+    <resultMap id="BaseResultMap" type="com.zwl.model.po.UserGift">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="user_id" property="userId" jdbcType="VARCHAR"/>
+        <result column="gift_id" property="giftId" jdbcType="INTEGER"/>
+        <result column="gift_title" property="giftTitle" jdbcType="VARCHAR"/>
+        <result column="price" property="price" jdbcType="INTEGER"/>
+        <result column="gift_main_img" property="giftMainImg" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="province" property="province" jdbcType="VARCHAR"/>
+        <result column="city" property="city" jdbcType="VARCHAR"/>
+        <result column="area" property="area" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="express_no" property="expressNo" jdbcType="VARCHAR"/>
+        <result column="real_name" property="realName" jdbcType="VARCHAR"/>
+        <result column="express_company" property="expressCompany" jdbcType="INTEGER"/>
+        <result column="merchant_id" property="merchantId" jdbcType="VARCHAR"/>
+        <result column="order_state" property="orderState" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
+        <result column="available" property="available" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, user_id, gift_id, gift_title,price,gift_main_img, phone, province, city, area, address, express_no,
+    express_company, merchant_id, order_state, create_time, modify_time, available,real_name
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from ss_user_gift
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from ss_user_gift
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" parameterType="com.zwl.model.po.UserGift">
+    insert into ss_user_gift (id, user_id, gift_id, 
+      gift_title, phone, province, 
+      city, area, address, 
+      express_no, express_company, merchant_id, 
+      order_state, create_time, modify_time, 
+      available)
+    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=VARCHAR}, #{giftId,jdbcType=INTEGER}, 
+      #{giftTitle,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{expressNo,jdbcType=VARCHAR}, #{expressCompany,jdbcType=INTEGER}, #{merchantId,jdbcType=VARCHAR}, 
+      #{orderState,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, 
+      #{available,jdbcType=INTEGER})
+  </insert>
+    <insert id="insertSelective" parameterType="com.zwl.model.po.UserGift">
+        insert into ss_user_gift
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="giftId != null">
+                gift_id,
+            </if>
+            <if test="giftTitle != null">
+                gift_title,
+            </if>
+            <if test="price != null">
+                price,
+            </if>
+            <if test="giftMainImg != null">
+                gift_main_img,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="province != null">
+                province,
+            </if>
+            <if test="city != null">
+                city,
+            </if>
+            <if test="area != null">
+                area,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="expressNo != null">
+                express_no,
+            </if>
+            <if test="expressCompany != null">
+                express_company,
+            </if>
+            <if test="merchantId != null">
+                merchant_id,
+            </if>
+            <if test="orderState != null">
+                order_state,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="modifyTime != null">
+                modify_time,
+            </if>
+            <if test="available != null">
+                available,
+            </if>
+            <if test="realName != null">
+                real_name,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="giftId != null">
+                #{giftId,jdbcType=INTEGER},
+            </if>
+            <if test="giftTitle != null">
+                #{giftTitle,jdbcType=INTEGER},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=INTEGER},
+            </if>
+            <if test="giftMainImg != null">
+                #{giftMainImg,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null">
+                #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+                #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="area != null">
+                #{area,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="expressNo != null">
+                #{expressNo,jdbcType=VARCHAR},
+            </if>
+            <if test="expressCompany != null">
+                #{expressCompany,jdbcType=INTEGER},
+            </if>
+            <if test="merchantId != null">
+                #{merchantId,jdbcType=VARCHAR},
+            </if>
+            <if test="orderState != null">
+                #{orderState,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyTime != null">
+                #{modifyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="available != null">
+                #{available,jdbcType=INTEGER},
+            </if>
+            <if test="realName != null">
+                #{realName,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.zwl.model.po.UserGift">
+        update ss_user_gift
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="giftId != null">
+                gift_id = #{giftId,jdbcType=INTEGER},
+            </if>
+            <if test="giftTitle != null">
+                gift_title = #{giftTitle,jdbcType=INTEGER},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null">
+                province = #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+                city = #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="area != null">
+                area = #{area,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="expressNo != null">
+                express_no = #{expressNo,jdbcType=VARCHAR},
+            </if>
+            <if test="expressCompany != null">
+                express_company = #{expressCompany,jdbcType=INTEGER},
+            </if>
+            <if test="merchantId != null">
+                merchant_id = #{merchantId,jdbcType=VARCHAR},
+            </if>
+            <if test="orderState != null">
+                order_state = #{orderState,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyTime != null">
+                modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="available != null">
+                available = #{available,jdbcType=INTEGER},
+            </if>
+            <if test="realName != null">
+                real_name = #{realName,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.zwl.model.po.UserGift">
+    update ss_user_gift
+    set user_id = #{userId,jdbcType=VARCHAR},
+      gift_id = #{giftId,jdbcType=INTEGER},
+      gift_title = #{giftTitle,jdbcType=INTEGER},
+      phone = #{phone,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      area = #{area,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      express_no = #{expressNo,jdbcType=VARCHAR},
+      express_company = #{expressCompany,jdbcType=INTEGER},
+      merchant_id = #{merchantId,jdbcType=VARCHAR},
+      order_state = #{orderState,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      available = #{available,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+    <select id="findUserGiftListPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ss_user_gift s
+        <where>
+            <if test="userId != null and userId !=''">
+                s.user_id = #{userId}
+            </if>
+            <if test="merchantId != null and merchantId !=''">
+                and s.merchant_id = #{merchantId}
+            </if>
+        </where>
+    </select>
+
+    <select id="getUserGiftByGiftId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ss_user_gift s
+        <where>
+            <if test="userId != null and userId !=''">
+                s.user_id = #{userId}
+            </if>
+            <if test="merchantId != null and merchantId !=''">
+                and s.merchant_id = #{merchantId}
+            </if>
+            <if test="giftId != null">
+                and s.gift_id = #{giftId}
+            </if>
+        </where>
+    </select>
+</mapper>

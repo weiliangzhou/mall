@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zwl.dao.mapper.OperateUserRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.zwl.model.po.OperateUserRecord" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="operator" property="operator" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="merchant_id" property="merchantId" jdbcType="VARCHAR" />
+    <result column="before_level" property="beforeLevel" jdbcType="SMALLINT" />
+    <result column="after_level" property="afterLevel" jdbcType="SMALLINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="available" property="available" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, operator, user_id, merchant_id, before_level, after_level, create_time, modify_time, 
+    available
+  </sql>
+
+  <insert id="insert" parameterType="com.zwl.model.po.OperateUserRecord" >
+    insert into ss_operate_user_record (operator, user_id,
+      merchant_id, before_level, after_level, 
+      create_time, modify_time, available
+      )
+    values ( #{operator,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR},
+      #{merchantId,jdbcType=VARCHAR}, #{beforeLevel,jdbcType=SMALLINT}, #{afterLevel,jdbcType=SMALLINT}, 
+      now(), #{modifyTime,jdbcType=TIMESTAMP}, #{available,jdbcType=INTEGER}
+      )
+  </insert>
+
+</mapper>
